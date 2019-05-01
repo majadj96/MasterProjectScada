@@ -358,15 +358,43 @@ namespace UserInterface
                 List<ScadaUIExchangeModel> measurements = ((ScadaUIExchangeModel[])resources).ToList();
                 foreach (var measure in measurements)
                 {
-                    Substation s = Substations.Values.Where(x => x.AsynchronousMachines.Where(y => y.SignalGid == measure.Gid).FirstOrDefault().SignalGid == measure.Gid).First();
+                    //measure.Gid to da se poklapa sa nekim od gidova od asinhrone ili od brejkera ili od diskonektora ili od ono za fluide itd..trebaju nam merenja
+                    //Prodje se kroz sve podstanice i onda kroz svaki od elemenata i onda radi radnju
 
-                    s.AsynchronousMachines.Where(x => x.SignalGid == measure.Gid).First().CosPhi = measure.Value;
-                    GaugeClasic = measure.Value.ToString();
-
+                    foreach(Substation sub in Substations.Values)
+                    {
+                        if(sub.Breaker.DiscreteGID == measure.Gid) {
+                            //komanduj nad brejkerom
+                        }
+                        if (sub.Disconectors.Count > 0)
+                        {
+                            foreach(Disconector dis in sub.Disconectors)
+                            {
+                                if(dis.DiscreteGID == measure.Gid)
+                                {
+                                    //komanduj nad diskonektorom
+                                }
+                            }
+                        }
+                        if (sub.AsynchronousMachines.Count > 0)
+                        {
+                            foreach (AsynchronousMachine am in sub.AsynchronousMachines)
+                            {
+                                if (am.SignalGid == measure.Gid)
+                                {
+                                    CommandToAM(measure.Value);
+                                }
+                            }
+                        }
+                    }
                 }
-
                 Console.WriteLine(resources);
             }
+        }
+
+        public void CommandToAM(double value)
+        {
+            GaugeClasic = value.ToString();
         }
 
 
@@ -551,8 +579,21 @@ namespace UserInterface
 
                             if(ModelCodeHelper.ExtractTypeFromGlobalId(resource1.Id) == (short)DMSType.ASYNCHRONOUSMACHINE)
                             {
-                                Substation s = Substations.Values.Where(x => x.AsynchronousMachines.Where(y => y.GID == gid.ToString()).FirstOrDefault().GID == gid.ToString()).First();
-                                s.AsynchronousMachines.Where(x => x.GID == gid.ToString()).First().SignalGid = resource.Id;
+                                foreach(Substation s in Substations.Values)
+                                {
+                                    if (s.AsynchronousMachines.Count > 0)
+                                    {
+                                        foreach(var am in s.AsynchronousMachines)
+                                        {
+                                            if(am.GID == gid.ToString())
+                                            {
+                                                am.SignalGid = resource.Id;
+                                            }
+                                        }
+                                    }
+                                }
+                                //Substation s = Substations.Values.Where(x => x.AsynchronousMachines.Where(y => y.GID == gid.ToString()).FirstOrDefault().GID == gid.ToString()).First();
+                               // s.AsynchronousMachines.Where(x => x.GID == gid.ToString()).First().SignalGid = resource.Id;
                             }
 
                         }
