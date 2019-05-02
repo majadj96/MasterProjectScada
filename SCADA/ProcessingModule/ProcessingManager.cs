@@ -66,8 +66,8 @@ namespace ProcessingModule
             //ModbusWriteCommandParameters p = new ModbusWriteCommandParameters(6, (byte)ModbusFunctionCode.WRITE_SINGLE_COIL, pointAddress, (ushort)value, transactionId, remoteUnitAddress);
             //IModbusFunction fn = FunctionFactory.CreateModbusFunction(p);
             //this.functionExecutor.EnqueueCommand(fn);
-
-            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(0xc0, (byte)DNP3FunctionCode.DIRECT_OPERATE, (ushort)TypeField.BINARY_COMMAND, 0x28, 0x0001, pointAddress, 0x81, 0x0564, 0x05, 0xc4, 0x0100, 0x0200, 0xc0);
+                                                                                //apl cont, function code,                      type field,                      qualf|range|obj pref| obj value|start|lenght|control|dest  |sourc|transport header
+            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(0xc1, (byte)DNP3FunctionCode.DIRECT_OPERATE, (ushort)TypeField.BINARY_COMMAND, 0x28, 0x0001, 0x0001, 0x0001, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
             IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p);
             this.functionExecutor.EnqueueCommand(fn);
         }
