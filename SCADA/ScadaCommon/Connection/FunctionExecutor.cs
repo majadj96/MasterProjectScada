@@ -125,8 +125,10 @@ namespace ScadaCommon.Connection
                                 payload = this.connection.RecvBytes((int)payLoadSize - 1); //writeDigitalOutput
                             else if (payLoadSize == 20)
                                 payload = this.connection.RecvBytes((int)payLoadSize - 3); // writeAnalogOutput
+                            else if (payLoadSize == 16)
+                                payload = this.connection.RecvBytes((int)payLoadSize - 3); //readDiscreteIn
                             else
-                                payload = null;
+                                payload = this.connection.RecvBytes((int)payLoadSize - 3);
 
                             message = new byte[header.Length + payload.Length];
 							Buffer.BlockCopy(header, 0, message, 0, 10);
