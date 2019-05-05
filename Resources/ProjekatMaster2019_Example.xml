@@ -358,28 +358,7 @@
 		<cim:IdentifiedObject.mRID>BreakerCurrent</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>BreakerCurrent</ftn:IdentifiedObject.name>
 	</cim:Analog>
-	<cim:Discrete rdf:ID="Discrete_1">
-		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
-		<cim:Discrete.minValue>0</cim:Discrete.minValue>
-		<cim:Discrete.normalValue>0</cim:Discrete.normalValue>
-		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
-		<cim:Measurement.measurementType>Discrete</cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource="#RatioTC_1"/>
-		<cim:IdentifiedObject.description>Tap changer position</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>TCPosition</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>TCPosition</ftn:IdentifiedObject.name>
-	</cim:Discrete>
-	<cim:Discrete rdf:ID="Discrete_5">
-		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
-		<cim:Discrete.minValue>0</cim:Discrete.minValue>
-		<cim:Discrete.normalValue>0</cim:Discrete.normalValue>
-		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
-		<cim:Measurement.measurementType>SwitchStatus</cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource="#Disc_2"/>
-		<cim:IdentifiedObject.description>Discrete measurement</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>Discrete_5</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>Discrete_5</ftn:IdentifiedObject.name>
-	</cim:Discrete>
+	
 	<cim:Discrete rdf:ID="Breaker_1SwitchStatus">
 		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0</cim:Discrete.minValue>
@@ -390,6 +369,17 @@
 		<cim:IdentifiedObject.description>Discrete measurement</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>Breaker_1SwitchStatus</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>Breaker_1SwitchStatus</ftn:IdentifiedObject.name>
+	</cim:Discrete>
+	<cim:Discrete rdf:ID="Breaker_2Pump">
+		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
+		<cim:Discrete.minValue>0</cim:Discrete.minValue>
+		<cim:Discrete.normalValue>0</cim:Discrete.normalValue>
+		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
+		<cim:Measurement.measurementType>SwitchStatus</cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#Breaker_AsyncMachine1"/>
+		<cim:IdentifiedObject.description>Discrete measurement</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>Breaker_2Pump</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>Breaker_2Pump</ftn:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Breaker_2SwitchStatus">
 		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
@@ -402,37 +392,81 @@
 		<cim:IdentifiedObject.mRID>Breaker_2SwitchStatus</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>Breaker_2SwitchStatus</ftn:IdentifiedObject.name>
 	</cim:Discrete>
-	<cim:Discrete rdf:ID="Discrete_6">
-		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
-		<cim:Discrete.minValue>0</cim:Discrete.minValue>
-		<cim:Discrete.normalValue>0</cim:Discrete.normalValue>
-		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
-		<cim:Measurement.measurementType>SwitchStatus</cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource="#Breaker_AsyncMachine1"/>
-		<cim:IdentifiedObject.description>Discrete measurement</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>Discrete_6</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>Discrete_6</ftn:IdentifiedObject.name>
-	</cim:Discrete>
-	<cim:Discrete rdf:ID="Discrete_7">
+	<cim:Discrete rdf:ID="Breaker_4Pump1">
 		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0</cim:Discrete.minValue>
 		<cim:Discrete.normalValue>0</cim:Discrete.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>SwitchStatus</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Breaker_AsyncMachine2"/>
-		<cim:IdentifiedObject.description>Discrete measurement</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>Discrete_7</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>Discrete_7</ftn:IdentifiedObject.name>
+		<cim:IdentifiedObject.description>Breaker switch status</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>Breaker_4Pump1</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>Breaker_4Pump1</ftn:IdentifiedObject.name>
 	</cim:Discrete>
-	<cim:Discrete rdf:ID="Discrete_8">
+	<cim:Discrete rdf:ID="Breaker_5Pump2">
 		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0</cim:Discrete.minValue>
 		<cim:Discrete.normalValue>0</cim:Discrete.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>SwitchStatus</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Breaker_AsyncMachine3"/>
+		<cim:IdentifiedObject.description>Breaker switch status</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>Breaker_5Pump2</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>Breaker_5Pump2</ftn:IdentifiedObject.name>
+	</cim:Discrete>
+	<cim:Discrete rdf:ID="Discrete_1">
+		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
+		<cim:Discrete.minValue>0</cim:Discrete.minValue>
+		<cim:Discrete.normalValue>0</cim:Discrete.normalValue>
+		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
+		<cim:Measurement.measurementType>Discrete</cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#RatioTC_1"/>
+		<cim:IdentifiedObject.description>Tap changer position</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>TCPosition</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>TCPosition</ftn:IdentifiedObject.name>
+	</cim:Discrete>
+	<cim:Discrete rdf:ID="Discrete_Disc1">
+		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
+		<cim:Discrete.minValue>0</cim:Discrete.minValue>
+		<cim:Discrete.normalValue>0</cim:Discrete.normalValue>
+		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
+		<cim:Measurement.measurementType>SwitchStatus</cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#Disc_1"/>
 		<cim:IdentifiedObject.description>Discrete measurement</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>Discrete_8</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>Discrete_8</ftn:IdentifiedObject.name>
+		<cim:IdentifiedObject.mRID>Discrete_Disc1</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>Discrete_Disc1</ftn:IdentifiedObject.name>
+	</cim:Discrete>
+	<cim:Discrete rdf:ID="Discrete_Disc2">
+		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
+		<cim:Discrete.minValue>0</cim:Discrete.minValue>
+		<cim:Discrete.normalValue>0</cim:Discrete.normalValue>
+		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
+		<cim:Measurement.measurementType>SwitchStatus</cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#Disc_2"/>
+		<cim:IdentifiedObject.description>Discrete measurement</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>Discrete_Disc2</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>Discrete_Disc2</ftn:IdentifiedObject.name>
+	</cim:Discrete>
+	<cim:Discrete rdf:ID="Discrete_Disc3">
+		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
+		<cim:Discrete.minValue>0</cim:Discrete.minValue>
+		<cim:Discrete.normalValue>0</cim:Discrete.normalValue>
+		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
+		<cim:Measurement.measurementType>SwitchStatus</cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#Disc_3"/>
+		<cim:IdentifiedObject.description>Discrete measurement</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>Discrete_Disc3</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>Discrete_Disc3</ftn:IdentifiedObject.name>
+	</cim:Discrete>
+	<cim:Discrete rdf:ID="Discrete_Disc4">
+		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
+		<cim:Discrete.minValue>0</cim:Discrete.minValue>
+		<cim:Discrete.normalValue>0</cim:Discrete.normalValue>
+		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
+		<cim:Measurement.measurementType>SwitchStatus</cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#Disc_4"/>
+		<cim:IdentifiedObject.description>Discrete measurement</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>Discrete_Disc4</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>Discrete_Disc4</ftn:IdentifiedObject.name>
 	</cim:Discrete>
 </rdf:RDF>
