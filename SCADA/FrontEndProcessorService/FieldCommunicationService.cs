@@ -14,7 +14,7 @@ using ScadaCommon.ServiceProxies;
 using ScadaCommon.NDSDataModel;
 using ScadaCommon.BackEnd_FrontEnd;
 using EntityFrameworkMeasurementInfrastructure;
-
+using FrontEndProcessorService.Simulator;
 
 namespace FrontEndProcessorService
 {
@@ -38,6 +38,7 @@ namespace FrontEndProcessorService
         private List<ServiceHost> hosts = null;
         private FEPCommandingService fEPCommandingService;
         private IFEPConfigService nDSConfigurationService;
+        private SimulatorCommandingService simulatorCommandingService;
         #endregion Fields
 
         #region Properties
@@ -70,6 +71,8 @@ namespace FrontEndProcessorService
 
             fEPCommandingService = new FEPCommandingService(processingManager, configuration);
             nDSConfigurationService = new NDSConfigurationService(StartService);
+
+            simulatorCommandingService = new SimulatorCommandingService(commandExecutor);
 
             InitializeHosts();
         }
@@ -183,6 +186,8 @@ namespace FrontEndProcessorService
 				if (points.TryGetValue(Tuple.Create(pointIds[0].Address, pointIds[0].PointType), out p))
 				{
 					retVal.Add(p);
+
+                    simulatorCommandingService.UpdatePoints(Tuple.Create(pointIds[0].Address, pointIds[0].PointType), p);
 				}
 			}
 			return retVal;

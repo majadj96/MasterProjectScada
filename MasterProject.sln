@@ -80,8 +80,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CalculationEngine", "Calcul
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TransactionManager", "TransactionManager", "{75A2F8DB-46B6-4278-85AF-9645E30A1A47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulator", "Simulator\Simulator.csproj", "{B5ABAFCB-E7AD-418D-A2C6-A217C3F59AC9}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

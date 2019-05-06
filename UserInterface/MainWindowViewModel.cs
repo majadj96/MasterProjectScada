@@ -587,23 +587,23 @@ namespace UserInterface
             {
 				if (SubstationCurrent.Transformator.TransformerWindings.Contains(meas.PowerSystemResource))
 				{
-					if (meas.Mrid == "PT1Current_W1")
-						meshViewModel.StrujaW1 = meas.Value.ToString() + " A";
+                    if (meas.Mrid == "PT1Current_W1")
+                        meshViewModel.StrujaW1 = String.Format("{0:0.#}", meas.Value) + " A";
 					else if (meas.Mrid == "PT1Current_W2")
-						meshViewModel.StrujaW2 = meas.Value.ToString() + " A";
-					else if (meas.Mrid == "PT1Voltage_W1")
-						meshViewModel.NaponW1 = meas.Value.ToString() + " V";
-					else if (meas.Mrid == "PT1Voltage_W2")
-						meshViewModel.NaponW2 = meas.Value.ToString() + " V";
-					else if (meas.Mrid == "PT2Current_W1")
-						meshViewModel.Struja2W1 = meas.Value.ToString() + " A";
-					else if (meas.Mrid == "PT2Current_W2")
-						meshViewModel.Struja2W2 = meas.Value.ToString() + " A";
-					else if (meas.Mrid == "PT2Voltage_W1")
-						meshViewModel.Napon2W1 = meas.Value.ToString() + " V";
-					else if (meas.Mrid == "PT2Voltage_W2")
-						meshViewModel.Napon2W2 = meas.Value.ToString() + " V";
-				}
+						meshViewModel.StrujaW2 = String.Format("{0:0.#}", meas.Value) + " A";
+                    else if (meas.Mrid == "PT1Voltage_W1")
+						meshViewModel.NaponW1 = String.Format("{0:0.#}", meas.Value) + " V";
+                    else if (meas.Mrid == "PT1Voltage_W2")
+						meshViewModel.NaponW2 = String.Format("{0:0.#}", meas.Value) + " V";
+                    else if (meas.Mrid == "PT2Current_W1")
+						meshViewModel.Struja2W1 = String.Format("{0:0.#}", meas.Value) + " A";
+                    else if (meas.Mrid == "PT2Current_W2")
+						meshViewModel.Struja2W2 = String.Format("{0:0.#}", meas.Value) + " A";
+                    else if (meas.Mrid == "PT2Voltage_W1")
+						meshViewModel.Napon2W1 = String.Format("{0:0.#}", meas.Value) + " V";
+                    else if (meas.Mrid == "PT2Voltage_W2")
+						meshViewModel.Napon2W2 = String.Format("{0:0.#}", meas.Value) + " V";
+                }
                 if (meas.PowerSystemResource.ToString() == SubstationCurrent.Gid)
                 {
                     CommandToAM(meas.Value);
@@ -657,7 +657,11 @@ namespace UserInterface
                         else if (meas.Mrid.ToLower().Contains("pressure"))
                         {
 							GaugePressure2Visibility = "Visible";
-							GaugePressure2 = meas.Value.ToString();
+                            try
+                            {
+                                GaugePressure2 = meas.Value.ToString();
+                            }
+                            catch (Exception) { }
                         }
                     }
                 }
