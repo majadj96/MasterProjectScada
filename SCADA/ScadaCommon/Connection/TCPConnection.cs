@@ -121,6 +121,10 @@ namespace ScadaCommon.Connection
                             numberOfReceivedBytes += numOfReceived;
                         }
                     }
+                    else
+                    {
+                        break;
+                    }
                     //Ovo smo dodali jer se socket nakon nasilnog iskljucivanja simulatora zaglupi....
                     //if (numberOfReceiveRetries >= 10 && numberOfReceivedBytes == 0)
                     //{
