@@ -80,7 +80,6 @@ namespace ScadaCommon.Connection
 			{
 				try
 				{
-
 					processConnection.WaitOne();
                     funcExecuteUnsolicitedSync.WaitOne();      //Sinhronizacioni mehanizam za unsolicited poruke
                                                                //Koja metoda prva udje zakljucava semafor i na kraju ga pusta

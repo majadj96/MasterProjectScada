@@ -84,7 +84,7 @@ namespace ProcessingModule
                 CheckUnsMessage(message);
                 
                 funcExecuteUnsolicitedSync.Set();
-                Thread.Sleep(300);
+                Thread.Sleep(50);
             }
         }
 

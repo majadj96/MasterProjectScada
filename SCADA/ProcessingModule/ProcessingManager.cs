@@ -228,7 +228,12 @@ namespace ProcessingModule
         {
             if (functionCode == DNP3FunctionCode.CONFIRM)
             {
+                byte transportHeaderSeq = (byte)(message[10] & 0x3f);
+                byte applicationControl = (byte)(message[11] & 0xf);
 
+                DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters((byte)(0xd0 | applicationControl), (byte)DNP3FunctionCode.CONFIRM, 0, 0, 0x0001, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, (byte)((0xc0 | transportHeaderSeq) + 1));
+                IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Message(p);
+                this.functionExecutor.SendMessage(fn);
             }
             else if (functionCode == DNP3FunctionCode.WRITE)
             {
