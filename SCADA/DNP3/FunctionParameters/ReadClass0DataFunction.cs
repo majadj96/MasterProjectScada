@@ -80,7 +80,7 @@ namespace DNP3.FunctionParameters
                     val = receivedMessage[idx++];
                     numberOfReg = (ushort)(BitConverter.ToUInt16(new byte[2] { receivedMessage[idx++], val }, 0) + 1);
 
-                    for (int i = 0, j = 0; i < numberOfReg; i++, j++)
+                    for (int i = 0, j = 0; i < numberOfReg; i++)
                     {
                         val = receivedMessage[idx];
 
@@ -99,7 +99,10 @@ namespace DNP3.FunctionParameters
                             j = 0;
                             idx++;
                         }
+                        else
+                            j++;
                     }
+                    idx++;
                 }
                 else if ((TypeField)typeField == TypeField.COUNTER_16BIT)
                 {
@@ -156,7 +159,7 @@ namespace DNP3.FunctionParameters
                     val = receivedMessage[idx++];
                     numberOfReg = (ushort)(BitConverter.ToUInt16(new byte[2] { receivedMessage[idx++], val }, 0) + 1);
 
-                    for (int i = 0, j = 0; i < numberOfReg; i++, j++)
+                    for (int i = 0, j = 0; i < numberOfReg; i++)
                     {
                         val = receivedMessage[idx];
 
@@ -175,6 +178,8 @@ namespace DNP3.FunctionParameters
                             j = 0;
                             idx++;
                         }
+                        else
+                            j++;
                     }
                     idx++;
                 }

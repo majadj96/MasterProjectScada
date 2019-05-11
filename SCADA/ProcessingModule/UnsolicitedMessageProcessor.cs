@@ -79,10 +79,11 @@ namespace ProcessingModule
                 message = new byte[header.Length + payload.Length];
                 Buffer.BlockCopy(header, 0, message, 0, 10);
                 Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
+
                 stateUpdater.LogMessage(message.ToString());
 
                 CheckUnsMessage(message);
-                
+
                 funcExecuteUnsolicitedSync.Set();
                 Thread.Sleep(50);
             }
