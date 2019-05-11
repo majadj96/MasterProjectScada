@@ -11,8 +11,6 @@ namespace EntityFrameworkMeasurementInfrastructure
     {
         protected override void Seed(MeasurementContext context)
         {
-            context.Measurements.Add(new RepositoryCore.Measurement() { Gid = 0, ChangedTime = DateTime.Now, Value = 2 });
-            context.SaveChanges();
             base.Seed(context);
         }
     }

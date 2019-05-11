@@ -1,23 +1,29 @@
 ﻿using ScadaCommon.Database;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace AlarmEventServiceDatabase
+namespace RepositoryCore.Interfaces
 {
-    [ServiceKnownType(typeof(Alarm))]
     [ServiceContract]
-    public interface IAlarmServiceOperations
+    public interface IAlarmEventRepository
     {
         [OperationContract]
         void AddAlarm(Alarm alarm);
-
-        [OperationContract]
-        bool DeleteAlarm(int id);
 
         [OperationContract]
         bool AcknowledgeAlarm(Alarm alarm);
 
         [OperationContract]
         List<Alarm> GetAllAlarms();
+
+        [OperationContract]
+        void AddEvent(Event newEvent);
+
+        [OperationContract]
+        List<Event> GetAllEvents();
     }
 }
