@@ -18,6 +18,12 @@ namespace EntityFrameworkMeasurementInfrastructure
             context.SaveChanges();
         }
 
+        public void AddMeasurements(Measurement[] measurements)
+        {
+            context.Measurements.AddRange(measurements);
+            context.SaveChanges();
+        }
+
         public void GetAllMeasurementsByGid(long gid)
         {
             throw new NotImplementedException();

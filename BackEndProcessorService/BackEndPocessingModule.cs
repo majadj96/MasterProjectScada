@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using BackEndProcessorService.Proxy;
 using PubSubCommon;
+using RepositoryCore;
+using RepositoryCore.Interfaces;
 using ScadaCommon;
 using ScadaCommon.BackEnd_FrontEnd;
 using ScadaCommon.Interfaces;
@@ -15,13 +17,15 @@ namespace BackEndProcessorService
         private IPointUpdateService pointUpdateProxy;
         private IPub publisherProxy;
         private AlarmEventServiceProxy alarmEventServiceProxy;
+        private IMeasurementRepository measurementRepository;
         public List<IProcessingData> ProcessingPipeline { get; set; }
         public List<IProcessingData> CommandingPipeline { get; set; }
-        public BackEndPocessingModule(IPointUpdateService pointUpdateProxy, AlarmEventServiceProxy alarmEventServiceProxy, IPub publisherProxy)
+        public BackEndPocessingModule(IPointUpdateService pointUpdateProxy, AlarmEventServiceProxy alarmEventServiceProxy, IPub publisherProxy, IMeasurementRepository measurementRepository)
         {
             this.alarmEventServiceProxy = alarmEventServiceProxy;
             this.pointUpdateProxy = pointUpdateProxy;
             this.publisherProxy = publisherProxy;
+            this.measurementRepository = measurementRepository;
             ProcessingPipeline = new List<IProcessingData>();
             CommandingPipeline = new List<IProcessingData>();
             InitializeProcessingModules();
@@ -30,6 +34,7 @@ namespace BackEndProcessorService
         public void Process(ProcessingObject[] inputObj)
         {
             List<ScadaUIExchangeModel> measurement = new List<ScadaUIExchangeModel>();
+            List<Measurement> measurementsDB = new List<Measurement>();
             for (int index = 0; index < inputObj.Length; index++)
             {
                 foreach (var item in ProcessingPipeline)
@@ -38,13 +43,15 @@ namespace BackEndProcessorService
                 }
                 if (inputObj[index].PointType == PointType.ANALOG_INPUT_16 || inputObj[index].PointType == PointType.ANALOG_OUTPUT_16) {
                     measurement.Add(new ScadaUIExchangeModel() { Gid = inputObj[index].Gid, Time = DateTime.Now, Value = ((AnalogPoint)(inputObj[index])).EguValue });
+                    measurementsDB.Add(new Measurement() { Gid = inputObj[index].Gid, ChangedTime = DateTime.Now, Value = (int)((AnalogPoint)(inputObj[index])).EguValue });
                 }
                 else
                 {
                     measurement.Add(new ScadaUIExchangeModel() { Gid = inputObj[index].Gid, Time = DateTime.Now, Value = inputObj[index].RawValue });
+                    measurementsDB.Add(new Measurement() { Gid = inputObj[index].Gid, ChangedTime =inputObj[index].Timestamp, Value = (int)inputObj[index].RawValue });
                 }
             }
-
+            measurementRepository.AddMeasurements(measurementsDB.ToArray());
            // this.pointUpdateProxy.UpdatePoint(inputObj);
             publisherProxy.PublishMeasure(measurement.ToArray(), "scada");
         }
