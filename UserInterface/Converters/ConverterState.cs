@@ -15,14 +15,14 @@ namespace UserInterface.Converters
         public static DiscreteState ConvertToDiscreteState(bool state)
         {
             if (state)
-                return DiscreteState.ON;
-            else
                 return DiscreteState.OFF;
+            else
+                return DiscreteState.ON;
         }
 
         public static DiscreteState ConvertToDiscreteState(double value)
         {
-            if(value > 0.5)
+            if(value == 1)
                 return DiscreteState.OFF;
             else
                 return DiscreteState.ON;

@@ -449,6 +449,9 @@ namespace UserInterface
                             c.Value = vv.State.ToString();
                             c.Time = vv.Time;
                             i++;
+
+                            /*if (vv.NewState != vv.State)
+                                vv.State = vv.NewState;*/
                         }
                     }
                 }

@@ -583,47 +583,47 @@ namespace UserInterface.ViewModel
         {
             if (string.Compare(element, "Breaker1") == 0)
             {
-                SubstationCurrent.Breakers[0].State = ((Breaker)target).NewState;
-                SubstationCurrent.Breakers[0].NewState = SubstationCurrent.Breakers[0].State;
+                SubstationCurrent.Breakers[0].NewState = ((Breaker)target).NewState;
+                SubstationCurrent.Breakers[0].State = SubstationCurrent.Breakers[0].NewState;
                 BreakerOperation("1");
             }
             else if (string.Compare(element, "Breaker2") == 0)
             {
-                SubstationCurrent.Breakers[1].State = ((Breaker)target).NewState;
-                SubstationCurrent.Breakers[1].NewState = SubstationCurrent.Breakers[1].State;
+                SubstationCurrent.Breakers[1].NewState = ((Breaker)target).NewState;
+                SubstationCurrent.Breakers[1].State = SubstationCurrent.Breakers[1].NewState;
                 BreakerOperation("2");
             }
             else if (string.Compare(element, "Breaker3") == 0)
             {
-                SubstationCurrent.Breakers[0].State = ((Breaker)target).NewState;
-                SubstationCurrent.Breakers[0].NewState = SubstationCurrent.Breakers[0].State;
+                SubstationCurrent.Breakers[0].NewState = ((Breaker)target).NewState;
+                SubstationCurrent.Breakers[0].State = SubstationCurrent.Breakers[0].NewState;
                 BreakerOperation("1");
             }
             else if (string.Compare(element, "Breaker4") == 0)
             {
-                SubstationCurrent.Breakers[1].State = ((Breaker)target).NewState;
-                SubstationCurrent.Breakers[1].NewState = SubstationCurrent.Breakers[1].State;
+                SubstationCurrent.Breakers[1].NewState = ((Breaker)target).NewState;
+                SubstationCurrent.Breakers[1].State = SubstationCurrent.Breakers[1].NewState;
                 BreakerOperation("4");
             }
             else if (string.Compare(element, "Breaker5") == 0)
             {
                 if (SubstationCurrent.Breakers.Count > 2)
                 {
-                    SubstationCurrent.Breakers[2].State = ((Breaker)target).NewState;
-                    SubstationCurrent.Breakers[2].NewState = SubstationCurrent.Breakers[2].State;
+                    SubstationCurrent.Breakers[2].NewState = ((Breaker)target).NewState;
+                    SubstationCurrent.Breakers[2].State = SubstationCurrent.Breakers[2].NewState;
                     BreakerOperation("5");
                 }
             }
             else if (string.Compare(element, "Disconector1") == 0)
             {
-                SubstationCurrent.Disconectors[0].State = ((Disconector)target).NewState;
-                SubstationCurrent.Disconectors[0].NewState = SubstationCurrent.Disconectors[0].State;
+                SubstationCurrent.Disconectors[0].NewState = ((Disconector)target).NewState;
+                SubstationCurrent.Disconectors[0].State = SubstationCurrent.Disconectors[0].NewState;
                 DisconectorOperation("1");
             }
             else if (string.Compare(element, "Disconector2") == 0)
             {
-                SubstationCurrent.Disconectors[1].State = ((Disconector)target).NewState;
-                SubstationCurrent.Disconectors[1].NewState = SubstationCurrent.Disconectors[1].State;
+                SubstationCurrent.Disconectors[1].NewState = ((Disconector)target).NewState;
+                SubstationCurrent.Disconectors[1].State = SubstationCurrent.Disconectors[1].NewState;
                 DisconectorOperation("2");
             }
             //TODO add elements
@@ -721,21 +721,21 @@ namespace UserInterface.ViewModel
                     case "1":
                         if (SubstationCurrent.Disconectors[0].State == DiscreteState.ON)
                         {
-                            SetFirstDisconectorOff();
+                            SetFirstDisconectorOn();
                         }
                         else
                         {
-                            SetFirstDisconectorOn();
+                            SetFirstDisconectorOff();
                         }
                         break;
                     case "2":
                         if (SubstationCurrent.Disconectors[1].State == DiscreteState.ON)
                         {
-                            SetSecondDisconectorOff();
+                            SetSecondDisconectorOn();
                         }
                         else
                         {
-                            SetSecondDisconectorOn();
+                            SetSecondDisconectorOff();
                         }
                         break;
                     default:
@@ -889,11 +889,11 @@ namespace UserInterface.ViewModel
                         {
                             if (SubstationCurrent.Breakers[0].State == DiscreteState.OFF)
                             {
-                                SetFirstBreakerOn();
+                                SetFirstBreakerOff();
                             }
                             else
                             {
-                                SetFirstBreakerOff();
+                                SetFirstBreakerOn();
                             }
                             break;
                         }
@@ -901,11 +901,11 @@ namespace UserInterface.ViewModel
                         {
                             if (SubstationCurrent.Breakers[1].State == DiscreteState.OFF)
                             {
-                                SetSecondBreakerOn();
+                                SetSecondBreakerOff();
                             }
                             else
                             {
-                                SetSecondBreakerOff();
+                                SetSecondBreakerOn();
                             }
                             break;
                         }
@@ -913,11 +913,11 @@ namespace UserInterface.ViewModel
                         {
                             if (SubstationCurrent.Breakers[1].State == DiscreteState.OFF)
                             {
-                                SetFourthBreakerOn();
+                                SetFourthBreakerOff();
                             }
                             else
                             {
-                                SetFourthBreakerOff();
+                                SetFourthBreakerOn();
                             }
                             break;
                         }
@@ -925,11 +925,11 @@ namespace UserInterface.ViewModel
                         {
                             if (SubstationCurrent.Breakers[2].State == DiscreteState.OFF)
                             {
-                                SetFifthBreakerOn();
+                                SetFifthBreakerOff();
                             }
                             else
                             {
-                                SetFifthBreakerOff();
+                                SetFifthBreakerOn();
                             }
                             break;
                         }

@@ -54,6 +54,7 @@ namespace UserInterface.ViewModel
             var v = ProxyServices.CommandingServiceProxy.WriteDigitalOutput(commandObject);
             if (v == ScadaCommon.CommandResult.Success)
             {
+                BreakerCurrent.State = BreakerCurrent.NewState;
                 Messenger.Default.Send(new NotificationMessage("command", BreakerCurrent, "Breaker" + type));
 
                 Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.UI, GiD = long.Parse(BreakerCurrent.GID), Message = "Commanding breaker.", PointName = BreakerCurrent.Name  };
