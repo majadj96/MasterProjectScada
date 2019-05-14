@@ -220,11 +220,11 @@ namespace FrontEndProcessorService.Simulator
 
                 while (value >= tank1.NormalValue)
                 {
-                    value -= 5;
+                    value -= 2;
 
                     SendMessage(tank1.Address, value);
 
-                    Thread.Sleep(5000);
+                    Thread.Sleep(2000);
                 }
             }
             tank1 = null;
@@ -238,11 +238,11 @@ namespace FrontEndProcessorService.Simulator
 
                 while (value >= tank2.NormalValue)
                 {
-                    value -= 5;
+                    value -= 2;
 
                     SendMessage(tank2.Address, value);
 
-                    Thread.Sleep(5000);
+                    Thread.Sleep(2000);
                 }
                 tank2 = null;
             }
