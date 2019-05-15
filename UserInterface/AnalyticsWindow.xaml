@@ -41,37 +41,33 @@
     </Window.Resources>
     <Grid Background="#FF474747">
 
-        <StackPanel x:Name="SubstationsPanel" Canvas.Left="3" Margin="40,297,808,352" Orientation="Vertical">
-            <CheckBox IsChecked="{Binding IsDiscreteSelected, Mode=TwoWay}" Content="Discrete Signal" FontSize="13" FontFamily="Consolas"/>
-        </StackPanel>
-        <wpf:CartesianChart Margin="228,152,48,48" Series="{Binding SeriesCollection}" Foreground="{x:Null}">
+        <StackPanel x:Name="SubstationsPanel" Canvas.Left="3" Margin="40,297,808,352" Orientation="Vertical"/>
+        <wpf:CartesianChart Margin="228,152,48,48" Series="{Binding SeriesCollection}" Foreground="{x:Null}" Background="White">
             <wpf:CartesianChart.AxisX>
                 <wpf:Axis>
                     <wpf:Axis.Separator>
-                        <wpf:Separator Stroke="White"/>
+                        <wpf:Separator Stroke="Black"/>
                     </wpf:Axis.Separator>
                 </wpf:Axis>
             </wpf:CartesianChart.AxisX>
             <wpf:CartesianChart.AxisY>
                 <wpf:Axis>
                     <wpf:Axis.Separator>
-                        <wpf:Separator Stroke="White"/>
+                        <wpf:Separator Stroke="Black"/>
                     </wpf:Axis.Separator>
                 </wpf:Axis>
             </wpf:CartesianChart.AxisY>
         </wpf:CartesianChart>
         <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding SubstationList}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedSubstation, Mode=TwoWay}" Margin="40,152,0,0" VerticalAlignment="Top" Height="25" Width="144" FontFamily="Consolas"/>
         <Label Content="Subsation" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="40,122,0,0" VerticalAlignment="Top" FontFamily="Consolas" Width="144" Foreground="White" FontSize="13"/>
-        <Label Content="Signal type" HorizontalAlignment="Left"  HorizontalContentAlignment="Center" Margin="40,267,0,0" VerticalAlignment="Top" FontFamily="Consolas" Width="144" Foreground="White" FontSize="13"/>
-        <Label Content="Measurements" HorizontalAlignment="Left" Margin="40,403,0,0"  HorizontalContentAlignment="Center" VerticalAlignment="Top" FontFamily="Consolas" Width="144" Foreground="White" FontSize="13"/>
-        <ListView HorizontalAlignment="Left" ItemsSource="{Binding SignalList}" Height="116" Margin="40,433,0,0" VerticalAlignment="Top" Width="144" Background="#FFA2A2A2" BorderBrush="Black" BorderThickness="2" FontSize="13">
+        <Label Content="Measurements" HorizontalAlignment="Left" Margin="40,250,0,0"  HorizontalContentAlignment="Center" VerticalAlignment="Top" FontFamily="Consolas" Width="144" Foreground="White" FontSize="13"/>
+        <ListView HorizontalAlignment="Left" ItemsSource="{Binding SignalList}" Height="298" Margin="10,297,0,0" VerticalAlignment="Top" Width="199" Background="#FFA2A2A2" BorderBrush="Black" BorderThickness="2" FontSize="13">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <analytics:SignalListItem/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Label Content="(Default is Analog)" HorizontalAlignment="Left"  HorizontalContentAlignment="Left" Margin="40,322,0,0" VerticalAlignment="Top" FontFamily="Consolas" Width="144" Foreground="Black"/>
         <Label Content="Analytic" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="10,24,0,0" VerticalAlignment="Top" FontFamily="Consolas" Width="972" Foreground="White" FontSize="30" Height="57"/>
 
     </Grid>

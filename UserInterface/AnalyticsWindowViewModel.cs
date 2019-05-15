@@ -36,6 +36,8 @@ namespace UserInterface
             {
                 selectedSubstation = value;
                 PopulateSignals(selectedSubstation.Gid);
+                signalsOn.Clear();
+                SeriesCollection.Clear();
             }
         }
 
@@ -107,7 +109,7 @@ namespace UserInterface
         {
             StepLineSeries test = new StepLineSeries();
             test.Title = title;
-            test.Stroke = Brushes.LightPink;
+            test.Stroke = Brushes.Red;
             test.AlternativeStroke = Brushes.LightPink;
             test.Values = new ChartValues<int> { 1, 1, 1, 0, 0, 1 };
             return test;
@@ -116,7 +118,7 @@ namespace UserInterface
         {
             StepLineSeries test = new StepLineSeries();
             test.Title = title;
-            test.Stroke = Brushes.LightGoldenrodYellow;
+            test.Stroke = Brushes.Yellow;
             test.AlternativeStroke = Brushes.LightGoldenrodYellow;
             test.Values = new ChartValues<int> { 0, 0, 1, 1, 1, 0 };
             return test;
@@ -125,15 +127,50 @@ namespace UserInterface
         {
             StepLineSeries test = new StepLineSeries();
             test.Title = title;
-            test.Stroke = Brushes.LightSkyBlue;
+            test.Stroke = Brushes.Blue;
             test.AlternativeStroke = Brushes.LightSkyBlue;
             test.Values = new ChartValues<int> { 0, 0, 0, 1, 1, 0 };
             return test;
         }
 
+
         private void PopulateSignals(string substationGid)
+        {
+            List<SignalListItemViewModel> tempList = new List<SignalListItemViewModel>();
+            Substation selectedSub = substations.Where(x => x.Value.Gid == substationGid).FirstOrDefault().Value;
+
+            foreach(var dis in selectedSub.Disconectors)
+            {
+                tempList.Add(new SignalListItemViewModel()
+                {
+                    Name = dis.Name,
+                    Gid = dis.DiscreteGID
+                });
+            }
+
+            foreach (var breaker in selectedSub.Breakers)
+            {
+                tempList.Add(new SignalListItemViewModel()
+                {
+                    Name = breaker.Name,
+                    Gid = breaker.DiscreteGID
+                });
+            }
+
+            foreach (var asyncMach in selectedSub.AsynchronousMachines)
+            {
+                tempList.Add(new SignalListItemViewModel()
+                {
+                    Name = asyncMach.Name,
+                    Gid = asyncMach.SignalGid
+                });
+            }
+            SignalList = tempList;
+        }
+
+        private void PopulateSignals1(string substationGid)
             => SignalList = substations.Where(x => x.Value.Gid == substationGid)
-            .Select(x => new { x.Value.AsynchronousMachines, x.Value.Breaker, x.Value.Disconectors })
+            .Select(x => new { x.Value.AsynchronousMachines, x.Value.Breakers, x.Value.Disconectors })
             .Select(x => MapSignals(x))
             .SelectMany(x => x)
             .ToList();
