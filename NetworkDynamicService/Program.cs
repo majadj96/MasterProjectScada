@@ -10,20 +10,20 @@ namespace NetworkDynamicService
     {
         static void Main(string[] args)
         {
-            FrontEndProcessorServiceProxy fepsProxy = new FrontEndProcessorServiceProxy("FieldCommunicationServiceEndPoint");
-
-            using (NetworkDynamicService nds = new NetworkDynamicService())
+            PointOperateService pos = new PointOperateService();
+            NetworkDynamicService nds = new NetworkDynamicService();
+            
+            try
             {
                 nds.Start();
+                pos.Start();
                 Console.WriteLine("Kao krenulo!");
-
-                Console.ReadKey();
-                fepsProxy.Open();
-                fepsProxy.ReadAnalogInput(0);
-                
-                Console.ReadLine();
             }
-
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            
             Console.ReadKey();
         }
     }

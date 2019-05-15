@@ -217,34 +217,40 @@ namespace FrontEndProcessorService
 			return retVal;
 		}
 
-        public void WriteDigitalOutput(int adress, int value)
+        public void WriteDigitalOutput(int address, int value)
         {
-            throw new NotImplementedException();
+            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.DIGITAL_OUTPUT, (ushort)address));
+            this.processingManager.ExecuteWriteCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, value);
         }
 
-        public void WriteAnalogOutput(int adress, int value)
+        public void WriteAnalogOutput(int address, int value)
         {
-            throw new NotImplementedException();
+            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.ANALOG_OUTPUT, (ushort)address));
+            this.processingManager.ExecuteWriteCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, value);
         }
 
-        public void ReadDigitalInput(int adress)
+        public void ReadDigitalInput(int address)
         {
-            throw new NotImplementedException();
+            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.DIGITAL_INPUT, (ushort)address));
+            this.processingManager.ExecuteReadCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
         }
 
-        public void ReadAnalogInput(int adress)
+        public void ReadAnalogInput(int address)
         {
-            Console.WriteLine("RAI radi!");
+            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.ANALOG_INPUT, (ushort)address));
+            this.processingManager.ExecuteReadCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
         }
 
-        public void ReadDigitalOutput(int adress)
+        public void ReadDigitalOutput(int address)
         {
-            throw new NotImplementedException();
+            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.DIGITAL_OUTPUT, (ushort)address));
+            this.processingManager.ExecuteReadCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
         }
 
-        public void ReadAnalogOutput(int adress)
+        public void ReadAnalogOutput(int address)
         {
-            throw new NotImplementedException();
+            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.ANALOG_OUTPUT, (ushort)address));
+            this.processingManager.ExecuteReadCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
         }
     }
 }

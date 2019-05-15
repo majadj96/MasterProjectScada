@@ -6,11 +6,18 @@ namespace FrontEndProcessorService
     {
         static void Main(string[] args)
         {
-            using (FrontEndProcessorService fcs = new FrontEndProcessorService())
+            FrontEndProcessorService fcs = new FrontEndProcessorService();
+
+            try
             {
                 fcs.Start();
-                Console.ReadKey();
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Console.ReadKey();
         }
     }
 }
