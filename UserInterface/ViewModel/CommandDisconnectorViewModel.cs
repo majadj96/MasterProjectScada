@@ -4,6 +4,7 @@ using ScadaCommon.ComandingModel;
 using System;
 using UserInterface.BaseError;
 using UserInterface.Command;
+using UserInterface.Converters;
 using UserInterface.Model;
 using UserInterface.ProxyPool;
 
@@ -35,7 +36,7 @@ namespace UserInterface.ViewModel
         public CommandDisconnectorViewModel(Disconector disconector, string type)
         {
             DisconectorCurrent = disconector;
-            NewState = !Converter.ConvertToBool(DisconectorCurrent.State);
+            NewState = !ConverterState.ConvertToBool(DisconectorCurrent.State);
 
             this.type = type;
 
@@ -44,7 +45,7 @@ namespace UserInterface.ViewModel
 
         public void CommandDisconnector()
         {
-            DisconectorCurrent.NewState = Converter.ConvertToDiscreteState(NewState);
+            DisconectorCurrent.NewState = ConverterState.ConvertToDiscreteState(NewState);
 
             CommandObject commandObject = new CommandObject() { CommandingTime = DateTime.Now, CommandOwner = "UI", EguValue = (float)DisconectorCurrent.NewState, SignalGid = DisconectorCurrent.DiscreteGID };
             var v = ProxyServices.CommandingServiceProxy.WriteDigitalOutput(commandObject);
@@ -52,8 +53,8 @@ namespace UserInterface.ViewModel
             {
                 Messenger.Default.Send(new NotificationMessage("command", DisconectorCurrent, "Disconector" + type));
 
-                Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.UI, GiD = long.Parse(DisconectorCurrent.GID), Message = "Commanding disconnector.", PointName = DisconectorCurrent.Name };
-                ProxyServices.AlarmEventServiceProxy.AddEvent(e);
+                /*Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.UI, GiD = long.Parse(DisconectorCurrent.GID), Message = "Commanding disconnector.", PointName = DisconectorCurrent.Name };
+                ProxyServices.AlarmEventServiceProxy.AddEvent(e);*/
             }
         }
     }

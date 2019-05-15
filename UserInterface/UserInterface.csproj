@@ -90,6 +90,9 @@
     </Compile>
     <Compile Include="CommandingWindowViewModel.cs" />
     <Compile Include="Command\MyICommand.cs" />
+    <Compile Include="Converters\BooleanConverter.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\ConverterState.cs" />
     <Compile Include="Model\AsynchronousMachine.cs" />
     <Compile Include="Model\Breaker.cs" />
     <Compile Include="Model\Disconector.cs" />
@@ -225,6 +228,10 @@
     <ProjectReference Include="..\PubSubCommon\PubSubCommon.csproj">
       <Project>{6109286A-0DC9-469C-A271-0605C18ED32C}</Project>
       <Name>PubSubCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RepositoryCore\RepositoryCore.csproj">
+      <Project>{46F879CD-DF1D-402A-9373-62153FDE9ED4}</Project>
+      <Name>RepositoryCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\SCADA\ScadaCommon\ScadaCommon.csproj">
       <Project>{823D1355-EFD0-481C-A0D9-FDA0C4EA37DF}</Project>

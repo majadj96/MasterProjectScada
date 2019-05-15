@@ -166,7 +166,7 @@
                 x:Name="Up_AM"
                 X1="0" Y1="0"
                 X2="0" Y2="25"
-                Stroke="{Binding LineUpPump}"
+                Stroke="{Binding LineUpBreaker2}"
                 StrokeThickness="2" Canvas.Left="110" Canvas.Top="417" Height="25" Fill="Red" />
             <Button Name="Disc_1" Content="" Canvas.Left="91" Margin="0" Canvas.Top="44" Width="37" Height="37" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
                 <Button.Background>
@@ -174,7 +174,6 @@
                 </Button.Background>
                 <Button.InputBindings>
                     <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Disconnector1"/>
-                    <MouseBinding Gesture="LeftClick" Command="{Binding CommandDis1}" CommandParameter="1"/>
                 </Button.InputBindings>
             </Button>
             <Button Name="Disc_2" Content="" Canvas.Left="91" Margin="0" Canvas.Top="239" Width="37" Height="37" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
@@ -184,7 +183,6 @@
 
                 <Button.InputBindings>
                     <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Disconnector2"/>
-                    <MouseBinding Gesture="LeftClick" Command="{Binding CommandDis2}" CommandParameter="2"/>
                 </Button.InputBindings>
             </Button>
             <Button x:Name="Breaker" Content="" Canvas.Left="97" Margin="0" Canvas.Top="142" Width="27" Height="27" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
@@ -193,8 +191,7 @@
                 </Button.Background>
 
                 <Button.InputBindings>
-                    <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Breaker"/>
-                    <MouseBinding Gesture="LeftClick" Command="{Binding CommandBreaker}"/>
+                    <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Breaker1"/>
                 </Button.InputBindings>
             </Button>
             <Button x:Name="PT" Canvas.Left="71" Margin="0" Canvas.Top="310" Width="79" Height="60" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen" FontFamily="Segoe UI Semibold" Foreground="#00000000">
@@ -204,7 +201,6 @@
 
                 <Button.InputBindings>
                     <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="PowerTransformer"/>
-                    <MouseBinding Gesture="LeftClick" Command="{Binding CommandPT}"/>
                 </Button.InputBindings>
             </Button>
             <Button x:Name="AM_1" Content="" Canvas.Left="97" Margin="0" Canvas.Top="502" Width="60" Height="78" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}">
@@ -213,22 +209,25 @@
                 </Button.Background>
             </Button>
 
-            <Button x:Name="BR_AM_1" Canvas.Left="100" Margin="0" Canvas.Top="441" Width="21" Height="19" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}">
+            <Button x:Name="BR_AM_1" Canvas.Left="100" Margin="0" Canvas.Top="441" Width="21" Height="19" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen" FontFamily="Segoe UI Semibold" Foreground="#00000000">
                 <Button.Background>
                     <ImageBrush ImageSource="{Binding BreakerPumpOneImage}"/>
                 </Button.Background>
+                <Button.InputBindings>
+                    <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Breaker2"/>
+                </Button.InputBindings>
             </Button>
             <Line
                 x:Name="Down_AM_BR"
                 X1="0" Y1="0"
                 X2="0" Y2="19"
-                Stroke="{Binding LineBreakerPumpOne}"
+                Stroke="{Binding LineDownBreaker2}"
                 StrokeThickness="2" Canvas.Left="110" Canvas.Top="460" Height="19" Fill="Red" />
             <Line
                 x:Name="Down_CN_AM_BR"
                 X1="0" Y1="0"
                 X2="0" Y2="22"
-                Stroke="{Binding LineDownPumpOne}"
+                Stroke="{Binding LineUpPumpOne}"
                 StrokeThickness="2" Canvas.Left="110" Canvas.Top="480" Height="22" Fill="Red" />
             <Canvas Visibility="{Binding Two_AM_Visible}" Height="150" Canvas.Top="442" Width="253" Background="#FF5E5E5E">
 
@@ -252,15 +251,21 @@
                     </Button.InputBindings>
                 </Button>
 
-                <Button x:Name="Breaker_Pump_M1" Content="" Canvas.Left="42" Margin="0" Width="21" Height="19" BorderBrush="{x:Null}" Canvas.Top="15" Style="{StaticResource MyButtonStyle}">
+                <Button x:Name="Breaker_Pump_M1" Content="" Canvas.Left="42" Margin="0" Width="21" Height="19" BorderBrush="{x:Null}" Canvas.Top="15" Style="{StaticResource MyButtonStyle}" Cursor="Pen" FontFamily="Segoe UI Semibold" Foreground="#00000000">
                     <Button.Background>
                         <ImageBrush ImageSource="{Binding Breaker_PM1Image}"/>
                     </Button.Background>
+                    <Button.InputBindings>
+                        <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Breaker4"/>
+                    </Button.InputBindings>
                 </Button>
-                <Button x:Name="Breaker_Pump_M2" Content="" Canvas.Left="173" Margin="0" Width="21" Height="19" BorderBrush="{x:Null}" Canvas.Top="15" Style="{StaticResource MyButtonStyle}">
+                <Button x:Name="Breaker_Pump_M2" Content="" Canvas.Left="173" Margin="0" Width="21" Height="19" BorderBrush="{x:Null}" Canvas.Top="15" Style="{StaticResource MyButtonStyle}" Cursor="Pen" FontFamily="Segoe UI Semibold" Foreground="#00000000">
                     <Button.Background>
                         <ImageBrush ImageSource="{Binding Breaker_PM2Image}"/>
                     </Button.Background>
+                    <Button.InputBindings>
+                        <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Breaker5"/>
+                    </Button.InputBindings>
                 </Button>
                 <Rectangle Height="12" Canvas.Left="51" Stroke="{Binding LineUpFirstPump}" StrokeThickness="2" Canvas.Top="4" Width="2"/>
                 <Rectangle Height="12" Canvas.Left="183" Stroke="{Binding LineUpSecondPump}" StrokeThickness="2" Canvas.Top="4" Width="2"/>

@@ -122,11 +122,11 @@ namespace ScadaCommon.Connection
                         }
                     }
                     //Ovo smo dodali jer se socket nakon nasilnog iskljucivanja simulatora zaglupi....
-                    if (numberOfReceiveRetries >= 10 && numberOfReceivedBytes == 0)
-                    {
-                        ConnectionState = ConnectionState.DISCONNECTED;
-                        throw new SocketException(10054);
-                    }
+                    //if (numberOfReceiveRetries >= 10 && numberOfReceivedBytes == 0)
+                    //{
+                    //    ConnectionState = ConnectionState.DISCONNECTED;
+                    //    throw new SocketException(10054);
+                    //}
                 }
                 else
                 {

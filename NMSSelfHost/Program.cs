@@ -11,6 +11,8 @@ namespace NetworkModelService
     {
         static void Main(string[] args)
         {
+            Console.Title = "NetworkModelService";
+
             try
             {
                 string message = "Starting Network Model Serivice...";

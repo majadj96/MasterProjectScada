@@ -6,6 +6,8 @@ namespace FrontEndProcessorService
     {
         static void Main(string[] args)
         {
+            Console.Title = "FEP";
+
             FieldCommunicationService fcs = new FieldCommunicationService();
 
             try

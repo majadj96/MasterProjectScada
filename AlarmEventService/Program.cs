@@ -6,41 +6,18 @@ namespace AlarmEventService
     {
         static void Main(string[] args)
         {
-            AlarmEventServiceHost alarmEventServiceHost = new AlarmEventServiceHost();
+            AlarmEventServiceHost aesh = new AlarmEventServiceHost();
 
             try
             {
-                alarmEventServiceHost.Start();
+                aesh.Start();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(e.Message);
             }
 
             Console.ReadKey();
-
-            /*AlarmEventServices alarmEventServices = new AlarmEventServices();
-
-            Alarm a = new Alarm()
-            {
-                AlarmReportedBy = AlarmEventType.CE,
-                Message = "Bla",
-                GiD = 12354654,
-                PointName = "Name",
-                Username = "somebody"
-            };
-
-            alarmEventServices.AddAlarm(a);
-
-            Event e = new Event() { GiD = 1561321535, EventReportedBy = ScadaCommon.AlarmEventType.CE, Message = "some", PointName = "name" };
-
-            alarmEventServices.AddEvent(e);
-
-
-            Alarm a = alarmEventServices.GetAllAlarms().Last();
-            a.AlarmAcknowledged = DateTime.Now;
-            a.Username = "no one";
-            alarmEventServices.AcknowledgeAlarm(a);*/
         }
     }
 }

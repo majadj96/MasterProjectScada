@@ -15,7 +15,15 @@ namespace NetworkModelService
 
         public Pub()
         {
-            CreateProxy();
+            try
+            {
+                CreateProxy();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
             _eventCounter = 0;
         }
         private void CreateProxy()

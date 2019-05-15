@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using UserInterface.BaseError;
 using UserInterface.Command;
+using UserInterface.Converters;
 using UserInterface.Model;
 using UserInterface.ProxyPool;
 using UserInterface.Subscription;
@@ -36,6 +37,9 @@ namespace UserInterface
         private ObservableCollection<string> searchType = new ObservableCollection<string> { "Name", "GID" };
         List<Substation> searchedSubs = new List<Substation>();
 
+        private DispatcherTimer AlarmButtonTimer = new DispatcherTimer();
+        //private Thread threadAlarms;
+
         #region Variables
         private BindableBase currentMeshViewModel;
         private BindableBase currentTableViewModel;
@@ -57,6 +61,9 @@ namespace UserInterface
         public string searchTerm { get; set; }
         public string searchTypeSelected { get; set; }
 
+        private bool BlinkOnFlag = false, FlagToStartBlinking = false;
+        private bool meshVisible = true;
+        private SolidColorBrush buttonAlarmBrush = Brushes.Crimson;
         #endregion
 
         #region Props
@@ -246,10 +253,35 @@ namespace UserInterface
                 OnPropertyChanged("PubSub");
             }
         }
+
+        public SolidColorBrush ButtonAlarmBrush
+        {
+            get
+            {
+                return buttonAlarmBrush;
+            }
+            set
+            {
+                buttonAlarmBrush = value;
+                OnPropertyChanged("ButtonAlarmBrush");
+            }
+        }
+        public bool MeshVisible
+        {
+            get
+            {
+                return meshVisible;
+            }
+            set
+            {
+                meshVisible = value;
+                OnPropertyChanged("MeshVisible");
+            }
+        }
         #endregion
+
         DispatcherTimer timer = new DispatcherTimer();
         Random rand = new Random();
-
 
         public MainWindowViewModel()
         {
@@ -271,6 +303,11 @@ namespace UserInterface
             timer.Tick += new EventHandler(Test);
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Start();
+
+            /*AlarmButtonTimer.Tick += ButtonBlinks;
+            AlarmButtonTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
+            AlarmButtonTimer.Start();*/
+
             Messenger.Default.Register<NotificationMessage>(this, (message) => { PopulateModel(message.Target, message.Notification); });
         }
 
@@ -314,6 +351,24 @@ namespace UserInterface
         }
 
 
+        /*private void CheckForAlarms(object stateInfo)
+        {
+            while (true)
+            {
+                int numberOfAlarms = ProxyServices.AlarmEventServiceProxy.GetAllAlarms().Where(x => x.AlarmAck == false).Count();
+                if (numberOfAlarms > 0)
+                {
+                    FlagToStartBlinking = true;
+                }
+                else
+                {
+                    FlagToStartBlinking = false;
+                    ButtonAlarmBrush = Brushes.Crimson;
+                    Thread.Sleep(1000);
+                }
+            }
+        }*/
+
         private void Test(object sender, EventArgs e)
         {
             GaugeValue = rand.Next(0, 100).ToString();
@@ -321,6 +376,19 @@ namespace UserInterface
             AnguarValue = rand.Next(-7, 7).ToString();
 
            // GaugeClasic = rand.Next(300, 1000).ToString();
+        }
+
+        private void ButtonBlinks(object sender, EventArgs e)
+        {
+            if (FlagToStartBlinking)
+            {
+                if (BlinkOnFlag)
+                    ButtonAlarmBrush = Brushes.Black;
+                else
+                    ButtonAlarmBrush = Brushes.Crimson;
+
+                BlinkOnFlag = !BlinkOnFlag;
+            }
         }
 
         private void OnNavigation(string destination)
@@ -350,13 +418,15 @@ namespace UserInterface
         public void SetCurrentSubstation()
         {
             if (Substations.Count > 0)
+            {
                 if (SelectedSubstation != null)
                     SubstationCurrent = SelectedSubstation;
                 else
                     SubstationCurrent = Substations.Values.First();
 
-            Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = long.Parse(substationCurrent.Gid), Message = "Substation selected.", PointName = SubstationCurrent.Name };
-            ProxyServices.AlarmEventServiceProxy.AddEvent(e);
+                /*Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = long.Parse(substationCurrent.Gid), Message = "Substation selected.", PointName = SubstationCurrent.Name };
+                ProxyServices.AlarmEventServiceProxy.AddEvent(e);*/
+            }
         }
 
         public void PopulateModel(object resources, string topic)
@@ -370,9 +440,9 @@ namespace UserInterface
                 if (SubstationCurrent != null)
                     meshViewModel.UpdateSubstationModel(SubstationCurrent);
 
-                Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
+                /*Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
                     Message = "Model arrived and loaded from NMS.", PointName = "" };
-                ProxyPool.ProxyServices.AlarmEventServiceProxy.AddEvent(e);
+                ProxyServices.AlarmEventServiceProxy.AddEvent(e);*/
             }
             else if (topic == "scada")
             {
@@ -385,37 +455,69 @@ namespace UserInterface
 
                     foreach(Substation sub in Substations.Values)
                     {
-                        if(sub.Breaker.DiscreteGID == measure.Gid) {
-                            //komanduj nad brejkerom
-                        }
-                        if (sub.Disconectors.Count > 0)
+                        if (sub.Gid == SubstationCurrent.Gid)
                         {
-                            foreach(Disconector dis in sub.Disconectors)
-                            {
-                                if(dis.DiscreteGID == measure.Gid)
-                                {
-                                    //komanduj nad diskonektorom
-                                }
-                            }
+                            ChangesFromScadaCommand(SubstationCurrent, measure);
                         }
-                        if (sub.AsynchronousMachines.Count > 0)
-                        {
-                            foreach (AsynchronousMachine am in sub.AsynchronousMachines)
-                            {
-                                if (am.SignalGid == measure.Gid)
-                                {
-                                    CommandToAM(measure.Value);
-                                }
-                            }
-                        }
+                        ChangesFromScadaCommand(sub, measure);
                     }
                 }
 
-                Event e = new Event() {  EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
+                /*Event e = new Event() {  EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
                     Message = "Acquisition arrived from SCADA.", PointName = "" };
-                ProxyPool.ProxyServices.AlarmEventServiceProxy.AddEvent(e);
+                ProxyServices.AlarmEventServiceProxy.AddEvent(e);*/
 
                 Console.WriteLine(resources);
+            }
+
+            MeshVisible = false;
+
+            /*threadAlarms = new Thread(CheckForAlarms);
+            threadAlarms.Start();*/
+        }
+
+        public void ChangesFromScadaCommand(Substation sub, ScadaUIExchangeModel newValue)
+        {
+            int i = 0;
+            if (sub.Breakers.Count > 0)
+            {
+                foreach (Breaker br in sub.Breakers)
+                {
+                    i++;
+                    if (br.DiscreteGID == newValue.Gid)
+                    {
+                        br.NewState = ConverterState.ConvertToDiscreteState(newValue.Value);
+                        br.State = br.NewState;
+                        if (sub.Breakers.Count > 2 && i != 1)
+                            i += 2;
+                        meshViewModel.ChangeStatesOfElements("Breaker" + i.ToString(), br);
+                    }
+                }
+                i = 0;
+            }
+            if (sub.Disconectors.Count > 0)
+            {
+                foreach (Disconector dis in sub.Disconectors)
+                {
+                    i++;
+                    if (dis.DiscreteGID == newValue.Gid)
+                    {
+                        dis.NewState = ConverterState.ConvertToDiscreteState(newValue.Value);
+                        dis.State = dis.NewState;
+                        meshViewModel.ChangeStatesOfElements("Disconector" + i.ToString(), dis);
+                    }
+                }
+                i = 0;
+            }
+            if (sub.AsynchronousMachines.Count > 0)
+            {
+                foreach (AsynchronousMachine am in sub.AsynchronousMachines)
+                {
+                    if (am.SignalGid == newValue.Gid)
+                    {
+                        CommandToAM(newValue.Value);
+                    }
+                }
             }
         }
 
@@ -562,7 +664,7 @@ namespace UserInterface
                     case (short)DMSType.BREAKER:
                         Breaker breaker = new Breaker();
                         populateEquipment(breaker, resource.Properties);
-                        getMySubstation(resource.Properties).Breaker = breaker;
+                        getMySubstation(resource.Properties).Breakers.Add(breaker);
                         break;
                     case (short)DMSType.RATIOTAPCHANGER:
                         TapChanger tapChanger = new TapChanger();
@@ -588,12 +690,31 @@ namespace UserInterface
                             ResourceDescription res = resources.Where(x => x.Id == gid).ToList<ResourceDescription>()[0];
                             if ((ModelCodeHelper.ExtractTypeFromGlobalId(res.Id) == (short)DMSType.BREAKER))
                             {
-                                substations.Values.Where(x => x.Breaker.GID == gid.ToString()).First().Breaker.DiscreteGID = resource.Id; 
+                                foreach (Substation s in Substations.Values)
+                                {
+                                    foreach (Breaker b in s.Breakers)
+                                    {
+                                        if (b.GID == gid.ToString())
+                                        {
+                                            b.DiscreteGID = resource.Id;
+                                            break;
+                                        }
+                                    }
+                                }
                             }
                             else if ((ModelCodeHelper.ExtractTypeFromGlobalId(res.Id) == (short)DMSType.DISCONNECTOR))
                             {
-                                Substation s = Substations.Values.Where(x => x.Disconectors.Where(c => c.GID == gid.ToString()).FirstOrDefault().GID == gid.ToString()).First();
-                                s.Disconectors.Where(c => c.GID == gid.ToString()).First().DiscreteGID = resource.Id;
+                                foreach (Substation s in Substations.Values)
+                                {
+                                    foreach(Disconector d in s.Disconectors)
+                                    {
+                                        if (d.GID == gid.ToString())
+                                        {
+                                            d.DiscreteGID = resource.Id;
+                                            break;
+                                        }
+                                    }
+                                }
                             }
                         }
                         break;

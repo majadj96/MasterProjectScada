@@ -1,4 +1,6 @@
-﻿using ScadaCommon;
+﻿using RepositoryCore;
+using RepositoryCore.Interfaces;
+using ScadaCommon;
 using ScadaCommon.ComandingModel;
 using Common.AlarmEvent;
 using ScadaCommon.ServiceContract;

@@ -47,9 +47,29 @@ namespace UserInterface
                     CurrentCommandViewModel = commandDisconnectorViewModel;
                 }
             }
-            else if (string.Compare(window, "Breaker") == 0)
+            else if (string.Compare(window, "Breaker1") == 0)
             {
-                commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breaker);
+                commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breakers[0], "1");
+                CurrentCommandViewModel = commandBreakerViewModel;
+            }
+            else if (string.Compare(window, "Breaker2") == 0)
+            {
+                commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breakers[1], "2");
+                CurrentCommandViewModel = commandBreakerViewModel;
+            }
+            else if (string.Compare(window, "Breaker3") == 0)
+            {
+                commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breakers[0], "3");
+                CurrentCommandViewModel = commandBreakerViewModel;
+            }
+            else if (string.Compare(window, "Breaker4") == 0)
+            {
+                commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breakers[1], "4");
+                CurrentCommandViewModel = commandBreakerViewModel;
+            }
+            else if (string.Compare(window, "Breaker5") == 0)
+            {
+                commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breakers[2], "5");
                 CurrentCommandViewModel = commandBreakerViewModel;
             }
             else if (string.Compare(window, "PowerTransformer") == 0)

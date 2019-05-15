@@ -10,7 +10,9 @@ namespace CalculationEngine
     {
         static void Main(string[] args)
         {
-            UpdateModelServiceHost host = new UpdateModelServiceHost();
+            Console.Title = "CalculationEngine";
+
+            CEServiceHost host = new CEServiceHost();
             Console.ReadLine();
         }
     }

@@ -16,12 +16,11 @@ namespace Common.AlarmEvent
         private string message;
         private string pointName;
         private DateTime? alarmAcknowledged;
+        private bool alarmAck = false;
         private string username;
         #endregion
 
         #region Props
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [DataMember]
         public int ID
         {
@@ -69,6 +68,12 @@ namespace Common.AlarmEvent
         {
             get { return username; }
             set { username = value; }
+        }
+        [DataMember]
+        public bool AlarmAck
+        {
+            get { return alarmAck; }
+            set { alarmAck = value; }
         }
         #endregion
 

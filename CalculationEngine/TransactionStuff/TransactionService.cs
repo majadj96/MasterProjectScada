@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CalculationEngine.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,23 +8,40 @@ using TransactionManagerContracts;
 
 namespace CalculationEngine
 {
-    public class TransactionService : ITransactionSteps
-    {
-        public bool Commit()
-        {
-            Console.WriteLine("Commit pozvan");
-            return true;
-        }
+	public class TransactionService : ITransactionSteps
+	{
+        public static ProcessingData _processingData;
 
-        public bool Prepare()
-        {
-            Console.WriteLine("Prepare pozvan");
-            return true;
-        }
+		public bool Prepare()
+		{
+			Console.WriteLine("CE Prepare");
+			return true;
+		}
 
-        public void Rollback()
-        {
-            Console.WriteLine("Rollback pozvan");
-        }
-    }
+		public bool Commit()
+		{
+			Console.WriteLine("CE Commit");
+
+			ConcreteModel.BackupModel = new Dictionary<long, IdObject>(ConcreteModel.CurrentModel);
+			ConcreteModel.CurrentModel = new Dictionary<long, IdObject>(ConcreteModel.CurrentModel_Copy);
+			ConcreteModel.CurrentModel_Copy.Clear();
+
+            _processingData.UpdateAsyncMachines();
+
+            if(!CalcEngine.aTimer.Enabled)
+            {
+                CalcEngine.aTimer.Enabled = true;
+            }
+
+			return true;
+		}
+
+		public void Rollback()
+		{
+			Console.WriteLine("CE Rollback");
+
+			ConcreteModel.CurrentModel = new Dictionary<long, IdObject>(ConcreteModel.BackupModel);
+			ConcreteModel.CurrentModel_Copy.Clear();
+		}
+	}
 }

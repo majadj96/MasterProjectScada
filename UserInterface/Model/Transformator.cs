@@ -13,6 +13,7 @@ namespace UserInterface.Model
         private string name;
         private string description;
         private string time;
+        private bool state;
 
         public Transformator(string mRID, string gID, string name, string description, string time)
         {
@@ -32,5 +33,6 @@ namespace UserInterface.Model
         public string Name { get => name; set => name = value; }
         public string Description { get => description; set => description = value; }
         public string Time { get => time; set => time = value; }
+        public bool State { get { return state; } set { state = value; } }
     }
 }

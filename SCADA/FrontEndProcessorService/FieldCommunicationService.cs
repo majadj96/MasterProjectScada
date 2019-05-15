@@ -13,6 +13,8 @@ using System.ServiceModel;
 using ScadaCommon.ServiceProxies;
 using ScadaCommon.NDSDataModel;
 using ScadaCommon.BackEnd_FrontEnd;
+using EntityFrameworkMeasurementInfrastructure;
+
 
 namespace FrontEndProcessorService
 {

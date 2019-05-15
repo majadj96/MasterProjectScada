@@ -9,7 +9,6 @@ namespace CIM.Model
     /// <para>There are several predefined stereotypes (whose names are given by constants in this class),</para>
     /// <para>but by using this class it is possible to support more stereotypes.</para>
     /// <para>See also: <seealso cref="P:Profile.StereotypeList"/></para>
-    /// <para>@author: Stanislava Selena</para>
     /// </summary>
     public class ProfileElementStereotype
     {
