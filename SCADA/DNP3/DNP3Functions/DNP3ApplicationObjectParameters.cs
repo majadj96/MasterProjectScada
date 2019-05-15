@@ -18,7 +18,7 @@ namespace DNP3.DNP3Functions
         private uint objectValue;
 
 
-        public DNP3ApplicationObjectParameters(byte aplicationControl, byte functionCode, ushort typeField, byte qualifier, uint range, uint objectPrefix, uint objectValue, ushort start, ushort length, byte control, ushort destination, ushort source, byte transportHeader)
+        public DNP3ApplicationObjectParameters(byte aplicationControl, byte functionCode, ushort typeField, byte qualifier, uint range, uint objectPrefix, uint objectValue, ushort start, byte length, byte control, ushort destination, ushort source, byte transportHeader)
                 : base(start, length, control, destination, source, transportHeader)
         {
             AplicationControl = aplicationControl;

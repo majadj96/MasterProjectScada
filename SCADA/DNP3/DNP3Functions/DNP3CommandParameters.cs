@@ -9,7 +9,7 @@ namespace DNP3.DNP3Functions
     public abstract class DNP3CommandParameters
     {
         private ushort start = 0x0564;
-        private ushort length;
+        private byte length;
         private byte control = 0x04;
         private ushort destination;
         private ushort source;
@@ -17,7 +17,7 @@ namespace DNP3.DNP3Functions
 
         private byte transportHeader;
 
-        public DNP3CommandParameters(ushort start, ushort length, byte control, ushort destination, ushort source, byte transportHeader)
+        public DNP3CommandParameters(ushort start, byte length, byte control, ushort destination, ushort source, byte transportHeader)
         {
             Start = start;
             Length = length;
@@ -40,7 +40,7 @@ namespace DNP3.DNP3Functions
             }
         }
 
-        public ushort Length
+        public byte Length
         {
             get
             {

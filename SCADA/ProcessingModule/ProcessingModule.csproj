@@ -49,9 +49,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Modbus\Modbus.csproj">
-      <Project>{65B26E48-3A6C-4BC4-AF16-F77809B5AFA2}</Project>
-      <Name>Modbus</Name>
+    <ProjectReference Include="..\DNP3\DNP3.csproj">
+      <Project>{8cc2c599-abc9-426e-8d54-4f9f25162417}</Project>
+      <Name>DNP3</Name>
     </ProjectReference>
     <ProjectReference Include="..\ScadaCommon\ScadaCommon.csproj">
       <Project>{823D1355-EFD0-481C-A0D9-FDA0C4EA37DF}</Project>

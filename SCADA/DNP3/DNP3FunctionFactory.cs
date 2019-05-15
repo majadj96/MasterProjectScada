@@ -36,15 +36,15 @@ namespace DNP3
                             return null;
                     }
 
-                case DNP3FunctionCode.OPERATE:
+                case DNP3FunctionCode.DIRECT_OPERATE:
                 case DNP3FunctionCode.WRITE:
                     switch ((TypeField)commandParameters.TypeField)
                     {
                         case TypeField.BINARY_INPUT_PACKED_FORMAT:
                             return null;
 
-                        case TypeField.BINARY_OUTPUT_PACKED_FORMAT:
-                            return null;
+                        case TypeField.BINARY_COMMAND:
+                            return new WriteDiscreteOutFunction(commandParameters);
 
                         case TypeField.ANALOG_OUTPUT_16BIT:
                             return new WriteAnalogOutputFunction(commandParameters);

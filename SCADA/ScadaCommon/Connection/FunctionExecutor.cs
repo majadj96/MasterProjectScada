@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScadaCommon.Interfaces;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
@@ -14,14 +15,16 @@ namespace ScadaCommon.Connection
 	{
 		private IConnection connection;
 		private IStateUpdater stateUpdater;
-		private IModbusFunction currentCommand;
-		private bool threadCancellationSignal = true;
+        //private IModbusFunction currentCommand;
+        private IDNP3Functions currentCommand;
+        private bool threadCancellationSignal = true;
 		private AutoResetEvent processConnection;
 		private Thread connectionProcessorThread;
 		private ConnectionState connectionState = ConnectionState.DISCONNECTED;
 		private uint numberOfConnectionRetries = 0;
-		private ConcurrentQueue<IModbusFunction> commandQueue = new ConcurrentQueue<IModbusFunction>();
-		private IConfiguration configuration;
+        //private ConcurrentQueue<IModbusFunction> commandQueue = new ConcurrentQueue<IModbusFunction>();
+        private ConcurrentQueue<IDNP3Functions> commandQueue = new ConcurrentQueue<IDNP3Functions>();
+        private IConfiguration configuration;
         private string RECEIVED_MESSAGE = "Point of type {0} on address {1:d5} received value: {2}";
 
         /// <inheritdoc />
@@ -44,7 +47,7 @@ namespace ScadaCommon.Connection
 		}
 
         /// <inheritdoc />
-        public void EnqueueCommand(IModbusFunction commandToExecute)
+        public void EnqueueCommand(IDNP3Functions commandToExecute)
 		{
 			if (this.connectionState == ConnectionState.CONNECTED)
 			{

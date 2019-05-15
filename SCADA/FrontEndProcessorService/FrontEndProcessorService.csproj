@@ -132,13 +132,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ScadaCommon\ScadaCommon.csproj">
-      <Project>{823d1355-efd0-481c-a0d9-fda0c4ea37df}</Project>
-      <Name>ScadaCommon</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ProcessingModule\ProcessingModule.csproj">
       <Project>{a61facb3-147e-4fd9-88c1-a3f226157c23}</Project>
       <Name>ProcessingModule</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ScadaCommon\ScadaCommon.csproj">
+      <Project>{823d1355-efd0-481c-a0d9-fda0c4ea37df}</Project>
+      <Name>ScadaCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

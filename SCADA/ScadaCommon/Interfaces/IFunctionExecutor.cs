@@ -1,4 +1,6 @@
-﻿namespace ScadaCommon
+﻿using ScadaCommon.Interfaces;
+
+namespace ScadaCommon
 {
     /// <summary>
     /// Delegate used for processing update point events.
@@ -17,7 +19,7 @@
         /// Enqueues a modbus command/request.
         /// </summary>
         /// <param name="send">The modbus function that should be enqueued.</param>
-		void EnqueueCommand(IModbusFunction send);
+		void EnqueueCommand(IDNP3Functions send);
 
         /// <summary>
         /// Occurs when a point is received.
