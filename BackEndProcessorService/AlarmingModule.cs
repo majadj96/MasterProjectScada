@@ -13,17 +13,17 @@ namespace BackEndProcessorService
     {
         public void Process(IProcessingObject processingObject)
         {
-            if (!CheckReasonability(processingObject.EguValue, NDSConfiguration.GetEguMin(processingObject.PointType), NDSConfiguration.GetEguMax(processingObject.PointType)))
-            {
-                //alarm izvan mernih opsega
-            }
-            else if(processingObject.EguValue < NDSConfiguration.GetLowLimit(processingObject.PointType))
-            {
-                //low alarm
-            }else if(processingObject.EguValue > NDSConfiguration.GetHighLimit(processingObject.PointType))
-            {
-                //high alarm
-            }
+            //if (!CheckReasonability(processingObject.EguValue, NDSConfiguration.GetEguMin(processingObject.PointType), NDSConfiguration.GetEguMax(processingObject.PointType)))
+            //{
+            //    //alarm izvan mernih opsega
+            //}
+            //else if(processingObject.EguValue < NDSConfiguration.GetLowLimit(processingObject.PointType))
+            //{
+            //    //low alarm
+            //}else if(processingObject.EguValue > NDSConfiguration.GetHighLimit(processingObject.PointType))
+            //{
+            //    //high alarm
+            //}
         }
 
         private bool CheckReasonability(double eguValue, uint eguMin, uint eguMax)

@@ -1,5 +1,6 @@
 ﻿using BackEndProcessorService;
 using NetworkDynamicService.PointUpdater;
+using NetworkDynamicService.ProxyPool;
 using ScadaCommon.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,14 @@ namespace NetworkDynamicService
     public class NetworkDynamicService : IDisposable
     {
         private List<ServiceHost> hosts = null;
+        private PointUpdateProxy pointUpdateProxy;
+        private BackEndPocessingModule backEndPocessingModule;
 
         public NetworkDynamicService()
         {
+            pointUpdateProxy = new PointUpdateProxy("UpdatePointEndPoint");
+            pointUpdateProxy.Open();
+            backEndPocessingModule = new BackEndPocessingModule(pointUpdateProxy);
             InitializeHosts();
         }
 
@@ -40,7 +46,7 @@ namespace NetworkDynamicService
         private void InitializeHosts()
         {
             hosts = new List<ServiceHost>();
-            hosts.Add(new ServiceHost(typeof(BackEndPocessingModule)));
+            hosts.Add(new ServiceHost(backEndPocessingModule));
             hosts.Add(new ServiceHost(typeof(StateUpdateService)));
             hosts.Add(new ServiceHost(typeof(PointOperateService)));
         }

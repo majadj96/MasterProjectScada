@@ -47,6 +47,7 @@
     <Compile Include="FrontEndProcessorServiceProxy.cs" />
     <Compile Include="NetworkDynamicService.cs" />
     <Compile Include="PointOperateService.cs" />
+    <Compile Include="ProxyPool\PointUpdateProxy.cs" />
     <Compile Include="StateUpdater\StateUpdateService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

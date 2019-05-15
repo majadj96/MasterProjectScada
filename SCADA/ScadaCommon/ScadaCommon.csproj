@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -42,6 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackEnd_FrontEnd\AnalogPoint.cs" />
+    <Compile Include="BackEnd_FrontEnd\DigitalPoint.cs" />
+    <Compile Include="BackEnd_FrontEnd\IInputObject.cs" />
+    <Compile Include="BackEnd_FrontEnd\InputObject.cs" />
     <Compile Include="BackEnd_FrontEnd\IProcessingObject.cs" />
     <Compile Include="Connection\IConnection.cs" />
     <Compile Include="Connection\TCPConnection.cs" />
@@ -58,12 +63,15 @@
     <Compile Include="Interfaces\IPoint.cs" />
     <Compile Include="Interfaces\IProcessingManager.cs" />
     <Compile Include="Interfaces\IStorage.cs" />
+    <Compile Include="Model\PointModel.cs" />
     <Compile Include="PointIdentifierHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceContract\IBackEndProessingData.cs" />
     <Compile Include="ServiceContract\IFieldCommunicationService.cs" />
     <Compile Include="ServiceContract\IPointUpdateService.cs" />
     <Compile Include="ServiceContract\IStateUpdateService.cs" />
+    <Compile Include="ServiceProxies\NetworkDynamicServiceProxy.cs" />
+    <Compile Include="ServiceProxies\NetworkDynamicStateServiceProxy.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

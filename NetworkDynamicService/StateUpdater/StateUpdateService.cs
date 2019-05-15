@@ -8,12 +8,16 @@ namespace NetworkDynamicService.PointUpdater
     {
         private StateUpdateServiceProxy proxy = new StateUpdateServiceProxy("StateUpdateServiceEndPoint");
 
+        public StateUpdateService()
+        {
+            proxy.Open();
+        }
         public void UpdateDateAndTime(DateTime dateTime)
         {
             proxy.UpdateDateAndTime(dateTime);
         }
 
-        public void UpdateState(ConnectionState connectionState)
+        public void UpdateState(short connectionState)
         {
             proxy.UpdateState(connectionState);
             Console.WriteLine(connectionState.ToString());

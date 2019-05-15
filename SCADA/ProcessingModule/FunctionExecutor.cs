@@ -58,10 +58,7 @@ namespace ProcessingModule
         {
             if (UpdatePointEvent != null)
             {
-                foreach (var point in pointsToupdate)
-                {
-                    UpdatePointEvent.Invoke(point.Key.Item1, point.Key.Item2, point.Value);
-                }
+                UpdatePointEvent.Invoke(pointsToupdate);
             }
         }
 
@@ -206,6 +203,7 @@ namespace ProcessingModule
                 {
                     string message = $"{ex.TargetSite.ReflectedType.Name}.{ex.TargetSite.Name}: {ex.Message}";
                     currentCommand = null;
+                    Console.WriteLine(message);
                 }
             }
         }

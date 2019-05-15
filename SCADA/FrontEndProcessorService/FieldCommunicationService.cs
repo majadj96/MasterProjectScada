@@ -11,6 +11,7 @@ using ScadaCommon.Interfaces;
 using ScadaCommon.ServiceContract;
 using System.ServiceModel;
 using FrontEndProcessorService.PointDataModel;
+using ScadaCommon.ServiceProxies;
 
 namespace FrontEndProcessorService
 {
@@ -18,20 +19,16 @@ namespace FrontEndProcessorService
     public class FieldCommunicationService : IDisposable, IStorage, IFieldCommunicationService
     {
         #region Fields
-        private object lockObject = new object();
         private Thread timerWorker;
-		private ConnectionState connectionState;
         private IConnection connection;
         private Acquisitor acquisitor;
 		private AutoResetEvent acquisitionTrigger = new AutoResetEvent(false);
-		private TimeSpan elapsedTime = new TimeSpan();
 		private Dispatcher dispather = Dispatcher.CurrentDispatcher;
-		private string logText;
 		private DateTime currentTime;
 		private IFunctionExecutor commandExecutor;
 		private bool timerThreadStopSignal = true;
 		private bool disposed = false;
-		IConfiguration configuration;
+		private IConfiguration configuration;
         private IProcessingManager processingManager = null;
         private NetworkDynamicServiceProxy ndsProxy;
         private NetworkDynamicStateServiceProxy ndsStateProxy;
@@ -49,34 +46,9 @@ namespace FrontEndProcessorService
                 if(currentTime != value)
                 {
                     currentTime = value;
-                    ndsStateProxy.UpdateDateAndTime(currentTime);
+                    //ndsStateProxy.UpdateDateAndTime(currentTime);
                 }
 			}
-		}
-
-		public ConnectionState ConnectionState
-		{
-			get { return connectionState; }
-			set
-			{
-                if (connectionState != value)
-                {
-                    connectionState = value;
-                    ndsStateProxy.UpdateState(connectionState);
-                }
-			}
-		}
-
-		public string LogText
-		{
-			get { return logText; }
-			set { logText = value; }
-		}
-
-		public TimeSpan ElapsedTime
-		{
-			get { return elapsedTime; }
-            set { elapsedTime = value; }
 		}
 
 		#endregion Properties
@@ -84,21 +56,19 @@ namespace FrontEndProcessorService
 		public FieldCommunicationService()
 		{
 			Thread.CurrentThread.Name = "Main Thread";
-            //ndsProxy = new NetworkDynamicServiceProxy("NetworkDynamicServiceEndPoint");
-            //ndsProxy.Open();
-            //ndsProxy.Process(null);
+            ndsProxy = new NetworkDynamicServiceProxy("NetworkDynamicServiceEndPoint");
+            ndsProxy.Open();
 
             ndsStateProxy = new NetworkDynamicStateServiceProxy("NetworkDynamicStateServiceEndPoint");
             ndsStateProxy.Open();
 
             configuration = new ConfigReader();
-            this.connection = new TCPConnection(configuration);
+            this.connection = new TCPConnection(configuration, ndsStateProxy);
             commandExecutor = new FunctionExecutor(configuration, connection);
-            this.processingManager = new ProcessingManager(this, commandExecutor);
+            this.processingManager = new ProcessingManager(this, commandExecutor, ndsProxy);
             this.acquisitor = new Acquisitor(acquisitionTrigger, this.processingManager, configuration);
             InitializePointCollection();
             InitializeAndStartThreads();
-            ConnectionState = connection.ConnectionState;
         }
 
 		#region Private methods
@@ -169,7 +139,6 @@ namespace FrontEndProcessorService
 					return;
 
 				CurrentTime = DateTime.Now;
-				ElapsedTime = ElapsedTime.Add(new TimeSpan(0, 0, 1));
 				acquisitionTrigger.Set();
 				Thread.Sleep(1000);
 			}

@@ -7,7 +7,7 @@ namespace ScadaCommon.ServiceContract
     public interface IStateUpdateService
     {
         [OperationContract]
-        void UpdateState(ConnectionState connectionState);
+        void UpdateState(short connectionState);
 
         [OperationContract]
         void UpdateDateAndTime(DateTime dateTime);

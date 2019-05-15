@@ -1,29 +1,33 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using BackEndProcessorService.Proxy;
+using System.ServiceModel;
 using ScadaCommon.BackEnd_FrontEnd;
 using ScadaCommon.Interfaces;
 using ScadaCommon.ServiceContract;
 
 namespace BackEndProcessorService
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class BackEndPocessingModule : IBackEndProessingData
     {
-        private PointUpdateProxy pointUpdateProxy = new PointUpdateProxy("UpdatePointEndPoint");
+        private IPointUpdateService pointUpdateProxy;
         public List<IProcessingData> ProcessingModules { get; set; }
-        public BackEndPocessingModule()
+        public BackEndPocessingModule(IPointUpdateService pointUpdateProxy)
         {
             InitializeProcessingModules();
-            pointUpdateProxy.Open();
+            this.pointUpdateProxy = pointUpdateProxy;
         }
 
-        public void Process(IProcessingObject processingObject)
+        public void Process(IInputObject inputObj)
         {
-            foreach (var item in ProcessingModules)
+            for (int index = 0; index < inputObj.Changes.Length; index++)
             {
-                item.Process(processingObject);
+                foreach (var item in ProcessingModules)
+                {
+                    item.Process(inputObj.Changes[index]);
+                }
+
+                this.pointUpdateProxy.UpdatePoint(inputObj.Changes[index]);
             }
-            this.pointUpdateProxy.UpdatePoint(processingObject);
         }
 
         private void InitializeProcessingModules()

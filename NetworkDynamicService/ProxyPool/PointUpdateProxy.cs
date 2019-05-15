@@ -7,7 +7,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BackEndProcessorService.Proxy
+namespace NetworkDynamicService.ProxyPool
 {
     class PointUpdateProxy : ClientBase<IPointUpdateService>, IPointUpdateService
     {

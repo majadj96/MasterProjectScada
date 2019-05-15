@@ -1,4 +1,6 @@
 ﻿using ScadaCommon.Interfaces;
+using System;
+using System.Collections.Generic;
 
 namespace ScadaCommon.Interfaces
 {
@@ -8,7 +10,7 @@ namespace ScadaCommon.Interfaces
     /// <param name="type">The type of the point.</param>
     /// <param name="pointAddres">The address of the point.</param>
     /// <param name="newValue">The new value received for the point.</param>
-    public delegate void UpdatePointDelegate(PointType type, ushort pointAddres, ushort newValue);
+    public delegate void UpdatePointDelegate(Dictionary<Tuple<PointType, ushort>, ushort> pointsToupdate);
 
     /// <summary>
     /// Interface containing logic for sending modbus requests and receiving point values. 

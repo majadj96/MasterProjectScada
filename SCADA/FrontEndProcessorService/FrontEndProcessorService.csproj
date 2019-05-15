@@ -63,8 +63,6 @@
     <Compile Include="Configuration\ConfigReader.cs" />
     <Compile Include="FieldCommunicationService.cs" />
     <Compile Include="FrontEndProcessorService.cs" />
-    <Compile Include="NetworkDynamicServiceProxy.cs" />
-    <Compile Include="NetworkDynamicStateServiceProxy.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="PointDataModel\AnalaogInput.cs" />
     <Compile Include="PointDataModel\AnalogBase.cs" />

@@ -4,7 +4,7 @@ using ScadaCommon.ServiceContract;
 using System;
 using System.ServiceModel;
 
-namespace FrontEndProcessorService
+namespace ScadaCommon.ServiceProxies
 {
     public class NetworkDynamicStateServiceProxy : ClientBase<IStateUpdateService>, IStateUpdateService
     {
@@ -18,7 +18,7 @@ namespace FrontEndProcessorService
             Channel.UpdateDateAndTime(dateTime);
         }
 
-        public void UpdateState(ConnectionState connectionState)
+        public void UpdateState(short connectionState)
         {
             Channel.UpdateState(connectionState);
         }

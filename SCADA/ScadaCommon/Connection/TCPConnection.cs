@@ -1,4 +1,5 @@
 ﻿using ScadaCommon.Interfaces;
+using ScadaCommon.ServiceProxies;
 using System;
 using System.Linq;
 using System.Net;
@@ -14,17 +15,20 @@ namespace ScadaCommon.Connection
 		private IPEndPoint remoteEP;
 		private Socket socket;
 		private IConfiguration configuration;
+        private ConnectionState connection = ConnectionState.DISCONNECTED;
+        private NetworkDynamicStateServiceProxy ndsStateProxy;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TCPConnection"/> class.
         /// </summary>
         /// <param name="stateUpdater">The state updater.</param>
         /// <param name="configuration">The configuration.</param>
-        public TCPConnection(IConfiguration configuration)
+        public TCPConnection(IConfiguration configuration, NetworkDynamicStateServiceProxy ndsStateProxy)
 		{
 			this.configuration = configuration;
 			this.remoteEP = CreateRemoteEndpoint();
             PrepairConnection();
+            this.ndsStateProxy = ndsStateProxy;
 		}
 
         /// <inheritdoc />
@@ -101,19 +105,34 @@ namespace ScadaCommon.Connection
         public byte[] RecvBytes(int numberOfBytes)
 		{
 			int numberOfReceivedBytes = 0;
-			byte[] retval = new byte[numberOfBytes];
+            int numberOfReceiveRetries = 0;
+            byte[] retval = new byte[numberOfBytes];
 			int numOfReceived;
 			while (numberOfReceivedBytes < numberOfBytes)
 			{
-				numOfReceived = 0;
-				if (socket.Poll(1623, SelectMode.SelectRead))
-				{
-					numOfReceived = socket.Receive(retval, numberOfReceivedBytes, (int)numberOfBytes - numberOfReceivedBytes, SocketFlags.None);
-					if (numOfReceived > 0)
-					{
-						numberOfReceivedBytes += numOfReceived;
-					}
-				}
+                numberOfReceiveRetries++;
+                if (socket.Connected) {
+                    numOfReceived = 0;
+                    if (socket.Poll(1623, SelectMode.SelectRead))
+                    {
+                        numOfReceived = socket.Receive(retval, numberOfReceivedBytes, (int)numberOfBytes - numberOfReceivedBytes, SocketFlags.None);
+                        if (numOfReceived > 0)
+                        {
+                            numberOfReceivedBytes += numOfReceived;
+                        }
+                    }
+                    //Ovo smo dodali jer se socket nakon nasilnog iskljucivanja simulatora zaglupi....
+                    if (numberOfReceiveRetries >= 10 && numberOfReceivedBytes == 0)
+                    {
+                        ConnectionState = ConnectionState.DISCONNECTED;
+                        throw new SocketException(10054);
+                    }
+                }
+                else
+                {
+                    ConnectionState = ConnectionState.DISCONNECTED;
+                    throw new SocketException(10054);
+                }
 			}
 			return retval;
 		}
@@ -149,7 +168,7 @@ namespace ScadaCommon.Connection
         /// <inheritdoc />
 		public bool CheckState()
 		{
-			return this.socket.Poll(30000, SelectMode.SelectWrite);
+			return this.socket.Poll(30000, SelectMode.SelectWrite) && this.socket.Connected;
 		}
 
         public bool ReadReady()
@@ -157,6 +176,17 @@ namespace ScadaCommon.Connection
             return this.socket.Poll(1623, SelectMode.SelectRead);
         }
 
-        public ConnectionState ConnectionState { get; set; } = ConnectionState.DISCONNECTED;
+        public ConnectionState ConnectionState
+        {
+            get
+            {
+                return connection;
+            }
+            set
+            {
+                connection = value;
+                ndsStateProxy.UpdateState((short)connection);
+            }
+        }
     }
 }

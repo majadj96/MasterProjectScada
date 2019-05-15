@@ -3,19 +3,18 @@ using ScadaCommon.Interfaces;
 using ScadaCommon.ServiceContract;
 using System.ServiceModel;
 
-namespace FrontEndProcessorService
+namespace ScadaCommon.ServiceProxies
 {
     public class NetworkDynamicServiceProxy : ClientBase<IBackEndProessingData>, IBackEndProessingData
     {
-        private INDSConfiguration nDSConfiguration;
         public NetworkDynamicServiceProxy(string endpointName) : base(endpointName)
         {
 
         }
 
-        public void Process(IProcessingObject processingObject)
+        public void Process(IInputObject inputObj)
         {
-            Channel.Process(processingObject);
+            Channel.Process(inputObj);
         }
     }
 }

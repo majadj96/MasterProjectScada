@@ -18,7 +18,7 @@ namespace NetworkDynamicService
             Channel.UpdateDateAndTime(dateTime);
         }
 
-        public void UpdateState(ConnectionState connectionState)
+        public void UpdateState(short connectionState)
         {
             Channel.UpdateState(connectionState);
         }

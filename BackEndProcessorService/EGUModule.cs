@@ -13,7 +13,7 @@ namespace BackEndProcessorService
     {
         public void Process(IProcessingObject processingObject)
         {
-            processingObject.EguValue = NDSConfiguration.GetScalingFactor(processingObject.PointType) * processingObject.RawValue + NDSConfiguration.GetDeviation(processingObject.PointType);
+            //processingObject.EguValue = NDSConfiguration.GetScalingFactor(processingObject.PointType) * processingObject.RawValue + NDSConfiguration.GetDeviation(processingObject.PointType);
         }
 
         public INDSConfiguration NDSConfiguration
