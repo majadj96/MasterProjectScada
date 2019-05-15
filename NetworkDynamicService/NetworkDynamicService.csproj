@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,6 +13,9 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,7 +38,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,28 +50,52 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FrontEndProcessorServiceProxy.cs" />
-    <Compile Include="NetworkDynamicService.cs" />
-    <Compile Include="PointOperateService.cs" />
+    <Compile Include="Cache\INDSRealTimePointCache.cs" />
+    <Compile Include="Cache\NDSRealTimePointCache.cs" />
+    <Compile Include="NDSConfigurationProxy.cs" />
+    <Compile Include="NetworkDynamicServiceHost.cs" />
+    <Compile Include="CommandingService.cs" />
+    <Compile Include="ProcessingService.cs" />
+    <Compile Include="ProxyPool\FepCommandingServiceProxy.cs" />
     <Compile Include="ProxyPool\PointUpdateProxy.cs" />
     <Compile Include="StateUpdater\StateUpdateService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StateUpdateServiceProxy.cs" />
+    <Compile Include="Transaction\ModelUpdateContract.cs" />
+    <Compile Include="Transaction\TransactionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\DataSources\ScadaCommon.Database.Alarm.datasource" />
+    <None Include="Properties\DataSources\ScadaCommon.Database.Event.datasource" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BackEndProcessorService\BackEndProcessorService.csproj">
       <Project>{9E9F3E50-1395-46B5-8D75-B16A08B45CDF}</Project>
       <Name>BackEndProcessorService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{6C234280-508A-47A4-B9CA-2677082EF85F}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SCADA\ScadaCommon\ScadaCommon.csproj">
       <Project>{823D1355-EFD0-481C-A0D9-FDA0C4EA37DF}</Project>
       <Name>ScadaCommon</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TransactionManagerContracts\TransactionManagerContracts.csproj">
+      <Project>{0A8F68EC-31CB-4FD1-B54A-DCF2FC97BBEC}</Project>
+      <Name>TransactionManagerContracts</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.0\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.0\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.0\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.targets')" />
 </Project>

@@ -10,13 +10,12 @@ using System.Windows.Threading;
 using ScadaCommon.Interfaces;
 using ScadaCommon.ServiceContract;
 using System.ServiceModel;
-using FrontEndProcessorService.PointDataModel;
 using ScadaCommon.ServiceProxies;
+using ScadaCommon.NDSDataModel;
 
 namespace FrontEndProcessorService
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
-    public class FieldCommunicationService : IDisposable, IStorage, IFieldCommunicationService
+    public class FieldCommunicationService : IDisposable, IStorage
     {
         #region Fields
         private Thread timerWorker;
@@ -32,9 +31,8 @@ namespace FrontEndProcessorService
         private IProcessingManager processingManager = null;
         private NetworkDynamicServiceProxy ndsProxy;
         private NetworkDynamicStateServiceProxy ndsStateProxy;
+        private Dictionary<Tuple<ushort, PointType>, BasePointCacheItem> points;
         #endregion Fields
-
-        Dictionary<int, IPoint> pointsCache = new Dictionary<int, IPoint>();
 
 		#region Properties
 
@@ -51,64 +49,41 @@ namespace FrontEndProcessorService
 			}
 		}
 
+        public IConfiguration Configuration
+        {
+            get { return configuration; }
+        }
+
+        public IProcessingManager ProcessingManager
+        {
+            get { return processingManager; }
+        }
+
 		#endregion Properties
 
 		public FieldCommunicationService()
 		{
-			Thread.CurrentThread.Name = "Main Thread";
-            ndsProxy = new NetworkDynamicServiceProxy("NetworkDynamicServiceEndPoint");
-            ndsProxy.Open();
-
+			Thread.CurrentThread.Name = "Field Communication Service";
+            
             ndsStateProxy = new NetworkDynamicStateServiceProxy("NetworkDynamicStateServiceEndPoint");
+            ndsProxy = new NetworkDynamicServiceProxy("NetworkDynamicServiceEndPoint");
+        }
+
+        public void StartService(Dictionary<Tuple<ushort, PointType>, BasePointCacheItem> points)
+        {
+            this.points = points;
+            ndsProxy.Open();
             ndsStateProxy.Open();
 
             configuration = new ConfigReader();
-            this.connection = new TCPConnection(configuration, ndsStateProxy);
-            commandExecutor = new FunctionExecutor(configuration, connection);
-            this.processingManager = new ProcessingManager(this, commandExecutor, ndsProxy);
-            this.acquisitor = new Acquisitor(acquisitionTrigger, this.processingManager, configuration);
-            InitializePointCollection();
+            connection = new TCPConnection(Configuration, ndsStateProxy);
+            commandExecutor = new FunctionExecutor(Configuration, connection);
+            processingManager = new ProcessingManager(this, commandExecutor, ndsProxy);
+            acquisitor = new Acquisitor(acquisitionTrigger, ProcessingManager, Configuration);
             InitializeAndStartThreads();
         }
 
-		#region Private methods
-
-		private void InitializePointCollection()
-		{
-			foreach (var c in configuration.GetConfigurationItems())
-			{
-				for (int i = 0; i < c.NumberOfRegisters; i++)
-				{
-					BasePointItem pi = CreatePoint(c, i, this.processingManager);
-					if (pi != null)
-					{
-						pointsCache.Add(pi.PointId, pi as IPoint);
-                        processingManager.InitializePoint(pi.Type, pi.Address, pi.RawValue);
-					}
-				}
-			}
-		}
-
-		private BasePointItem CreatePoint(IConfigItem c, int i, IProcessingManager processingManager)
-		{
-			switch (c.RegistryType)
-			{
-				case PointType.DIGITAL_INPUT:
-					return new DigitalInput(c, i);
-
-				case PointType.DIGITAL_OUTPUT:
-					return new DigitalOutput(c, i);
-
-				case PointType.ANALOG_INPUT:
-					return new AnalaogInput(c, i);
-
-				case PointType.ANALOG_OUTPUT:
-					return new AnalogOutput(c, i);
-
-				default:
-					return null;
-			}
-		}
+        #region Private methods
 
         private void InitializeAndStartThreads()
 		{
@@ -156,55 +131,18 @@ namespace FrontEndProcessorService
             GC.SuppressFinalize(this);
         }
 
-		public List<IPoint> GetPoints(List<PointIdentifier> pointIds)
+		public List<BasePointCacheItem> GetPoints(List<PointIdentifier> pointIds)
 		{
-			List<IPoint> retVal = new List<IPoint>(pointIds.Count);
+			List<BasePointCacheItem> retVal = new List<BasePointCacheItem>(pointIds.Count);
 			foreach (var pid in pointIds)
 			{
-				int id = PointIdentifierHelper.GetNewPointId(pid);
-				IPoint p = null;
-				if (pointsCache.TryGetValue(id, out p))
+				BasePointCacheItem p = null;
+				if (points.TryGetValue(Tuple.Create(pointIds[0].Address, pointIds[0].PointType), out p))
 				{
 					retVal.Add(p);
 				}
 			}
 			return retVal;
 		}
-
-        public void WriteDigitalOutput(int address, int value)
-        {
-            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.DIGITAL_OUTPUT, (ushort)address));
-            this.processingManager.ExecuteWriteCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, value);
-        }
-
-        public void WriteAnalogOutput(int address, int value)
-        {
-            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.ANALOG_OUTPUT, (ushort)address));
-            this.processingManager.ExecuteWriteCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, value);
-        }
-
-        public void ReadDigitalInput(int address)
-        {
-            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.DIGITAL_INPUT, (ushort)address));
-            this.processingManager.ExecuteReadCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
-        }
-
-        public void ReadAnalogInput(int address)
-        {
-            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.ANALOG_INPUT, (ushort)address));
-            this.processingManager.ExecuteReadCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
-        }
-
-        public void ReadDigitalOutput(int address)
-        {
-            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.DIGITAL_OUTPUT, (ushort)address));
-            this.processingManager.ExecuteReadCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
-        }
-
-        public void ReadAnalogOutput(int address)
-        {
-            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.ANALOG_OUTPUT, (ushort)address));
-            this.processingManager.ExecuteReadCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
-        }
     }
 }

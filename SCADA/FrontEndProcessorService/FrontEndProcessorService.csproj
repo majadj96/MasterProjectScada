@@ -57,20 +57,13 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\ConfigItemEqualityComparer.cs" />
     <Compile Include="Exceptions\ConfigurationException.cs" />
-    <Compile Include="Configuration\ConfigItem.cs" />
     <Compile Include="Configuration\ConfigReader.cs" />
+    <Compile Include="FEPCommandingService.cs" />
     <Compile Include="FieldCommunicationService.cs" />
     <Compile Include="FrontEndProcessorService.cs" />
+    <Compile Include="NDSConfigurationService.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="PointDataModel\AnalaogInput.cs" />
-    <Compile Include="PointDataModel\AnalogBase.cs" />
-    <Compile Include="PointDataModel\AnalogOutput.cs" />
-    <Compile Include="PointDataModel\BasePointItem.cs" />
-    <Compile Include="PointDataModel\DigitalBase.cs" />
-    <Compile Include="PointDataModel\DigitalInput.cs" />
-    <Compile Include="PointDataModel\DigitalOutput.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

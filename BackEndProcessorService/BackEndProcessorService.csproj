@@ -46,9 +46,11 @@
     <Compile Include="BackEndPocessingModule.cs" />
     <Compile Include="Configuration\ConfigItem.cs" />
     <Compile Include="Configuration\ConfigReader.cs" />
-    <Compile Include="EGUModule.cs" />
+    <Compile Include="EGUConverterModule.cs" />
     <Compile Include="IProcessingData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Proxy\AlarmEventServiceProxy.cs" />
+    <Compile Include="RawConverterModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SCADA\ScadaCommon\ScadaCommon.csproj">
@@ -62,8 +64,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Proxy\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

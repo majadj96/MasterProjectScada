@@ -12,7 +12,7 @@ namespace BackEndProcessorService.Configuration
     internal class ConfigReader : INDSConfiguration
     {
         private Dictionary<PointType, INDSConfigItem> itemToConfiguration = new Dictionary<PointType, INDSConfigItem>();
-        private string path = "NDSConfig.txt";
+        private string path = "../../../BackEndProcessorService/NDSConfig.txt";
 
         public ConfigReader()
         {
@@ -69,36 +69,6 @@ namespace BackEndProcessorService.Configuration
             if (itemToConfiguration.TryGetValue(pointType, out item))
             {
                 return item.Deviation;
-            }
-            throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointType)));
-        }
-
-        public uint GetHighLimit(PointType pointType)
-        {
-            INDSConfigItem item;
-            if (itemToConfiguration.TryGetValue(pointType, out item))
-            {
-                return item.HighLimit;
-            }
-            throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointType)));
-        }
-
-        public uint GetLowLimit(PointType pointType)
-        {
-            INDSConfigItem item;
-            if (itemToConfiguration.TryGetValue(pointType, out item))
-            {
-                return item.LowLimit;
-            }
-            throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointType)));
-        }
-
-        public uint GetNormalValue(PointType pointType)
-        {
-            INDSConfigItem item;
-            if (itemToConfiguration.TryGetValue(pointType, out item))
-            {
-                return item.NormalValue;
             }
             throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointType)));
         }

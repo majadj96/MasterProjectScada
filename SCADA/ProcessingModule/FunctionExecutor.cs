@@ -526,11 +526,11 @@ namespace ProcessingModule
                         }
                         break;
                     default:
-
+                        Console.WriteLine("Prosledjeni objekat ne postoji u case-ovima:   " + objectType);
                         break;
                 }
-                HandleReceivedChangesOfPoints(pointsToupdate);
             }
+            HandleReceivedChangesOfPoints(pointsToupdate);
         }
 
         private void PreproccessMsg(byte[] message, int messageLength, ref byte[] dataArray, int lengthData)
