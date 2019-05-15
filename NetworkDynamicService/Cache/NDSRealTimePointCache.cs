@@ -16,7 +16,7 @@ namespace NetworkDynamicService.Cache
     {
         private Dictionary<long, BasePointCacheItem> ndsModel = new Dictionary<long, BasePointCacheItem>();
         private Dictionary<long, BasePointCacheItem> ndsModelNew = new Dictionary<long, BasePointCacheItem>();
-        private INDSBasePointCacheItems nDSBasePointCacheItems;
+        private IFEPConfigService nDSBasePointCacheItems;
         private bool modelUpdate = false;
         private Delta model;
 
@@ -194,7 +194,7 @@ namespace NetworkDynamicService.Cache
             return ndsModel.TryGetValue(gid, out basePointCacheItem);
         }
 
-        public void StoreDelta(Delta delta, INDSBasePointCacheItems nDSBasePointCacheItems)
+        public void StoreDelta(Delta delta, IFEPConfigService nDSBasePointCacheItems)
         {
             this.nDSBasePointCacheItems = nDSBasePointCacheItems;
             this.modelUpdate = true;

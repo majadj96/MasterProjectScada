@@ -12,7 +12,7 @@ namespace NetworkDynamicService.Cache
     public interface INDSRealTimePointCache
     {
         bool TryGetBasePointItem(long gid, out BasePointCacheItem basePointCacheItem);
-        void StoreDelta(Delta delta, INDSBasePointCacheItems nDSBasePointCacheItems);
+        void StoreDelta(Delta delta, IFEPConfigService nDSBasePointCacheItems);
         void ApplyUpdate();
     }
 }

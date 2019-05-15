@@ -65,13 +65,6 @@
     <Compile Include="FrontEndProcessorService.cs" />
     <Compile Include="NDSConfigurationService.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="PointDataModel\AnalaogInput.cs" />
-    <Compile Include="PointDataModel\AnalogBase.cs" />
-    <Compile Include="PointDataModel\AnalogOutput.cs" />
-    <Compile Include="PointDataModel\BasePointItem.cs" />
-    <Compile Include="PointDataModel\DigitalBase.cs" />
-    <Compile Include="PointDataModel\DigitalInput.cs" />
-    <Compile Include="PointDataModel\DigitalOutput.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

@@ -10,7 +10,6 @@ using System.Windows.Threading;
 using ScadaCommon.Interfaces;
 using ScadaCommon.ServiceContract;
 using System.ServiceModel;
-using FrontEndProcessorService.PointDataModel;
 using ScadaCommon.ServiceProxies;
 using ScadaCommon.NDSDataModel;
 
@@ -53,63 +52,29 @@ namespace FrontEndProcessorService
 
 		#endregion Properties
 
-		public FieldCommunicationService(Dictionary<Tuple<ushort, PointType>, BasePointCacheItem> points)
+		public FieldCommunicationService()
 		{
-			Thread.CurrentThread.Name = "Main Thread";
-            this.points = points;
-           // ndsProxy = new NetworkDynamicServiceProxy("NetworkDynamicServiceEndPoint");
-           // ndsProxy.Open();
+			Thread.CurrentThread.Name = "Field Communication Service";
+            
+            ndsStateProxy = new NetworkDynamicStateServiceProxy("NetworkDynamicStateServiceEndPoint");
+            ndsProxy = new NetworkDynamicServiceProxy("NetworkDynamicServiceEndPoint");
+        }
 
-           // ndsStateProxy = new NetworkDynamicStateServiceProxy("NetworkDynamicStateServiceEndPoint");
-           // ndsStateProxy.Open();
+        public void StartService(Dictionary<Tuple<ushort, PointType>, BasePointCacheItem> points)
+        {
+            this.points = points;
+            ndsProxy.Open();
+            ndsStateProxy.Open();
 
             configuration = new ConfigReader();
             this.connection = new TCPConnection(configuration, ndsStateProxy);
-            commandExecutor = new FunctionExecutor(configuration, connection);
+            this.commandExecutor = new FunctionExecutor(configuration, connection);
             this.processingManager = new ProcessingManager(this, commandExecutor, ndsProxy);
             this.acquisitor = new Acquisitor(acquisitionTrigger, this.processingManager, configuration);
-           // InitializePointCollection();
             InitializeAndStartThreads();
         }
 
-		#region Private methods
-
-	/*	private void InitializePointCollection()
-		{
-			foreach (var c in configuration.GetConfigurationItems())
-			{
-				for (int i = 0; i < c.NumberOfRegisters; i++)
-				{
-					BasePointItem pi = CreatePoint(c, i, this.processingManager);
-					if (pi != null)
-					{
-						pointsCache.Add(pi.PointId, pi as IPoint);
-                        processingManager.InitializePoint(pi.Type, pi.Address, pi.RawValue);
-					}
-				}
-			}
-		}*/
-
-	/*	private BasePointItem CreatePoint(IConfigItem c, int i, IProcessingManager processingManager)
-		{
-			switch (c.RegistryType)
-			{
-				case PointType.DIGITAL_INPUT:
-					return new DigitalInput(c, i);
-
-				case PointType.DIGITAL_OUTPUT:
-					return new DigitalOutput(c, i);
-
-				case PointType.ANALOG_INPUT:
-					return new AnalaogInput(c, i);
-
-				case PointType.ANALOG_OUTPUT:
-					return new AnalogOutput(c, i);
-
-				default:
-					return null;
-			}
-		}*/
+        #region Private methods
 
         private void InitializeAndStartThreads()
 		{

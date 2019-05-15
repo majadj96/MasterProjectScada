@@ -17,7 +17,7 @@ namespace FrontEndProcessorService
                 Console.WriteLine(e.Message);
             }
 
-            //Console.ReadKey();
+            Console.ReadKey();
         }
     }
 }

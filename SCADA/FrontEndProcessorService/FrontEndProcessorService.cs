@@ -1,4 +1,6 @@
-﻿using ScadaCommon.NDSDataModel;
+﻿using ScadaCommon;
+using ScadaCommon.BackEnd_FrontEnd;
+using ScadaCommon.NDSDataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,18 +14,24 @@ namespace FrontEndProcessorService
     {
         private List<ServiceHost> hosts = null;
         private FieldCommunicationService fieldCommunicationService;
-        private NDSConfigurationService nDSConfigurationService;
+        private IFEPConfigService nDSConfigurationService;
+        
 
         public FrontEndProcessorService()
         {
-            nDSConfigurationService = new NDSConfigurationService();
-            fieldCommunicationService = new FieldCommunicationService(this.nDSConfigurationService.Model);
+            fieldCommunicationService = new FieldCommunicationService();
+            nDSConfigurationService = new NDSConfigurationService(StartFCS);
             InitializeHosts();
         }
 
         public void Start()
         {
             StartHosts();
+        }
+
+        private void StartFCS(Dictionary<Tuple<ushort, PointType>, BasePointCacheItem> model)
+        {
+            fieldCommunicationService.StartService(model);
         }
         private void StartHosts()
         {

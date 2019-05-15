@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace NetworkDynamicService
 {
-    public class NDSConfigurationProxy : ClientBase<INDSBasePointCacheItems>, INDSBasePointCacheItems
+    public class NDSConfigurationProxy : ClientBase<IFEPConfigService>, IFEPConfigService
     {
         public NDSConfigurationProxy(string endpointName) : base(endpointName)
         {

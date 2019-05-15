@@ -16,7 +16,6 @@ namespace FrontEndProcessorService.Configuration
 		private byte unitAddress;
 		private int tcpPort;
         private int class0Acquisition;
-        private ConfigItemEqualityComparer confItemEqComp = new ConfigItemEqualityComparer();
 
 		private Dictionary<string, IConfigItem> pointTypeToConfiguration = new Dictionary<string, IConfigItem>();
 
@@ -38,26 +37,6 @@ namespace FrontEndProcessorService.Configuration
 			if (pointTypeToConfiguration.TryGetValue(pointDescription, out ci))
 			{
 				return ci.AcquisitionInterval;
-			}
-			throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointDescription)));
-		}
-
-		public ushort GetStartAddress(string pointDescription)
-		{
-			IConfigItem ci;
-			if (pointTypeToConfiguration.TryGetValue(pointDescription, out ci))
-			{
-				return ci.StartIndex;
-			}
-			throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointDescription)));
-		}
-
-		public ushort GetNumberOfRegisters(string pointDescription)
-		{
-			IConfigItem ci;
-			if (pointTypeToConfiguration.TryGetValue(pointDescription, out ci))
-			{
-				return ci.NumberOfRegisters;
 			}
 			throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointDescription)));
 		}
@@ -104,24 +83,7 @@ namespace FrontEndProcessorService.Configuration
                         Class0Acquisition = Convert.ToInt32(filtered[filtered.Count - 1]);
                         continue;
                     }
-                    //try
-                    //{
-                    //    ConfigItem ci = new ConfigItem(filtered);
-                    //    pointTypeToConfiguration.Add(ci.Description, ci);
-                    //}
-                    //catch (ArgumentException argEx)
-                    //{
-                    //    throw new ConfigurationException($"Configuration error: {argEx.Message}", argEx);
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    throw ex;
-                    //}
                 }
-				//if (pointTypeToConfiguration.Count == 0)
-				//{
-				//	throw new ConfigurationException("Configuration error! Check RtuCfg.txt file!");
-				//}
 			}
 		}
 
@@ -168,23 +130,6 @@ namespace FrontEndProcessorService.Configuration
                 class0Acquisition = value;
             }
         }
-        private int dbc;
-		public int DelayBetweenCommands
-		{
-			get
-			{
-				return dbc;
-			}
-
-			private set
-			{
-				dbc = value;
-			}
-		}
         
-        public List<IConfigItem> GetConfigurationItems()
-		{
-			return new List<IConfigItem>(pointTypeToConfiguration.Values);
-		}
 	}
 }

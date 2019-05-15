@@ -11,20 +11,22 @@ namespace NetworkDynamicService.Transaction
     public class ModelUpdateContract : IModelUpdateContract
     {
         private INDSRealTimePointCache nDSRealTimePointCache;
-        private INDSBasePointCacheItems nDSBasePointCacheItems;
-        public ModelUpdateContract(INDSRealTimePointCache nDSRealTimePointCache, INDSBasePointCacheItems nDSBasePointCacheItems)
+        private IFEPConfigService nDSBasePointCacheItems;
+        private ITransactionSteps transactionService;
+        private TMProxy transactionManagerProxy;
+        public ModelUpdateContract(INDSRealTimePointCache nDSRealTimePointCache, IFEPConfigService nDSBasePointCacheItems, ITransactionSteps transactionService)
         {
             this.nDSRealTimePointCache = nDSRealTimePointCache;
             this.nDSBasePointCacheItems = nDSBasePointCacheItems;
+            this.transactionService = transactionService;
+            transactionManagerProxy = new TMProxy(transactionService);
         }
         public UpdateResult UpdateModel(Delta delta)
         {
             try
             {
                 Console.WriteLine("Update model invoked");
-                TransactionService transaction = new TransactionService(nDSRealTimePointCache);
-                TMProxy _proxy = new TMProxy(transaction);
-                _proxy.Enlist();
+                transactionManagerProxy.Enlist();
             }
             catch (Exception e)
             {

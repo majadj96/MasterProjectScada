@@ -5,9 +5,11 @@ using NetworkDynamicService.PointUpdater;
 using NetworkDynamicService.ProxyPool;
 using NetworkDynamicService.Transaction;
 using ScadaCommon.BackEnd_FrontEnd;
+using ScadaCommon.ServiceContract;
 using System;
 using System.Collections.Generic;
 using System.ServiceModel;
+using TransactionManagerContracts;
 
 namespace NetworkDynamicService
 {
@@ -20,28 +22,37 @@ namespace NetworkDynamicService
         private BackEndPocessingModule backEndPocessingModule;
         private INDSRealTimePointCache nDSRealTimePointCache;
         private ModelUpdateContract modelUpdateContract;
+        private ITransactionSteps transactionService;
+        private IStateUpdateService stateUpdateService;
+        private StateUpdateServiceProxy stateUpdateProxy;
 
         public NetworkDynamicServiceHost()
         {
-            //pointUpdateProxy = new PointUpdateProxy("UpdatePointEndPoint");
-            //pointUpdateProxy.Open();
-
+            pointUpdateProxy = new PointUpdateProxy("UpdatePointEndPoint");
             alarmEventServiceProxy = new AlarmEventServiceProxy("AlarmEventServiceEndPoint");
-            alarmEventServiceProxy.Open();
-
-            ndSConfigurationProxy = new NDSConfigurationProxy("INDSBasePointCacheItemsEndPoint");
-            ndSConfigurationProxy.Open();
+            ndSConfigurationProxy = new NDSConfigurationProxy("IFEPConfigService");
+            stateUpdateProxy = new StateUpdateServiceProxy("StateUpdateServiceEndPoint");
 
             nDSRealTimePointCache = new NDSRealTimePointCache();
 
             backEndPocessingModule = new BackEndPocessingModule(pointUpdateProxy, this.alarmEventServiceProxy);
-            modelUpdateContract = new ModelUpdateContract(nDSRealTimePointCache, ndSConfigurationProxy);
+            transactionService =  new TransactionService(nDSRealTimePointCache, OpenProxies);
+            modelUpdateContract = new ModelUpdateContract(nDSRealTimePointCache, ndSConfigurationProxy, transactionService);
+            stateUpdateService = new StateUpdateService(stateUpdateProxy);
             InitializeHosts();
         }
 
         public void Start()
         {
             StartHosts();
+        }
+
+        private void OpenProxies()
+        {
+            pointUpdateProxy.Open();
+            alarmEventServiceProxy.Open();
+            //ndSConfigurationProxy.Open();
+            stateUpdateProxy.Open();
         }
 
         private void StartHosts()
@@ -64,7 +75,7 @@ namespace NetworkDynamicService
         {
             hosts = new List<ServiceHost>();
             hosts.Add(new ServiceHost(backEndPocessingModule));
-            hosts.Add(new ServiceHost(typeof(StateUpdateService)));
+            hosts.Add(new ServiceHost(stateUpdateService));
             hosts.Add(new ServiceHost(typeof(PointOperateService)));
             hosts.Add(new ServiceHost(modelUpdateContract)); //transaction
         }

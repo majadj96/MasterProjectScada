@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace ScadaCommon.BackEnd_FrontEnd
 {
     [ServiceContract]
-    public interface INDSBasePointCacheItems
+    public interface IFEPConfigService
     {
         [OperationContract]
         void SendConfiguration(List<BasePointCacheItem> basePointCacheItems);
