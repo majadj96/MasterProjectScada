@@ -12,6 +12,7 @@ namespace DNP3.FunctionParameters
     public abstract class DNP3Functions : IDNP3Functions
     {
         private DNP3ApplicationObjectParameters commandParameters;
+        private string commandOwner;
 
         public DNP3Functions(DNP3ApplicationObjectParameters commandParameters)
         {
@@ -19,6 +20,18 @@ namespace DNP3.FunctionParameters
         }
 
         public abstract byte[] PackRequest();
+
+        public string CommandOwner
+        {
+            get
+            {
+                return commandOwner;
+            }
+            set
+            {
+                commandOwner = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the command parameters.

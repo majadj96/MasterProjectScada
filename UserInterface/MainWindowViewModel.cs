@@ -431,7 +431,6 @@ namespace UserInterface
                 searchedSubs = substations.Values.Where(x => x.Gid.Contains(SearchTerm)).ToList();
                 SubstationsList = new ObservableCollection<Substation>(searchedSubs);
             }
-
         }
 
         private void openAnalytics(string a)
@@ -766,6 +765,7 @@ namespace UserInterface
                         br.NewState = ConverterState.ConvertToDiscreteState(newValue.Value);
                         br.State = br.NewState;
                         br.Time = newValue.Time.ToString();
+                        br.Flag = newValue.Flag;
                         if (sub.Breakers.Count > 2 && i != 1)
                             i += 2;
                         meshViewModel.ChangeStatesOfElements("Breaker" + i.ToString(), br);
@@ -783,6 +783,7 @@ namespace UserInterface
                         dis.NewState = ConverterState.ConvertToDiscreteState(newValue.Value);
                         dis.State = dis.NewState;
                         dis.Time = newValue.Time.ToString();
+                        dis.Flag = newValue.Flag;
                         meshViewModel.ChangeStatesOfElements("Disconector" + i.ToString(), dis);
                     }
                 }

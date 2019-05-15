@@ -73,7 +73,7 @@ namespace ProcessingModule
 
                     if (cnt == configuration.Class0Acquisition)
                     {
-                        processingManager.ExecuteReadCommand(PointType.NONE, 0x00, 0, 0x00, 0x00);
+                        processingManager.ExecuteReadCommand(PointType.NONE, 0x00, 0, 0x00, 0x00, string.Empty);
 
                         cnt = 0;
                     }

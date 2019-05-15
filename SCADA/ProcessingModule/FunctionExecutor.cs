@@ -9,6 +9,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using DNP3;
+using DNP3.FunctionParameters;
+using ScadaCommon.FEPDataModel;
 
 namespace ProcessingModule
 {
@@ -59,11 +61,11 @@ namespace ProcessingModule
             }
         }
 
-        public void HandleReceivedChangesOfPoints(Dictionary<Tuple<PointType, ushort>, ushort> pointsToupdate)
+        public void HandleReceivedChangesOfPoints(PointChanges changes)
         {
             if (UpdatePointEvent != null)
             {
-                UpdatePointEvent.Invoke(pointsToupdate);
+                UpdatePointEvent.Invoke(changes);
             }
         }
 
@@ -105,7 +107,11 @@ namespace ProcessingModule
                         {
                             while (commandQueue.TryDequeue(out currentCommand))
                             {
-                                this.connection.SendBytes(this.currentCommand.PackRequest());
+                                byte[] messageForSend = this.currentCommand.PackRequest();
+                                string commandOwner = ((DNP3Functions)currentCommand).CommandOwner;
+                                byte transactionId = (byte)(messageForSend[11] & 0xf);
+
+                                this.connection.SendBytes(messageForSend);
                                 bool recvAgain = true;
                                 byte[] message;
 
@@ -145,7 +151,7 @@ namespace ProcessingModule
                                         recvAgain = false;
                                     }
 
-                                    this.ProccessMsg(message, len + 10);
+                                    this.ProccessMsg(message, len + 10, transactionId, commandOwner);
                                 }
                                 this.currentCommand = null;
                             }
@@ -214,10 +220,11 @@ namespace ProcessingModule
             }
         }
 
-        private void ProccessMsg(byte[] message, int messageLength)
+        private void ProccessMsg(byte[] message, int messageLength, int transactionId = 0, string commandOwner = null)
         {
             Dictionary<Tuple<PointType, ushort>, ushort> pointsToupdate = new Dictionary<Tuple<PointType, ushort>, ushort>();
             byte lengthData = (byte)(BitConverter.ToChar(message, 2) - 5);
+            PointChanges changes = new PointChanges();
             byte[] dataArray = new byte[lengthData];
             int byteProcessed = 0;
             byte qualifier, quality, controlStatus;
@@ -231,6 +238,21 @@ namespace ProcessingModule
             byte functionCode = dataArray[byteProcessed++];
             short interalIndications = BitConverter.ToInt16(dataArray, byteProcessed);
             byteProcessed += 2;
+
+            int transactionIndex = (int)(appControl & 0x0f);
+
+            if (transactionId != 0 && transactionId == transactionIndex)
+            {
+                changes.TransactionId = transactionId;
+                changes.CommandOwner = commandOwner;
+                changes.Changes = pointsToupdate;
+            }
+            else
+            {
+                changes.TransactionId = 0;
+                changes.CommandOwner = String.Empty;
+                changes.Changes = pointsToupdate;
+            }
 
             short objectType, prefixMeaning, rangeMeaning;
             int prefixOffset = 0, rangeOffset = 0;
@@ -536,7 +558,7 @@ namespace ProcessingModule
                         break;
                 }
             }
-            HandleReceivedChangesOfPoints(pointsToupdate);
+            HandleReceivedChangesOfPoints(changes);
         }
 
         private void PreproccessMsg(byte[] message, int messageLength, ref byte[] dataArray, int lengthData)

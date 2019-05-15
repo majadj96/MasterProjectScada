@@ -9,6 +9,7 @@ using ScadaCommon;
 using ScadaCommon.BackEnd_FrontEnd;
 using Common.AlarmEvent;
 using ScadaCommon.Interfaces;
+using Common;
 
 namespace BackEndProcessorService
 {
@@ -30,6 +31,7 @@ namespace BackEndProcessorService
                     if (!CheckReasonability(((AnalogPoint)item).EguValue, NDSConfiguration.GetEguMin(item.PointType), NDSConfiguration.GetEguMax(item.PointType)))
                     {
                         item.InAlarm = true;
+                        item.Flag = item.Flag | PointFlag.Alarm;
                         //alarm izvan mernih opsega
                         //dodati u ProcessingObject sta jos ima u Alarmu TODO
                         Alarm alarm = new Alarm()
@@ -48,6 +50,7 @@ namespace BackEndProcessorService
                     else if (((AnalogPoint)item).EguValue < ((AnalogPoint)item).MinValue)
                     {
                         item.InAlarm = true;
+                        item.Flag = item.Flag | PointFlag.Alarm;
                         //low alarm
                         //dodati u ProcessingObject sta jos ima u Alarmu TODO
                         Alarm alarm = new Alarm()
@@ -66,6 +69,7 @@ namespace BackEndProcessorService
                     else if (((AnalogPoint)item).EguValue > ((AnalogPoint)item).MaxValue)
                     {
                         item.InAlarm = true;
+                        item.Flag = item.Flag | PointFlag.Alarm;
                         //high alarm
                         //dodati u ProcessingObject sta jos ima u Alarmu TODO
                         Alarm alarm = new Alarm()
@@ -84,6 +88,7 @@ namespace BackEndProcessorService
                     else
                     {
                         item.InAlarm = false;
+                        item.Flag = item.Flag & ~PointFlag.Alarm;
                         //Tacka je vracena u normalan opseg vrednosti, prijavljuje se alarm za normal.
                         Alarm alarm = new Alarm()
                         {
@@ -104,6 +109,7 @@ namespace BackEndProcessorService
                     if (((DigitalPoint)item).NormalValue != item.RawValue)
                     {
                         item.InAlarm = true;
+                        item.Flag = item.Flag | PointFlag.Alarm;
                         //alarm treba da se napravi (ABNORMAL ALARM)
                         //dodati u ProcessingObject sta jos ima u Alarmu TODO
                         Alarm alarm = new Alarm()
@@ -122,6 +128,7 @@ namespace BackEndProcessorService
                     else
                     {
                         item.InAlarm = false;
+                        item.Flag = item.Flag & ~PointFlag.Alarm;
                         //Tacka se vraca u NORMAL stanje, prijavljuje se normal alarm...
                         Alarm alarm = new Alarm()
                         {

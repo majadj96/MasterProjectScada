@@ -8,7 +8,7 @@ namespace DNP3
 {
     public class DNP3FunctionFactory
     {
-        public static IDNP3Functions CreateDNP3Function(DNP3ApplicationObjectParameters commandParameters)
+        public static IDNP3Functions CreateDNP3Function(DNP3ApplicationObjectParameters commandParameters, string commandOwner)
         {
             //Ovde se vracaju konkretne funkcije (klase) sto nasledjuju ovaj interfejs i u njima je popunjen niz bajtova...
             switch ((DNP3FunctionCode)commandParameters.FunctionCode)
@@ -17,22 +17,22 @@ namespace DNP3
                     switch ((TypeField)commandParameters.TypeField)
                     {
                         case TypeField.BINARY_INPUT_PACKED_FORMAT:
-                            return new ReadDiscreteInFunction(commandParameters);
+                            return new ReadDiscreteInFunction(commandParameters) { CommandOwner = commandOwner};
 
                         case TypeField.BINARY_OUTPUT_PACKED_FORMAT:
-                            return new ReadDiscreteOutFunction(commandParameters);
+                            return new ReadDiscreteOutFunction(commandParameters) { CommandOwner = commandOwner };
 
                         case TypeField.ANALOG_OUTPUT_STATUS_16BIT:
-                            return new ReadAnalogOutputFunction(commandParameters);
+                            return new ReadAnalogOutputFunction(commandParameters) { CommandOwner = commandOwner };
 
                         case TypeField.ANALOG_INPUT_16BIT:
-                            return new ReadAnalogInFunction(commandParameters);
+                            return new ReadAnalogInFunction(commandParameters) { CommandOwner = commandOwner };
 
                         case TypeField.COUNTER_16BIT:
                             return null;
 
                         case TypeField.CLASS_0_DATA:
-                            return new ReadClass0DataFunction(commandParameters);
+                            return new ReadClass0DataFunction(commandParameters) { CommandOwner = commandOwner };
 
                         default:
                             return null;
@@ -43,10 +43,10 @@ namespace DNP3
                     switch ((TypeField)commandParameters.TypeField)
                     {
                         case TypeField.BINARY_COMMAND:
-                            return new WriteDiscreteOutFunction(commandParameters);
+                            return new WriteDiscreteOutFunction(commandParameters) { CommandOwner = commandOwner };
 
                         case TypeField.ANALOG_OUTPUT_16BIT:
-                            return new WriteAnalogOutputFunction(commandParameters);
+                            return new WriteAnalogOutputFunction(commandParameters) { CommandOwner = commandOwner };
                             
                         case TypeField.COUNTER_16BIT:
                             return null;

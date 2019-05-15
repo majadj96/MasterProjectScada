@@ -19,6 +19,7 @@ namespace NetworkDynamicService
         private IFEPCommandingServiceContract fepCmdProxy;
         private IBackendProcessor backendProcessor;
         private ProcessingObject[] processingObjects = new ProcessingObject[1];
+        private ushort transactionId = 0;
         INDSRealTimePointCache nDSRealTimePointCache;
         public CommandingService(IFEPCommandingServiceContract fepCmdProxy, IBackendProcessor backendProcessor, INDSRealTimePointCache nDSRealTimePointCache)
         {
@@ -32,7 +33,7 @@ namespace NetworkDynamicService
             ProcessingObject processingObject = CommandObjectToProcessingObject(command, PointType.ANALOG_INPUT_16);
             processingObjects[0] = processingObject;
             backendProcessor.CommandingProcess(processingObjects);
-            fepCmdProxy.ReadAnalogInput(ProcessingObjectToFEPCommandObject(processingObjects));
+            fepCmdProxy.ReadAnalogInput(ProcessingObjectToFEPCommandObject(processingObjects, command.CommandOwner));
             return CommandResult.Success;
         }
 
@@ -41,7 +42,7 @@ namespace NetworkDynamicService
             ProcessingObject processingObject = CommandObjectToProcessingObject(command, PointType.ANALOG_OUTPUT_16);
             processingObjects[0] = processingObject;
             backendProcessor.CommandingProcess(processingObjects);
-            fepCmdProxy.ReadAnalogOutput(ProcessingObjectToFEPCommandObject(processingObjects));
+            fepCmdProxy.ReadAnalogOutput(ProcessingObjectToFEPCommandObject(processingObjects, command.CommandOwner));
 
             return CommandResult.Success;
         }
@@ -51,7 +52,7 @@ namespace NetworkDynamicService
             ProcessingObject processingObject = CommandObjectToProcessingObject(command, PointType.BINARY_INPUT);
             processingObjects[0] = processingObject;
             backendProcessor.CommandingProcess(processingObjects);
-            fepCmdProxy.ReadDigitalInput(ProcessingObjectToFEPCommandObject(processingObjects));
+            fepCmdProxy.ReadDigitalInput(ProcessingObjectToFEPCommandObject(processingObjects, command.CommandOwner));
 
             return CommandResult.Success;
         }
@@ -61,7 +62,7 @@ namespace NetworkDynamicService
             ProcessingObject processingObject = CommandObjectToProcessingObject(command, PointType.BINARY_OUTPUT);
             processingObjects[0] = processingObject;
             backendProcessor.CommandingProcess(processingObjects);
-            fepCmdProxy.ReadDigitalOutput(ProcessingObjectToFEPCommandObject(processingObjects));
+            fepCmdProxy.ReadDigitalOutput(ProcessingObjectToFEPCommandObject(processingObjects, command.CommandOwner));
 
             return CommandResult.Success;
         }
@@ -71,7 +72,7 @@ namespace NetworkDynamicService
             ProcessingObject processingObject = CommandObjectToProcessingObject(command, PointType.ANALOG_OUTPUT_16);
             processingObjects[0] = processingObject;
             backendProcessor.CommandingProcess(processingObjects);
-            fepCmdProxy.WriteAnalogOutput(ProcessingObjectToFEPCommandObject(processingObjects));
+            fepCmdProxy.WriteAnalogOutput(ProcessingObjectToFEPCommandObject(processingObjects, command.CommandOwner));
 
             return CommandResult.Success;
         }
@@ -81,13 +82,13 @@ namespace NetworkDynamicService
             ProcessingObject processingObject = CommandObjectToProcessingObject(command, PointType.BINARY_OUTPUT);
             processingObjects[0] = processingObject;
             backendProcessor.CommandingProcess(processingObjects);
-            fepCmdProxy.WriteDigitalOutput(ProcessingObjectToFEPCommandObject(processingObjects));
+
+            fepCmdProxy.WriteDigitalOutput(ProcessingObjectToFEPCommandObject(processingObjects, command.CommandOwner));
 
             return CommandResult.Success;
         }
 
         private ProcessingObject CommandObjectToProcessingObject(CommandObject command, PointType pointType)
-
         {
             BasePointCacheItem basePointCacheItem;
             this.nDSRealTimePointCache.TryGetBasePointItem(command.SignalGid, out basePointCacheItem);
@@ -107,9 +108,27 @@ namespace NetworkDynamicService
             }
         }
 
-        private FEPCommandObject ProcessingObjectToFEPCommandObject(ProcessingObject[] processingObjects)
+        private FEPCommandObject ProcessingObjectToFEPCommandObject(ProcessingObject[] processingObjects, string commandOwner)
         {
-            return new FEPCommandObject() { Address = (ushort)processingObjects[0].Adress, RawValue = (int)processingObjects[0].RawValue };
+            return new FEPCommandObject() {
+                Address = (ushort)processingObjects[0].Adress,
+                RawValue = (int)processingObjects[0].RawValue,
+                TransactionId = GetTransactionId(),
+                CommandOwner = commandOwner,
+            };
+        }
+        private ushort GetTransactionId()
+        {
+            if (transactionId == 15)
+            {
+                transactionId = 0;
+            }
+            else
+            {
+                transactionId++;
+            }
+
+            return transactionId;
         }
     }
 }

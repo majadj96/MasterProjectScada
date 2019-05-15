@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using UserInterface.BaseError;
 
 namespace UserInterface.Model
@@ -13,6 +14,10 @@ namespace UserInterface.Model
         private DiscreteState state;
         private DiscreteState newState;
         private long discreteGID;
+        private PointFlag flag;
+        private bool inAlarm;
+        private bool operaterCommanded;
+        private bool autoCommanded;
 
         public Breaker(string mRID, string gID, string name, string description, string time, DiscreteState state)
         {
@@ -35,12 +40,32 @@ namespace UserInterface.Model
         public DiscreteState NewState
         {
             get { return newState; }
-            set  { newState = value;  }
+            set { newState = value; }
         }
         public long DiscreteGID
         {
             get { return discreteGID; }
             set { discreteGID = value; }
         }
+
+        public PointFlag Flag
+        {
+            get
+            {
+                return flag;
+            }
+            set
+            {
+                flag = value;
+
+                if (flag.HasFlag(PointFlag.Alarm)) { InAlarm = true; } else { InAlarm = false; }
+                if (flag.HasFlag(PointFlag.AutoCommanded)) { AutoCommanded = true; } else { AutoCommanded = false; }
+                if (flag.HasFlag(PointFlag.OperaterCommanded)) { OperaterCommanded = true; } else { OperaterCommanded = false; }
+            }
+        }
+
+        public bool AutoCommanded { get => autoCommanded; set => autoCommanded = value; }
+        public bool OperaterCommanded { get => operaterCommanded; set => operaterCommanded = value; }
+        public bool InAlarm { get => inAlarm; set => inAlarm = value; }
     }
 }

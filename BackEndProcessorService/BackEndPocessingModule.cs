@@ -41,18 +41,30 @@ namespace BackEndProcessorService
                 {
                     item.Process(inputObj);
                 }
-                if (inputObj[index].PointType == PointType.ANALOG_INPUT_16 || inputObj[index].PointType == PointType.ANALOG_OUTPUT_16) {
-                    measurement.Add(new ScadaUIExchangeModel() { Gid = inputObj[index].Gid, Time = DateTime.Now, Value = ((AnalogPoint)(inputObj[index])).EguValue });
+                if (inputObj[index].PointType == PointType.ANALOG_INPUT_16 || inputObj[index].PointType == PointType.ANALOG_OUTPUT_16)
+                {
+                    measurement.Add(new ScadaUIExchangeModel()
+                    {
+                        Gid = inputObj[index].Gid,
+                        Time = DateTime.Now,
+                        Value = ((AnalogPoint)(inputObj[index])).EguValue,
+                        Flag = inputObj[index].Flag
+                    });
                     measurementsDB.Add(new Measurement() { Gid = inputObj[index].Gid, ChangedTime = DateTime.Now, Value = (int)((AnalogPoint)(inputObj[index])).EguValue });
                 }
                 else
                 {
-                    measurement.Add(new ScadaUIExchangeModel() { Gid = inputObj[index].Gid, Time = DateTime.Now, Value = inputObj[index].RawValue });
-                    measurementsDB.Add(new Measurement() { Gid = inputObj[index].Gid, ChangedTime =inputObj[index].Timestamp, Value = (int)inputObj[index].RawValue });
+                    measurement.Add(new ScadaUIExchangeModel()
+                    {
+                        Gid = inputObj[index].Gid,
+                        Time = DateTime.Now,
+                        Value = inputObj[index].RawValue,
+                        Flag = inputObj[index].Flag
+                    });
+                    measurementsDB.Add(new Measurement() { Gid = inputObj[index].Gid, ChangedTime = inputObj[index].Timestamp, Value = (int)inputObj[index].RawValue });
                 }
             }
             measurementRepository.AddMeasurements(measurementsDB.ToArray());
-           // this.pointUpdateProxy.UpdatePoint(inputObj);
             publisherProxy.Publish(measurement.ToArray(), "scada");
         }
 

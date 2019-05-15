@@ -33,32 +33,32 @@ namespace FrontEndProcessorService
         }
         public void WriteDigitalOutput(FEPCommandObject cmdObject)
         {
-            ProcessingManager.ExecuteWriteCommand(PointType.DIGITAL_OUTPUT, Configuration.GetTransactionId(), Configuration.UnitAddress, cmdObject.Address, cmdObject.RawValue);
+            ProcessingManager.ExecuteWriteCommand(PointType.DIGITAL_OUTPUT, cmdObject.TransactionId, Configuration.UnitAddress, cmdObject.Address, cmdObject.RawValue, cmdObject.CommandOwner);
         }
 
         public void WriteAnalogOutput(FEPCommandObject cmdObject)
         {
-            ProcessingManager.ExecuteWriteCommand(PointType.ANALOG_OUTPUT, Configuration.GetTransactionId(), Configuration.UnitAddress, cmdObject.Address, cmdObject.RawValue);
+            ProcessingManager.ExecuteWriteCommand(PointType.ANALOG_OUTPUT, cmdObject.TransactionId, Configuration.UnitAddress, cmdObject.Address, cmdObject.RawValue, cmdObject.CommandOwner);
         }
 
         public void ReadDigitalInput(FEPCommandObject cmdObject)
         {
-            ProcessingManager.ExecuteReadCommand(PointType.DIGITAL_INPUT, Configuration.GetTransactionId(), Configuration.UnitAddress, cmdObject.Address, 0);
+            ProcessingManager.ExecuteReadCommand(PointType.DIGITAL_INPUT, cmdObject.TransactionId, Configuration.UnitAddress, cmdObject.Address, 0, cmdObject.CommandOwner);
         }
 
         public void ReadAnalogInput(FEPCommandObject cmdObject)
         {
-            ProcessingManager.ExecuteReadCommand(PointType.ANALOG_INPUT, Configuration.GetTransactionId(), Configuration.UnitAddress, cmdObject.Address, 0);
+            ProcessingManager.ExecuteReadCommand(PointType.ANALOG_INPUT, cmdObject.TransactionId, Configuration.UnitAddress, cmdObject.Address, 0, cmdObject.CommandOwner);
         }
 
         public void ReadDigitalOutput(FEPCommandObject cmdObject)
         {
-            ProcessingManager.ExecuteReadCommand(PointType.DIGITAL_OUTPUT, Configuration.GetTransactionId(), Configuration.UnitAddress, cmdObject.Address, 0);
+            ProcessingManager.ExecuteReadCommand(PointType.DIGITAL_OUTPUT, cmdObject.TransactionId, Configuration.UnitAddress, cmdObject.Address, 0, cmdObject.CommandOwner);
         }
 
         public void ReadAnalogOutput(FEPCommandObject cmdObject)
         {
-            ProcessingManager.ExecuteReadCommand(PointType.ANALOG_OUTPUT, Configuration.GetTransactionId(), Configuration.UnitAddress, cmdObject.Address, 0);
+            ProcessingManager.ExecuteReadCommand(PointType.ANALOG_OUTPUT, cmdObject.TransactionId, Configuration.UnitAddress, cmdObject.Address, 0, cmdObject.CommandOwner);
         }
     }
 }

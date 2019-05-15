@@ -8,6 +8,8 @@ using DNP3;
 using ScadaCommon.ServiceProxies;
 using ScadaCommon.BackEnd_FrontEnd;
 using ScadaCommon.NDSDataModel;
+using ScadaCommon.FEPDataModel;
+using Common;
 
 namespace ProcessingModule
 {
@@ -34,23 +36,23 @@ namespace ProcessingModule
         }
 
         /// <inheritdoc />
-        public void ExecuteReadCommand(PointType pointType, ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints)
+        public void ExecuteReadCommand(PointType pointType, ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints, string commandOwner)
         {
             if (pointType == PointType.ANALOG_INPUT)
             {
-                ExecuteAnalogInputRead(transactionId, remoteUnitAddress, startAddress, numberOfPoints);
+                ExecuteAnalogInputRead(transactionId, remoteUnitAddress, startAddress, numberOfPoints, commandOwner);
             }
-            else if(pointType == PointType.ANALOG_OUTPUT)
+            else if (pointType == PointType.ANALOG_OUTPUT)
             {
-                ExecuteAnalogOutputRead(transactionId, remoteUnitAddress, startAddress, numberOfPoints);
+                ExecuteAnalogOutputRead(transactionId, remoteUnitAddress, startAddress, numberOfPoints, commandOwner);
             }
             else if (pointType == PointType.DIGITAL_INPUT)
             {
-                ExecuteDigitalInputRead(transactionId, remoteUnitAddress, startAddress, numberOfPoints);
+                ExecuteDigitalInputRead(transactionId, remoteUnitAddress, startAddress, numberOfPoints, commandOwner);
             }
             else if (pointType == PointType.DIGITAL_OUTPUT)
             {
-                ExecuteDigitalOutputRead(transactionId, remoteUnitAddress, startAddress, numberOfPoints);
+                ExecuteDigitalOutputRead(transactionId, remoteUnitAddress, startAddress, numberOfPoints, commandOwner);
             }
             else
             {
@@ -58,51 +60,56 @@ namespace ProcessingModule
             }
         }
 
-        private void ExecuteDigitalOutputRead(ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints)
+        private void ExecuteDigitalOutputRead(ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints, string commandOwner)
         {
-            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(0xc1, (byte)DNP3FunctionCode.READ, (ushort)TypeField.BINARY_OUTPUT_PACKED_FORMAT, 0x00, startAddress, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
-            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p);
+            byte applicationControl = (byte)(0xc0 | transactionId);
+            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(applicationControl, (byte)DNP3FunctionCode.READ, (ushort)TypeField.BINARY_OUTPUT_PACKED_FORMAT, 0x00, startAddress, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
+            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p, commandOwner);
             this.functionExecutor.EnqueueCommand(fn);
         }
 
-        private void ExecuteDigitalInputRead(ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints)
+        private void ExecuteDigitalInputRead(ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints, string commandOwner)
         {
-            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(0xc1, (byte)DNP3FunctionCode.READ, (ushort)TypeField.BINARY_INPUT_PACKED_FORMAT, 0x00, startAddress, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
-            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p);
+            byte applicationControl = (byte)(0xc0 | transactionId);
+            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(applicationControl, (byte)DNP3FunctionCode.READ, (ushort)TypeField.BINARY_INPUT_PACKED_FORMAT, 0x00, startAddress, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
+            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p, commandOwner);
             this.functionExecutor.EnqueueCommand(fn);
         }
 
-        private void ExecuteAnalogInputRead(ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints)
+        private void ExecuteAnalogInputRead(ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints, string commandOwner)
         {
-            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(0xc1, (byte)DNP3FunctionCode.READ, (ushort)TypeField.ANALOG_INPUT_16BIT, 0x00, startAddress, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
-            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p);
+            byte applicationControl = (byte)(0xc0 | transactionId);
+            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(applicationControl, (byte)DNP3FunctionCode.READ, (ushort)TypeField.ANALOG_INPUT_16BIT, 0x00, startAddress, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
+            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p, commandOwner);
             this.functionExecutor.EnqueueCommand(fn);
         }
 
-        private void ExecuteAnalogOutputRead(ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints)
+        private void ExecuteAnalogOutputRead(ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints, string commandOwner)
         {
-            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(0xc1, (byte)DNP3FunctionCode.READ, (ushort)TypeField.ANALOG_OUTPUT_STATUS_16BIT, 0x00, startAddress, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
-            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p);
+            byte applicationControl = (byte)(0xc0 | transactionId);
+            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(applicationControl, (byte)DNP3FunctionCode.READ, (ushort)TypeField.ANALOG_OUTPUT_STATUS_16BIT, 0x00, startAddress, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
+            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p, commandOwner);
             this.functionExecutor.EnqueueCommand(fn);
         }
 
         private void ExecuteClass0DataRead(ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints)
         {
-            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(0xc1, (byte)DNP3FunctionCode.READ, (ushort)TypeField.CLASS_0_DATA, 0x06, 0, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
-            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p);
+            byte applicationControl = (byte)(0xc0 | transactionId);
+            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(applicationControl, (byte)DNP3FunctionCode.READ, (ushort)TypeField.CLASS_0_DATA, 0x06, 0, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
+            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p, String.Empty);
             this.functionExecutor.EnqueueCommand(fn);
         }
 
         /// <inheritdoc />
-        public void ExecuteWriteCommand(PointType pointType, ushort transactionId, byte remoteUnitAddress, ushort pointAddress, int value)
+        public void ExecuteWriteCommand(PointType pointType, ushort transactionId, byte remoteUnitAddress, ushort pointAddress, int value, string commandOwner)
         {
             if (pointType == PointType.ANALOG_OUTPUT)
             {
-                ExecuteAnalogCommand(transactionId, remoteUnitAddress, pointAddress, value);
+                ExecuteAnalogCommand(transactionId, remoteUnitAddress, pointAddress, value, commandOwner);
             }
             else
             {
-                ExecuteDigitalCommand(transactionId, remoteUnitAddress, pointAddress, value);
+                ExecuteDigitalCommand(transactionId, remoteUnitAddress, pointAddress, value, commandOwner);
             }
         }
 
@@ -114,11 +121,12 @@ namespace ProcessingModule
         /// <param name="remoteUnitAddress">The remote unit address.</param>
         /// <param name="pointAddress">The point address.</param>
         /// <param name="value">The value.</param>
-        private void ExecuteDigitalCommand(ushort transactionId, byte remoteUnitAddress, ushort pointAddress, int value)
+        private void ExecuteDigitalCommand(ushort transactionId, byte remoteUnitAddress, ushort pointAddress, int value, string commandOwner)
         {
-                                                                                 //apl cont, function code,                      type field,                        qualf|range |   obj pref   |obj value   |start|lenght|control|dest  |sourc|transport header
-            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(0xc1, (byte)DNP3FunctionCode.DIRECT_OPERATE, (ushort)TypeField.BINARY_COMMAND, 0x28, 0x0001, pointAddress, (uint)value, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
-            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p);
+            byte applicationControl = (byte)(0xc0 | transactionId);
+            //apl cont, function code,                      type field,                        qualf|range |   obj pref   |obj value   |start|lenght|control|dest  |sourc|transport header
+            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(applicationControl, (byte)DNP3FunctionCode.DIRECT_OPERATE, (ushort)TypeField.BINARY_COMMAND, 0x28, 0x0001, pointAddress, (uint)value, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
+            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p, commandOwner);
             this.functionExecutor.EnqueueCommand(fn);
         }
 
@@ -130,11 +138,12 @@ namespace ProcessingModule
         /// <param name="remoteUnitAddress">The remote unit address.</param>
         /// <param name="pointAddress">The point address.</param>
         /// <param name="value">The value.</param>
-        private void ExecuteAnalogCommand(ushort transactionId, byte remoteUnitAddress, ushort pointAddress, int value)
+        private void ExecuteAnalogCommand(ushort transactionId, byte remoteUnitAddress, ushort pointAddress, int value, string commandOwner)
         {
-                                                                                //apl cont, function code,                      type field,                             qualf|range |   obj pref   |obj value   |start|lenght|control|dest  |sourc|transport header
-            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(0xc1, (byte)DNP3FunctionCode.DIRECT_OPERATE, (ushort)TypeField.ANALOG_OUTPUT_16BIT, 0x28, 0x0001, pointAddress, (uint)value, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
-            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p);
+            byte applicationControl = (byte)(0xc0 | transactionId);
+            //apl cont, function code,                      type field,                             qualf|range |   obj pref   |obj value   |start|lenght|control|dest  |sourc|transport header
+            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(applicationControl, (byte)DNP3FunctionCode.DIRECT_OPERATE, (ushort)TypeField.ANALOG_OUTPUT_16BIT, 0x28, 0x0001, pointAddress, (uint)value, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
+            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p, commandOwner);
             this.functionExecutor.EnqueueCommand(fn);
         }
 
@@ -162,42 +171,50 @@ namespace ProcessingModule
         /// <param name="type">The point type.</param>
         /// <param name="pointAddress">The point address.</param>
         /// <param name="newValue">The new value.</param>
-        private void CommandExecutor_UpdatePointEvent(Dictionary<Tuple<PointType, ushort>, ushort> pointsToupdate)
+        private void CommandExecutor_UpdatePointEvent(PointChanges changes)
         {
-            List<ProcessingObject> changes = new List<ProcessingObject>();
+            List<ProcessingObject> valueChanges = new List<ProcessingObject>();
             ProcessingObject[] inputObj;
 
-            foreach (var item in pointsToupdate)
+            foreach (var item in changes.Changes)
             {
                 List<BasePointCacheItem> points = storage.GetPoints(new List<PointIdentifier>(1) { new PointIdentifier(item.Key.Item1, item.Key.Item2) });
+                if (String.Equals(changes.CommandOwner, "UI"))
+                {
+                    points.First().Flag = PointFlag.OperaterCommanded;
+                }
+                else if (String.Equals(changes.CommandOwner, "CalculationEngine"))
+                {
+                    points.First().Flag = PointFlag.AutoCommanded;
+                }
 
                 if (item.Value != points.First().RawValue)
                 {
                     if (item.Key.Item1 == PointType.ANALOG_INPUT_16)
                     {
                         ProcessAnalogPoint(points.First() as AnalogPointCacheItem, item.Value);
-                        changes.Add(BasePointCacheItemToProcessingObj(points.First(), PointType.ANALOG_INPUT_16, item.Key.Item2));
+                        valueChanges.Add(BasePointCacheItemToProcessingObj(points.First(), PointType.ANALOG_INPUT_16, item.Key.Item2));
                     }
                     else if (item.Key.Item1 == PointType.ANALOG_OUTPUT_16)
                     {
                         ProcessAnalogPoint(points.First() as AnalogPointCacheItem, item.Value);
-                        changes.Add(BasePointCacheItemToProcessingObj(points.First(), PointType.ANALOG_OUTPUT_16, item.Key.Item2));
+                        valueChanges.Add(BasePointCacheItemToProcessingObj(points.First(), PointType.ANALOG_OUTPUT_16, item.Key.Item2));
                     }
                     else if (item.Key.Item1 == PointType.BINARY_INPUT)
                     {
                         ProcessDigitalPoint(points.First() as DigitalPointCacheItem, item.Value);
-                        changes.Add(BasePointCacheItemToProcessingObj(points.First(), PointType.BINARY_INPUT, item.Key.Item2));
+                        valueChanges.Add(BasePointCacheItemToProcessingObj(points.First(), PointType.BINARY_INPUT, item.Key.Item2));
                     }
                     else
                     {
                         ProcessDigitalPoint(points.First() as DigitalPointCacheItem, item.Value);
-                        changes.Add(BasePointCacheItemToProcessingObj(points.First(), PointType.BINARY_OUTPUT, item.Key.Item2));
+                        valueChanges.Add(BasePointCacheItemToProcessingObj(points.First(), PointType.BINARY_OUTPUT, item.Key.Item2));
                     }
                 }
             }
-            if (changes.Count > 0)
+            if (valueChanges.Count > 0)
             {
-                inputObj = changes.ToArray();
+                inputObj = valueChanges.ToArray();
                 ndsProxy.Process(inputObj);
             }
         }
@@ -206,22 +223,66 @@ namespace ProcessingModule
         {
             if (pointType == PointType.ANALOG_INPUT_16)
             {
-                AnalogPoint analog = new AnalogPoint() {Gid = point.Gid, RawValue = ((AnalogPointCacheItem)point).RawValue, Timestamp = DateTime.Now, PointType = PointType.ANALOG_INPUT_16, Adress = address, MaxValue = point.MaxValue, MinValue = point.MinValue, NormalValue = point.NormalValue};
+                AnalogPoint analog = new AnalogPoint()
+                {
+                    Gid = point.Gid,
+                    RawValue = ((AnalogPointCacheItem)point).RawValue,
+                    Timestamp = DateTime.Now,
+                    PointType = PointType.ANALOG_INPUT_16,
+                    Adress = address,
+                    MaxValue = point.MaxValue,
+                    MinValue = point.MinValue,
+                    NormalValue = point.NormalValue,
+                    Flag = 0x0
+                };
                 return analog;
             }
             else if (pointType == PointType.ANALOG_OUTPUT_16)
             {
-                AnalogPoint analog = new AnalogPoint() { Gid = point.Gid, RawValue = ((AnalogPointCacheItem)point).RawValue, Timestamp = DateTime.Now, PointType = PointType.ANALOG_OUTPUT_16, Adress = address, MaxValue = point.MaxValue, MinValue = point.MinValue, NormalValue = point.NormalValue};
+                AnalogPoint analog = new AnalogPoint()
+                {
+                    Gid = point.Gid,
+                    RawValue = ((AnalogPointCacheItem)point).RawValue,
+                    Timestamp = DateTime.Now,
+                    PointType = PointType.ANALOG_OUTPUT_16,
+                    Adress = address,
+                    MaxValue = point.MaxValue,
+                    MinValue = point.MinValue,
+                    NormalValue = point.NormalValue,
+                    Flag = 0x0
+                };
                 return analog;
             }
             else if (pointType == PointType.BINARY_INPUT)
             {
-                DigitalPoint digital = new DigitalPoint() { Gid = point.Gid, RawValue = ((DigitalPointCacheItem)point).RawValue, Timestamp = DateTime.Now, PointType = PointType.BINARY_INPUT, Adress = address, MaxValue = (int)(point.MaxValue), MinValue = (int)(point.MinValue), NormalValue = (int)(point.NormalValue)};
+                DigitalPoint digital = new DigitalPoint()
+                {
+                    Gid = point.Gid,
+                    RawValue = ((DigitalPointCacheItem)point).RawValue,
+                    Timestamp = DateTime.Now,
+                    PointType = PointType.BINARY_INPUT,
+                    Adress = address,
+                    MaxValue = (int)(point.MaxValue),
+                    MinValue = (int)(point.MinValue),
+                    NormalValue = (int)(point.NormalValue),
+                    Flag = point.Flag
+                };
                 return digital;
             }
             else
             {
-                DigitalPoint digital = new DigitalPoint() { Gid = point.Gid, RawValue = ((DigitalPointCacheItem)point).RawValue, Timestamp = DateTime.Now, PointType = PointType.BINARY_OUTPUT, Adress = address, MaxValue = (int)(point.MaxValue), MinValue = (int)(point.MinValue), NormalValue = (int)(point.NormalValue)};
+                DigitalPoint digital = new DigitalPoint()
+                {
+                    Gid = point.Gid,
+                    RawValue = ((DigitalPointCacheItem)point).RawValue,
+                    Timestamp = DateTime.Now,
+                    PointType = PointType.BINARY_OUTPUT,
+                    Adress = address,
+                    MaxValue = (int)(point.MaxValue),
+                    MinValue = (int)(point.MinValue),
+                    NormalValue = (int)(point.NormalValue),
+                    Flag = point.Flag
+                };
                 return digital;
             }
         }
@@ -250,20 +311,20 @@ namespace ProcessingModule
             point.Timestamp = DateTime.Now;
         }
 
-    /*    /// <inheritdoc />
-        public void InitializePoint(PointType type, ushort pointAddress, ushort defaultValue)
-        {
-            List<BasePointCacheItem> points = storage.GetPoints(new List<PointIdentifier>(1) { new PointIdentifier(type, pointAddress) });
+        /*    /// <inheritdoc />
+            public void InitializePoint(PointType type, ushort pointAddress, ushort defaultValue)
+            {
+                List<BasePointCacheItem> points = storage.GetPoints(new List<PointIdentifier>(1) { new PointIdentifier(type, pointAddress) });
 
-            if (type == PointType.ANALOG_INPUT || type == PointType.ANALOG_OUTPUT)
-            {
-                ProcessAnalogPoint(points.First() as IAnalogPoint, defaultValue);
-            }
-            else
-            {
-                ProcessDigitalPoint(points.First() as IDigitalPoint, defaultValue);
-            }
-        }*/
+                if (type == PointType.ANALOG_INPUT || type == PointType.ANALOG_OUTPUT)
+                {
+                    ProcessAnalogPoint(points.First() as IAnalogPoint, defaultValue);
+                }
+                else
+                {
+                    ProcessDigitalPoint(points.First() as IDigitalPoint, defaultValue);
+                }
+            }*/
 
         public void SendRawBytesMessage(DNP3FunctionCode functionCode, byte[] message)
         {
@@ -279,8 +340,8 @@ namespace ProcessingModule
             else if (functionCode == DNP3FunctionCode.WRITE)
             {
                 byte tran = (byte)(message[10] & 0xf);
-                byte app = (byte)(message[11] & 0xf); 
-                                                                                //0xc0 - apl cont, function code,                      type field,        qualf|range|obj pref|obj value|start|lenght|control|dest  |sourc|transport header
+                byte app = (byte)(message[11] & 0xf);
+                //0xc0 - apl cont, function code,                      type field,        qualf|range|obj pref|obj value|start|lenght|control|dest  |sourc|transport header
                 DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters((byte)(0xc0 | app), (byte)DNP3FunctionCode.WRITE, (ushort)TypeField.TIME_MESSAGE, 0x07, 0x0001, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, (byte)(0xc0 | tran));
                 IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Message(p);
                 this.functionExecutor.SendMessage(fn);
