@@ -61,7 +61,6 @@
     <Compile Include="Configuration\ConfigReader.cs" />
     <Compile Include="FEPCommandingService.cs" />
     <Compile Include="FieldCommunicationService.cs" />
-    <Compile Include="FrontEndProcessorService.cs" />
     <Compile Include="NDSConfigurationService.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>

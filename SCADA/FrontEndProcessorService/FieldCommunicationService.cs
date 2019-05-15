@@ -12,6 +12,7 @@ using ScadaCommon.ServiceContract;
 using System.ServiceModel;
 using ScadaCommon.ServiceProxies;
 using ScadaCommon.NDSDataModel;
+using ScadaCommon.BackEnd_FrontEnd;
 
 namespace FrontEndProcessorService
 {
@@ -32,31 +33,23 @@ namespace FrontEndProcessorService
         private NetworkDynamicServiceProxy ndsProxy;
         private NetworkDynamicStateServiceProxy ndsStateProxy;
         private Dictionary<Tuple<ushort, PointType>, BasePointCacheItem> points;
+        private List<ServiceHost> hosts = null;
+        private FEPCommandingService fEPCommandingService;
+        private IFEPConfigService nDSConfigurationService;
         #endregion Fields
 
-		#region Properties
+        #region Properties
 
-		public DateTime CurrentTime
-		{
-			get { return currentTime; }
-			set
-			{
-                if(currentTime != value)
+        public DateTime CurrentTime
+        {
+            get { return currentTime; }
+            set
+            {
+                if (currentTime != value)
                 {
                     currentTime = value;
-                    //ndsStateProxy.UpdateDateAndTime(currentTime);
                 }
-			}
-		}
-
-        public IConfiguration Configuration
-        {
-            get { return configuration; }
-        }
-
-        public IProcessingManager ProcessingManager
-        {
-            get { return processingManager; }
+            }
         }
 
 		#endregion Properties
@@ -67,6 +60,54 @@ namespace FrontEndProcessorService
             
             ndsStateProxy = new NetworkDynamicStateServiceProxy("NetworkDynamicStateServiceEndPoint");
             ndsProxy = new NetworkDynamicServiceProxy("NetworkDynamicServiceEndPoint");
+
+            configuration = new ConfigReader();
+            connection = new TCPConnection(configuration, ndsStateProxy);
+            commandExecutor = new FunctionExecutor(configuration, connection);
+            processingManager = new ProcessingManager(this, commandExecutor, ndsProxy);
+
+            fEPCommandingService = new FEPCommandingService(processingManager, configuration);
+            nDSConfigurationService = new NDSConfigurationService(StartService);
+
+            InitializeHosts();
+        }
+
+        public void Start()
+        {
+            StartHosts();
+        }
+
+        private void StartHosts()
+        {
+            if (hosts == null || hosts.Count == 0)
+            {
+                throw new Exception("Field Communication Services can not be opend because it is not initialized.");
+            }
+
+            foreach (ServiceHost host in hosts)
+            {
+                host.Open();
+            }
+        }
+
+        private void InitializeHosts()
+        {
+            hosts = new List<ServiceHost>();
+            hosts.Add(new ServiceHost(nDSConfigurationService));
+            hosts.Add(new ServiceHost(fEPCommandingService));
+        }
+
+        public void CloseHosts()
+        {
+            if (hosts == null || hosts.Count == 0)
+            {
+                throw new Exception("Network Dynamic Services can not be closed because it is not initialized.");
+            }
+
+            foreach (ServiceHost host in hosts)
+            {
+                host.Close();
+            }
         }
 
         public void StartService(Dictionary<Tuple<ushort, PointType>, BasePointCacheItem> points)
@@ -75,11 +116,10 @@ namespace FrontEndProcessorService
             ndsProxy.Open();
             ndsStateProxy.Open();
 
-            configuration = new ConfigReader();
-            connection = new TCPConnection(Configuration, ndsStateProxy);
-            commandExecutor = new FunctionExecutor(Configuration, connection);
-            processingManager = new ProcessingManager(this, commandExecutor, ndsProxy);
-            acquisitor = new Acquisitor(acquisitionTrigger, ProcessingManager, Configuration);
+            commandExecutor.StartExecution();
+
+
+            acquisitor = new Acquisitor(acquisitionTrigger, processingManager, configuration);
             InitializeAndStartThreads();
         }
 
@@ -129,6 +169,7 @@ namespace FrontEndProcessorService
             this.acquisitor.Dispose();
             acquisitionTrigger.Dispose();
             GC.SuppressFinalize(this);
+            CloseHosts();
         }
 
 		public List<BasePointCacheItem> GetPoints(List<PointIdentifier> pointIds)

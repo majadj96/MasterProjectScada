@@ -58,11 +58,14 @@ namespace UserInterface.Subscription
             _proxy.UnSubscribe(topic);
         }
 
-        public void PublishMeasure(string test, string topicName)
+        public void PublishMeasure(ScadaUIExchangeModel []measurement, string topicName)
         {
-            _eventCount += 1;
-            NotificationMessage n = new NotificationMessage(null, test, topicName);
-            Messenger.Default.Send<NotificationMessage>(n);
+            Console.WriteLine("Stigao model....");
+            //_eventCount += 1;
+            //NotificationMessage n = new NotificationMessage(null, test, topicName);
+            //Messenger.Default.Send<NotificationMessage>(n);
+
+            //Ovde stizu merenje sa skade, izmenjen je contract odnosno interfejs kod ove metode....
         }
     }
 }

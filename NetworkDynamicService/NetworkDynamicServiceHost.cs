@@ -6,6 +6,7 @@ using NetworkDynamicService.ProxyPool;
 using NetworkDynamicService.Transaction;
 using ScadaCommon.BackEnd_FrontEnd;
 using ScadaCommon.ServiceContract;
+using PubSubCommon;
 using System;
 using System.Collections.Generic;
 using System.ServiceModel;
@@ -28,6 +29,7 @@ namespace NetworkDynamicService
         private StateUpdateServiceProxy stateUpdateProxy;
         private FepCommandingServiceProxy fepCmdProxy;
         private IProcessingServiceContract processingService;
+        private PublisherProxy publisherProxy;
 
         public NetworkDynamicServiceHost()
         {
@@ -36,9 +38,10 @@ namespace NetworkDynamicService
             ndSConfigurationProxy = new NDSConfigurationProxy("IFEPConfigService");
             stateUpdateProxy = new StateUpdateServiceProxy("StateUpdateServiceEndPoint");
             fepCmdProxy = new FepCommandingServiceProxy("FEPCommandingServiceContract");
+            publisherProxy = new PublisherProxy("PublisherEndPoint");
 
             nDSRealTimePointCache = new NDSRealTimePointCache();
-            backEndPocessingModule = new BackEndPocessingModule(pointUpdateProxy, this.alarmEventServiceProxy);
+            backEndPocessingModule = new BackEndPocessingModule(pointUpdateProxy, this.alarmEventServiceProxy, this.publisherProxy);
 
             transactionService =  new TransactionService(nDSRealTimePointCache, OpenProxies);
             modelUpdateContract = new ModelUpdateContract(nDSRealTimePointCache, ndSConfigurationProxy, transactionService);
@@ -55,11 +58,12 @@ namespace NetworkDynamicService
 
         private void OpenProxies()
         {
-            //pointUpdateProxy.Open();
+            pointUpdateProxy.Open();
             alarmEventServiceProxy.Open();
             //ndSConfigurationProxy.Open();
-            //stateUpdateProxy.Open();
+            stateUpdateProxy.Open();
             fepCmdProxy.Open();
+            publisherProxy.Open();
         }
 
         private void StartHosts()

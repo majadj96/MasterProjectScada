@@ -36,7 +36,7 @@ namespace PubSub.PubSubEngine
             }
         }
 
-        public void PublishMeasure(string test, string topicName)
+        public void PublishMeasure(ScadaUIExchangeModel []measurement, string topicName)
         {
             List<IPub> subscribers = Filter.GetSubscribers(topicName);
             if (subscribers == null) return;
@@ -48,7 +48,7 @@ namespace PubSub.PubSubEngine
             {
                 try
                 {
-                    publishMethodInfo.Invoke(subscriber, new object[] { test, topicName });
+                    publishMethodInfo.Invoke(subscriber, new object[] { measurement, topicName });
                 }
                 catch
                 {

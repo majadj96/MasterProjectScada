@@ -13,6 +13,6 @@ namespace PubSubCommon
         [OperationContract(IsOneWay = true)]
         void Publish(NMSModel model, string topicName);
         [OperationContract(IsOneWay = true)]
-        void PublishMeasure(string test, string topicName);
+        void PublishMeasure(ScadaUIExchangeModel []measurement, string topicName);
     }
 }

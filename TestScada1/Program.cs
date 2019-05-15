@@ -10,7 +10,7 @@ namespace TestScada1
     {
         static void Main(string[] args)
         {
-            PubSCADA pub = new PubSCADA();
+            //PubSCADA pub = new PubSCADA();
             while (true)
             {
                 //Kada se u konzolu unese slovo a - imitira se Publish metoda (PublishMeasure)

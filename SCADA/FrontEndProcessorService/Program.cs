@@ -6,7 +6,7 @@ namespace FrontEndProcessorService
     {
         static void Main(string[] args)
         {
-            FrontEndProcessorService fcs = new FrontEndProcessorService();
+            FieldCommunicationService fcs = new FieldCommunicationService();
 
             try
             {

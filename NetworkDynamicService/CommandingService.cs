@@ -87,6 +87,7 @@ namespace NetworkDynamicService
         }
 
         private ProcessingObject CommandObjectToProcessingObject(CommandObject command, PointType pointType)
+
         {
             BasePointCacheItem basePointCacheItem;
             this.nDSRealTimePointCache.TryGetBasePointItem(command.SignalGid, out basePointCacheItem);

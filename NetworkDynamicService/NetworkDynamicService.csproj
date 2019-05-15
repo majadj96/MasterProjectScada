@@ -58,6 +58,7 @@
     <Compile Include="ProcessingService.cs" />
     <Compile Include="ProxyPool\FepCommandingServiceProxy.cs" />
     <Compile Include="ProxyPool\PointUpdateProxy.cs" />
+    <Compile Include="PublisProxy\PublisherProxy.cs" />
     <Compile Include="StateUpdater\StateUpdateService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -79,6 +80,10 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{6C234280-508A-47A4-B9CA-2677082EF85F}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PubSubCommon\PubSubCommon.csproj">
+      <Project>{6109286a-0dc9-469c-a271-0605c18ed32c}</Project>
+      <Name>PubSubCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\SCADA\ScadaCommon\ScadaCommon.csproj">
       <Project>{823D1355-EFD0-481C-A0D9-FDA0C4EA37DF}</Project>
