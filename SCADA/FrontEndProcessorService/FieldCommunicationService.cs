@@ -93,16 +93,16 @@ namespace FrontEndProcessorService
 		{
 			switch (c.RegistryType)
 			{
-				case PointType.DIGITAL_INPUT:
+				case PointType.BINARY_INPUT:
 					return new DigitalInput(c, i);
 
-				case PointType.DIGITAL_OUTPUT:
+				case PointType.BINARY_OUTPUT:
 					return new DigitalOutput(c, i);
 
-				case PointType.ANALOG_INPUT:
+				case PointType.ANALOG_INPUT_16:
 					return new AnalaogInput(c, i);
 
-				case PointType.ANALOG_OUTPUT:
+				case PointType.ANALOG_OUTPUT_16:
 					return new AnalogOutput(c, i);
 
 				default:
@@ -173,37 +173,37 @@ namespace FrontEndProcessorService
 
         public void WriteDigitalOutput(int address, int value)
         {
-            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.DIGITAL_OUTPUT, (ushort)address));
+            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.BINARY_OUTPUT, (ushort)address));
             this.processingManager.ExecuteWriteCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, value);
         }
 
         public void WriteAnalogOutput(int address, int value)
         {
-            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.ANALOG_OUTPUT, (ushort)address));
+            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.ANALOG_OUTPUT_16, (ushort)address));
             this.processingManager.ExecuteWriteCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, value);
         }
 
         public void ReadDigitalInput(int address)
         {
-            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.DIGITAL_INPUT, (ushort)address));
+            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.BINARY_INPUT, (ushort)address));
             this.processingManager.ExecuteReadCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
         }
 
         public void ReadAnalogInput(int address)
         {
-            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.ANALOG_INPUT, (ushort)address));
+            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.ANALOG_INPUT_16, (ushort)address));
             this.processingManager.ExecuteReadCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
         }
 
         public void ReadDigitalOutput(int address)
         {
-            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.DIGITAL_OUTPUT, (ushort)address));
+            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.BINARY_OUTPUT, (ushort)address));
             this.processingManager.ExecuteReadCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
         }
 
         public void ReadAnalogOutput(int address)
         {
-            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.ANALOG_OUTPUT, (ushort)address));
+            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.ANALOG_OUTPUT_16, (ushort)address));
             this.processingManager.ExecuteReadCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
         }
     }

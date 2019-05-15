@@ -29,13 +29,13 @@ namespace ScadaCommon
     /// </summary>
 	public enum PointType : short
 	{
-        DIGITAL_OUTPUT = 0x01,
-        DIGITAL_INPUT = 0x02,
-        ANALOG_INPUT = 0x03,
-        ANALOG_OUTPUT = 0x04,
-        HR_LONG = 0x05,
+        //DIGITAL_OUTPUT = 0x01,
+        //DIGITAL_INPUT = 0x02,
+        //ANALOG_INPUT = 0x03,
+        //ANALOG_OUTPUT = 0x04,
+        //HR_LONG = 0x05,
 
-        //Ovo je za DNP3 protokol, gore su za MODBUS (njih brisemo)
+        ////Ovo je za DNP3 protokol, gore su za MODBUS (njih brisemo)
         BINARY_OUTPUT = 0x01,
         BINARY_INPUT = 0x02,
         ANALOG_INPUT_16 = 0x03,

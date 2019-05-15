@@ -35,7 +35,7 @@ namespace ProcessingModule
         /// <param name="configuration">The configuration.</param>
         public FunctionExecutor(IConfiguration configuration, IConnection connection)
         {
-            //MessagesForUnsolicited();
+            MessagesForUnsolicited();
             this.configuration = configuration;
             this.connection = connection;
             this.processConnection = new AutoResetEvent(true);
@@ -375,7 +375,7 @@ namespace ProcessingModule
                         {
                             regValue = BitConverter.ToInt16(dataArray, byteProcessed);
                             byteProcessed += 2;
-                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.ANALOG_INPUT, (ushort)adress), (ushort)regValue);
+                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.ANALOG_INPUT_16, (ushort)adress), (ushort)regValue);
                         }
                         break;
                     case TypeField.ANALOG_OUTPUT_16BIT:
@@ -428,7 +428,7 @@ namespace ProcessingModule
                             byteProcessed++;
                             regValue = BitConverter.ToInt16(dataArray, byteProcessed);
                             byteProcessed += 2;
-                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.ANALOG_OUTPUT, (ushort)adress), (ushort)regValue);
+                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.ANALOG_OUTPUT_16, (ushort)adress), (ushort)regValue);
                         }
                         break;
                     case TypeField.BINARY_OUTPUT_WITHOUT_TIME:
@@ -498,7 +498,7 @@ namespace ProcessingModule
                             quality = dataArray[byteProcessed++];
                             regValue = BitConverter.ToInt16(dataArray, byteProcessed);
                             byteProcessed += 2;
-                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.ANALOG_INPUT, (ushort)objectIndex), (ushort)regValue);
+                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.ANALOG_INPUT_16, (ushort)objectIndex), (ushort)regValue);
                         }
                         break;
                     case TypeField.ANALOG_OUTPUT_EVENT_16BIT_WITHOUT_TIME:
@@ -522,15 +522,15 @@ namespace ProcessingModule
                             quality = dataArray[byteProcessed++];
                             regValue = BitConverter.ToInt16(dataArray, byteProcessed);
                             byteProcessed += 2;
-                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.ANALOG_OUTPUT, (ushort)objectIndex), (ushort)regValue);
+                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.ANALOG_OUTPUT_16, (ushort)objectIndex), (ushort)regValue);
                         }
                         break;
                     default:
 
                         break;
                 }
-                HandleReceivedChangesOfPoints(pointsToupdate);
             }
+            HandleReceivedChangesOfPoints(pointsToupdate);
         }
 
         private void PreproccessMsg(byte[] message, int messageLength, ref byte[] dataArray, int lengthData)

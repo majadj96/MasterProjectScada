@@ -9,6 +9,6 @@ namespace BackEndProcessorService
 {
     public interface IProcessingData
     {
-        void Process(IProcessingObject processingObject);
+        void Process(IProcessingObject[] processingObject);
     }
 }

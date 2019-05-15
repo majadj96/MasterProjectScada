@@ -23,10 +23,10 @@ namespace BackEndProcessorService
             {
                 foreach (var item in ProcessingModules)
                 {
-                    item.Process(inputObj[index]);
+                    item.Process(inputObj);
                 }
 
-                //this.pointUpdateProxy.UpdatePoint(inputObj[index]);
+                this.pointUpdateProxy.UpdatePoint(inputObj[index]);
             }
         }
 

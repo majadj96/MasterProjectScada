@@ -35,19 +35,19 @@ namespace ProcessingModule
         /// <inheritdoc />
         public void ExecuteReadCommand(IConfigItem configItem, ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints)
         {
-            if (configItem.RegistryType == PointType.ANALOG_INPUT)
+            if (configItem.RegistryType == PointType.ANALOG_INPUT_16)
             {
                 ExecuteAnalogInputRead(configItem, transactionId, remoteUnitAddress, startAddress, numberOfPoints);
             }
-            else if(configItem.RegistryType == PointType.ANALOG_OUTPUT)
+            else if(configItem.RegistryType == PointType.ANALOG_OUTPUT_16)
             {
                 ExecuteAnalogOutputRead(configItem, transactionId, remoteUnitAddress, startAddress, numberOfPoints);
             }
-            else if (configItem.RegistryType == PointType.DIGITAL_INPUT)
+            else if (configItem.RegistryType == PointType.BINARY_INPUT)
             {
                 ExecuteDigitalInputRead(configItem, transactionId, remoteUnitAddress, startAddress, numberOfPoints);
             }
-            else if (configItem.RegistryType == PointType.DIGITAL_OUTPUT)
+            else if (configItem.RegistryType == PointType.BINARY_OUTPUT)
             {
                 ExecuteDigitalOutputRead(configItem, transactionId, remoteUnitAddress, startAddress, numberOfPoints);
             }
@@ -95,7 +95,7 @@ namespace ProcessingModule
         /// <inheritdoc />
         public void ExecuteWriteCommand(IConfigItem configItem, ushort transactionId, byte remoteUnitAddress, ushort pointAddress, int value)
         {
-            if (configItem.RegistryType == PointType.ANALOG_OUTPUT)
+            if (configItem.RegistryType == PointType.ANALOG_OUTPUT_16)
             {
                 ExecuteAnalogCommand(configItem, transactionId, remoteUnitAddress, pointAddress, value);
             }
@@ -138,24 +138,6 @@ namespace ProcessingModule
         }
 
         /// <summary>
-        /// Gets the modbus function code for the point type.
-        /// </summary>
-        /// <param name="registryType">The register type.</param>
-        /// <returns>The modbus function code.</returns>
-        private ModbusFunctionCode? GetReadFunctionCode(PointType registryType)
-        {
-            switch (registryType)
-            {
-                case PointType.DIGITAL_OUTPUT: return ModbusFunctionCode.READ_COILS;
-                case PointType.DIGITAL_INPUT: return ModbusFunctionCode.READ_DISCRETE_INPUTS;
-                case PointType.ANALOG_INPUT: return ModbusFunctionCode.READ_INPUT_REGISTERS;
-                case PointType.ANALOG_OUTPUT: return ModbusFunctionCode.READ_HOLDING_REGISTERS;
-                case PointType.HR_LONG: return ModbusFunctionCode.READ_HOLDING_REGISTERS;
-                default: return null;
-            }
-        }
-
-        /// <summary>
         /// Method for handling received points.
         /// </summary>
         /// <param name="type">The point type.</param>
@@ -182,15 +164,15 @@ namespace ProcessingModule
                         ProcessAnalogPoint(points.First() as IAnalogPoint, item.Value);
                         changes.Add(IPointToIProcessingObj(points.First(), PointType.ANALOG_OUTPUT_16));
                     }
-                    else if(item.Key.Item1 == PointType.DIGITAL_INPUT)
+                    else if(item.Key.Item1 == PointType.BINARY_INPUT)
                     {
                         ProcessDigitalPoint(points.First() as IDigitalPoint, item.Value);
-                        changes.Add(IPointToIProcessingObj(points.First(), PointType.DIGITAL_INPUT));
+                        changes.Add(IPointToIProcessingObj(points.First(), PointType.BINARY_INPUT));
                     }
                     else
                     {
                         ProcessDigitalPoint(points.First() as IDigitalPoint, item.Value);
-                        changes.Add(IPointToIProcessingObj(points.First(), PointType.DIGITAL_OUTPUT));
+                        changes.Add(IPointToIProcessingObj(points.First(), PointType.BINARY_OUTPUT));
                     }
                 }
             }
@@ -213,14 +195,14 @@ namespace ProcessingModule
                 AnalogPoint analog = new AnalogPoint() { RawValue = point.RawValue, Timestamp = DateTime.Now, PointType = PointType.ANALOG_OUTPUT_16 };
                 return analog;
             }
-            else if(pointType == PointType.DIGITAL_INPUT)
+            else if(pointType == PointType.BINARY_INPUT)
             {
-                DigitalPoint digital = new DigitalPoint() { RawValue = point.RawValue, Timestamp = DateTime.Now, PointType = PointType.DIGITAL_INPUT };
+                DigitalPoint digital = new DigitalPoint() { RawValue = point.RawValue, Timestamp = DateTime.Now, PointType = PointType.BINARY_INPUT };
                 return digital;
             }
             else
             {
-                DigitalPoint digital = new DigitalPoint() { RawValue = point.RawValue, Timestamp = DateTime.Now, PointType = PointType.DIGITAL_OUTPUT };
+                DigitalPoint digital = new DigitalPoint() { RawValue = point.RawValue, Timestamp = DateTime.Now, PointType = PointType.BINARY_OUTPUT };
                 return digital;
             }
         }
@@ -254,7 +236,7 @@ namespace ProcessingModule
         {
             List<IPoint> points = storage.GetPoints(new List<PointIdentifier>(1) { new PointIdentifier(type, pointAddress) });
 
-            if (type == PointType.ANALOG_INPUT || type == PointType.ANALOG_OUTPUT)
+            if (type == PointType.ANALOG_INPUT_16 || type == PointType.ANALOG_OUTPUT_16)
             {
                 ProcessAnalogPoint(points.First() as IAnalogPoint, defaultValue);
             }

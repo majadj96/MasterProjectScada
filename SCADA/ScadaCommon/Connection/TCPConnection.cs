@@ -27,8 +27,8 @@ namespace ScadaCommon.Connection
 		{
 			this.configuration = configuration;
 			this.remoteEP = CreateRemoteEndpoint();
-            PrepairConnection();
             this.ndsStateProxy = ndsStateProxy;
+            PrepairConnection();
 		}
 
         /// <inheritdoc />
