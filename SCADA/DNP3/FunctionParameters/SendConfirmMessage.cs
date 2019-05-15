@@ -13,6 +13,7 @@ namespace DNP3.FunctionParameters
     {
         public SendConfirmMessage(DNP3ApplicationObjectParameters commandParameters) : base(commandParameters)
         {
+              
 
         }
         public override byte[] PackRequest()

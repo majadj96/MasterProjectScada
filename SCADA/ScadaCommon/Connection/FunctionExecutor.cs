@@ -143,6 +143,11 @@ namespace ScadaCommon.Connection
 				}
 			}
 		}
+
+        private void ProccessMsg(IDNP3Functions message)
+        {
+            //ovde obradjujem sve poruke
+        }
         public void SendMessage(IDNP3Functions message)
         {
             this.connection.SendBytes(message.PackRequest());

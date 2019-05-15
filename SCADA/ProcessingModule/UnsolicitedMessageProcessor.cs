@@ -41,51 +41,54 @@ namespace ProcessingModule
 
         private void UnsolicitedProccessor_DoWork()
         {
-            while (this.threadCancellationSignal)
-            {
-                funcExecuteUnsolicitedSync.WaitOne();
-
-                if (connection.ReadReady() == false)
+            if (this.connection.ConnectionState == ConnectionState.CONNECTED) {
+                while (this.threadCancellationSignal)
                 {
+                    funcExecuteUnsolicitedSync.WaitOne();
+
+                    if (connection.ReadReady() == false)
+                    {
+                        funcExecuteUnsolicitedSync.Set();
+                        Thread.Sleep(50);
+                        continue;
+                    }
+
+                    byte[] message;
+                    byte[] header = this.connection.RecvBytes(10);
+                    byte payLoadSize = 0;
+                    int len = 0;
+                    unchecked
+                    {
+                        payLoadSize = (byte)BitConverter.ToChar(header, 2);
+                    }
+                    byte[] payload;
+
+                    //Duzina poruke posle header-a (heder je duzine 5) racuna se tako sto od ukupne duzine oduzmemo header
+                    // i na tu duzinu dodajemo duzinu svih crc-ova koji su na svakih 16 bajtova
+                    payLoadSize = (byte)(payLoadSize - 5);
+
+                    if (payLoadSize % 16 == 0)
+                    {
+                        len = payLoadSize + (payLoadSize / 16) * 2;
+                    }
+                    else
+                    {
+                        len = (payLoadSize / 16) == 0 ? (byte)(payLoadSize + 2) : (byte)(payLoadSize + (payLoadSize / 16) * 2 + 2);
+                    }
+
+                    payload = this.connection.RecvBytes(len);
+
+                    message = new byte[header.Length + payload.Length];
+                    Buffer.BlockCopy(header, 0, message, 0, 10);
+                    Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
+
+                    stateUpdater.LogMessage("Stigla poruka...");
+
+                    CheckUnsMessage(message);
+
                     funcExecuteUnsolicitedSync.Set();
-                    continue;
+                    Thread.Sleep(50);
                 }
-
-                byte[] message;
-                byte[] header = this.connection.RecvBytes(10);
-                byte payLoadSize = 0;
-                int len = 0;
-                unchecked
-                {
-                    payLoadSize = (byte)BitConverter.ToChar(header, 2);
-                }
-                byte[] payload;
-
-                //Duzina poruke posle header-a (heder je duzine 5) racuna se tako sto od ukupne duzine oduzmemo header
-                // i na tu duzinu dodajemo duzinu svih crc-ova koji su na svakih 16 bajtova
-                payLoadSize = (byte)(payLoadSize - 5);
-
-                if (payLoadSize % 16 == 0)
-                {
-                    len = payLoadSize + (payLoadSize / 16) * 2;
-                }
-                else
-                {
-                    len = (payLoadSize / 16) == 0 ? (byte)(payLoadSize + 2) : (byte)(payLoadSize + (payLoadSize / 16) * 2 + 2);
-                }
-
-                payload = this.connection.RecvBytes(len);
-
-                message = new byte[header.Length + payload.Length];
-                Buffer.BlockCopy(header, 0, message, 0, 10);
-                Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
-
-                stateUpdater.LogMessage(message.ToString());
-
-                CheckUnsMessage(message);
-
-                funcExecuteUnsolicitedSync.Set();
-                Thread.Sleep(50);
             }
         }
 

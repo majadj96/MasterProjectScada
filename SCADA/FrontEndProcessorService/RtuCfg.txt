@@ -1,6 +1,6 @@
 STA 1
 TCP 4001
-CLASS0 5
+CLASS0 1
 
 
 BO_REG		25 0  0  0      1     0  BO  @DigOut	#
