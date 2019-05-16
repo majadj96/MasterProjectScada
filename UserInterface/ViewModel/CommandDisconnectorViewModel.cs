@@ -19,6 +19,9 @@ namespace UserInterface.ViewModel
         private Disconector disconector;
         private string type;
         private bool newState;
+        private string inAlarmSource;
+        private string autoCommandedSource;
+        private string operatorCommandedSource;
         #endregion
 
         #region Props
@@ -32,6 +35,21 @@ namespace UserInterface.ViewModel
             get { return newState; }
             set { newState = value; OnPropertyChanged("NewState"); }
         }
+        public string InAlarmSource
+        {
+            get => inAlarmSource;
+            set { inAlarmSource = value; OnPropertyChanged("InAlarmSource"); }
+        }
+        public string AutoCommandedSource
+        {
+            get => autoCommandedSource;
+            set { autoCommandedSource = value; OnPropertyChanged("AutoCommandedSource"); }
+        }
+        public string OperatorCommandedSource
+        {
+            get => operatorCommandedSource;
+            set { operatorCommandedSource = value; OnPropertyChanged("OperatorCommandedSource"); }
+        }
         #endregion
 
         public CommandDisconnectorViewModel(Disconector disconector, string type)
@@ -41,7 +59,27 @@ namespace UserInterface.ViewModel
 
             this.type = type;
 
+            SetPictures();
+
             Command = new MyICommand(CommandDisconnector);
+        }
+
+        private void SetPictures()
+        {
+            if (DisconectorCurrent.InAlarm)
+                InAlarmSource = "../Assets/fire-alarm.png";
+            else
+                InAlarmSource = String.Empty;
+
+            if (DisconectorCurrent.OperaterCommanded)
+                OperatorCommandedSource = "../Assets/robot.png";
+            else
+                OperatorCommandedSource = String.Empty;
+
+            if (DisconectorCurrent.AutoCommanded)
+                AutoCommandedSource = "../Assets/automation.png";
+            else
+                AutoCommandedSource = String.Empty;
         }
 
         public void CommandDisconnector()

@@ -428,7 +428,7 @@ namespace FrontEndProcessorService.Simulator
         private void SendMessage(ushort address, float value)
         {
             DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(0xc1, (byte)DNP3FunctionCode.DIRECT_OPERATE, (ushort)TypeField.ANALOG_OUTPUT_16BIT, 0x28, 0x0001, address, (uint)value, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
-            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p);
+            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p, "Simulator for field.");
 
             functionExecutor.SendDirectMessage(fn);
         }

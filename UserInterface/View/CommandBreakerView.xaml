@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:UserInterface.View"
+             xmlns:converters="clr-namespace:UserInterface.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="370" d:DesignWidth="370" Background="White">
     <UserControl.Resources>
@@ -189,36 +190,42 @@
     </UserControl.Resources>
 
     <Grid>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="10,39,0,0" VerticalAlignment="Top" Width="347">
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="11,19,0,0" VerticalAlignment="Top" Width="347">
             <Label Content="Commanding Breaker" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="37" VerticalAlignment="Top" Width="329" Margin="8.4,8.4,0,0" FontFamily="Calibri" FontSize="22" Foreground="Black"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="10,92,0,0" VerticalAlignment="Top" Width="175">
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="11,72,0,0" VerticalAlignment="Top" Width="175">
             <Label Content="Name:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" VerticalAlignment="Top" Width="155" Margin="8.4,8.4,0,0" FontFamily="Calibri" FontSize="20" Foreground="Black"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="10,145,0,0" VerticalAlignment="Top" Width="175">
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="11,125,0,0" VerticalAlignment="Top" Width="175">
             <Label Content="Description:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" VerticalAlignment="Top" Width="155" Margin="8.4,8.4,0,0" FontFamily="Calibri" FontSize="20" Foreground="Black"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="10,198,0,0" VerticalAlignment="Top" Width="175">
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="11,178,0,0" VerticalAlignment="Top" Width="175">
             <Label Content="New state:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" VerticalAlignment="Top" Width="155" Margin="8.4,8.4,0,0" FontFamily="Calibri" FontSize="20" Foreground="Black"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="182,92,0,0" VerticalAlignment="Top" Width="175">
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="183,72,0,0" VerticalAlignment="Top" Width="175">
             <Label Content="{Binding BreakerCurrent.Name}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" Width="155" Margin="8.4,8.4,0,7.8" FontFamily="Calibri" FontSize="20" Foreground="Black"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="182,145,0,0" VerticalAlignment="Top" Width="175">
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="183,125,0,0" VerticalAlignment="Top" Width="175">
             <Label Content="{Binding BreakerCurrent.Description}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" Width="155" Margin="8.4,8.4,0,7.8" FontFamily="Calibri" FontSize="20" Foreground="Black"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="182,198,0,0" VerticalAlignment="Top" Width="175">
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="183,178,0,0" VerticalAlignment="Top" Width="175">
             <ToggleButton Height="35" Width="70" Margin="8.4,8.4,0,7.8" Visibility="Visible" Style="{StaticResource SwitchTypeToggleButton}" IsChecked="{Binding NewState, Mode=TwoWay}"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="10,252,0,0" VerticalAlignment="Top" Width="347">
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="11,233,0,0" VerticalAlignment="Top" Width="175">
+            <Label Content="Alarm/Operated:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" VerticalAlignment="Top" Width="155" Margin="8.4,8.4,0,0" FontFamily="Calibri" FontSize="20" Foreground="Black"/>
+        </Border>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="183,233,0,0" VerticalAlignment="Top" Width="61">
+            <Image Source="{Binding InAlarmSource}" HorizontalAlignment="Left" Height="50" Margin="9,1.5,0,0" VerticalAlignment="Top" Width="48"/>
+        </Border>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="244,233,0,0" VerticalAlignment="Top" Width="57">
+            <Image Source="{Binding AutoCommandedSource}" HorizontalAlignment="Left" Height="50" Margin="2,1.5,0,0" VerticalAlignment="Top" Width="48"/>
+        </Border>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="301,233,0,0" VerticalAlignment="Top" Width="57">
+            <Image Source="{Binding OperatorCommandedSource}" HorizontalAlignment="Left" Height="50" Margin="2,1.5,0,0" VerticalAlignment="Top" Width="48"/>
+        </Border>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="11,288,0,0" VerticalAlignment="Top" Width="347">
             <Button Style="{StaticResource MyButtonStyle}" Height="35" Width="100" Content="Command" Margin="123.4,8.4,119.8,7.8" Background="#FF64CBE2" Foreground="#FF252525" Command="{Binding Command}" FontFamily="Calibri" FontSize="16"/>
         </Border>
-
-        <!--<Label Content="{Binding BreakerCurrent.Name}" HorizontalContentAlignment="Center" Margin="10,52,10,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="20" Foreground="#FFB1E698"/>
-        <Label Content="{Binding BreakerCurrent.Description}" HorizontalContentAlignment="Center" Margin="11,104,9,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="18" Foreground="#FFB1E698"/>
-        <Label Content="New state" HorizontalContentAlignment="Center" Margin="4,165,16,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="16" Foreground="#FFE69898"/>
-        <ToggleButton Height="35" Width="70" Margin="147,215,152.6,119.6" Visibility="Visible" Style="{StaticResource SwitchTypeToggleButton}" IsChecked="{Binding NewState}"/>
-        <Button Style="{StaticResource MyButtonStyle}" Height="30" Width="80" Content="Command" Margin="137,298,152.6,41.6" Background="#FF94E264" Foreground="#FF252525" Command="{Binding Command}" FontFamily="Consolas" FontSize="16"/>
-    -->
+        
     </Grid>
 </UserControl>

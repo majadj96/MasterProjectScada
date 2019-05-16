@@ -395,8 +395,11 @@
     <Resource Include="Assets\cross.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Assets\fire-alarm.png" />
+    <Resource Include="Assets\robot.png" />
     <Resource Include="Assets\alarm-bell.png" />
     <Resource Include="analytics_graph_online_statistics_icon_127207.ico" />
+    <Resource Include="Assets\automation.png" />
     <Content Include="Assets\completeGif.mp4" />
     <Resource Include="Assets\scadaCon.gif" />
   </ItemGroup>

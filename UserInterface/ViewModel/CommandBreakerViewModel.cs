@@ -19,6 +19,9 @@ namespace UserInterface.ViewModel
         private Breaker breaker;
         private bool newState;
         private string type;
+        private string inAlarmSource;
+        private string autoCommandedSource;
+        private string operatorCommandedSource;
         #endregion
 
         #region Props
@@ -32,18 +35,51 @@ namespace UserInterface.ViewModel
             get { return newState; }
             set { newState = value; OnPropertyChanged("NewState"); }
         }
+        public string InAlarmSource
+        {
+            get => inAlarmSource;
+            set { inAlarmSource = value; OnPropertyChanged("InAlarmSource"); }
+        }
+        public string AutoCommandedSource
+        {
+            get => autoCommandedSource;
+            set { autoCommandedSource = value; OnPropertyChanged("AutoCommandedSource"); }
+        }
+        public string OperatorCommandedSource
+        {
+            get => operatorCommandedSource;
+            set { operatorCommandedSource = value; OnPropertyChanged("OperatorCommandedSource"); }
+        }
         #endregion
 
         public CommandBreakerViewModel(Breaker breaker, string type)
         {
-            
-
             BreakerCurrent = breaker;
             NewState = !ConverterState.ConvertToBool(BreakerCurrent.State);
 
             this.type = type;
 
+            SetPictures();
+
             Command = new MyICommand(CommandBreaker);
+        }
+
+        private void SetPictures()
+        {
+            if (BreakerCurrent.InAlarm)
+                InAlarmSource = "../Assets/fire-alarm.png";
+            else
+                InAlarmSource = String.Empty;
+
+            if (BreakerCurrent.OperaterCommanded)
+                OperatorCommandedSource = "../Assets/robot.png";
+            else
+                OperatorCommandedSource = String.Empty;
+
+            if (BreakerCurrent.AutoCommanded)
+                AutoCommandedSource = "../Assets/automation.png";
+            else
+                AutoCommandedSource = String.Empty;
         }
 
         public void CommandBreaker()

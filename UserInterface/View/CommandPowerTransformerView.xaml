@@ -210,10 +210,10 @@
             <Label Content="{Binding TranformerCurrent.Description}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" Width="155" Margin="8.4,8.4,0,7.8" FontFamily="Calibri" FontSize="16" Foreground="Black"/>
         </Border>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="182,228,0,0" VerticalAlignment="Top" Width="88">
-            <Button FontFamily="Segoe UI Symbol" Content="&#xE110;" Command="{Binding CurrentVoltageCommand}" CommandParameter="TapChangerUp" Background="#FF32BDCB" FontSize="25" Margin="8.4,8.4,7.8,7.8" Foreground="White"/>
+            <Button FontFamily="Segoe UI Symbol" Content="&#xE110;" Command="{Binding CurrentVoltageCommand}" CommandParameter="TapChangerUp" Background="#FF32BDCB" FontSize="21" Margin="8.4,8.4,7.8,7.8" Foreground="Black"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="269,228,0,0" VerticalAlignment="Top" Width="89">
-            <Button FontFamily="Segoe UI Symbol" Content="&#xE1FD;" Command="{Binding CurrentVoltageCommand}" CommandParameter="TapChangerDown" Background="#FF6ED1CC" FontSize="25" Margin="8.4,8.4,7.8,7.8" Foreground="White"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="269,228,0,0" VerticalAlignment="Top" Width="88">
+            <Button FontFamily="Segoe UI Symbol" Content="&#xE1FD;" Command="{Binding CurrentVoltageCommand}" CommandParameter="TapChangerDown" Background="#FF6ED1CC" FontSize="21" Margin="8.4,8.4,7.8,7.8" Foreground="Black"/>
         </Border>
     </Grid>
 </UserControl>
