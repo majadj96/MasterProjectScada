@@ -47,7 +47,6 @@
     <Compile Include="CRCCalculator\CRCCalculator.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Interfaces\IAnalogPoint.cs" />
-    <Compile Include="Interfaces\IAutomationManager.cs" />
     <Compile Include="Interfaces\IConfigItem.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
     <Compile Include="Interfaces\IDigitalPoint.cs" />

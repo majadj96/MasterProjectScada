@@ -1,4 +1,6 @@
-﻿namespace ScadaCommon
+﻿using System;
+
+namespace ScadaCommon
 {
     /// <summary>
     /// Digital states.
@@ -61,6 +63,19 @@
         INTERNAL_INDICATIONS = 0x5001
     };
 
+    public enum Qualifier : short
+    {
+        //object prefix
+        INDEX,
+        OBJECT_SIZE,
+
+        //range
+        START_STOP_INDEX,
+        VIRTUAL_ADDRESS,
+        NONE,
+        OBJECT_COUNT
+    }
+
     public enum DNP3FunctionCode : short
     {
         CONFIRM = 0,
@@ -100,6 +115,27 @@
         RESPONSE = 129,
         UNSOLICITED_RESPONSE,
         AUTHENTICATE_RESP,
+    }
+
+    [Flags]
+    public enum InternalIndications : ushort
+    {
+        ALL_STATIONS = 0x0001,
+        CLASS_1_EVENTS = 0x0002,
+        CLASS_2_EVENTS = 0x0004,
+        CLASS_3_EVENTS = 0x0008,
+        NEED_TIME = 0x0010,
+        LOCAL_CONTROL = 0x0020,
+        DEVICE_TROUBLE = 0x0040,
+        DEVICE_RESTART = 0x0080,
+        NO_FUNC_CODE_SUPPORT = 0x0100,
+        OBJECT_UNKNOWN = 0x0200,
+        PARAMETER_ERROR = 0x0400,
+        EVENT_BUFFER_OVERFLOW = 0x0800,
+        ALREADY_EXECUTING = 0x1000,
+        CONFIG_CORRUPT = 0x2000,
+        RESERVED_2 = 0x4000,
+        RESERVED_1 = 0x8000,
     }
 
     /// <summary>

@@ -30,7 +30,6 @@ namespace FrontEndProcessorService.ViewModel
 		private StringBuilder logBuilder;
 		private DateTime currentTime;
 		private IFunctionExecutor commandExecutor;
-		private IAutomationManager automationManager;
 		private bool timerThreadStopSignal = true;
 		private bool disposed = false;
 		IConfiguration configuration;
@@ -65,10 +64,6 @@ namespace FrontEndProcessorService.ViewModel
 			set
 			{
 				connectionState = value;
-				if(connectionState == ConnectionState.CONNECTED)
-				{
-					automationManager.Start(configuration.DelayBetweenCommands);
-				}
 				OnPropertyChanged("ConnectionState");
 			}
 		}
@@ -231,7 +226,6 @@ namespace FrontEndProcessorService.ViewModel
 			(commandExecutor as IDisposable).Dispose();
 			this.acquisitor.Dispose();
 			acquisitionTrigger.Dispose();
-			automationManager.Stop();
 		}
 
 		public List<IPoint> GetPoints(List<PointIdentifier> pointIds)

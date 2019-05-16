@@ -66,11 +66,21 @@ namespace ScadaCommon.Connection
                     foreach (var point in pointsToupdate)
                     {
                         UpdatePointEvent.Invoke(point.Key.Item1, point.Key.Item2, point.Value);
-                        stateUpdater.LogMessage(string.Format(RECEIVED_MESSAGE, point.Key.Item1, point.Key.Item2, point.Value));
                     }
                 }
             }
 		}
+
+        public void HandleReceivedChangesOfPoints(Dictionary<Tuple<PointType, ushort>, ushort> pointsToupdate)
+        {
+            if (UpdatePointEvent != null)
+            {
+                foreach (var point in pointsToupdate)
+                {
+                    UpdatePointEvent.Invoke(point.Key.Item1, point.Key.Item2, point.Value);
+                }
+            }
+        }
 
         /// <summary>
         /// Logic for handling the connection.
@@ -81,91 +91,96 @@ namespace ScadaCommon.Connection
 			{
 				try
 				{
-                    if (processConnection.WaitOne())
-                    {
-                        while (commandQueue.TryDequeue(out currentCommand))
+                    if (connection.ConnectionState == ConnectionState.CONNECTED) {
+                        if (processConnection.WaitOne())
                         {
-                            this.connection.SendBytes(this.currentCommand.PackRequest());
-                            bool recvAgain = true;
-                            byte[] message;
-
-                            while (recvAgain)
+                            while (commandQueue.TryDequeue(out currentCommand))
                             {
-                                byte[] header = this.connection.RecvBytes(10);
-                                byte payLoadSize = 0;
-                                int len = 0;
-                                unchecked
+                                this.connection.SendBytes(this.currentCommand.PackRequest());
+                                bool recvAgain = true;
+                                byte[] message;
+
+                                while (recvAgain)
                                 {
-                                    payLoadSize = (byte)BitConverter.ToChar(header, 2);
+                                    byte[] header = this.connection.RecvBytes(10);
+                                    byte payLoadSize = 0;
+                                    int len = 0;
+                                    unchecked
+                                    {
+                                        payLoadSize = (byte)BitConverter.ToChar(header, 2);
+                                    }
+                                    byte[] payload;
+
+                                    //Duzina poruke posle header-a (heder je duzine 5) racuna se tako sto od ukupne duzine oduzmemo header
+                                    // i na tu duzinu dodajemo duzinu svih crc-ova koji su na svakih 16 bajtova
+                                    payLoadSize = (byte)(payLoadSize - 5);
+
+                                    if (payLoadSize % 16 == 0)
+                                    {
+                                        len = payLoadSize + (payLoadSize / 16) * 2;
+                                    }
+                                    else
+                                    {
+                                        len = (payLoadSize / 16) == 0 ? (byte)(payLoadSize + 2) : (byte)(payLoadSize + (payLoadSize / 16) * 2 + 2);
+                                    }
+
+                                    payload = this.connection.RecvBytes(len);
+
+                                    message = new byte[header.Length + payload.Length];
+                                    Buffer.BlockCopy(header, 0, message, 0, 10);
+                                    Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
+
+                                    //na dvanaestom byte se nalazi u responsu da li je unsolicited ili ne (tacnije u njemu jer je jedan bit)
+                                    if (!ChechIfUnsolicited(message[11]))
+                                    {
+                                        recvAgain = false;
+                                    }
+
+                                    this.ProccessMsg(message, len + 10);
+                                    this.currentCommand = null;
                                 }
-                                byte[] payload;
-
-                                //Duzina poruke posle header-a (heder je duzine 5) racuna se tako sto od ukupne duzine oduzmemo header
-                                // i na tu duzinu dodajemo duzinu svih crc-ova koji su na svakih 16 bajtova
-                                payLoadSize = (byte)(payLoadSize - 5);
-
-                                if (payLoadSize % 16 == 0)
-                                {
-                                    len = payLoadSize + (payLoadSize / 16) * 2;
-                                }
-                                else
-                                {
-                                    len = (payLoadSize / 16) == 0 ? (byte)(payLoadSize + 2) : (byte)(payLoadSize + (payLoadSize / 16) * 2 + 2);
-                                }
-
-                                payload = this.connection.RecvBytes(len);
-
-                                message = new byte[header.Length + payload.Length];
-                                Buffer.BlockCopy(header, 0, message, 0, 10);
-                                Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
-
-                                //na dvanaestom byte se nalazi u responsu da li je unsolicited ili ne (tacnije u njemu jer je jedan bit)
-                                if (!ChechIfUnsolicited(message[11]))
-                                {
-                                    recvAgain = false;
-                                }
-
-                                //   this.ProccessMsg(message, len + 5);
-                                this.HandleReceivedBytes(message);
-                                this.currentCommand = null;
                             }
-                        }
-                    }
-                    else
-                    {
-                        byte[] message;
-                        byte[] header = this.connection.RecvBytes(10);
-                        byte payLoadSize = 0;
-                        int len = 0;
-                        unchecked
-                        {
-                            payLoadSize = (byte)BitConverter.ToChar(header, 2);
-                        }
-                        byte[] payload;
-
-                        //Duzina poruke posle header-a (heder je duzine 5) racuna se tako sto od ukupne duzine oduzmemo header
-                        // i na tu duzinu dodajemo duzinu svih crc-ova koji su na svakih 16 bajtova
-                        payLoadSize = (byte)(payLoadSize - 5);
-
-                        if (payLoadSize % 16 == 0)
-                        {
-                            len = payLoadSize + (payLoadSize / 16) * 2;
                         }
                         else
                         {
-                            len = (payLoadSize / 16) == 0 ? (byte)(payLoadSize + 2) : (byte)(payLoadSize + (payLoadSize / 16) * 2 + 2);
+                            byte[] message;
+                            byte[] header = this.connection.RecvBytes(10);
+                            byte payLoadSize = 0;
+                            int len = 0;
+                            unchecked
+                            {
+                                payLoadSize = (byte)BitConverter.ToChar(header, 2);
+                            }
+                            byte[] payload;
+
+                            //Duzina poruke posle header-a (heder je duzine 5) racuna se tako sto od ukupne duzine oduzmemo header
+                            // i na tu duzinu dodajemo duzinu svih crc-ova koji su na svakih 16 bajtova
+                            payLoadSize = (byte)(payLoadSize - 5);
+
+                            if (payLoadSize % 16 == 0)
+                            {
+                                len = payLoadSize + (payLoadSize / 16) * 2;
+                            }
+                            else
+                            {
+                                len = (payLoadSize / 16) == 0 ? (byte)(payLoadSize + 2) : (byte)(payLoadSize + (payLoadSize / 16) * 2 + 2);
+                            }
+
+                            payload = this.connection.RecvBytes(len);
+
+                            message = new byte[header.Length + payload.Length];
+                            Buffer.BlockCopy(header, 0, message, 0, 10);
+                            Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
+                            this.ProccessMsg(message, len + 10);
+                            this.currentCommand = null;
                         }
-
-                        payload = this.connection.RecvBytes(len);
-
-                        message = new byte[header.Length + payload.Length];
-                        Buffer.BlockCopy(header, 0, message, 0, 10);
-                        Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
-                        this.HandleReceivedBytes(message);
-                        //this.ProccessMsg(message, len + 5);
-                        this.currentCommand = null;
+                        Thread.Sleep(30);
                     }
-                    Thread.Sleep(30);
+                    else
+                    {
+                        connection.PrepairConnection();
+                        Thread.Sleep(30);
+                    }
                 }
 				catch (SocketException se)
 				{
@@ -190,12 +205,143 @@ namespace ScadaCommon.Connection
 
         private void ProccessMsg(byte[] message, int messageLength)
         {
+            Dictionary<Tuple<PointType, ushort>, ushort> pointsToupdate = new Dictionary<Tuple<PointType, ushort>, ushort>();
             byte lengthData = (byte)(BitConverter.ToChar(message, 2) - 5);
             byte[] dataArray = new byte[lengthData];
+            int byteProcessed = 0;
+            byte qualifier, quality;
 
             PreproccessMsg(message, messageLength, ref dataArray, lengthData);
 
+            byte transportControl = dataArray[byteProcessed++];
+            byte appControl = dataArray[byteProcessed++];
+            byte functionCode = dataArray[byteProcessed++];
+            short interalIndications = BitConverter.ToInt16(dataArray, byteProcessed);
+            byteProcessed += 2;
 
+            short objectType, prefixMeaning, rangeMeaning;
+            int prefixOffset = 0, rangeOffset = 0;
+            int start = 0, stop = 0, octetNumber, objectNumber, i, regValue, value, objectPrefix;
+
+            while (byteProcessed < lengthData)
+            {
+                objectType = IPAddress.NetworkToHostOrder(BitConverter.ToInt16(dataArray, byteProcessed));
+                byteProcessed += 2;
+
+                qualifier = dataArray[byteProcessed++];
+                ProcessQualifier(qualifier, out prefixOffset, out prefixMeaning, out rangeOffset, out rangeMeaning);
+
+                octetNumber = rangeOffset / 2;
+                if (octetNumber == 1)
+                {
+                    start = (byte)BitConverter.ToChar(dataArray, byteProcessed);
+                    byteProcessed++;
+                    stop = (byte)BitConverter.ToChar(dataArray, byteProcessed);
+                    byteProcessed++;
+                }
+                else if (octetNumber == 2)
+                {
+                    start = BitConverter.ToInt16(dataArray, byteProcessed);
+                    byteProcessed += 2;
+                    stop = BitConverter.ToInt16(dataArray, byteProcessed);
+                    byteProcessed += 2;
+                }
+                else if (octetNumber == 4)
+                {
+                    start = BitConverter.ToInt32(dataArray, byteProcessed);
+                    byteProcessed += 4;
+                    stop = BitConverter.ToInt32(dataArray, byteProcessed);
+                    byteProcessed += 4;
+                }
+
+                objectNumber = stop - start + 1;
+
+                switch ((TypeField)objectType)
+                {
+                    case TypeField.BINARY_INPUT_PACKED_FORMAT:
+                        for (i = start; i <= stop; i++)
+                        {
+                            regValue = dataArray[byteProcessed + i / 8];
+                            value = (regValue & (1 << (i % 8))) != 0 ? 1 : 0;
+                            pointsToupdate.Add(new Tuple<PointType, ushort> (PointType.BINARY_INPUT, (ushort)i), (ushort)value);
+                        }
+                        if (objectNumber % 8 == 0)
+                        {
+                            byteProcessed += objectNumber / 8;
+                        }
+                        else
+                        {
+                            byteProcessed += objectNumber / 8 + 1;
+                        }
+                        break;
+                    case TypeField.BINARY_OUTPUT_PACKED_FORMAT:
+                        for (i = start; i <= stop; i++)
+                        {
+                            regValue = dataArray[byteProcessed + i / 8];
+                            value = (regValue & (1 << (i % 8))) != 0 ? 1 : 0;
+                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.BINARY_OUTPUT, (ushort)i), (ushort)value);
+                        }
+                        if (objectNumber % 8 == 0)
+                        {
+                            byteProcessed += objectNumber / 8;
+                        }
+                        else
+                        {
+                            byteProcessed += objectNumber / 8 + 1;
+                        }
+                        break;
+                    case TypeField.ANALOG_INPUT_16BIT:
+                        for (i = start; i <= stop; i++)
+                        {
+                            regValue = BitConverter.ToInt16(dataArray, byteProcessed);
+                            byteProcessed += 2;
+                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.ANALOG_INPUT, (ushort)i), (ushort)regValue);
+                        }
+                        break;
+                    case TypeField.COUNTER_16BIT:
+                        for (i = start; i <= stop; i++)
+                        {
+                            regValue = BitConverter.ToInt16(dataArray, byteProcessed);
+                            byteProcessed += 2;
+                            //pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.ANALOG_INPUT, (ushort)i), (ushort)regValue);
+                            //Ovde fakin nemamo countere, ali ugradicemo ih.
+                        }
+                        break;
+                    case TypeField.FROZEN_COUNTER_16BIT:
+                        for (i = start; i <= stop; i++)
+                        {
+                            regValue = BitConverter.ToInt16(dataArray, byteProcessed);
+                            byteProcessed += 2;
+                            //pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.ANALOG_INPUT, (ushort)i), (ushort)regValue);
+                            //Ovde fakin nemamo countere, ali ugradicemo ih.
+                        }
+                        break;
+                    case TypeField.ANALOG_OUTPUT_STATUS_16BIT:
+                        for (i = start; i <= stop; i++)
+                        {
+                            quality = (byte)BitConverter.ToChar(dataArray, byteProcessed);
+                            byteProcessed++;
+                            regValue = BitConverter.ToInt16(dataArray, byteProcessed);
+                            byteProcessed += 2;
+                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.ANALOG_OUTPUT, (ushort)i), (ushort)regValue);
+                        }
+                        break;
+                    case TypeField.BINARY_OUTPUT_EVENT:
+                        break;
+                    case TypeField.ANALOG_INPUT_EVENT_16BIT:
+                        break;
+                    case TypeField.BINARY_INPUT_EVENT_WITHOUT_TIME:
+                        break;
+                    case TypeField.FLOATING_POINT_OUTPUT_EVENT_32BIT:
+                        break;
+                    case TypeField.COUNTER_CHANGE_EVENT_16BIT:
+                        break;
+                    default:
+
+                        break;
+                }
+                HandleReceivedChangesOfPoints(pointsToupdate);
+            }
         }
         private void PreproccessMsg(byte[] message, int messageLength, ref byte[] dataArray, int lengthData)
         {
@@ -212,16 +358,98 @@ namespace ScadaCommon.Connection
             }
 
             Buffer.BlockCopy(message, srcOffset, dataArray, dstOffset, lengthData % 16);
+        }
+
+        void ProcessQualifier(byte qualifier, out int prefixOffset, out short prefixMeaning, out int rangeOffset, out short rangeMeaning)
+        {
+            prefixOffset = 0;
+            rangeOffset = 0;
+            prefixMeaning = -1;
+            rangeMeaning = -1;
+
+            switch ((qualifier >> 4) & 0xf)
+            {
+                case 0x0:
+                    break;
+                case 0x1:
+                    prefixOffset = 1;
+                    prefixMeaning = (short)Qualifier.INDEX;
+                    break;
+                case 0x2:
+                    prefixOffset = 2;
+                    prefixMeaning = (short)Qualifier.INDEX;
+                    break;
+                case 0x3:
+                    prefixOffset = 4;
+                    prefixMeaning = (short)Qualifier.INDEX;
+                    break;
+                case 0x4:
+                    prefixOffset = 1;
+                    prefixMeaning = (short)Qualifier.OBJECT_SIZE;
+                    break;
+                case 0x5:
+                    prefixOffset = 2;
+                    prefixMeaning = (short)Qualifier.OBJECT_SIZE;
+                    break;
+                case 0x6:
+                    prefixOffset = 4;
+                    prefixMeaning = (short)Qualifier.OBJECT_SIZE;
+                    break;
+                case 0x7:
+                    break;
+            }
+
+            switch (qualifier & 0xf)
+            {
+                case 0x0:
+                    rangeOffset = 2;
+                    rangeMeaning = (short)Qualifier.INDEX;
+                    break;
+                case 0x1:
+                    rangeOffset = 4;
+                    rangeMeaning = (short)Qualifier.INDEX;
+                    break;
+                case 0x2:
+                    rangeOffset = 8;
+                    rangeMeaning = (short)Qualifier.INDEX;
+                    break;
+                case 0x3:
+                    rangeOffset = 2;
+                    rangeMeaning = (short)Qualifier.VIRTUAL_ADDRESS;
+                    break;
+                case 0x4:
+                    rangeOffset = 4;
+                    rangeMeaning = (short)Qualifier.VIRTUAL_ADDRESS;
+                    break;
+                case 0x5:
+                    rangeOffset = 8;
+                    rangeMeaning = (short)Qualifier.VIRTUAL_ADDRESS;
+                    break;
+                case 0x6:
+                    //polje opsega se ne koristi..
+                    break;
+                case 0x7:
+                    rangeOffset = 1;
+                    rangeMeaning = (short)Qualifier.OBJECT_COUNT;
+                    break;
+                case 0x8:
+                    rangeOffset = 2;
+                    rangeMeaning = (short)Qualifier.OBJECT_COUNT;
+                    break;
+                case 0x9:
+                    rangeOffset = 4;
+                    rangeMeaning = (short)Qualifier.OBJECT_COUNT;
+                    break;
+            }
+
+            return;
+        }
         private bool ChechIfUnsolicited(byte unsolicited)
         {
             int uns = (unsolicited & 0x10) >> 4;
             return uns == 1 ? true : false;
         }
 
-        private void ProccessMsg(byte[] message, int messageLength)
-        {
-            //ovde obradjujem sve poruke
-        }
 
         //private void CheckUnsMessage(byte[] messageByte)
         //{

@@ -35,7 +35,7 @@ namespace DNP3.FunctionParameters
             dnp3Request[14] = BitConverter.GetBytes((short)CommandParameters.TypeField)[0];
             dnp3Request[15] = CommandParameters.Qualifier;//0x00
             Buffer.BlockCopy(BitConverter.GetBytes(Convert.ToUInt16(CommandParameters.Range)), 0, dnp3Request, 16, 2);//0x0707
-            dnp3Request[18] = (byte)CommandParameters.ObjectPrefix;//0x00
+            dnp3Request[18] = (byte)CommandParameters.ObjectValue;//0x00
 
             ushort crc2 = 0;
             for (int i = 10; i < 19; i++)

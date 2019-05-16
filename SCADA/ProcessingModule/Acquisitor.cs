@@ -52,7 +52,7 @@ namespace ProcessingModule
         /// </summary>
 		private void StartAcquisitionThread()
 		{
-			acquisitionWorker.Start();
+			//acquisitionWorker.Start();
 		}
 
         /// <summary>
