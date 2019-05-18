@@ -1,12 +1,15 @@
-﻿using ScadaCommon.BackEnd_FrontEnd;
+﻿using System;
 using System.ServiceModel;
 
 namespace ScadaCommon.ServiceContract
 {
     [ServiceContract]
-    public interface IStateProcessingModule
+    public interface IPointUpdateService
     {
         [OperationContract]
-        void ProcessState(IProcessingState processingObject);
+        void UpdateState(ConnectionState connectionState);
+
+        [OperationContract]
+        void UpdateDateAndTime(DateTime dateTime);
     }
 }

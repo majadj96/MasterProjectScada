@@ -43,54 +43,40 @@ namespace FrontEndProcessorService
 
 		public DateTime CurrentTime
 		{
-			get
-			{
-				return currentTime;
-			}
-
+			get { return currentTime; }
 			set
 			{
-				currentTime = value;
+                if(currentTime != value)
+                {
+                    currentTime = value;
+                    ndsStateProxy.UpdateDateAndTime(currentTime);
+                }
 			}
 		}
 
 		public ConnectionState ConnectionState
 		{
-			get
-			{
-				return connectionState;
-			}
-
+			get { return connectionState; }
 			set
 			{
-				connectionState = value;
+                if (connectionState != value)
+                {
+                    connectionState = value;
+                    ndsStateProxy.UpdateState(connectionState);
+                }
 			}
 		}
 
 		public string LogText
 		{
-			get
-			{
-				return logText;
-			}
-
-			set
-			{
-				logText = value;
-			}
+			get { return logText; }
+			set { logText = value; }
 		}
 
 		public TimeSpan ElapsedTime
 		{
-			get
-			{
-				return elapsedTime;
-			}
-
-			set
-			{
-				elapsedTime = value;
-			}
+			get { return elapsedTime; }
+            set { elapsedTime = value; }
 		}
 
 		#endregion Properties
@@ -102,9 +88,8 @@ namespace FrontEndProcessorService
             //ndsProxy.Open();
             //ndsProxy.Process(null);
 
-            //ndsStateProxy = new NetworkDynamicStateServiceProxy("NetworkDynamicStateServiceEndPoint");
-            //ndsStateProxy.Open();
-            //ndsStateProxy.ProcessState(null);
+            ndsStateProxy = new NetworkDynamicStateServiceProxy("NetworkDynamicStateServiceEndPoint");
+            ndsStateProxy.Open();
 
             configuration = new ConfigReader();
             this.connection = new TCPConnection(configuration);

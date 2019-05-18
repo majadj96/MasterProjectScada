@@ -43,7 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BackEnd_FrontEnd\IProcessingObject.cs" />
-    <Compile Include="BackEnd_FrontEnd\IProcessingState.cs" />
     <Compile Include="Connection\IConnection.cs" />
     <Compile Include="Connection\TCPConnection.cs" />
     <Compile Include="CRCCalculator\CRCCalculator.cs" />

@@ -1,18 +1,26 @@
-﻿using ScadaCommon.BackEnd_FrontEnd;
+﻿using ScadaCommon;
+using ScadaCommon.BackEnd_FrontEnd;
 using ScadaCommon.ServiceContract;
-using System.ServiceModel;  
+using System;
+using System.ServiceModel;
 
 namespace FrontEndProcessorService
 {
-    public class NetworkDynamicStateServiceProxy : ClientBase<IStateProcessingModule>, IStateProcessingModule
+    public class NetworkDynamicStateServiceProxy : ClientBase<IPointUpdateService>, IPointUpdateService
     {
         public NetworkDynamicStateServiceProxy(string endpointName) : base(endpointName)
         {
 
         }
-        public void ProcessState(IProcessingState processingObject)
+        
+        public void UpdateDateAndTime(DateTime dateTime)
         {
-            Channel.ProcessState(processingObject);
+            Channel.UpdateDateAndTime(dateTime);
+        }
+
+        public void UpdateState(ConnectionState connectionState)
+        {
+            Channel.UpdateState(connectionState);
         }
     }
 }
