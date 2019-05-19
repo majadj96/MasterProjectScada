@@ -12,9 +12,6 @@ namespace ScadaCommon.Interfaces
 
         uint ScalingFactor { get; }
         uint Deviation { get; }
-        uint NormalValue { get; }
-        uint LowLimit { get; }
-        uint HighLimit { get; }
         uint EguMin { get; }
         uint EguMax { get; }
     }

@@ -57,9 +57,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\ConfigItemEqualityComparer.cs" />
     <Compile Include="Exceptions\ConfigurationException.cs" />
-    <Compile Include="Configuration\ConfigItem.cs" />
     <Compile Include="Configuration\ConfigReader.cs" />
     <Compile Include="FieldCommunicationService.cs" />
     <Compile Include="FrontEndProcessorService.cs" />

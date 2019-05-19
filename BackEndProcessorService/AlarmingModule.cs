@@ -35,7 +35,7 @@ namespace BackEndProcessorService
                         Alarm alarm = new Alarm() { Message = "Value is outside boundaries." };
                         alarmEventServiceProxy.AddAlarm(alarm);
                     }
-                    else if (((AnalogPoint)item).EguValue < NDSConfiguration.GetLowLimit(item.PointType))
+                    else if (((AnalogPoint)item).EguValue < ((AnalogPoint)item).MinValue)
                     {
                         item.InAlarm = true;
                         //low alarm
@@ -43,7 +43,7 @@ namespace BackEndProcessorService
                         Alarm alarm = new Alarm() { Message = "Point is in low alarm state." };
                         alarmEventServiceProxy.AddAlarm(alarm);
                     }
-                    else if (((AnalogPoint)item).EguValue > NDSConfiguration.GetHighLimit(item.PointType))
+                    else if (((AnalogPoint)item).EguValue > ((AnalogPoint)item).MaxValue)
                     {
                         item.InAlarm = true;
                         //high alarm
@@ -54,7 +54,7 @@ namespace BackEndProcessorService
                 }
                 else
                 {
-                    if (NDSConfiguration.GetNormalValue(PointType.BINARY_INPUT) != item.RawValue)
+                    if (((DigitalPoint)item).NormalValue != item.RawValue)
                     {
                         item.InAlarm = true;
                         //alarm treba da se napravi (ABNORMAL ALARM)
