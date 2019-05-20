@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Cache\INDSRealTimePointCache.cs" />
     <Compile Include="Cache\NDSRealTimePointCache.cs" />
+    <Compile Include="MeasurementProviderService.cs" />
     <Compile Include="NDSConfigurationProxy.cs" />
     <Compile Include="NetworkDynamicServiceHost.cs" />
     <Compile Include="CommandingService.cs" />

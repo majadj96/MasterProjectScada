@@ -24,14 +24,14 @@ namespace EntityFrameworkMeasurementInfrastructure
             context.SaveChanges();
         }
 
-        public void GetAllMeasurementsByGid(long gid)
+        public Measurement[] GetAllMeasurementsByGid(long gid)
         {
-            throw new NotImplementedException();
+            return (context.Measurements.Where(x => x.Gid == gid)).ToArray();
         }
 
-        public void GetAllMeasurementsByTime(DateTime startTime, DateTime endTime, long gid)
+        public Measurement[] GetAllMeasurementsByTime(DateTime startTime, DateTime endTime, long gid)
         {
-            throw new NotImplementedException();
+            return (context.Measurements.Where(x => x.Gid == gid & x.ChangedTime > startTime & x.ChangedTime < endTime)).ToArray();
         }
     }
 }

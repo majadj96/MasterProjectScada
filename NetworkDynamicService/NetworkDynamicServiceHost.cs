@@ -13,6 +13,7 @@ using System.ServiceModel;
 using TransactionManagerContracts;
 using EntityFrameworkMeasurementInfrastructure;
 using AlarmEventServiceInfrastructure;
+using RepositoryCore.Interfaces;
 
 namespace NetworkDynamicService
 {
@@ -28,6 +29,7 @@ namespace NetworkDynamicService
         private ModelUpdateContract modelUpdateContract;
         private ITransactionSteps transactionService;
         private IStateUpdateService stateUpdateService;
+        private IMeasurementRepository measurementRepository;
         private StateUpdateServiceProxy stateUpdateProxy;
         private FepCommandingServiceProxy fepCmdProxy;
         private IProcessingServiceContract processingService;
@@ -48,6 +50,7 @@ namespace NetworkDynamicService
             backEndPocessingModule = new BackEndPocessingModule(pointUpdateProxy, this.alarmEventServiceProxy, this.publisherProxy, this.measurementsRepository);
 
             transactionService =  new TransactionService(nDSRealTimePointCache, OpenProxies);
+            measurementRepository = new MeasurementProviderService(measurementsRepository);
             modelUpdateContract = new ModelUpdateContract(nDSRealTimePointCache, ndSConfigurationProxy, transactionService);
             stateUpdateService = new StateUpdateService(stateUpdateProxy);
             commandingService = new CommandingService(fepCmdProxy, backEndPocessingModule, nDSRealTimePointCache);
@@ -93,6 +96,7 @@ namespace NetworkDynamicService
             hosts.Add(new ServiceHost(commandingService));
             hosts.Add(new ServiceHost(modelUpdateContract));
             hosts.Add(new ServiceHost(processingService));
+            hosts.Add(new ServiceHost(measurementRepository));
         }
 
         public void Dispose()
