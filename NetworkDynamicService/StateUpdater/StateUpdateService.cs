@@ -17,7 +17,7 @@ namespace NetworkDynamicService.PointUpdater
             proxy.UpdateDateAndTime(dateTime);
         }
 
-        public void UpdateState(short connectionState)
+        public void UpdateState(ConnectionState connectionState)
         {
             proxy.UpdateState(connectionState);
             Console.WriteLine(connectionState.ToString());
