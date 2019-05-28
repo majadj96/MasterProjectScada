@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A61FACB3-147E-4FD9-88C1-A3F226157C23}</ProjectGuid>
+    <ProjectGuid>{9E9F3E50-1395-46B5-8D75-B16A08B45CDF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ProcessingModule</RootNamespace>
-    <AssemblyName>ProcessingModule</AssemblyName>
+    <RootNamespace>BackEndProcessorService</RootNamespace>
+    <AssemblyName>BackEndProcessorService</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,27 +42,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Acquisitor.cs" />
-    <Compile Include="FunctionExecutor.cs" />
-    <Compile Include="ProcessingManager.cs" />
+    <Compile Include="AlarmingModule.cs" />
+    <Compile Include="BackEndPocessingModule.cs" />
+    <Compile Include="Configuration\ConfigItem.cs" />
+    <Compile Include="Configuration\ConfigReader.cs" />
+    <Compile Include="EGUModule.cs" />
+    <Compile Include="IProcessingData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DNP3\DNP3.csproj">
-      <Project>{8cc2c599-abc9-426e-8d54-4f9f25162417}</Project>
-      <Name>DNP3</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ScadaCommon\ScadaCommon.csproj">
+    <ProjectReference Include="..\SCADA\ScadaCommon\ScadaCommon.csproj">
       <Project>{823D1355-EFD0-481C-A0D9-FDA0C4EA37DF}</Project>
       <Name>ScadaCommon</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="NDSConfig.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Proxy\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

@@ -1,16 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A61FACB3-147E-4FD9-88C1-A3F226157C23}</ProjectGuid>
+    <ProjectGuid>{8CC2C599-ABC9-426E-8D54-4F9F25162417}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ProcessingModule</RootNamespace>
-    <AssemblyName>ProcessingModule</AssemblyName>
+    <RootNamespace>DNP3</RootNamespace>
+    <AssemblyName>DNP3</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -33,7 +34,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,27 +42,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Acquisitor.cs" />
-    <Compile Include="FunctionExecutor.cs" />
-    <Compile Include="ProcessingManager.cs" />
+    <Compile Include="DNP3FunctionFactory.cs" />
+    <Compile Include="DNP3Functions\DNP3ApplicationObjectParameters.cs" />
+    <Compile Include="DNP3Functions\DNP3CommandParameters.cs" />
+    <Compile Include="FunctionParameters\Class0123.cs" />
+    <Compile Include="FunctionParameters\DelayMeasurement.cs" />
+    <Compile Include="FunctionParameters\DisableUnsolicitedMessages.cs" />
+    <Compile Include="FunctionParameters\DNP3Functions.cs" />
+    <Compile Include="FunctionParameters\EnableUnsolicitedMessages.cs" />
+    <Compile Include="FunctionParameters\InternalIndicationsMessage.cs" />
+    <Compile Include="FunctionParameters\ReadAnalogOutputFunction.cs" />
+    <Compile Include="FunctionParameters\ReadClass0DataFunction.cs" />
+    <Compile Include="FunctionParameters\ReadDiscreteInFunction.cs" />
+    <Compile Include="FunctionParameters\ReadDiscreteOutFunction.cs" />
+    <Compile Include="FunctionParameters\SendConfirmMessage.cs" />
+    <Compile Include="FunctionParameters\TimeMessage.cs" />
+    <Compile Include="FunctionParameters\WriteAnalogOutputFunction.cs" />
+    <Compile Include="FunctionParameters\ReadAnalogInFunction.cs" />
+    <Compile Include="FunctionParameters\WriteDiscreteOutFunction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DNP3\DNP3.csproj">
-      <Project>{8cc2c599-abc9-426e-8d54-4f9f25162417}</Project>
-      <Name>DNP3</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ScadaCommon\ScadaCommon.csproj">
-      <Project>{823D1355-EFD0-481C-A0D9-FDA0C4EA37DF}</Project>
+      <Project>{823d1355-efd0-481c-a0d9-fda0c4ea37df}</Project>
       <Name>ScadaCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
