@@ -14,6 +14,7 @@ using System.Windows.Threading;
 using UserInterface.BaseError;
 using UserInterface.Command;
 using UserInterface.Model;
+using UserInterface.ProxyPool;
 using UserInterface.Subscription;
 using UserInterface.ViewModel;
 
@@ -30,10 +31,8 @@ namespace UserInterface
 
         private ObservableCollection<RadioButton> radioButtons = new ObservableCollection<RadioButton>();
         private ObservableCollection<Substation> substationsList = new ObservableCollection<Substation>();
-        private ObservableCollection<Substation> substationsListCopy = new ObservableCollection<Substation>();
         private ObservableCollection<string> searchType = new ObservableCollection<string> { "Name", "GID" };
         List<Substation> searchedSubs = new List<Substation>();
-
 
         #region Variables
         private BindableBase currentMeshViewModel;
@@ -258,6 +257,7 @@ namespace UserInterface
             LoadSubstationCommand = new MyICommand<string>(changeGrid);
             SearchSubsCommand = new MyICommand<string>(searchSubstation);
             DissmisSubsCommand = new MyICommand<string>(dissmisSubstation);
+
             Sub subNMS = new Sub();
             subNMS.OnSubscribe("nms");
             subNMS.OnSubscribe("scada");
@@ -273,7 +273,8 @@ namespace UserInterface
 
         private void changeGrid(string a)
         {
-            meshViewModel.setSubstation(SelectedSubstation);
+            SetCurrentSubstation();
+            meshViewModel.UpdateSubstationModel(SubstationCurrent);
         }
         private void searchSubstation(string a)
         {
@@ -282,19 +283,19 @@ namespace UserInterface
 
             if (SearchTypeSelected == "Name")
             {
-                searchedSubs = substationsListCopy.Where(x => x.Name.Contains(SearchTerm)).ToList();
+                searchedSubs = substations.Values.Where(x => x.Name.Contains(SearchTerm)).ToList();
                 SubstationsList = new ObservableCollection<Substation>(searchedSubs);
             }
             else
             {
-                searchedSubs = substationsListCopy.Where(x => x.Gid.Contains(SearchTerm)).ToList();
+                searchedSubs = substations.Values.Where(x => x.Gid.Contains(SearchTerm)).ToList();
                 SubstationsList = new ObservableCollection<Substation>(searchedSubs);
             }
 
         }
         private void dissmisSubstation(string a)
         {
-            SubstationsList = substationsListCopy;
+            SubstationsList = new ObservableCollection<Substation>( substations.Values.ToList());
             SearchTerm = "";
         }
 
@@ -335,7 +336,10 @@ namespace UserInterface
         public void SetCurrentSubstation()
         {
             if (Substations.Count > 0)
-                SubstationCurrent = Substations.First().Value;
+                if (SelectedSubstation != null)
+                    SubstationCurrent = SelectedSubstation;
+                else
+                    SubstationCurrent = Substations.Values.First();
         }
 
         public void PopulateModel(object resources, string topic)
@@ -473,15 +477,14 @@ namespace UserInterface
                 Substation substation = new Substation(name.GetValue().ToString(), description.GetValue().ToString(), gid.GetValue().ToString());
                 substations.Add((long)gid.GetValue(), substation);
             }
-            ObservableCollection<Substation> subs = new ObservableCollection<Substation>(substations.Values);
-            SubstationsList = subs;
-            substationsListCopy = subs;
+            SubstationsList = new ObservableCollection<Substation>(substations.Values);
             // setRadioButtons();
             foreach (ResourceDescription resource in resources.Where(x => (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.DISCONNECTOR) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.BREAKER) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.RATIOTAPCHANGER) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.POWERTRANSFORMER) ||
-                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ASYNCHRONOUSMACHINE)))
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ASYNCHRONOUSMACHINE) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.DISCRETE)))
             {
 
                 switch (ModelCodeHelper.ExtractTypeFromGlobalId(resource.Id))
@@ -513,6 +516,22 @@ namespace UserInterface
                         populateEquipment(transformator, resource.Properties);
                         getMySubstation(resource.Properties).Transformator = transformator;
                         break;
+                    case (short)DMSType.DISCRETE:
+                        foreach(var v in resource.Properties.Where(x => x.Id == ModelCode.MEASUREMENT_PSR))
+                        {
+                            long gid = v.PropertyValue.LongValue;
+                            ResourceDescription res = resources.Where(x => x.Id == gid).ToList<ResourceDescription>()[0];
+                            if ((ModelCodeHelper.ExtractTypeFromGlobalId(res.Id) == (short)DMSType.BREAKER))
+                            {
+                                substations.Values.Where(x => x.Breaker.GID == gid.ToString()).First().Breaker.DiscreteGID = resource.Id; 
+                            }
+                            else if ((ModelCodeHelper.ExtractTypeFromGlobalId(res.Id) == (short)DMSType.DISCONNECTOR))
+                            {
+                                Substation s = Substations.Values.Where(x => x.Disconectors.Where(c => c.GID == gid.ToString()).FirstOrDefault().GID == gid.ToString()).First();
+                                s.Disconectors.Where(c => c.GID == gid.ToString()).First().DiscreteGID = resource.Id;
+                            }
+                        }
+                        break;
                 }
 
             }
@@ -530,7 +549,7 @@ namespace UserInterface
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ASYNCHRONOUSMACHINE)))
             {
                 UIModel model = new UIModel();
-
+                
                 foreach (Property property in resource.Properties)
                 {
                     switch (property.Id)

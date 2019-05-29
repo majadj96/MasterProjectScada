@@ -16,13 +16,10 @@ namespace AlarmEventService.AlarmServiceRef {
     public interface IAlarmServiceOperations {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlarmServiceOperations/AddAlarm", ReplyAction="http://tempuri.org/IAlarmServiceOperations/AddAlarmResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ScadaCommon.AlarmEventType))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ScadaCommon.Database.Alarm))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ScadaCommon.Database.Alarm[]))]
-        bool AddAlarm(object alarm);
+        void AddAlarm(ScadaCommon.Database.Alarm alarm);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlarmServiceOperations/AddAlarm", ReplyAction="http://tempuri.org/IAlarmServiceOperations/AddAlarmResponse")]
-        System.Threading.Tasks.Task<bool> AddAlarmAsync(object alarm);
+        System.Threading.Tasks.Task AddAlarmAsync(ScadaCommon.Database.Alarm alarm);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlarmServiceOperations/DeleteAlarm", ReplyAction="http://tempuri.org/IAlarmServiceOperations/DeleteAlarmResponse")]
         bool DeleteAlarm(int id);
@@ -31,13 +28,10 @@ namespace AlarmEventService.AlarmServiceRef {
         System.Threading.Tasks.Task<bool> DeleteAlarmAsync(int id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlarmServiceOperations/AcknowledgeAlarm", ReplyAction="http://tempuri.org/IAlarmServiceOperations/AcknowledgeAlarmResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ScadaCommon.AlarmEventType))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ScadaCommon.Database.Alarm))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ScadaCommon.Database.Alarm[]))]
-        bool AcknowledgeAlarm(object alarm);
+        bool AcknowledgeAlarm(ScadaCommon.Database.Alarm alarm);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlarmServiceOperations/AcknowledgeAlarm", ReplyAction="http://tempuri.org/IAlarmServiceOperations/AcknowledgeAlarmResponse")]
-        System.Threading.Tasks.Task<bool> AcknowledgeAlarmAsync(object alarm);
+        System.Threading.Tasks.Task<bool> AcknowledgeAlarmAsync(ScadaCommon.Database.Alarm alarm);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlarmServiceOperations/GetAllAlarms", ReplyAction="http://tempuri.org/IAlarmServiceOperations/GetAllAlarmsResponse")]
         ScadaCommon.Database.Alarm[] GetAllAlarms();
@@ -73,11 +67,11 @@ namespace AlarmEventService.AlarmServiceRef {
                 base(binding, remoteAddress) {
         }
         
-        public bool AddAlarm(object alarm) {
-            return base.Channel.AddAlarm(alarm);
+        public void AddAlarm(ScadaCommon.Database.Alarm alarm) {
+            base.Channel.AddAlarm(alarm);
         }
         
-        public System.Threading.Tasks.Task<bool> AddAlarmAsync(object alarm) {
+        public System.Threading.Tasks.Task AddAlarmAsync(ScadaCommon.Database.Alarm alarm) {
             return base.Channel.AddAlarmAsync(alarm);
         }
         
@@ -89,11 +83,11 @@ namespace AlarmEventService.AlarmServiceRef {
             return base.Channel.DeleteAlarmAsync(id);
         }
         
-        public bool AcknowledgeAlarm(object alarm) {
+        public bool AcknowledgeAlarm(ScadaCommon.Database.Alarm alarm) {
             return base.Channel.AcknowledgeAlarm(alarm);
         }
         
-        public System.Threading.Tasks.Task<bool> AcknowledgeAlarmAsync(object alarm) {
+        public System.Threading.Tasks.Task<bool> AcknowledgeAlarmAsync(ScadaCommon.Database.Alarm alarm) {
             return base.Channel.AcknowledgeAlarmAsync(alarm);
         }
         

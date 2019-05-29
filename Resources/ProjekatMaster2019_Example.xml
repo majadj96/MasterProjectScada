@@ -30,17 +30,17 @@
 		<cim:IdentifiedObject.mRID>Disc_1</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>Disc_1</ftn:IdentifiedObject.name>
 	</cim:Disconnector>
-	<cim:Disconnector rdf:ID="Disc_3">
-		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
-		<cim:IdentifiedObject.description>Disconnector</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>Disc_3</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>Disc_3</ftn:IdentifiedObject.name>
-	</cim:Disconnector>
 	<cim:Disconnector rdf:ID="Disc_2">
-		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_2"/>
+		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.description>Disconnector</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>Disc_2</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>Disc_2</ftn:IdentifiedObject.name>
+	</cim:Disconnector>
+	<cim:Disconnector rdf:ID="Disc_3">
+		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_2"/>
+		<cim:IdentifiedObject.description>Disconnector</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>Disc_3</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>Disc_3</ftn:IdentifiedObject.name>
 	</cim:Disconnector>
 	<cim:ACLineSegment rdf:ID="ACLS_1">
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
@@ -200,10 +200,32 @@
 		<cim:Discrete.normalValue>0</cim:Discrete.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType></cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource="#RatioTC_1"/>
+		<cim:Measurement.PowerSystemResource rdf:resource="#Disc_1"/>
 		<cim:IdentifiedObject.description>Discrete measurement</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>Discrete_1</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>Discrete_1</ftn:IdentifiedObject.name>
+	</cim:Discrete>
+	<cim:Discrete rdf:ID="Discrete_2">
+		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
+		<cim:Discrete.minValue>0</cim:Discrete.minValue>
+		<cim:Discrete.normalValue>0</cim:Discrete.normalValue>
+		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
+		<cim:Measurement.measurementType></cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#Breaker_1"/>
+		<cim:IdentifiedObject.description>Discrete measurement</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>Discrete_2</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>Discrete_2</ftn:IdentifiedObject.name>
+	</cim:Discrete>
+	<cim:Discrete rdf:ID="Discrete_3">
+		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
+		<cim:Discrete.minValue>0</cim:Discrete.minValue>
+		<cim:Discrete.normalValue>0</cim:Discrete.normalValue>
+		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
+		<cim:Measurement.measurementType></cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#Disc_2"/>
+		<cim:IdentifiedObject.description>Discrete measurement</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>Discrete_3</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>Discrete_3</ftn:IdentifiedObject.name>
 	</cim:Discrete>
 
 </rdf:RDF>

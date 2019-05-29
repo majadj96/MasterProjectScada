@@ -434,6 +434,15 @@ namespace UserInterface.ViewModel
             SubstationCurrent.Disconectors[0].State = DiscreteState.ON;
             if (SubstationCurrent.Disconectors.Count > 1)
                 SubstationCurrent.Disconectors[1].State = DiscreteState.ON;
+
+            if (SubstationCurrent.AsynchronousMachines.Count == 1)
+            {
+                Two_AM_Visible = "Hidden";
+            }
+            else
+            {
+                Two_AM_Visible = "Visible";
+            }
         }
 
         public void DataSharingWithCommandingViewModels()
@@ -461,19 +470,6 @@ namespace UserInterface.ViewModel
             });
 
             SubstationCurrent = new Substation();
-        }
-
-        public void setSubstation(Substation sub)
-        {
-            SubstationCurrent = sub;
-
-            if(sub.AsynchronousMachines.Count == 1)
-            {
-                Two_AM_Visible = "Hidden";
-            } else
-            {
-                Two_AM_Visible = "Visible";
-            }
         }
 
         public void setUpInitState()

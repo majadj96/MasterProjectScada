@@ -43,7 +43,7 @@ namespace AlarmEventServiceDatabase
             }
         }
 
-        public bool AddAlarm(Alarm alarm)
+        public void AddAlarm(Alarm alarm)
         {
             using (AccessDB db = new AccessDB())
             {
@@ -60,12 +60,11 @@ namespace AlarmEventServiceDatabase
                     });
                     //log
                     db.SaveChanges();
-                    return true;
                 }
                 catch (Exception ex)
                 {
                     //log
-                    return false;
+                    return;
                 }
                 finally
                 {

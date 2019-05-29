@@ -30,31 +30,31 @@ namespace AlarmEventService
             return ret;
         }
 
-        public bool AddAlarm(Alarm alarm)
+        public void AddAlarm(Alarm alarm)
         {
-            bool ret = true;
             if (alarm == null)
-                ret = false;
+                return;
 
             alarmServiceClient.AddAlarm(alarm);
-
-            return ret;
         }
 
-        public bool AddEvent(Event newEvent)
+        public void AddEvent(Event newEvent)
         {
-            bool ret = true;
             if (newEvent == null)
-                ret = false;
+                return;
 
             eventServiceClient.AddEvent(newEvent);
-
-            return ret;
         }
 
         public List<Alarm> GetAllAlarms()
         {
             List<Alarm> list = new List<Alarm>(alarmServiceClient.GetAllAlarms());
+            return list;
+        }
+
+        public List<Event> GetAllEvents()
+        {
+            List<Event> list = new List<Event>(eventServiceClient.GetAllEvents());
             return list;
         }
     }

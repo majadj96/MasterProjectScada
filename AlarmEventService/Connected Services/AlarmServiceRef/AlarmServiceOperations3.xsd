@@ -4,15 +4,13 @@
   <xs:element name="AddAlarm">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="alarm" nillable="true" type="xs:anyType" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/ScadaCommon.Database" minOccurs="0" name="alarm" nillable="true" type="q1:Alarm" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="AddAlarmResponse">
     <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="AddAlarmResult" type="xs:boolean" />
-      </xs:sequence>
+      <xs:sequence />
     </xs:complexType>
   </xs:element>
   <xs:element name="DeleteAlarm">
@@ -32,7 +30,7 @@
   <xs:element name="AcknowledgeAlarm">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="alarm" nillable="true" type="xs:anyType" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/ScadaCommon.Database" minOccurs="0" name="alarm" nillable="true" type="q2:Alarm" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -51,7 +49,7 @@
   <xs:element name="GetAllAlarmsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/ScadaCommon.Database" minOccurs="0" name="GetAllAlarmsResult" nillable="true" type="q1:ArrayOfAlarm" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/ScadaCommon.Database" minOccurs="0" name="GetAllAlarmsResult" nillable="true" type="q3:ArrayOfAlarm" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

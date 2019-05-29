@@ -9,7 +9,7 @@ namespace AlarmEventServiceDatabase
     public interface IAlarmServiceOperations
     {
         [OperationContract]
-        bool AddAlarm(Alarm alarm);
+        void AddAlarm(Alarm alarm);
 
         [OperationContract]
         bool DeleteAlarm(int id);

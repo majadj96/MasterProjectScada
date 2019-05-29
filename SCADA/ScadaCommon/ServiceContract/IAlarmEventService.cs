@@ -8,7 +8,7 @@ namespace ScadaCommon.ServiceContract
     public interface IAlarmEventService
     {
         [OperationContract]
-        bool AddAlarm(Alarm alarm);
+        void AddAlarm(Alarm alarm);
 
         [OperationContract]
         bool AcknowledgeAlarm(Alarm alarm);
@@ -17,6 +17,9 @@ namespace ScadaCommon.ServiceContract
         List<Alarm> GetAllAlarms();
 
         [OperationContract]
-        bool AddEvent(Event newEvent);
+        void AddEvent(Event newEvent);
+
+        [OperationContract]
+        List<Event> GetAllEvents();
     }
 }

@@ -1,20 +1,22 @@
-﻿using System.Collections.Generic;
-using System.ServiceModel;
+﻿using ScadaCommon;
+using ScadaCommon.ComandingModel;
 using ScadaCommon.Database;
 using ScadaCommon.ServiceContract;
+using System.Collections.Generic;
+using System.ServiceModel;
 
-namespace BackEndProcessorService.Proxy
+namespace UserInterface.ProxyPool
 {
     public class AlarmEventServiceProxy : ClientBase<IAlarmEventService>, IAlarmEventService
     {
-        public AlarmEventServiceProxy(string endpointName) : base(endpointName) { }
+        public AlarmEventServiceProxy(string endpointName) : base(endpointName)
+        {
+
+        }
 
         public bool AcknowledgeAlarm(Alarm alarm)
         {
-            if (Channel.AcknowledgeAlarm(alarm))
-                return true;
-
-            return false;
+            return Channel.AcknowledgeAlarm(alarm);
         }
 
         public void AddAlarm(Alarm alarm)
