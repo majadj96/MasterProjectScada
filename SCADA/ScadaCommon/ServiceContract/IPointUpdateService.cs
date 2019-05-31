@@ -12,6 +12,6 @@ namespace ScadaCommon.ServiceContract
     public interface IPointUpdateService
     {
         [OperationContract]
-        void UpdatePoint(IProcessingObject processingObject);
+        void UpdatePoint(IProcessingObject[] processingObject);
     }
 }

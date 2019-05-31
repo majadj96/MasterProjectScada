@@ -25,9 +25,9 @@ namespace BackEndProcessorService
                 {
                     item.Process(inputObj);
                 }
-
-                this.pointUpdateProxy.UpdatePoint(inputObj[index]);
             }
+
+            this.pointUpdateProxy.UpdatePoint(inputObj);
         }
 
         private void InitializeProcessingModules()
