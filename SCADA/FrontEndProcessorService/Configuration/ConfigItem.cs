@@ -10,7 +10,7 @@ namespace FrontEndProcessorService.Configuration
 
 		private PointType registryType;
 		private ushort numberOfRegisters;
-		private ushort startAddress;
+		private ushort startIndex;
 		private ushort decimalSeparatorPlace;
 		private ushort minValue;
 		private ushort maxValue;
@@ -57,16 +57,16 @@ namespace FrontEndProcessorService.Configuration
 			}
 		}
 
-		public ushort StartAddress
+		public ushort StartIndex
 		{
 			get
 			{
-				return startAddress;
+				return startIndex;
 			}
 
 			set
 			{
-				startAddress = value;
+				startIndex = value;
 			}
 		}
 
@@ -274,7 +274,7 @@ namespace FrontEndProcessorService.Configuration
 			Int32.TryParse(configurationParameters[1], out temp);
 			NumberOfRegisters = (ushort)temp;
 			Int32.TryParse(configurationParameters[2], out temp);
-			StartAddress = (ushort)temp;
+			StartIndex = (ushort)temp;
 			Int32.TryParse(configurationParameters[3], out temp);
 			DecimalSeparatorPlace = (ushort)temp;
 			Int32.TryParse(configurationParameters[4], out temp);
@@ -301,24 +301,42 @@ namespace FrontEndProcessorService.Configuration
 			PointType registryType;
 			switch (registryTypeName)
 			{
-				case "DO_REG":
-					registryType = PointType.DIGITAL_OUTPUT;
-					break;
+				//case "DO_REG":
+				//	registryType = PointType.DIGITAL_OUTPUT;
+				//	break;
 
-				case "DI_REG":
-					registryType = PointType.DIGITAL_INPUT;
-					break;
+				//case "DI_REG":
+				//	registryType = PointType.DIGITAL_INPUT;
+				//	break;
 
-				case "IN_REG":
-					registryType = PointType.ANALOG_INPUT;
-					break;
+				//case "IN_REG":
+				//	registryType = PointType.ANALOG_INPUT;
+				//	break;
 
-				case "HR_INT":
-					registryType = PointType.ANALOG_OUTPUT;
-					break;
+				//case "HR_INT":
+				//	registryType = PointType.ANALOG_OUTPUT;
+				//	break;
 
-				default:
-					registryType = PointType.HR_LONG;
+                case "BO_REG":
+                    registryType = PointType.BINARY_OUTPUT;
+                    break;
+
+                case "BI_REG":
+                    registryType = PointType.BINARY_INPUT;
+                    break;
+
+                case "AI_INT16":
+                    registryType = PointType.ANALOG_INPUT_16;
+                    break;
+
+                case "AO_INT16":
+                    registryType = PointType.ANALOG_OUTPUT_16;
+                    break;
+                case "CI_REG16":
+                    registryType = PointType.COUNTER_INPUT_16;
+                    break;
+                default:
+					registryType = PointType.COUNTER_INPUT_16;
 					break;
 			}
 			return registryType;

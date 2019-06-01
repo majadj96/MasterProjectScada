@@ -1,12 +1,11 @@
-﻿using ScadaCommon;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace Modbus.Connection
+namespace ScadaCommon.Connection
 {
     /// <summary>
     /// Class containing logic for sending modbus requests and receiving point values. 

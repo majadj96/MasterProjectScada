@@ -7,8 +7,8 @@
     <ProjectGuid>{823D1355-EFD0-481C-A0D9-FDA0C4EA37DF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Common</RootNamespace>
-    <AssemblyName>Common</AssemblyName>
+    <RootNamespace>ScadaCommon</RootNamespace>
+    <AssemblyName>ScadaCommon</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,18 +40,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connection\FunctionExecutor.cs" />
+    <Compile Include="Connection\IConnection.cs" />
+    <Compile Include="Connection\TCPConnection.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="IAnalogPoint.cs" />
-    <Compile Include="IAutomationManager.cs" />
-    <Compile Include="IConfigItem.cs" />
-    <Compile Include="IConfiguration.cs" />
-    <Compile Include="IDigitalPoint.cs" />
-    <Compile Include="IFunctionExecutor.cs" />
-    <Compile Include="IModbusFunction.cs" />
-    <Compile Include="IPoint.cs" />
-    <Compile Include="IProcessingManager.cs" />
-    <Compile Include="IStateUpdater.cs" />
-    <Compile Include="IStorage.cs" />
+    <Compile Include="Interfaces\IAnalogPoint.cs" />
+    <Compile Include="Interfaces\IAutomationManager.cs" />
+    <Compile Include="Interfaces\IConfigItem.cs" />
+    <Compile Include="Interfaces\IConfiguration.cs" />
+    <Compile Include="Interfaces\IDigitalPoint.cs" />
+    <Compile Include="Interfaces\IDNP3Functions.cs" />
+    <Compile Include="Interfaces\IFunctionExecutor.cs" />
+    <Compile Include="Interfaces\IModbusFunction.cs" />
+    <Compile Include="Interfaces\IPoint.cs" />
+    <Compile Include="Interfaces\IProcessingManager.cs" />
+    <Compile Include="Interfaces\IStateUpdater.cs" />
+    <Compile Include="Interfaces\IStorage.cs" />
     <Compile Include="PointIdentifierHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

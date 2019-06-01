@@ -18,7 +18,7 @@
         /// <summary>
         /// Gets the start address.
         /// </summary>
-        ushort StartAddress { get; }
+        ushort StartIndex { get; }
 
         /// <summary>
         /// Gets the decimal separator`s place.

@@ -40,9 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connection\FunctionExecutor.cs" />
-    <Compile Include="Connection\IConnection.cs" />
-    <Compile Include="Connection\TCPConnection.cs" />
     <Compile Include="FunctionFactory.cs" />
     <Compile Include="FunctionParameters\ModbusCommandParameters.cs" />
     <Compile Include="FunctionParameters\ModbusReadCommandParameters.cs" />
@@ -57,7 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\ScadaCommon.csproj">
+    <ProjectReference Include="..\ScadaCommon\ScadaCommon.csproj">
       <Project>{823d1355-efd0-481c-a0d9-fda0c4ea37df}</Project>
       <Name>ScadaCommon</Name>
     </ProjectReference>

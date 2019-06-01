@@ -11,15 +11,15 @@ namespace FrontEndProcessorService.Configuration
 			{
 				throw new ArgumentException("Configuration item description must be unique!");
 			}
-			if (x.StartAddress == y.StartAddress)
+			if (x.StartIndex == y.StartIndex)
 			{
 				throw new ArgumentException("Configuration item start address must be unique!");
 			}
-			if (x.StartAddress != y.StartAddress)
+			if (x.StartIndex != y.StartIndex)
 			{
-				ConfigItem lessAddress = x.StartAddress < y.StartAddress ? x : y;
-				ConfigItem greaterAddress = x.StartAddress > y.StartAddress ? x : y;
-				if ((ushort)(lessAddress.StartAddress + lessAddress.NumberOfRegisters) > greaterAddress.StartAddress)
+				ConfigItem lessAddress = x.StartIndex < y.StartIndex ? x : y;
+				ConfigItem greaterAddress = x.StartIndex > y.StartIndex ? x : y;
+				if ((ushort)(lessAddress.StartIndex + lessAddress.NumberOfRegisters) > greaterAddress.StartIndex)
 				{
 					throw new ArgumentException($"Address ranges are overlapping for point types of {x.RegistryType}({x.Description}) and {y.RegistryType}({y.Description})");
 				}

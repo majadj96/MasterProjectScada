@@ -45,7 +45,7 @@ namespace FrontEndProcessorService.ViewModel
 			this.configuration = configuration;
 
 			this.type = c.RegistryType;
-			this.address = (ushort)(c.StartAddress+i);
+			this.address = (ushort)(c.StartIndex+i);
 			this.name = $"{configItem.Description} [{i}]";
 			this.rawValue = configItem.DefaultValue;
 			this.pointId = PointIdentifierHelper.GetNewPointId(new PointIdentifier(this.type, this.address));

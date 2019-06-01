@@ -1,9 +1,8 @@
-﻿using ScadaCommon;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Modbus.Connection
+namespace ScadaCommon.Connection
 {
     /// <summary>
     /// Class containing logic for establisshing tcp connections.

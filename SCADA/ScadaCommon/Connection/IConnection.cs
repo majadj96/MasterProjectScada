@@ -1,4 +1,4 @@
-﻿namespace Modbus.Connection
+﻿namespace ScadaCommon.Connection
 {
     /// <summary>
     /// Interface containing the logic for handling connections.

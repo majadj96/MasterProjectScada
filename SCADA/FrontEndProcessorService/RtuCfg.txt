@@ -1,0 +1,9 @@
+STA 1
+TCP 4001
+
+
+BO_REG		25 0  0  0      1     0  BO  @DigOut   100
+BI_REG		30 0  0  0      1     0  BI  @DigIn    100
+AI_INT16	20 0  0  0   4095  2000  AI  @AnaIn    100
+AO_INT16	4 0  0  0   4095  1200  AO  @AnaOut   100
+CI_REG16	8 0  0  0   4095  1200  CI  @Cnt   100

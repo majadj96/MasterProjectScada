@@ -1,6 +1,6 @@
 ﻿using ScadaCommon;
 using FrontEndProcessorService.Configuration;
-using Modbus.Connection;
+using ScadaCommon.Connection;
 using ProcessingModule;
 using System;
 using System.Collections.Generic;

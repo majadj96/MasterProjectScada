@@ -122,7 +122,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="RtuCfg.txt">
@@ -130,13 +132,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\ScadaCommon.csproj">
+    <ProjectReference Include="..\ScadaCommon\ScadaCommon.csproj">
       <Project>{823d1355-efd0-481c-a0d9-fda0c4ea37df}</Project>
       <Name>ScadaCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Modbus\Modbus.csproj">
-      <Project>{65b26e48-3a6c-4bc4-af16-f77809b5afa2}</Project>
-      <Name>Modbus</Name>
     </ProjectReference>
     <ProjectReference Include="..\ProcessingModule\ProcessingModule.csproj">
       <Project>{a61facb3-147e-4fd9-88c1-a3f226157c23}</Project>
