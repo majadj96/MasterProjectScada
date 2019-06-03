@@ -38,8 +38,30 @@ namespace ProcessingModule
             //ModbusReadCommandParameters p = new ModbusReadCommandParameters(6, (byte)GetReadFunctionCode(configItem.RegistryType), startAddress, numberOfPoints, transactionId, remoteUnitAddress);
             //IModbusFunction fn = FunctionFactory.CreateModbusFunction(p);
             //this.functionExecutor.EnqueueCommand(fn);
+            if (configItem.RegistryType == PointType.ANALOG_INPUT)
+            {
+                ExecuteAnalogRead(configItem, transactionId, remoteUnitAddress, startAddress, numberOfPoints);
+            }else if(configItem.RegistryType == PointType.ANALOG_OUTPUT)
+            {
+
+            }
+            else if (configItem.RegistryType == PointType.DIGITAL_INPUT)
+            {
+
+            }
+            else if (configItem.RegistryType == PointType.DIGITAL_OUTPUT)
+            {
+
+            }
         }
-        
+
+        private void ExecuteAnalogRead(IConfigItem configItem, ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints)
+        {
+            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(0xc1, (byte)DNP3FunctionCode.READ, (ushort)TypeField.ANALOG_INPUT_16BIT, 0x00, 0x0001, startAddress, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
+            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p);
+            this.functionExecutor.EnqueueCommand(fn);
+        }
+
         /// <inheritdoc />
         public void ExecuteWriteCommand(IConfigItem configItem, ushort transactionId, byte remoteUnitAddress, ushort pointAddress, int value)
         {
