@@ -47,6 +47,7 @@
     <Compile Include="DNP3Functions\DNP3CommandParameters.cs" />
     <Compile Include="FunctionParameters\DNP3Functions.cs" />
     <Compile Include="FunctionParameters\ReadAnalogOutputFunction.cs" />
+    <Compile Include="FunctionParameters\ReadDiscreteInFunction.cs" />
     <Compile Include="FunctionParameters\WriteAnalogOutputFunction.cs" />
     <Compile Include="FunctionParameters\ReadAnalogInFunction.cs" />
     <Compile Include="FunctionParameters\WriteDiscreteOutFunction.cs" />

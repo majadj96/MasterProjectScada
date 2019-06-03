@@ -18,7 +18,7 @@ namespace DNP3
                     switch ((TypeField)commandParameters.TypeField)
                     {
                         case TypeField.BINARY_INPUT_PACKED_FORMAT:
-                            return null;
+                            return new ReadDiscreteInFunction(commandParameters);
 
                         case TypeField.BINARY_OUTPUT_PACKED_FORMAT:
                             return null;
