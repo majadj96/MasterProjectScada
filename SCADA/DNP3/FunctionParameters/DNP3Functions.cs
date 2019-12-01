@@ -17,6 +17,11 @@ namespace DNP3.FunctionParameters
         {
             this.commandParameters = commandParameters;
         }
+
+        public abstract byte[] PackRequest();
+
+        public abstract Dictionary<Tuple<PointType, ushort>, ushort> ParseResponse(byte[] receivedBytes);
+
         /// <summary>
         /// Gets or sets the command parameters.
         /// </summary>
@@ -31,9 +36,5 @@ namespace DNP3.FunctionParameters
                 commandParameters = value;
             }
         }
-
-        public abstract byte[] PackRequest();
-
-        public abstract Dictionary<Tuple<PointType, ushort>, ushort> ParseResponse(byte[] receivedBytes);
     }
 }
