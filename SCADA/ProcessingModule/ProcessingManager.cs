@@ -42,9 +42,10 @@ namespace ProcessingModule
             if (configItem.RegistryType == PointType.ANALOG_INPUT)
             {
                 ExecuteAnalogInputRead(configItem, transactionId, remoteUnitAddress, startAddress, numberOfPoints);
-            }else if(configItem.RegistryType == PointType.ANALOG_OUTPUT)
+            }
+            else if(configItem.RegistryType == PointType.ANALOG_OUTPUT)
             {
-       
+                ExecuteAnalogOutputRead(configItem, transactionId, remoteUnitAddress, startAddress, numberOfPoints);
             }
             else if (configItem.RegistryType == PointType.DIGITAL_INPUT)
             {
@@ -52,8 +53,13 @@ namespace ProcessingModule
             }
             else if (configItem.RegistryType == PointType.DIGITAL_OUTPUT)
             {
-
+                ExecuteDigitalOutputRead(configItem, transactionId, remoteUnitAddress, startAddress, numberOfPoints);
             }
+        }
+
+        private void ExecuteDigitalOutputRead(IConfigItem configItem, ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints)
+        {
+
         }
 
         private void ExecuteDigitalInputRead(IConfigItem configItem, ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints)
@@ -66,6 +72,13 @@ namespace ProcessingModule
         private void ExecuteAnalogInputRead(IConfigItem configItem, ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints)
         {
             DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(0xc1, (byte)DNP3FunctionCode.READ, (ushort)TypeField.ANALOG_INPUT_16BIT, 0x00, 0x0001, startAddress, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
+            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p);
+            this.functionExecutor.EnqueueCommand(fn);
+        }
+
+        private void ExecuteAnalogOutputRead(IConfigItem configItem, ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints)
+        {
+            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(0xc1, (byte)DNP3FunctionCode.READ, (ushort)TypeField.ANALOG_OUTPUT_16BIT, 0x00, 0x0001, startAddress, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
             IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p);
             this.functionExecutor.EnqueueCommand(fn);
         }
