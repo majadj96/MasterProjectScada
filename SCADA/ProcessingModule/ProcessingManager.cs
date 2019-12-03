@@ -70,7 +70,7 @@ namespace ProcessingModule
             //ModbusWriteCommandParameters p = new ModbusWriteCommandParameters(6, (byte)ModbusFunctionCode.WRITE_SINGLE_COIL, pointAddress, (ushort)value, transactionId, remoteUnitAddress);
             //IModbusFunction fn = FunctionFactory.CreateModbusFunction(p);
             //this.functionExecutor.EnqueueCommand(fn);
-                                                                                //apl cont, function code,                      type field,                        qualf|range |   obj pref  |obj value|start|lenght|control|dest  |sourc|transport header
+                                                                                //apl cont, function code,                      type field,                        qualf|range |   obj pref   |obj value   |start|lenght|control|dest  |sourc|transport header
             DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(0xc1, (byte)DNP3FunctionCode.DIRECT_OPERATE, (ushort)TypeField.BINARY_COMMAND, 0x28, 0x0001, pointAddress, (uint)value, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
             IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p);
             this.functionExecutor.EnqueueCommand(fn);
@@ -89,6 +89,10 @@ namespace ProcessingModule
             //ModbusWriteCommandParameters p = new ModbusWriteCommandParameters(6, (byte)ModbusFunctionCode.WRITE_SINGLE_REGISTER, pointAddress, (ushort)value, transactionId, remoteUnitAddress);
             //IModbusFunction fn = FunctionFactory.CreateModbusFunction(p);
             //this.functionExecutor.EnqueueCommand(fn);
+                                                                                //apl cont, function code,                      type field,                             qualf|range |   obj pref   |obj value   |start|lenght|control|dest  |sourc|transport header
+            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(0xc1, (byte)DNP3FunctionCode.DIRECT_OPERATE, (ushort)TypeField.ANALOG_OUTPUT_16BIT, 0x28, 0x0001, pointAddress, (uint)value, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
+            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p);
+            this.functionExecutor.EnqueueCommand(fn);
         }
 
         /// <summary>
