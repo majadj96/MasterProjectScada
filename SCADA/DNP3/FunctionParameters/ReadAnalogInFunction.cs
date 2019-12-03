@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DNP3.DNP3Functions;
 using ScadaCommon;
+using ScadaCommon.CRCCalculator;
 
 namespace DNP3.FunctionParameters
 {
@@ -17,22 +18,38 @@ namespace DNP3.FunctionParameters
         }
         public override byte[] PackRequest()
         {
-            byte[] dnp3Request = new byte[30];
+            byte[] dnp3Request = new byte[20];
 
-            Buffer.BlockCopy(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)CommandParameters.Start)), 0, dnp3Request, 0, 2);
-            Buffer.BlockCopy(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)CommandParameters.Length)), 0, dnp3Request, 2, 2);
-            dnp3Request[4] = CommandParameters.Control;
-            Buffer.BlockCopy(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)CommandParameters.Destination)), 0, dnp3Request, 5, 2);
-            Buffer.BlockCopy(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)CommandParameters.Source)), 0, dnp3Request, 7, 2);
-            Buffer.BlockCopy(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)CommandParameters.Crc)), 0, dnp3Request, 9, 2);
-            dnp3Request[11] = CommandParameters.TransportHeader;
-            dnp3Request[12] = CommandParameters.AplicationControl;
-            dnp3Request[13] = CommandParameters.FunctionCode;
-            Buffer.BlockCopy(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)CommandParameters.TypeField)), 0, dnp3Request, 14, 2);
-            dnp3Request[16] = CommandParameters.Qualifier;
-            Buffer.BlockCopy(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((int)CommandParameters.Range)), 0, dnp3Request, 17, 4);
-            Buffer.BlockCopy(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((int)CommandParameters.ObjectPrefix)), 0, dnp3Request, 21, 4);
-            Buffer.BlockCopy(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((int)CommandParameters.ObjectValue)), 0, dnp3Request, 25, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes((short)CommandParameters.Start), 0, dnp3Request, 0, 2);
+            dnp3Request[2] = 0x0d;
+            dnp3Request[3] = CommandParameters.Control;
+            Buffer.BlockCopy(BitConverter.GetBytes((short)CommandParameters.Destination), 0, dnp3Request, 4, 2);
+            Buffer.BlockCopy(BitConverter.GetBytes((short)CommandParameters.Source), 0, dnp3Request, 6, 2);
+
+            ushort crc = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                CRCCalculator.computeCRC(dnp3Request[i], ref crc);
+            }
+            crc = (ushort)(~crc);
+
+            Buffer.BlockCopy(BitConverter.GetBytes((short)crc), 0, dnp3Request, 8, 2);
+            dnp3Request[10] = CommandParameters.TransportHeader;
+            dnp3Request[11] = CommandParameters.AplicationControl;
+            dnp3Request[12] = CommandParameters.FunctionCode;
+            dnp3Request[13] = BitConverter.GetBytes((short)CommandParameters.TypeField)[1];
+            dnp3Request[14] = BitConverter.GetBytes((short)CommandParameters.TypeField)[0];
+            dnp3Request[15] = CommandParameters.Qualifier;
+            dnp3Request[16] = (byte)CommandParameters.Range;
+            dnp3Request[17] = (byte)CommandParameters.Range;
+
+            ushort crc2 = 0;
+            for (int i = 10; i < 18; i++)
+            {
+                CRCCalculator.computeCRC(dnp3Request[i], ref crc2);
+            }
+            crc2 = (ushort)(~crc2);
+            Buffer.BlockCopy(BitConverter.GetBytes(crc2), 0, dnp3Request, 18, 2);
 
             return dnp3Request;
         }

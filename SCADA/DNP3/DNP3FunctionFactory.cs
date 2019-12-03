@@ -26,8 +26,8 @@ namespace DNP3
                         case TypeField.ANALOG_OUTPUT_16BIT:
                             return new ReadAnalogOutputFunction(commandParameters);
 
-                        case TypeField.ANALOG_INPUT_16IT:
-                            return null;
+                        case TypeField.ANALOG_INPUT_16BIT:
+                            return new ReadAnalogInFunction(commandParameters);
 
                         case TypeField.COUNTER_16BIT:
                             return null;
@@ -49,7 +49,7 @@ namespace DNP3
                         case TypeField.ANALOG_OUTPUT_16BIT:
                             return new WriteAnalogOutputFunction(commandParameters);
 
-                        case TypeField.ANALOG_INPUT_16IT:
+                        case TypeField.ANALOG_INPUT_16BIT:
                             return null;
 
                         case TypeField.COUNTER_16BIT:
