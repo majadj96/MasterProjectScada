@@ -114,16 +114,16 @@ namespace ScadaCommon.Connection
 						{
 							this.connection.SendBytes(this.currentCommand.PackRequest());
 							byte[] message;
-							byte[] header = this.connection.RecvBytes(7);
-							int payLoadSize = 0;
+							byte[] header = this.connection.RecvBytes(10);
+							byte payLoadSize = 0;
 							unchecked
 							{
-								payLoadSize = IPAddress.NetworkToHostOrder((short)BitConverter.ToUInt16(header, 4));
+								payLoadSize = (byte)BitConverter.ToChar(header, 2);
 							}
-							byte[] payload = this.connection.RecvBytes(payLoadSize - 1);
+							byte[] payload = this.connection.RecvBytes((int)payLoadSize - 1);
 							message = new byte[header.Length + payload.Length];
-							Buffer.BlockCopy(header, 0, message, 0, 7);
-							Buffer.BlockCopy(payload, 0, message, 7, payload.Length);
+							Buffer.BlockCopy(header, 0, message, 0, 10);
+							Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
 							this.HandleReceivedBytes(message);
 							this.currentCommand = null;
 						}
