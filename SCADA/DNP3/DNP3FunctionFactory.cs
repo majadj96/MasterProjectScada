@@ -21,9 +21,9 @@ namespace DNP3
                             return new ReadDiscreteInFunction(commandParameters);
 
                         case TypeField.BINARY_OUTPUT_PACKED_FORMAT:
-                            return null;
+                            return new ReadDiscreteOutFunction(commandParameters);
 
-                        case TypeField.ANALOG_OUTPUT_16BIT:
+                        case TypeField.ANALOG_OUTPUT_STATUS_16BIT:
                             return new ReadAnalogOutputFunction(commandParameters);
 
                         case TypeField.ANALOG_INPUT_16BIT:
