@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modbus", "SCADA\Modbus\Modb
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SCADA", "SCADA", "{1D9DA43D-2ADC-40A1-AC9D-FAB36D0F77F2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{2197CCB6-F9DE-4D4F-819E-FA00B2BAB070}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
