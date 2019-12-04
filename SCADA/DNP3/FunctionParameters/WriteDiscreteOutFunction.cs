@@ -83,7 +83,12 @@ namespace DNP3.FunctionParameters
 
         public override Dictionary<Tuple<PointType, ushort>, ushort> ParseResponse(byte[] receivedBytes)
         {
-            throw new NotImplementedException();
+            DNP3ApplicationObjectParameters writeCommandParameters = CommandParameters;
+
+            Dictionary<Tuple<PointType, ushort>, ushort> dic = new Dictionary<Tuple<PointType, ushort>, ushort>();
+            dic.Add(new Tuple<PointType, ushort>(PointType.BINARY_OUTPUT, Convert.ToUInt16(writeCommandParameters.ObjectPrefix)), Convert.ToUInt16(writeCommandParameters.ObjectValue));
+
+            return dic;
         }
     }
 }
