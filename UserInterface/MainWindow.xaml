@@ -5,8 +5,117 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UserInterface"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="628" Width="1522">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="59*"/>
+            <ColumnDefinition Width="58*"/>
+            <ColumnDefinition Width="15*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="122*"/>
+            <RowDefinition Height="297*"/>
+        </Grid.RowDefinitions>
+        <DataGrid Margin="10,32,10,7" Grid.ColumnSpan="3"/>
+        <Button Content="X" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top" Width="29" Height="20"/>
+        <Button Content="Expand" Margin="6,0,10,0" Grid.Column="2" Grid.Row="1" Height="20" VerticalAlignment="Top"/>
+
+        <Canvas Margin="10,8,16,10" Background="#FFF1ABAB" Grid.Row="1">
+            <Line
+            X1="0" Y1="0"
+            X2="0" Y2="40"
+            Stroke="Yellow"
+            StrokeThickness="3" Grid.Row="1" Canvas.Left="110" Canvas.Top="11" />
+
+
+            <Line
+            X1="{Binding Line_1.X1, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding Line_1.Y1, UpdateSourceTrigger=PropertyChanged}"
+            X2="{Binding Line_1.X2, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding Line_1.Y2, UpdateSourceTrigger=PropertyChanged}"
+            Stroke="Black"
+            StrokeThickness="3" Grid.Row="1" Canvas.Left="110" Canvas.Top="90" />
+            <Ellipse
+        Fill="#99F0FFF0"
+        Height="35"
+        Width="35"
+        StrokeThickness="2"
+        Stroke="Black" Canvas.Left="93" Canvas.Top="210"/>
+            <Ellipse
+                Fill="#99F0FFF0"
+                Height="35"
+                Width="35"
+                StrokeThickness="2"
+                Stroke="Black" Canvas.Left="93" Canvas.Top="233"/>
+            <Ellipse
+                Fill="Black"
+                Height="6"
+                Width="6"
+                StrokeThickness="2"
+                Stroke="Black" Canvas.Left="107" Canvas.Top="125"/>
+            <Line
+            X1="0" Y1="0"
+            X2="0" Y2="40"
+            Stroke="Black"
+            Name="line_2"
+            StrokeThickness="3" Grid.Row="1" Canvas.Left="110" Canvas.Top="170" />
+            <Line
+            X1="0" Y1="0"
+            X2="0" Y2="40"
+            Stroke="Black"
+            Name="line_3"
+            StrokeThickness="3" Grid.Row="1" Canvas.Left="110" Canvas.Top="267" />
+            <Ellipse
+                Fill="Black"
+                Height="6"
+                Width="6"
+                StrokeThickness="2"
+                Stroke="Black" Canvas.Left="107" Canvas.Top="205"/>
+            <Ellipse
+                Fill="Black"
+                Height="6"
+                Width="6"
+                StrokeThickness="2"
+                Stroke="Black" Canvas.Left="107" Canvas.Top="45"/>
+            <Ellipse
+                Fill="Black"
+                Height="6"
+                Width="6"
+                StrokeThickness="2"
+                Stroke="Black" Canvas.Left="107" Canvas.Top="266"/>
+        </Canvas>
+        <Canvas Margin="17,8,3,10" Background="#FFC1F1AB" Grid.Column="1" Grid.Row="1">
+            <TextBox Name="statistics" Height="188" Canvas.Left="132" TextWrapping="Wrap" Text="Statistika" Canvas.Top="130" Width="320" Background="#33FFFFFF"/>
+        </Canvas>
+
+        <Line
+        X1="0" Y1="10"
+        X2="150" Y2="10"
+        Stroke="Black"
+        StrokeThickness="3" Margin="51,10,153,268" Grid.Row="1"/>
+
+        <Line
+        X1="20" Y1="0"
+        X2="0" Y2="40"
+        Stroke="Black"
+        Name="disconector"
+        StrokeThickness="3" Margin="120,59,529,325" Grid.Row="1" />
+
+        <Line
+            X1="20" Y1="0"
+            X2="0" Y2="40"
+            Stroke="Black"
+            Name="breaker"
+            StrokeThickness="3" Margin="120,138,530,245" Grid.Row="1" />
+
+
+
+        <Polygon
+        Points="0,0 60,0 60,50 0,50"
+        Stroke="Black" 
+        StrokeThickness="3" Canvas.Left="173" Canvas.Top="17" Margin="90,314,192,45" Grid.Row="1">
+            <Polygon.Fill>
+                <SolidColorBrush Color="Gray" Opacity="0.2"/>
+            </Polygon.Fill>
+        </Polygon>
+        <Label Content="AM" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="90,318,0,0" Grid.Row="1" VerticalAlignment="Top" Height="40" Width="58" FontFamily="Vijaya" FontSize="16"/>
     </Grid>
 </Window>
