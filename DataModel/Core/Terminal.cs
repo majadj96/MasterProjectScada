@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DataModel.Core
+{
+    public class Terminal : IdentifiedObject
+    {
+        public Terminal(string gID) : base(gID)
+        {
+        }
+    }
+}
