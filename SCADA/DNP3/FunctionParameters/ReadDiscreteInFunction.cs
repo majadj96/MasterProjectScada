@@ -11,9 +11,7 @@ namespace DNP3.FunctionParameters
 {
     public class ReadDiscreteInFunction : DNP3Functions
     {
-        public ReadDiscreteInFunction(DNP3ApplicationObjectParameters commandParameters) : base(commandParameters)
-        {
-        }
+        public ReadDiscreteInFunction(DNP3ApplicationObjectParameters commandParameters) : base(commandParameters) { }
 
         public override byte[] PackRequest()
         {

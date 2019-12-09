@@ -25,7 +25,7 @@ namespace DNP3.FunctionParameters
         /// <summary>
         /// Gets or sets the command parameters.
         /// </summary>
-		public DNP3ApplicationObjectParameters CommandParameters
+        public DNP3ApplicationObjectParameters CommandParameters
         {
             get
             {
