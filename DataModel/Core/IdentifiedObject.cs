@@ -8,12 +8,12 @@ namespace DataModel.Core
 {
     public class IdentifiedObject
     {
-        private string gID;
+        private long gID;
         private string mRID;
         private string name;
         private string description;
 
-        public IdentifiedObject(string gID)
+        public IdentifiedObject(long gID)
         {
             GID = gID;
         }
@@ -21,6 +21,6 @@ namespace DataModel.Core
         public string MRID { get => mRID; set => mRID = value; }
         public string Name { get => name; set => name = value; }
         public string Description { get => description; set => description = value; }
-        public string GID { get => gID; set => gID = value; }
+        public long GID { get => gID; set => gID = value; }
     }
 }

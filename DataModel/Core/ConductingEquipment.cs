@@ -8,8 +8,12 @@ namespace DataModel.Core
 {
     public class ConductingEquipment : Equipment
     {
-        public ConductingEquipment(string gID) : base(gID)
+        public ConductingEquipment(long gID) : base(gID)
         {
         }
+
+        private List<long> terminals = new List<long>();
+
+        public List<long> Terminals { get => terminals; set => terminals = value; }
     }
 }

@@ -8,8 +8,12 @@ namespace DataModel.Core
 {
     public class PowerSystemResource : IdentifiedObject
     {
-        public PowerSystemResource(string gID) : base(gID)
+        public PowerSystemResource(long gID) : base(gID)
         {
         }
+
+        private List<long> measurements = new List<long>();
+
+        public List<long> Measurements { get => measurements; set => measurements = value; }
     }
 }

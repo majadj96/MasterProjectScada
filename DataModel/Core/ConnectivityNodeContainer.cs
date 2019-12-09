@@ -8,8 +8,12 @@ namespace DataModel.Core
 {
     public class ConnectivityNodeContainer : PowerSystemResource
     {
-        public ConnectivityNodeContainer(string gID) : base(gID)
+        public ConnectivityNodeContainer(long gID) : base(gID)
         {
         }
+
+        private List<long> connectivityNodes = new List<long>();
+
+        public List<long> ConnectivityNodes { get => connectivityNodes; set => connectivityNodes = value; }
     }
 }

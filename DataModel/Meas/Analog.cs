@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataModel.Core
+namespace DataModel.Meas
 {
-    public class Substation : EquipmentContainer
+    public class Analog : Measurement
     {
-        public Substation(long gID) : base(gID)
+        public Analog(long gID) : base(gID)
         {
         }
     }

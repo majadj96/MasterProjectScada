@@ -8,8 +8,12 @@ namespace DataModel.Core
 {
     public class EquipmentContainer : ConnectivityNodeContainer
     {
-        public EquipmentContainer(string gID) : base(gID)
+        public EquipmentContainer(long gID) : base(gID)
         {
         }
+
+        private List<long> equipments = new List<long>();
+
+        public List<long> Equipments { get => equipments; set => equipments = value; }
     }
 }

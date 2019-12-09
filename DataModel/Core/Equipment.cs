@@ -8,8 +8,12 @@ namespace DataModel.Core
 {
     public class Equipment : PowerSystemResource
     {
-        public Equipment(string gID) : base(gID)
+        public Equipment(long gID) : base(gID)
         {
         }
+
+        private long equipmentContainer = 0;
+
+        public long EquipmentContainer { get => equipmentContainer; set => equipmentContainer = value; }
     }
 }
