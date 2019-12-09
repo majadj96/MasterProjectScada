@@ -20,7 +20,10 @@ namespace FrontEndProcessorService.ViewModel
 		private object lockObject = new object();
 		private Thread timerWorker;
 		private ConnectionState connectionState;
-		private Acquisitor acquisitor;
+        private IConnection connection;
+        private Acquisitor acquisitor;
+        private UnsolicitedMessageProcessor unsolicitedMessageProcessor;
+        private AutoResetEvent funcExecuteUnsolicitedSync = new AutoResetEvent(true);
 		private AutoResetEvent acquisitionTrigger = new AutoResetEvent(false);
 		private TimeSpan elapsedTime = new TimeSpan();
 		private Dispatcher dispather = Dispatcher.CurrentDispatcher;
@@ -103,16 +106,18 @@ namespace FrontEndProcessorService.ViewModel
 
 		public MainViewModel()
 		{
+			Thread.CurrentThread.Name = "Main Thread";
+			logBuilder = new StringBuilder();
 			configuration = new ConfigReader();
-			commandExecutor = new FunctionExecutor(this, configuration);
+            this.connection = new TCPConnection(this, configuration);
+            commandExecutor = new FunctionExecutor(this, configuration, funcExecuteUnsolicitedSync, connection);
             this.processingManager = new ProcessingManager(this, commandExecutor);
-			this.acquisitor = new Acquisitor(acquisitionTrigger, this.processingManager, this, configuration);
+            this.acquisitor = new Acquisitor(acquisitionTrigger, this.processingManager, this, configuration);
+            this.unsolicitedMessageProcessor = new UnsolicitedMessageProcessor(this, configuration, funcExecuteUnsolicitedSync, this.connection);
 			this.automationManager = new AutomationManager(this, processingManager);
 			InitializePointCollection();
 			InitializeAndStartThreads();
-			logBuilder = new StringBuilder();
-			ConnectionState = ConnectionState.DISCONNECTED;
-			Thread.CurrentThread.Name = "Main Thread";
+			ConnectionState = connection.ConnectionState;
 		}
 
 		#region Private methods
@@ -228,6 +233,7 @@ namespace FrontEndProcessorService.ViewModel
 			timerThreadStopSignal = false;
 			(commandExecutor as IDisposable).Dispose();
 			this.acquisitor.Dispose();
+            this.unsolicitedMessageProcessor.Dispose();
 			acquisitionTrigger.Dispose();
 			automationManager.Stop();
 		}

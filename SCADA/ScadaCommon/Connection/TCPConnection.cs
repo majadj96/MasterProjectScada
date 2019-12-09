@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
@@ -7,7 +8,7 @@ namespace ScadaCommon.Connection
     /// <summary>
     /// Class containing logic for establisshing tcp connections.
     /// </summary>
-    internal class TCPConnection : IConnection
+    public class TCPConnection : IConnection
 	{
 		private IStateUpdater stateUpdater;
 		private IPEndPoint remoteEP;
@@ -19,11 +20,12 @@ namespace ScadaCommon.Connection
         /// </summary>
         /// <param name="stateUpdater">The state updater.</param>
         /// <param name="configuration">The configuration.</param>
-		public TCPConnection(IStateUpdater stateUpdater, IConfiguration configuration)
+        public TCPConnection(IStateUpdater stateUpdater, IConfiguration configuration)
 		{
 			this.stateUpdater = stateUpdater;
 			this.configuration = configuration;
 			this.remoteEP = CreateRemoteEndpoint();
+            PrepairConnection();
 		}
 
         /// <inheritdoc />
@@ -43,6 +45,51 @@ namespace ScadaCommon.Connection
 				}
 			}
 		}
+
+        public void PrepairConnection()
+        {
+            try
+            {
+                int numberOfConnectionRetries = 0;
+                Connect();
+                while (numberOfConnectionRetries < 10)
+                {
+                    if (CheckState())
+                    {
+                        ConnectionState = ConnectionState.CONNECTED;
+                        this.stateUpdater.UpdateConnectionState(this.ConnectionState);
+                        numberOfConnectionRetries = 0;
+                        break;
+                    }
+                    else
+                    {
+                        numberOfConnectionRetries++;
+                        if (numberOfConnectionRetries == 10)
+                        {
+                            Disconnect();
+                            ConnectionState = ConnectionState.DISCONNECTED;
+                            this.stateUpdater.UpdateConnectionState(this.ConnectionState);
+                        }
+                    }
+                }
+            }
+            catch (SocketException se)
+            {
+                if (se.ErrorCode != 10054)
+                {
+                    throw se;
+                }
+                ConnectionState = ConnectionState.DISCONNECTED;
+                this.stateUpdater.UpdateConnectionState(ConnectionState.DISCONNECTED);
+                string message = $"{se.TargetSite.ReflectedType.Name}.{se.TargetSite.Name}: {se.Message}";
+                stateUpdater.LogMessage(message);
+            }
+            catch (Exception ex)
+            {
+                string message = $"{ex.TargetSite.ReflectedType.Name}.{ex.TargetSite.Name}: {ex.Message}";
+                stateUpdater.LogMessage(message);
+            }
+        }
 
         /// <inheritdoc />
         public void Disconnect()
@@ -110,5 +157,12 @@ namespace ScadaCommon.Connection
 		{
 			return this.socket.Poll(30000, SelectMode.SelectWrite);
 		}
-	}
+
+        public bool ReadReady()
+        {
+            return this.socket.Poll(1623, SelectMode.SelectRead);
+        }
+
+        public ConnectionState ConnectionState { get; set; } = ConnectionState.DISCONNECTED;
+    }
 }
