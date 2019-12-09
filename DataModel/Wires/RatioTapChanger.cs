@@ -8,7 +8,7 @@ namespace DataModel.Wires
 {
     public class RatioTapChanger : TapChanger
     {
-        public RatioTapChanger(string gID) : base(gID)
+        public RatioTapChanger(long gID) : base(gID)
         {
         }
     }

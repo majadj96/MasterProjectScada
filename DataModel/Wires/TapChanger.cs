@@ -13,7 +13,7 @@ namespace DataModel.Wires
         private int lowStep;
         private int normalStep;
 
-        public TapChanger(string gID) : base(gID)
+        public TapChanger(long gID) : base(gID)
         {
         }
 

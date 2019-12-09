@@ -9,7 +9,7 @@ namespace DataModel.Wires
 {
     public class TransformerWinding : ConductingEquipment
     {
-        public TransformerWinding(string gID) : base(gID)
+        public TransformerWinding(long gID) : base(gID)
         {
         }
     }

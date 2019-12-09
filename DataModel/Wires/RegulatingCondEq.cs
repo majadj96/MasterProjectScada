@@ -9,7 +9,7 @@ namespace DataModel.Wires
 {
     public class RegulatingCondEq : ConductingEquipment
     {
-        public RegulatingCondEq(string gID) : base(gID)
+        public RegulatingCondEq(long gID) : base(gID)
         {
         }
     }

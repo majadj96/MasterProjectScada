@@ -9,7 +9,7 @@ namespace DataModel.Wires
 {
     public class PowerTransformer : Equipment
     {
-        public PowerTransformer(string gID) : base(gID)
+        public PowerTransformer(long gID) : base(gID)
         {
         }
     }

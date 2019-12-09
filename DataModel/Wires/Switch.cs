@@ -9,7 +9,7 @@ namespace DataModel.Wires
 {
     public class Switch : ConductingEquipment
     {
-        public Switch(string gID) : base(gID)
+        public Switch(long gID) : base(gID)
         {
         }
     }

@@ -8,7 +8,7 @@ namespace DataModel.Wires
 {
     public class Disconnector : Switch
     {
-        public Disconnector(string gID) : base(gID)
+        public Disconnector(long gID) : base(gID)
         {
         }
     }

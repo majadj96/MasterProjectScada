@@ -8,7 +8,7 @@ namespace DataModel.Wires
 {
     public class ACLineSegment : Conductor
     {
-        public ACLineSegment(string gID) : base(gID)
+        public ACLineSegment(long gID) : base(gID)
         {
         }
     }

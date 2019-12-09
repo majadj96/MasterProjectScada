@@ -8,7 +8,7 @@ namespace DataModel.Wires
 {
     public class Breaker : ProtectedSwitch
     {
-        public Breaker(string gID) : base(gID)
+        public Breaker(long gID) : base(gID)
         {
         }
     }
