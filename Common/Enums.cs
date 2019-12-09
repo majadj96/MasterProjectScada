@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Common
 {
-    public enum SignalDirection
+    public enum SignalDirection : short
     {
 
         /// The signal is read from the field
@@ -19,142 +19,106 @@ namespace Common
         Write,
     }
 
-    public enum UnitMultiplier
+    public enum MeasurementType : short
     {
 
-        /// Centi 10**-2
-        c,
+        /// Active energy [kWh]
+        ActiveEnergy,
 
-        /// Deci 10**-1
-        d,
+        /// Active power [kW]
+        ActivePower,
 
-        /// Giga 10**9
-        G,
+        /// Admittance, conductance or susceptance [S]
+        Admittance,
 
-        /// Kilo 10**3
-        k,
+        /// Admittance, conductance or susceptance per unit length [S/km]
+        AdmittancePerLength,
 
-        /// Milli 10**-3
-        m,
+        /// Apparent power [kVA]
+        ApparentPower,
 
-        /// Mega 10**6
-        M,
+        /// Power angle (cos(phi))
+        CosPhi,
 
-        /// Micro 10**-6
-        micro,
+        /// CrossSection [mm<sup>2</sup>]
+        CrossSection,
 
-        /// Nano 10**-9
-        n,
+        /// Current [A]
+        Current,
 
-        none,
+        /// Current angle provided from fault recorder or IEDs. Default unit is degree.
+        CurrentAngle,
 
-        /// Pico 10**-12
-        p,
+        /// A discrete signal with a range of integer values
+        Discrete,
 
-        /// Tera 10**12
-        T,
-    }
+        /// Equivalent temperature [°C]
+        FeelsLike,
 
-    public enum UnitSymbol
-    {
+        /// Frequency
+        Frequency,
 
-        /// Current in ampere
-        A,
+        /// Relative humidity [%]
+        Humidity,
 
-        /// Plane angle in degrees
-        deg,
+        /// Impedance, resistance or reactance [&Omega;]
+        Impedance,
 
-        /// Capacitance in farad
-        F,
+        /// Impedance, resistance or reactance per unit length [&Omega;/km]
+        ImpedancePerLength,
 
-        /// Mass in gram
-        g,
+        /// Insolation [W/m<sup>2</sup>]
+        Insolation,
 
-        /// Time in hours
-        h,
+        /// Physical length [m]
+        Length,
 
-        /// Inductance in henry
-        H,
+        /// Money unit. The unit symbol is taken from system locale information.
+        Money,
 
-        /// Frequency in hertz
-        Hz,
+        /// A percentage value [%]
+        Percent,
 
-        /// per Hertz
-        HzMINUS1,
+        /// Reactive energy [kVArh]
+        ReactiveEnergy,
 
-        /// Energy in joule
-        J,
+        /// Reactive power [kVAr]
+        ReactivePower,
 
-        /// Joule per second
-        J_s,
+        /// Voltage expressed as relative value of base voltage. Default unit is %, other applicable units are p.u and base 120
+        RelativeVoltage,
 
-        /// Mass per energy
-        kg_J,
+        /// Speed of a rotational machine
+        RotationSpeed,
 
-        /// Length in meter
-        m,
+        /// Sky cover [%]
+        SkyCover,
 
-        /// Area in square meters
-        m2,
+        /// A discrete signal with on/off (true/false) value.
+        Status,
 
-        /// Volume in cubic meters
-        m3,
+        /// Sunshine minutes per hour [min]
+        SunshineMinutes,
 
-        /// Time in minutes
-        min,
+        /// A discrete signal describing switch status -- open/close/error/transit.
+        SwitchStatus,
 
-        /// Force in newton
-        N,
+        /// Temperature [°C]
+        Temperature,
 
-        /// Dimension less quantity, e.g. count, per unit, etc.
-        none,
+        /// Time [s]
+        Time,
 
-        /// Resistance in ohm
-        ohm,
+        /// Quantity which is unitless, or not otherwise in the list of supported types
+        Unitless,
 
-        /// Pressure in pascal (n/m2)
-        Pa,
+        /// Voltage [kV]
+        Voltage,
 
-        /// Plane angle in radians
-        rad,
+        /// Voltage angle. Typically, this is not a physical measurement but a pseudo-measurement imported from e.g. EMS estimator.
+        VoltageAngle,
 
-        /// Time in seconds
-        s,
-
-        /// Conductance in siemens
-        S,
-
-        /// per second
-        sMINUS1,
-
-        /// Relative temperature in degrees Celsius
-        DegC,
-
-        /// Voltage in volt
-        V,
-
-        /// Volt per volt ampere reactive
-        V_VAr,
-
-        /// Apparent energy in volt ampere hours
-        VAh,
-
-        /// Reactive power in volt ampere reactive
-        VAr,
-
-        /// Reactive energy in volt ampere reactive hours
-        VArh,
-
-        /// Active power in watt
-        W,
-
-        /// Watt per hertz
-        W_Hz,
-
-        /// Watt per second
-        W_s,
-
-        /// Real energy in what hours
-        Wh,
+        /// Wind speed [km/h]
+        WindSpeed,
     }
 }
