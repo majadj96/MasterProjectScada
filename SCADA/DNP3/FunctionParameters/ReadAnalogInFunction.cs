@@ -56,7 +56,18 @@ namespace DNP3.FunctionParameters
 
         public override Dictionary<Tuple<PointType, ushort>, ushort> ParseResponse(byte[] receivedBytes)
         {
-            throw new NotImplementedException();
+            Dictionary<Tuple<PointType, ushort>, ushort> dic = new Dictionary<Tuple<PointType, ushort>, ushort>();
+
+            ushort address = 0;
+            if (receivedBytes[18] == receivedBytes[19])
+                address = BitConverter.ToUInt16(new byte[2] { receivedBytes[18], 0x00 }, 0);
+            else
+                address = BitConverter.ToUInt16(new byte[2] { receivedBytes[19], receivedBytes[18] }, 0);
+
+            ushort value = BitConverter.ToUInt16(new byte[2] { receivedBytes[20], receivedBytes[21] }, 0);
+            dic.Add(new Tuple<PointType, ushort>(PointType.ANALOG_INPUT_16, address), value);
+
+            return dic;
         }
     }
 }
