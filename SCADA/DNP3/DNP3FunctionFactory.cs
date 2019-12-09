@@ -32,6 +32,9 @@ namespace DNP3
                         case TypeField.COUNTER_16BIT:
                             return null;
 
+                        case TypeField.CLASS_0_DATA:
+                            return new ReadClass0DataFunction(commandParameters);
+
                         default:
                             return null;
                     }
@@ -40,18 +43,12 @@ namespace DNP3
                 case DNP3FunctionCode.WRITE:
                     switch ((TypeField)commandParameters.TypeField)
                     {
-                        case TypeField.BINARY_INPUT_PACKED_FORMAT:
-                            return null;
-
                         case TypeField.BINARY_COMMAND:
                             return new WriteDiscreteOutFunction(commandParameters);
 
                         case TypeField.ANALOG_OUTPUT_16BIT:
                             return new WriteAnalogOutputFunction(commandParameters);
-
-                        case TypeField.ANALOG_INPUT_16BIT:
-                            return null;
-
+                            
                         case TypeField.COUNTER_16BIT:
                             return null;
 
