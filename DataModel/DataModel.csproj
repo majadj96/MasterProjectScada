@@ -56,6 +56,17 @@
     <Compile Include="TDMS\AsynchronousMachine.cs" />
     <Compile Include="TDMS\FeederObject.cs" />
     <Compile Include="Topology\ConnectivityNode.cs" />
+    <Compile Include="Wires\ACLineSegment.cs" />
+    <Compile Include="Wires\Breaker.cs" />
+    <Compile Include="Wires\Conductor.cs" />
+    <Compile Include="Wires\Disconnector.cs" />
+    <Compile Include="Wires\PowerTransformer.cs" />
+    <Compile Include="Wires\ProtectedSwitch.cs" />
+    <Compile Include="Wires\RatioTapChanger.cs" />
+    <Compile Include="Wires\RegulatingCondEq.cs" />
+    <Compile Include="Wires\Switch.cs" />
+    <Compile Include="Wires\TapChanger.cs" />
+    <Compile Include="Wires\TransformerWinding.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
