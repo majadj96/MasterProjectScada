@@ -1,4 +1,4 @@
-﻿namespace ScadaCommon
+﻿namespace ScadaCommon.Interfaces
 {
     /// <summary>
     /// Interface containing logic for processing points and executing commands.
@@ -32,5 +32,10 @@
         /// <param name="startAddress">The start address.</param>
         /// <param name="numberOfPoints">The number of points that should be read.</param>
         void ExecuteReadCommand(IConfigItem configItem, ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints);
+
+        /// <summary>
+        /// Send byte array message
+        /// </summary>
+        void SendRawBytesMessage(IDNP3Functions message);
     }
 }

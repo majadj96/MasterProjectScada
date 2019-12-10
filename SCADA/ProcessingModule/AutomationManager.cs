@@ -1,4 +1,4 @@
-﻿using ScadaCommon;
+﻿using ScadaCommon.Interfaces;
 using System;
 using System.Threading;
 

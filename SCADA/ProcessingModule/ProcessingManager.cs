@@ -223,5 +223,10 @@ namespace ProcessingModule
                 ProcessDigitalPoint(points.First() as IDigitalPoint, defaultValue);
             }
         }
+
+        public void SendRawBytesMessage(IDNP3Functions message)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

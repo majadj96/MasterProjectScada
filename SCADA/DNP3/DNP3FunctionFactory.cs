@@ -59,5 +59,10 @@ namespace DNP3
                     return null;
             }
         }
+
+        public static IDNP3Functions CreateDNP3Message(DNP3ApplicationObjectParameters commandParameters)
+        {
+            return null;
+        }
     }
 }

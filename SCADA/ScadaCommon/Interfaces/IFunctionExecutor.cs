@@ -1,6 +1,6 @@
 ﻿using ScadaCommon.Interfaces;
 
-namespace ScadaCommon
+namespace ScadaCommon.Interfaces
 {
     /// <summary>
     /// Delegate used for processing update point events.
@@ -25,5 +25,7 @@ namespace ScadaCommon
         /// Occurs when a point is received.
         /// </summary>
 		event UpdatePointDelegate UpdatePointEvent;
+
+        void SendMessage(IDNP3Functions message);
 	}
 }

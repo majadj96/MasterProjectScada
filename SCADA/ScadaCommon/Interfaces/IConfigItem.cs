@@ -1,4 +1,4 @@
-﻿namespace ScadaCommon
+﻿namespace ScadaCommon.Interfaces
 {
     /// <summary>
     /// Interface containing properties of the configuration.

@@ -1,4 +1,6 @@
-﻿namespace ScadaCommon
+﻿using ScadaCommon.Interfaces;
+
+namespace ScadaCommon
 {
     /// <summary>
     /// Helper class that converts the pointidentifier to integer.
