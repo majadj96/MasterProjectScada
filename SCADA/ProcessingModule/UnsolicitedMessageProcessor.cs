@@ -1,5 +1,6 @@
 ﻿using ScadaCommon;
 using ScadaCommon.Connection;
+using ScadaCommon.Interfaces;
 using System;
 using System.Threading;
 
@@ -77,6 +78,7 @@ namespace ProcessingModule
                 Buffer.BlockCopy(header, 0, message, 0, 10);
                 Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
                 stateUpdater.LogMessage(message.ToString());
+
                 funcExecuteUnsolicitedSync.Set();
                 Thread.Sleep(300);
             }

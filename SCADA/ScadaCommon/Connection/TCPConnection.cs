@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScadaCommon.Interfaces;
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;

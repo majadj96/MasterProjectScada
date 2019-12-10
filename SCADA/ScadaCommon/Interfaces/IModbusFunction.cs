@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ScadaCommon
+namespace ScadaCommon.Interfaces
 {
     /// <summary>
     /// Interface containing logic for parsing and packing modbus functions/requests.

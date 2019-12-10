@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ScadaCommon
+namespace ScadaCommon.Interfaces
 {
     /// <summary>
     /// Structure representing the point identifier

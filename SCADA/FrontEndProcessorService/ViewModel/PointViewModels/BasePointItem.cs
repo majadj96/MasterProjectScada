@@ -3,6 +3,7 @@ using FrontEndProcessorService.Utils;
 using System;
 using System.ComponentModel;
 using System.Windows.Threading;
+using ScadaCommon.Interfaces;
 
 namespace FrontEndProcessorService.ViewModel
 {

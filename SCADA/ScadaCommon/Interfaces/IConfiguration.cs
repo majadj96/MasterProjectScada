@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ScadaCommon
+namespace ScadaCommon.Interfaces
 {
     public interface IConfiguration
 	{

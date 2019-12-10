@@ -1,4 +1,5 @@
 ﻿using DNP3.DNP3Functions;
+using ScadaCommon.Interfaces;
 using ScadaCommon;
 using System;
 using System.Threading;
@@ -51,7 +52,7 @@ namespace ProcessingModule
         /// </summary>
 		private void StartAcquisitionThread()
 		{
-			acquisitionWorker.Start();
+			//acquisitionWorker.Start();
 		}
 
         /// <summary>

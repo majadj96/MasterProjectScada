@@ -1,6 +1,7 @@
 ﻿using ScadaCommon;
 using Modbus.FunctionParameters;
 using Modbus.ModbusFunctions;
+using ScadaCommon.Interfaces;
 
 namespace Modbus
 {

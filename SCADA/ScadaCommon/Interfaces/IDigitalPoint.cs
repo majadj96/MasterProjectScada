@@ -1,4 +1,4 @@
-﻿namespace ScadaCommon
+﻿namespace ScadaCommon.Interfaces
 {
     /// <summary>
     /// Interface representing digital point specific values.

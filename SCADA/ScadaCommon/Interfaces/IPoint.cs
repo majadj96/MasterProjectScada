@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ScadaCommon
+namespace ScadaCommon.Interfaces
 {
     /// <summary>
     /// Interface representing a point.

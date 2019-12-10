@@ -1,4 +1,5 @@
-﻿using ScadaCommon;
+﻿using ScadaCommon.Interfaces;
+using ScadaCommon;
 
 namespace FrontEndProcessorService.ViewModel
 {

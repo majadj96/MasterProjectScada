@@ -141,11 +141,16 @@ namespace ScadaCommon.Connection
 				}
 			}
 		}
+        public void SendMessage(IDNP3Functions message)
+        {
+            this.connection.SendBytes(message.PackRequest());
+        }
 
         /// <inheritdoc />
         public void Dispose()
 		{
 			connectionProcessorThread.Abort();
 		}
-	}
+
+    }
 }

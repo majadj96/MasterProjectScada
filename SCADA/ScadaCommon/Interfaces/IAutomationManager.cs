@@ -1,4 +1,4 @@
-﻿namespace ScadaCommon
+﻿namespace ScadaCommon.Interfaces
 {
     /// <summary>
     /// Interface containing methods for starting and stopping the automation manager.
