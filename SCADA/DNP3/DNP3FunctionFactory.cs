@@ -62,7 +62,13 @@ namespace DNP3
 
         public static IDNP3Functions CreateDNP3Message(DNP3ApplicationObjectParameters commandParameters)
         {
-            return null;
+            switch ((DNP3FunctionCode)commandParameters.FunctionCode)
+            {
+                case DNP3FunctionCode.CONFIRM:
+                    return new SendConfirmMessage(commandParameters);
+                default:
+                    return null;
+            }
         }
     }
 }
