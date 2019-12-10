@@ -51,6 +51,7 @@
     <Compile Include="FunctionParameters\ReadDiscreteInFunction.cs" />
     <Compile Include="FunctionParameters\ReadDiscreteOutFunction.cs" />
     <Compile Include="FunctionParameters\SendConfirmMessage.cs" />
+    <Compile Include="FunctionParameters\TimeMessage.cs" />
     <Compile Include="FunctionParameters\WriteAnalogOutputFunction.cs" />
     <Compile Include="FunctionParameters\ReadAnalogInFunction.cs" />
     <Compile Include="FunctionParameters\WriteDiscreteOutFunction.cs" />

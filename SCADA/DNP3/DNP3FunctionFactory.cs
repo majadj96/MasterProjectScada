@@ -10,7 +10,6 @@ namespace DNP3
     {
         public static IDNP3Functions CreateDNP3Function(DNP3ApplicationObjectParameters commandParameters)
         {
-            //TODO
             //Ovde se vracaju konkretne funkcije (klase) sto nasledjuju ovaj interfejs i u njima je popunjen niz bajtova...
             switch ((DNP3FunctionCode)commandParameters.FunctionCode)
             {
@@ -66,6 +65,13 @@ namespace DNP3
             {
                 case DNP3FunctionCode.CONFIRM:
                     return new SendConfirmMessage(commandParameters);
+				case DNP3FunctionCode.WRITE:
+                    return new TimeMessage(commandParameters);
+
+                case DNP3FunctionCode.COLD_RESTART:
+                case DNP3FunctionCode.WARM_RESTART:
+                    return null;
+
                 default:
                     return null;
             }
