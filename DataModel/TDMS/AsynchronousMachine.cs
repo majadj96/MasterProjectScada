@@ -1,4 +1,6 @@
-﻿using DataModel.Wires;
+﻿using Common;
+using Common.GDA;
+using DataModel.Wires;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +20,70 @@ namespace DataModel.TDMS
 
         public float CosPhi { get => cosPhi; set => cosPhi = value; }
         public float RatedP { get => ratedP; set => ratedP = value; }
+
+        public override bool Equals(object obj)
+        {
+            if (base.Equals(obj))
+            {
+                AsynchronousMachine x = (AsynchronousMachine)obj;
+                return ((x.cosPhi == this.cosPhi) && (x.ratedP == this.ratedP));
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        #region IAccess
+        public override bool HasProperty(ModelCode property)
+        {
+            switch (property)
+            {
+                case ModelCode.ASYNCMACHINE_COSPHI:
+                case ModelCode.ASYNCMACHINE_RATEDP:
+                    return true;
+
+                default:
+                    return base.HasProperty(property);
+            }
+        }
+        public override void GetProperty(Property property)
+        {
+            switch (property.Id)
+            {
+                case ModelCode.ASYNCMACHINE_COSPHI:
+                    property.SetValue(cosPhi);
+                    break;
+                case ModelCode.ASYNCMACHINE_RATEDP:
+                    property.SetValue(ratedP);
+                    break;
+
+                default:
+                    base.GetProperty(property.Id);
+                    break;
+            }
+        }
+        public override void SetProperty(Property property)
+        {
+            switch (property.Id)
+            {
+                case ModelCode.ASYNCMACHINE_COSPHI:
+                    cosPhi = property.AsFloat();
+                    break;
+                case ModelCode.ASYNCMACHINE_RATEDP:
+                    ratedP = property.AsFloat();
+                    break;
+
+                default:
+                    base.SetProperty(property);
+                    break;
+            }
+        }
+        #endregion
     }
 }
