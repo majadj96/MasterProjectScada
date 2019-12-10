@@ -60,59 +60,23 @@ namespace ProcessingModule
 		private void Acquisition_DoWork()
 		{
             //Class 0
-            //try
-            //{
-            //    int cnt = 0;
-            //    bool state = false;
-
-            //    while (true)
-            //    {
-            //        state = acquisitionTrigger.WaitOne();
-
-            //        if (cnt < configuration.GetAcquisitionInterval("DigOut") && state)
-            //            cnt++;
-
-            //        if (cnt == configuration.GetAcquisitionInterval("DigOut"))
-            //        {
-            //            processingManager.ExecuteReadCommand(configuration.GetConfigurationItems()[configuration.GetConfigurationItems().Count - 1], 0x00, 0, 0x00, 0x00);
-
-            //            cnt = 0;
-            //        }
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    string message = $"{ex.TargetSite.ReflectedType.Name}.{ex.TargetSite.Name}: {ex.Message}";
-            //    stateUpdater.LogMessage(message);
-            //}
-            bool state = false;
             try
             {
-                List<IConfigItem> lista = configuration.GetConfigurationItems();
-                int listaCount = lista.Count;
-                List<int> cnt = new List<int>(lista.Count);
-                for (int i = 0; i < listaCount; i++)
-                {
-                    cnt.Add(0);
-                }
+                int cnt = 0;
+                bool state = false;
 
                 while (true)
                 {
                     state = acquisitionTrigger.WaitOne();
 
-                    for (int brojac = 0; brojac < listaCount; brojac++)
+                    if (cnt < configuration.GetAcquisitionInterval("DigOut") && state)
+                        cnt++;
+
+                    if (cnt == configuration.GetAcquisitionInterval("DigOut"))
                     {
-                        if (lista[brojac].RegistryType == PointType.DIGITAL_OUTPUT)
-                            ReadRegisters(lista, state, brojac, cnt);
+                        processingManager.ExecuteReadCommand(configuration.GetConfigurationItems()[configuration.GetConfigurationItems().Count - 1], 0x00, 0, 0x00, 0x00);
 
-                        if (lista[brojac].RegistryType == PointType.ANALOG_OUTPUT)
-                            ReadRegisters(lista, state, brojac, cnt);
-
-                        if (lista[brojac].RegistryType == PointType.DIGITAL_INPUT)
-                            ReadRegisters(lista, state, brojac, cnt);
-
-                        if (lista[brojac].RegistryType == PointType.ANALOG_INPUT)
-                            ReadRegisters(lista, state, brojac, cnt);
+                        cnt = 0;
                     }
                 }
             }
@@ -120,20 +84,6 @@ namespace ProcessingModule
             {
                 string message = $"{ex.TargetSite.ReflectedType.Name}.{ex.TargetSite.Name}: {ex.Message}";
                 stateUpdater.LogMessage(message);
-            }
-        }
-
-        private void ReadRegisters(List<IConfigItem> lista, bool state, int brojac, List<int> cnt)
-        {
-            if (cnt[brojac] != lista[brojac].AcquisitionInterval && state)
-                cnt[brojac]++;
-            if (cnt[brojac] == lista[brojac].AcquisitionInterval)
-            {
-                for (int i = 0; i < lista[brojac].NumberOfRegisters; i++)
-                {
-                    this.processingManager.ExecuteReadCommand(lista[brojac], 0x00, 0x00, (ushort)i, 0x00);
-                }
-                cnt[brojac] = 0;
             }
         }
         
