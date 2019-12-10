@@ -224,9 +224,24 @@ namespace ProcessingModule
             }
         }
 
-        public void SendRawBytesMessage(IDNP3Functions message)
+        public void SendRawBytesMessage(DNP3FunctionCode functionCode, byte[] message)
         {
-            throw new NotImplementedException();
+            if (functionCode == DNP3FunctionCode.CONFIRM)
+            {
+
+            }
+            else if (functionCode == DNP3FunctionCode.WRITE)
+            {
+                byte app = message[11];
+                                                                                //0xc0 - apl cont, function code,                      type field,        qualf|range|obj pref|obj value|start|lenght|control|dest  |sourc|transport header
+                DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(app, (byte)DNP3FunctionCode.WRITE, (ushort)TypeField.TIME_MESSAGE, 0x07, 0x0001, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc0);
+                IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Message(p);
+                this.functionExecutor.SendMessage(fn);
+            }
+            else
+            {
+
+            }
         }
     }
 }

@@ -57,6 +57,7 @@
         FLOATING_POINT_OUTPUT_EVENT_32BIT = 0x2a07,
         COUNTER_CHANGE_EVENT_16BIT = 0x1602,
         CLASS_0_DATA = 0x3c01,
+        TIME_MESSAGE = 0x3201
     };
 
     public enum DNP3FunctionCode : short

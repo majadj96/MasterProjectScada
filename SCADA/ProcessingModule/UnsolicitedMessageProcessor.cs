@@ -14,13 +14,15 @@ namespace ProcessingModule
         private AutoResetEvent funcExecuteUnsolicitedSync;
         private bool threadCancellationSignal = true;
         private IConnection connection;
+        private IProcessingManager processingManager;
 
-        public UnsolicitedMessageProcessor(IStateUpdater stateUpdater, IConfiguration configuration, AutoResetEvent funcExecuteUnsolicitedSync, IConnection connection)
+        public UnsolicitedMessageProcessor(IStateUpdater stateUpdater, IConfiguration configuration, AutoResetEvent funcExecuteUnsolicitedSync, IConnection connection, IProcessingManager processingManager)
         {
             this.connection = connection;
             this.stateUpdater = stateUpdater;
             this.configuration = configuration;
             this.funcExecuteUnsolicitedSync = funcExecuteUnsolicitedSync;
+            this.processingManager = processingManager;
             InitializeUnsolicitedThread();
             StartUnsolicitedThread();
         }
@@ -79,13 +81,41 @@ namespace ProcessingModule
                 Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
                 stateUpdater.LogMessage(message.ToString());
 
+                CheckUnsMessage(message);
+                
                 funcExecuteUnsolicitedSync.Set();
                 Thread.Sleep(300);
             }
         }
+
         public void Dispose()
         {
             this.unsolicitedProcessor.Abort();
+        }
+
+        private void CheckUnsMessage(byte[] messageByte)
+        {
+            //CONFIRM
+            byte mask = 0x20;
+            byte confirmRestartTime = (byte)((messageByte[11] & mask) >> 5);
+            if(confirmRestartTime == 1)
+            {
+                this.processingManager.SendRawBytesMessage(DNP3FunctionCode.CONFIRM, messageByte);
+            }
+            //RESTART
+            mask = 0x80;
+            confirmRestartTime = (byte)((messageByte[13] & mask) >> 7);
+            if (confirmRestartTime == 1)
+            {
+                this.processingManager.SendRawBytesMessage(DNP3FunctionCode.WARM_RESTART, messageByte);
+            }
+            //TIME SYNC
+            mask = 0x10;
+            confirmRestartTime = (byte)((messageByte[13] & mask) >> 4);
+            if (confirmRestartTime == 1)
+            {
+                this.processingManager.SendRawBytesMessage(DNP3FunctionCode.WRITE, messageByte);
+            }
         }
     }
 }

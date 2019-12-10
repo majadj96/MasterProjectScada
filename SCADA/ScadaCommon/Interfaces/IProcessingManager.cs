@@ -36,6 +36,6 @@
         /// <summary>
         /// Send byte array message
         /// </summary>
-        void SendRawBytesMessage(IDNP3Functions message);
+        void SendRawBytesMessage(DNP3FunctionCode functionCode, byte[] message);
     }
 }
