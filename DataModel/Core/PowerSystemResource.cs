@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
+using Common.GDA;
 
 namespace DataModel.Core
 {
@@ -15,5 +17,82 @@ namespace DataModel.Core
         private List<long> measurements = new List<long>();
 
         public List<long> Measurements { get => measurements; set => measurements = value; }
+
+        public override bool Equals(object x)
+        {
+            return base.Equals(x);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        #region IAccess implementation
+
+        public override bool HasProperty(ModelCode property)
+        {
+            switch (property)
+            {
+                case ModelCode.PSR_MEASUREMENTS:
+                    return true;
+
+                default:
+                    return base.HasProperty(property);
+            }
+        }
+
+        public override void GetProperty(Property property)
+        {
+            switch (property.Id)
+            {
+                case ModelCode.PSR_MEASUREMENTS:
+                    property.SetValue(measurements);
+                    break;
+
+                default:
+                    base.GetProperty(property);
+                    break;
+            }
+        }
+
+        public override void SetProperty(Property property)
+        {
+            base.SetProperty(property);
+        }
+
+        #endregion
+
+        #region IReference implementation
+
+        public override bool IsReferenced
+        {
+            get
+            {
+                return measurements.Count != 0 || base.IsReferenced;
+            }
+        }
+
+        public override void GetReferences(Dictionary<ModelCode, List<long>> references, TypeOfReference refType)
+        {
+            if (measurements != null && measurements.Count != 0 && (refType == TypeOfReference.Target || refType == TypeOfReference.Both))
+            {
+                references[ModelCode.PSR_MEASUREMENTS] = measurements.GetRange(0, measurements.Count);
+            }
+
+            base.GetReferences(references, refType);
+        }
+
+        public override void AddReference(ModelCode referenceId, long globalId)
+        {
+            base.AddReference(referenceId, globalId);
+        }
+
+        public override void RemoveReference(ModelCode referenceId, long globalId)
+        {
+            base.RemoveReference(referenceId, globalId);
+        }
+
+        #endregion
     }
 }

@@ -46,6 +46,7 @@ namespace Common
         TERMINAL                    = 0x12000000000c0000,
         TERMINAL_CONNNODE           = 0x12000000000c0109,
         TERMINAL_MEASUREMENTS       = 0x12000000000c0219,
+        TERMINAL_CONDEQUIPMENT      = 0x12000000000c0309,
 
         CONDUCTOR                   = 0x1111100000000000,
 
