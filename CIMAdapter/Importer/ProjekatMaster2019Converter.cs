@@ -16,7 +16,7 @@
         {
             if ((cimConductor != null) && (rd != null))
             {
-                //ProjekatMaster2019Converter.PopulateConductingEquipmentProperties(cimConductor, rd, importHelper, report);                
+                ProjekatMaster2019Converter.PopulateConductingEquipmentProperties(cimConductor, rd, importHelper, report);                
             }
         }
 
@@ -40,7 +40,7 @@
         {
             if ((cimPowerTransformer != null) && (rd != null))
             {
-                //ProjekatMaster2019Converter.PopulateEquipmentProperties(cimPowerTransformer, rd, importHelper, report);
+                ProjekatMaster2019Converter.PopulateEquipmentProperties(cimPowerTransformer, rd, importHelper, report);
             }
         }
 
@@ -177,7 +177,7 @@
         {
             if ((cimRegulatingCondEq != null) && (rd != null))
             {
-                //ProjekatMaster2019Converter.PopulateConductingEquipmentProperties(cimRegulatingCondEq, rd, importHelper, report);
+                ProjekatMaster2019Converter.PopulateConductingEquipmentProperties(cimRegulatingCondEq, rd, importHelper, report);
             }
         }
 
@@ -185,7 +185,7 @@
         {
             if ((cimSwitch != null) && (rd != null))
             {
-                //ProjekatMaster2019Converter.PopulateConductingEquipmentProperties(cimSwitch, rd, importHelper, report);
+                ProjekatMaster2019Converter.PopulateConductingEquipmentProperties(cimSwitch, rd, importHelper, report);
             }
         }
 
@@ -193,7 +193,7 @@
         {
             if ((cimTapChanger != null) && (rd != null))
             {
-                //ProjekatMaster2019Converter.PopulatePowerSystemResourceProperties(cimTapChanger, rd, importHelper, report);
+                ProjekatMaster2019Converter.PopulatePowerSystemResourceProperties(cimTapChanger, rd, importHelper, report);
 
                 if (cimTapChanger.HighStepHasValue)
                 {
@@ -214,7 +214,7 @@
         {
             if ((cimTransformerWinding != null) && (rd != null))
             {
-                //ProjekatMaster2019Converter.PopulateConductingEquipmentProperties(cimTransformerWinding, rd, importHelper, report);
+                ProjekatMaster2019Converter.PopulateConductingEquipmentProperties(cimTransformerWinding, rd, importHelper, report);
 
                 if (cimTransformerWinding.PowerTransformerHasValue)
                 {
@@ -286,6 +286,14 @@
                         report.Report.Append("\" - Failed to set reference to PowerSystemResource: rdfID \"").Append(cimMeasurement.PowerSystemResource.ID).AppendLine(" \" is not mapped to GID!");
                     }
                     rd.AddProperty(new Property(ModelCode.MEASUREMENT_PSR, gid));
+                }
+                if (cimMeasurement.DirectionHasValue)
+                {
+                    rd.AddProperty(new Property(ModelCode.MEASUREMENT_DIRECTION, (short)GetDMSSignalDirection((SignalDirection)cimMeasurement.Direction)));
+                }
+                if (cimMeasurement.MeasurementTypeHasValue)
+                {
+                    rd.AddProperty(new Property(ModelCode.MEASUREMENT_MEASTYPE, (short)GetDMSMeasurementType((MeasurementType)cimMeasurement.MeasurementType)));
                 }
             }
         }
