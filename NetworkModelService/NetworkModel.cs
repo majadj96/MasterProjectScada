@@ -130,7 +130,7 @@ namespace NetworkModelService
                 foreach (ModelCode propId in properties)
                 {
                     property = new Property(propId);
-                    //io.GetProperty(property); TODO
+                    io.GetProperty(property);
                     rd.AddProperty(property);
                 }
 
@@ -359,14 +359,14 @@ namespace NetworkModelService
 
                                 // get referenced entity for update
                                 IdentifiedObject targetEntity = GetEntity(targetGlobalId);
-                                //targetEntity.AddReference(property.Id, io.GlobalId); TODO
+                                targetEntity.AddReference(property.Id, io.GID);
                             }
 
-                            //io.SetProperty(property); TODO
+                            io.SetProperty(property);
                         }
                         else
                         {
-                            //io.SetProperty(property); TODO
+                            io.SetProperty(property);
                         }
                     }
                 }
@@ -409,42 +409,42 @@ namespace NetworkModelService
                 IdentifiedObject io = GetEntity(globalId);
 
                 // updating properties of entity
-                //foreach (Property property in rd.Properties)
-                //{
-                //    if (property.Type == PropertyType.Reference)
-                //    {
-                //        long oldTargetGlobalId = io.GetProperty(property.Id).AsReference();
+                foreach (Property property in rd.Properties)
+                {
+                    if (property.Type == PropertyType.Reference)
+                    {
+                        long oldTargetGlobalId = io.GetProperty(property.Id).AsReference();
 
-                //        if (oldTargetGlobalId != 0)
-                //        {
-                //            IdentifiedObject oldTargetEntity = GetEntity(oldTargetGlobalId);
-                //            oldTargetEntity.RemoveReference(property.Id, globalId);
-                //        }
+                        if (oldTargetGlobalId != 0)
+                        {
+                            IdentifiedObject oldTargetEntity = GetEntity(oldTargetGlobalId);
+                            oldTargetEntity.RemoveReference(property.Id, globalId);
+                        }
 
-                //        // updating reference of entity
-                //        long targetGlobalId = property.AsReference();
+                        // updating reference of entity
+                        long targetGlobalId = property.AsReference();
 
-                //        if (targetGlobalId != 0)
-                //        {
-                //            if (!EntityExists(targetGlobalId))
-                //            {
-                //                string message = string.Format("Failed to get target entity with GID: 0x{0:X16}.", targetGlobalId);
-                //                throw new Exception(message);
-                //            }
+                        if (targetGlobalId != 0)
+                        {
+                            if (!EntityExists(targetGlobalId))
+                            {
+                                string message = string.Format("Failed to get target entity with GID: 0x{0:X16}.", targetGlobalId);
+                                throw new Exception(message);
+                            }
 
-                //            IdentifiedObject targetEntity = GetEntity(targetGlobalId);
-                //            targetEntity.AddReference(property.Id, globalId);
-                //        }
+                            IdentifiedObject targetEntity = GetEntity(targetGlobalId);
+                            targetEntity.AddReference(property.Id, globalId);
+                        }
 
-                //        // update value of the property in specified entity
-                //        io.SetProperty(property);
-                //    }
-                //    else
-                //    {
-                //        // update value of the property in specified entity
-                //        io.SetProperty(property);
-                //    }
-                //} TODO
+                        // update value of the property in specified entity
+                        io.SetProperty(property);
+                    }
+                    else
+                    {
+                        // update value of the property in specified entity
+                        io.SetProperty(property);
+                    }
+                }
 
                 CommonTrace.WriteTrace(CommonTrace.TraceVerbose, "Updating entity with GID ({0:x16}) successfully finished.", globalId);
             }
@@ -486,58 +486,59 @@ namespace NetworkModelService
                 IdentifiedObject io = GetEntity(globalId);
 
                 // check if entity could be deleted (if it is not referenced by any other entity)
-                //if (io.IsReferenced)
-                //{
-                //    Dictionary<ModelCode, List<long>> references = new Dictionary<ModelCode, List<long>>();
-                //    io.GetReferences(references, TypeOfReference.Target);
+                if (io.IsReferenced)
+                {
+                    Dictionary<ModelCode, List<long>> references = new Dictionary<ModelCode, List<long>>();
+                    io.GetReferences(references, TypeOfReference.Target);
 
-                //    StringBuilder sb = new StringBuilder();
+                    StringBuilder sb = new StringBuilder();
 
-                //    foreach (KeyValuePair<ModelCode, List<long>> kvp in references)
-                //    {
-                //        foreach (long referenceGlobalId in kvp.Value)
-                //        {
-                //            sb.AppendFormat("0x{0:x16}, ", referenceGlobalId);
-                //        }
-                //    }
+                    foreach (KeyValuePair<ModelCode, List<long>> kvp in references)
+                    {
+                        foreach (long referenceGlobalId in kvp.Value)
+                        {
+                            sb.AppendFormat("0x{0:x16}, ", referenceGlobalId);
+                        }
+                    }
 
-                //    string message = String.Format("Failed to delete entity (GID = 0x{0:x16}) because it is referenced by entities with GIDs: {1}.", globalId, sb.ToString());
-                //    CommonTrace.WriteTrace(CommonTrace.TraceError, message);
-                //    throw new Exception(message);
-                //} TODO
+                    string message = String.Format("Failed to delete entity (GID = 0x{0:x16}) because it is referenced by entities with GIDs: {1}.", globalId, sb.ToString());
+                    CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                    throw new Exception(message);
+                }
 
                 // find property ids
-                //List<ModelCode> propertyIds = resourcesDescs.GetAllSettablePropertyIdsForEntityId(io.GlobalId); TODO
+                List<ModelCode> propertyIds = resourcesDescs.GetAllSettablePropertyIdsForEntityId(io.GID);
 
                 // remove references
                 Property property = null;
-                //foreach (ModelCode propertyId in propertyIds)
-                //{
-                //    PropertyType propertyType = Property.GetPropertyType(propertyId);
 
-                //    if (propertyType == PropertyType.Reference)
-                //    {
-                //        //property = io.GetProperty(propertyId); TODO
+                foreach (ModelCode propertyId in propertyIds)
+                {
+                    PropertyType propertyType = Property.GetPropertyType(propertyId);
 
-                //        if (propertyType == PropertyType.Reference)
-                //        {
-                //            // get target entity and remove reference to another entity
-                //            long targetGlobalId = property.AsReference();
+                    if (propertyType == PropertyType.Reference)
+                    {
+                        property = io.GetProperty(propertyId);
 
-                //            if (targetGlobalId != 0)
-                //            {
-                //                // get target entity
-                //                IdentifiedObject targetEntity = GetEntity(targetGlobalId);
+                        if (propertyType == PropertyType.Reference)
+                        {
+                            // get target entity and remove reference to another entity
+                            long targetGlobalId = property.AsReference();
 
-                //                // remove reference to another entity
-                //                //targetEntity.RemoveReference(propertyId, globalId);  TODO
-                //            }
-                //        }
-                //    }
-                //} TODO
+                            if (targetGlobalId != 0)
+                            {
+                                // get target entity
+                                IdentifiedObject targetEntity = GetEntity(targetGlobalId);
 
-                // remove entity form netowrk model
-                DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(globalId);
+                                // remove reference to another entity
+                                targetEntity.RemoveReference(propertyId, globalId);
+                            }
+                        }
+                    }
+                }
+
+              // remove entity form netowrk model
+              DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(globalId);
                 Container container = GetContainer(type);
                 container.RemoveEntity(globalId);
 
@@ -568,15 +569,16 @@ namespace NetworkModelService
 
             IdentifiedObject io = GetEntity(source);
 
-            //if (!io.HasProperty(association.PropertyId))
-            //{
-            //    throw new Exception(string.Format("Entity with GID = 0x{0:x16} does not contain prperty with Id = {1}.", source, association.PropertyId));
-            //} TODO
+            if (!io.HasProperty(association.PropertyId))
+            {
+                throw new Exception(string.Format("Entity with GID = 0x{0:x16} does not contain prperty with Id = {1}.", source, association.PropertyId));
+            }
 
             Property propertyRef = null;
+
             if (Property.GetPropertyType(association.PropertyId) == PropertyType.Reference)
             {
-                //propertyRef = io.GetProperty(association.PropertyId); TODO
+                propertyRef = io.GetProperty(association.PropertyId);
                 long relatedGidFromProperty = propertyRef.AsReference();
 
                 if (relatedGidFromProperty != 0)
@@ -589,7 +591,7 @@ namespace NetworkModelService
             }
             else if (Property.GetPropertyType(association.PropertyId) == PropertyType.ReferenceVector)
             {
-                //propertyRef = io.GetProperty(association.PropertyId); TODO
+                propertyRef = io.GetProperty(association.PropertyId);
                 List<long> relatedGidsFromProperty = propertyRef.AsReferences();
 
                 if (relatedGidsFromProperty != null)
@@ -644,17 +646,17 @@ namespace NetworkModelService
                 {
                     foreach (ResourceDescription rd in delta.InsertOperations)
                     {
-                        //InsertEntity(rd);
+                        InsertEntity(rd);
                     }
 
                     foreach (ResourceDescription rd in delta.UpdateOperations)
                     {
-                        //UpdateEntity(rd);
+                        UpdateEntity(rd);
                     }
 
                     foreach (ResourceDescription rd in delta.DeleteOperations)
                     {
-                        //DeleteEntity(rd);
+                        DeleteEntity(rd);
                     }
                 }
                 catch (Exception ex)
