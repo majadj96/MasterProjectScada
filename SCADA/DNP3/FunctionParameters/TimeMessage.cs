@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Text;
 using DNP3.DNP3Functions;
 using ScadaCommon;
 using ScadaCommon.CRCCalculator;
@@ -12,11 +14,11 @@ namespace DNP3.FunctionParameters
 
         public override byte[] PackRequest()
         {
-            byte[] dnp3Message = new byte[28];
-            byte[] time = new byte[8];
+            byte[] dnp3Message = new byte[26];
+            byte[] time = new byte[6];
 
             Buffer.BlockCopy(BitConverter.GetBytes((short)CommandParameters.Start), 0, dnp3Message, 0, 2);
-            dnp3Message[2] = 21;
+            dnp3Message[2] = 19;
             dnp3Message[3] = CommandParameters.Control;
             Buffer.BlockCopy(BitConverter.GetBytes((short)CommandParameters.Destination), 0, dnp3Message, 4, 2);
             Buffer.BlockCopy(BitConverter.GetBytes((short)CommandParameters.Source), 0, dnp3Message, 6, 2);
@@ -37,19 +39,32 @@ namespace DNP3.FunctionParameters
             dnp3Message[15] = CommandParameters.Qualifier;
             Buffer.BlockCopy(BitConverter.GetBytes(Convert.ToInt16(CommandParameters.Range)), 0, dnp3Message, 16, 2);
 
-            DateTime dt = Convert.ToDateTime(DateTime.Now);
-            time = BitConverter.GetBytes(dt.Ticks);
+            DateTime dt = DateTime.UtcNow;
+            string str = dt.ToString("MMddyyyyHHmmss");
+            long decValue = Convert.ToInt64(str);
+            string hexValue = decValue.ToString("X");
+            string byteVal = "";
 
-            Buffer.BlockCopy(time, 0, dnp3Message, 18, 8);
+            if (hexValue.Length == 11)
+                hexValue = "0" + hexValue;
+
+            for (int i = 0; i < 6; i++)
+            {
+                byteVal = hexValue.Substring(i * 2, 2);
+
+                time[i] = byte.Parse(byteVal, System.Globalization.NumberStyles.HexNumber);
+                dnp3Message[17 + i] = time[i];
+            }
+            long decAgain = Int64.Parse(hexValue, System.Globalization.NumberStyles.HexNumber);
 
             ushort crc1 = 0;
-            for (int i = 10; i < 26; i++)
+            for (int i = 10; i < 24; i++)
             {
                 CRCCalculator.computeCRC(dnp3Message[i], ref crc1);
             }
             crc1 = (ushort)(~crc1);
 
-            Buffer.BlockCopy(BitConverter.GetBytes(crc1), 0, dnp3Message, 26, 2);
+            Buffer.BlockCopy(BitConverter.GetBytes(crc1), 0, dnp3Message, 24, 2);
 
             return dnp3Message;
         }

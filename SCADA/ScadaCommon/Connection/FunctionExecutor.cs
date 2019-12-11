@@ -60,15 +60,18 @@ namespace ScadaCommon.Connection
         /// <param name="receivedBytes">The received response.</param>
 		public void HandleReceivedBytes(byte[] receivedBytes)
 		{
-			Dictionary<Tuple<PointType, ushort>, ushort> pointsToupdate = this.currentCommand?.ParseResponse(receivedBytes);
-			if (UpdatePointEvent != null)
-			{
-				foreach (var point in pointsToupdate)
-				{
-					UpdatePointEvent.Invoke(point.Key.Item1, point.Key.Item2, point.Value);
-					stateUpdater.LogMessage(string.Format(RECEIVED_MESSAGE, point.Key.Item1, point.Key.Item2, point.Value));
-				}
-			}
+            if (receivedBytes.Length != 17)
+            {
+                Dictionary<Tuple<PointType, ushort>, ushort> pointsToupdate = this.currentCommand?.ParseResponse(receivedBytes);
+                if (UpdatePointEvent != null)
+                {
+                    foreach (var point in pointsToupdate)
+                    {
+                        UpdatePointEvent.Invoke(point.Key.Item1, point.Key.Item2, point.Value);
+                        stateUpdater.LogMessage(string.Format(RECEIVED_MESSAGE, point.Key.Item1, point.Key.Item2, point.Value));
+                    }
+                }
+            }
 		}
 
         /// <summary>
