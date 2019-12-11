@@ -357,6 +357,14 @@
             }
         }
 
+        public static void PopulateBreakerProperties(FTN.Breaker cimBreaker, ResourceDescription rd, ImportHelper importHelper, TransformAndLoadReport report)
+        {
+            if ((cimBreaker != null) && (rd != null))
+            {
+                ProjekatMaster2019Converter.PopulateProtectedSwitchProperties(cimBreaker, rd, importHelper, report);
+            }
+        }
+
         #endregion Populate ResourceDescription
 
         #region Enums convert
