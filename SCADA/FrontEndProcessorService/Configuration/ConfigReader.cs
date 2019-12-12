@@ -15,7 +15,8 @@ namespace FrontEndProcessorService.Configuration
 
 		private byte unitAddress;
 		private int tcpPort;
-		private ConfigItemEqualityComparer confItemEqComp = new ConfigItemEqualityComparer();
+        private int class0Acquisition;
+        private ConfigItemEqualityComparer confItemEqComp = new ConfigItemEqualityComparer();
 
 		private Dictionary<string, IConfigItem> pointTypeToConfiguration = new Dictionary<string, IConfigItem>();
 
@@ -98,12 +99,17 @@ namespace FrontEndProcessorService.Configuration
 						TcpPort = Convert.ToInt32(filtered[filtered.Count - 1]);
 						continue;
 					}
-					//if (s.StartsWith("DBC"))
-					//{
-					//	DelayBetweenCommands = Convert.ToInt32(filtered[filtered.Count - 1]);
-					//	continue;
-					//}
-					try
+                    if (s.StartsWith("CLASS0"))
+                    {
+                        Class0Acquisition = Convert.ToInt32(filtered[filtered.Count - 1]);
+                        continue;
+                    }
+                    //if (s.StartsWith("DBC"))
+                    //{
+                    //	DelayBetweenCommands = Convert.ToInt32(filtered[filtered.Count - 1]);
+                    //	continue;
+                    //}
+                    try
                     {
                         ConfigItem ci = new ConfigItem(filtered);
                         //if (pointTypeToConfiguration.Count > 0)
@@ -168,7 +174,20 @@ namespace FrontEndProcessorService.Configuration
 				tcpPort = value;
 			}
 		}
-		private int dbc;
+
+        public int Class0Acquisition
+        {
+            get
+            {
+                return class0Acquisition;
+            }
+
+            private set
+            {
+                class0Acquisition = value;
+            }
+        }
+        private int dbc;
 		public int DelayBetweenCommands
 		{
 			get
@@ -181,8 +200,8 @@ namespace FrontEndProcessorService.Configuration
 				dbc = value;
 			}
 		}
-
-		public List<IConfigItem> GetConfigurationItems()
+        
+        public List<IConfigItem> GetConfigurationItems()
 		{
 			return new List<IConfigItem>(pointTypeToConfiguration.Values);
 		}

@@ -70,10 +70,10 @@ namespace ProcessingModule
                 {
                     state = acquisitionTrigger.WaitOne();
 
-                    if (cnt < configuration.GetAcquisitionInterval("DigOut") && state)
+                    if (cnt < configuration.Class0Acquisition && state)
                         cnt++;
 
-                    if (cnt == configuration.GetAcquisitionInterval("DigOut"))
+                    if (cnt == configuration.Class0Acquisition)
                     {
                         processingManager.ExecuteReadCommand(configuration.GetConfigurationItems()[configuration.GetConfigurationItems().Count - 1], 0x00, 0, 0x00, 0x00);
 

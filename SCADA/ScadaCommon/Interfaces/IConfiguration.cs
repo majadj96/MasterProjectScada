@@ -15,6 +15,11 @@ namespace ScadaCommon.Interfaces
 		byte UnitAddress { get; }
 
         /// <summary>
+        /// Gets the tcp port of the remote unit.
+        /// </summary>
+		int Class0Acquisition { get; }
+
+        /// <summary>
         /// Gets delay between commands (in seconds).
         /// </summary>
 		int DelayBetweenCommands { get; }
