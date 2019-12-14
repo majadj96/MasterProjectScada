@@ -111,10 +111,10 @@ namespace FrontEndProcessorService.ViewModel
 			logBuilder = new StringBuilder();
 			configuration = new ConfigReader();
             this.connection = new TCPConnection(this, configuration);
-            commandExecutor = new FunctionExecutor(this, configuration, funcExecuteUnsolicitedSync, connection);
+            commandExecutor = new FunctionExecutor(this, configuration, connection);
             this.processingManager = new ProcessingManager(this, commandExecutor);
             this.acquisitor = new Acquisitor(acquisitionTrigger, this.processingManager, this, configuration);
-            this.unsolicitedMessageProcessor = new UnsolicitedMessageProcessor(this, configuration, funcExecuteUnsolicitedSync, connection, processingManager);
+            //this.unsolicitedMessageProcessor = new UnsolicitedMessageProcessor(this, configuration, funcExecuteUnsolicitedSync, connection, processingManager);
 			this.automationManager = new AutomationManager(this, processingManager);
 			InitializePointCollection();
 			InitializeAndStartThreads();

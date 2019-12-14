@@ -32,11 +32,11 @@ namespace ScadaCommon.Connection
         /// </summary>
         /// <param name="stateUpdater">The state updater.</param>
         /// <param name="configuration">The configuration.</param>
-		public FunctionExecutor(IStateUpdater stateUpdater, IConfiguration configuration, AutoResetEvent funcExecuteUnsolicitedSync, IConnection connection)
+		public FunctionExecutor(IStateUpdater stateUpdater, IConfiguration configuration, IConnection connection)
 		{
 			this.stateUpdater = stateUpdater;
 			this.configuration = configuration;
-            this.funcExecuteUnsolicitedSync = funcExecuteUnsolicitedSync;
+            //this.funcExecuteUnsolicitedSync = funcExecuteUnsolicitedSync;
             this.connection = connection;
 			this.processConnection = new AutoResetEvent(false);
 			connectionProcessorThread = new Thread(new ThreadStart(ConnectionProcessorThread));
@@ -83,20 +83,66 @@ namespace ScadaCommon.Connection
 			{
 				try
 				{
-					processConnection.WaitOne();
-                    funcExecuteUnsolicitedSync.WaitOne();      //Sinhronizacioni mehanizam za unsolicited poruke
-                                                               //Koja metoda prva udje zakljucava semafor i na kraju ga pusta
-					while (commandQueue.TryDequeue(out currentCommand))
-					{
-						this.connection.SendBytes(this.currentCommand.PackRequest());
-						byte[] message;
-						byte[] header = this.connection.RecvBytes(10);
-						byte payLoadSize = 0;
+                    if (processConnection.WaitOne())
+                    {
+                        while (commandQueue.TryDequeue(out currentCommand))
+                        {
+                            this.connection.SendBytes(this.currentCommand.PackRequest());
+                            bool recvAgain = true;
+                            byte[] message;
+
+                            while (recvAgain)
+                            {
+                                byte[] header = this.connection.RecvBytes(10);
+                                byte payLoadSize = 0;
+                                int len = 0;
+                                unchecked
+                                {
+                                    payLoadSize = (byte)BitConverter.ToChar(header, 2);
+                                }
+                                byte[] payload;
+
+                                //Duzina poruke posle header-a (heder je duzine 5) racuna se tako sto od ukupne duzine oduzmemo header
+                                // i na tu duzinu dodajemo duzinu svih crc-ova koji su na svakih 16 bajtova
+                                payLoadSize = (byte)(payLoadSize - 5);
+
+                                if (payLoadSize % 16 == 0)
+                                {
+                                    len = payLoadSize + (payLoadSize / 16) * 2;
+                                }
+                                else
+                                {
+                                    len = (payLoadSize / 16) == 0 ? (byte)(payLoadSize + 2) : (byte)(payLoadSize + (payLoadSize / 16) * 2 + 2);
+                                }
+
+                                payload = this.connection.RecvBytes(len);
+
+                                message = new byte[header.Length + payload.Length];
+                                Buffer.BlockCopy(header, 0, message, 0, 10);
+                                Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
+
+                                //na dvanaestom byte se nalazi u responsu da li je unsolicited ili ne (tacnije u njemu jer je jedan bit)
+                                if (!ChechIfUnsolicited(message[11]))
+                                {
+                                    recvAgain = false;
+                                }
+
+                                //   this.ProccessMsg(message, len + 5);
+                                this.HandleReceivedBytes(message);
+                                this.currentCommand = null;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        byte[] message;
+                        byte[] header = this.connection.RecvBytes(10);
+                        byte payLoadSize = 0;
                         int len = 0;
-						unchecked
-						{
-							payLoadSize = (byte)BitConverter.ToChar(header, 2);
-						}
+                        unchecked
+                        {
+                            payLoadSize = (byte)BitConverter.ToChar(header, 2);
+                        }
                         byte[] payload;
 
                         //Duzina poruke posle header-a (heder je duzine 5) racuna se tako sto od ukupne duzine oduzmemo header
@@ -115,14 +161,14 @@ namespace ScadaCommon.Connection
                         payload = this.connection.RecvBytes(len);
 
                         message = new byte[header.Length + payload.Length];
-						Buffer.BlockCopy(header, 0, message, 0, 10);
-						Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
-						this.HandleReceivedBytes(message);
-						this.currentCommand = null;
-					}
-
-                    funcExecuteUnsolicitedSync.Set();
-				}
+                        Buffer.BlockCopy(header, 0, message, 0, 10);
+                        Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
+                        this.HandleReceivedBytes(message);
+                        //this.ProccessMsg(message, len + 5);
+                        this.currentCommand = null;
+                    }
+                    Thread.Sleep(30);
+                }
 				catch (SocketException se)
 				{
 					if (se.ErrorCode != 10054)
@@ -144,7 +190,13 @@ namespace ScadaCommon.Connection
 			}
 		}
 
-        private void ProccessMsg(IDNP3Functions message)
+        private bool ChechIfUnsolicited(byte unsolicited)
+        {
+            int uns = (unsolicited & 0x10) >> 4;
+            return uns == 1 ? true : false;
+        }
+
+        private void ProccessMsg(byte[] message, int messageLength)
         {
             //ovde obradjujem sve poruke
         }
