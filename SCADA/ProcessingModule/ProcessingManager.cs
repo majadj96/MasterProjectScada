@@ -237,9 +237,10 @@ namespace ProcessingModule
             }
             else if (functionCode == DNP3FunctionCode.WRITE)
             {
-                byte app = message[11];
+                byte tran = (byte)(message[10] & 0xf);
+                byte app = (byte)(message[11] & 0xf); 
                                                                                 //0xc0 - apl cont, function code,                      type field,        qualf|range|obj pref|obj value|start|lenght|control|dest  |sourc|transport header
-                DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(app, (byte)DNP3FunctionCode.WRITE, (ushort)TypeField.TIME_MESSAGE, 0x07, 0x0001, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc0);
+                DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters((byte)(0xc0 | app), (byte)DNP3FunctionCode.WRITE, (ushort)TypeField.TIME_MESSAGE, 0x07, 0x0001, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, (byte)(0xc0 | tran));
                 IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Message(p);
                 this.functionExecutor.SendMessage(fn);
             }

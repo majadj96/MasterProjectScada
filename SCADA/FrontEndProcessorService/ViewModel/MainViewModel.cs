@@ -114,7 +114,7 @@ namespace FrontEndProcessorService.ViewModel
             commandExecutor = new FunctionExecutor(this, configuration, connection);
             this.processingManager = new ProcessingManager(this, commandExecutor);
             this.acquisitor = new Acquisitor(acquisitionTrigger, this.processingManager, this, configuration);
-            //this.unsolicitedMessageProcessor = new UnsolicitedMessageProcessor(this, configuration, funcExecuteUnsolicitedSync, connection, processingManager);
+            this.unsolicitedMessageProcessor = new UnsolicitedMessageProcessor(this, configuration, funcExecuteUnsolicitedSync, connection, processingManager);
 			this.automationManager = new AutomationManager(this, processingManager);
 			InitializePointCollection();
 			InitializeAndStartThreads();

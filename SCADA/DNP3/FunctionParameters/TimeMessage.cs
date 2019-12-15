@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Text;
 using DNP3.DNP3Functions;
 using ScadaCommon;
 using ScadaCommon.CRCCalculator;
@@ -38,27 +36,31 @@ namespace DNP3.FunctionParameters
             dnp3Message[14] = BitConverter.GetBytes((short)CommandParameters.TypeField)[0];
             dnp3Message[15] = CommandParameters.Qualifier;
             Buffer.BlockCopy(BitConverter.GetBytes(Convert.ToInt16(CommandParameters.Range)), 0, dnp3Message, 16, 2);
+            
+            //Convert DateTime to 6 octets
+            DateTime dateTimeNow = DateTime.Now;
+            DateTime dateTime = new DateTime(1970, 1, 1);
 
-            DateTime dt = new DateTime();
-            dt = DateTime.Now;
-            string str = dt.ToString("ddMMyyyyhhmmss");
-            long decValue = Convert.ToInt64(str);
-            string hexValue = decValue.ToString("X");
-            string byteVal = "";
-
-            long decAgain = Int64.Parse(hexValue, System.Globalization.NumberStyles.HexNumber);
-
-            if (hexValue.Length == 11)
-                hexValue = "0" + hexValue;
-
-            for (int i = 0; i < 6; i++)
+            TimeSpan diff = dateTimeNow - dateTime;
+            long milis = (long)diff.TotalMilliseconds;
+            string s = "";
+            for(int i = 0; i < 6; i++)
             {
-                byteVal = hexValue.Substring(i * 2, 2);
-
-                time[i] = byte.Parse(byteVal, System.Globalization.NumberStyles.HexNumber);
+                s = ((milis >> (i * 8)) & 0xff).ToString("X");
+                time[i] = byte.Parse(s, System.Globalization.NumberStyles.HexNumber);
                 dnp3Message[17 + i] = time[i];
             }
-            
+
+            //Convert 6 Octects to DateTime - NOT WORKING, YET
+
+            //s = ""; long miliss = 0; string ss = "0";
+            //for (int i = 0; i < 6; i++)
+            //{
+            //    ss = (miliss | (time[i]) << (i * 16)).ToString("X");
+            //    miliss = long.Parse(ss, System.Globalization.NumberStyles.HexNumber);
+            //}
+            //DateTime dd = new DateTime(miliss / 1000);
+
             ushort crc1 = 0;
             for (int i = 10; i < 23; i++)
             {

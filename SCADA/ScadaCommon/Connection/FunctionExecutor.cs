@@ -200,6 +200,32 @@ namespace ScadaCommon.Connection
         {
             //ovde obradjujem sve poruke
         }
+
+        //private void CheckUnsMessage(byte[] messageByte)
+        //{
+        //    //CONFIRM
+        //    byte mask = 0x20;
+        //    byte confirmRestartTime = (byte)((messageByte[11] & mask) >> 5);
+        //    if (confirmRestartTime == 1)
+        //    {
+        //        this.processingManager.SendRawBytesMessage(DNP3FunctionCode.CONFIRM, messageByte);
+        //    }
+        //    //RESTART
+        //    mask = 0x80;
+        //    confirmRestartTime = (byte)((messageByte[13] & mask) >> 7);
+        //    if (confirmRestartTime == 1)
+        //    {
+        //        this.processingManager.SendRawBytesMessage(DNP3FunctionCode.WARM_RESTART, messageByte);
+        //    }
+        //    //TIME SYNC
+        //    mask = 0x10;
+        //    confirmRestartTime = (byte)((messageByte[13] & mask) >> 4);
+        //    if (confirmRestartTime == 1)
+        //    {
+        //        this.processingManager.SendRawBytesMessage(DNP3FunctionCode.WRITE, messageByte);
+        //    }
+        //}
+
         public void SendMessage(IDNP3Functions message)
         {
             this.connection.SendBytes(message.PackRequest());
