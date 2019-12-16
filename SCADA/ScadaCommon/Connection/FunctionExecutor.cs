@@ -81,18 +81,66 @@ namespace ScadaCommon.Connection
 			{
 				try
 				{
-					processConnection.WaitOne();
-					while (commandQueue.TryDequeue(out currentCommand))
-					{
-						this.connection.SendBytes(this.currentCommand.PackRequest());
-						byte[] message;
-						byte[] header = this.connection.RecvBytes(10);
-						byte payLoadSize = 0;
+                    if (processConnection.WaitOne())
+                    {
+                        while (commandQueue.TryDequeue(out currentCommand))
+                        {
+                            this.connection.SendBytes(this.currentCommand.PackRequest());
+                            bool recvAgain = true;
+                            byte[] message;
+
+                            while (recvAgain)
+                            {
+                                byte[] header = this.connection.RecvBytes(10);
+                                byte payLoadSize = 0;
+                                int len = 0;
+                                unchecked
+                                {
+                                    payLoadSize = (byte)BitConverter.ToChar(header, 2);
+                                }
+                                byte[] payload;
+
+                                //Duzina poruke posle header-a (heder je duzine 5) racuna se tako sto od ukupne duzine oduzmemo header
+                                // i na tu duzinu dodajemo duzinu svih crc-ova koji su na svakih 16 bajtova
+                                payLoadSize = (byte)(payLoadSize - 5);
+
+                                if (payLoadSize % 16 == 0)
+                                {
+                                    len = payLoadSize + (payLoadSize / 16) * 2;
+                                }
+                                else
+                                {
+                                    len = (payLoadSize / 16) == 0 ? (byte)(payLoadSize + 2) : (byte)(payLoadSize + (payLoadSize / 16) * 2 + 2);
+                                }
+
+                                payload = this.connection.RecvBytes(len);
+
+                                message = new byte[header.Length + payload.Length];
+                                Buffer.BlockCopy(header, 0, message, 0, 10);
+                                Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
+
+                                //na dvanaestom byte se nalazi u responsu da li je unsolicited ili ne (tacnije u njemu jer je jedan bit)
+                                if (!ChechIfUnsolicited(message[11]))
+                                {
+                                    recvAgain = false;
+                                }
+
+                                //   this.ProccessMsg(message, len + 5);
+                                this.HandleReceivedBytes(message);
+                                this.currentCommand = null;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        byte[] message;
+                        byte[] header = this.connection.RecvBytes(10);
+                        byte payLoadSize = 0;
                         int len = 0;
-						unchecked
-						{
-							payLoadSize = (byte)BitConverter.ToChar(header, 2);
-						}
+                        unchecked
+                        {
+                            payLoadSize = (byte)BitConverter.ToChar(header, 2);
+                        }
                         byte[] payload;
 
                         //Duzina poruke posle header-a (heder je duzine 5) racuna se tako sto od ukupne duzine oduzmemo header
@@ -111,13 +159,14 @@ namespace ScadaCommon.Connection
                         payload = this.connection.RecvBytes(len);
 
                         message = new byte[header.Length + payload.Length];
-						Buffer.BlockCopy(header, 0, message, 0, 10);
-						Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
-						this.HandleReceivedBytes(message);
-						this.currentCommand = null;
-					}
-
-				}
+                        Buffer.BlockCopy(header, 0, message, 0, 10);
+                        Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
+                        this.HandleReceivedBytes(message);
+                        //this.ProccessMsg(message, len + 5);
+                        this.currentCommand = null;
+                    }
+                    Thread.Sleep(30);
+                }
 				catch (SocketException se)
 				{
 					if (se.ErrorCode != 10054)
@@ -163,7 +212,42 @@ namespace ScadaCommon.Connection
             }
 
             Buffer.BlockCopy(message, srcOffset, dataArray, dstOffset, lengthData % 16);
+        private bool ChechIfUnsolicited(byte unsolicited)
+        {
+            int uns = (unsolicited & 0x10) >> 4;
+            return uns == 1 ? true : false;
         }
+
+        private void ProccessMsg(byte[] message, int messageLength)
+        {
+            //ovde obradjujem sve poruke
+        }
+
+        //private void CheckUnsMessage(byte[] messageByte)
+        //{
+        //    //CONFIRM
+        //    byte mask = 0x20;
+        //    byte confirmRestartTime = (byte)((messageByte[11] & mask) >> 5);
+        //    if (confirmRestartTime == 1)
+        //    {
+        //        this.processingManager.SendRawBytesMessage(DNP3FunctionCode.CONFIRM, messageByte);
+        //    }
+        //    //RESTART
+        //    mask = 0x80;
+        //    confirmRestartTime = (byte)((messageByte[13] & mask) >> 7);
+        //    if (confirmRestartTime == 1)
+        //    {
+        //        this.processingManager.SendRawBytesMessage(DNP3FunctionCode.WARM_RESTART, messageByte);
+        //    }
+        //    //TIME SYNC
+        //    mask = 0x10;
+        //    confirmRestartTime = (byte)((messageByte[13] & mask) >> 4);
+        //    if (confirmRestartTime == 1)
+        //    {
+        //        this.processingManager.SendRawBytesMessage(DNP3FunctionCode.WRITE, messageByte);
+        //    }
+        //}
+
         public void SendMessage(IDNP3Functions message)
         {
             this.connection.SendBytes(message.PackRequest());

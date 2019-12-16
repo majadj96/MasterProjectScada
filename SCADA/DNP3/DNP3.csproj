@@ -45,7 +45,12 @@
     <Compile Include="DNP3FunctionFactory.cs" />
     <Compile Include="DNP3Functions\DNP3ApplicationObjectParameters.cs" />
     <Compile Include="DNP3Functions\DNP3CommandParameters.cs" />
+    <Compile Include="FunctionParameters\Class0123.cs" />
+    <Compile Include="FunctionParameters\DelayMeasurement.cs" />
+    <Compile Include="FunctionParameters\DisableUnsolicitedMessages.cs" />
     <Compile Include="FunctionParameters\DNP3Functions.cs" />
+    <Compile Include="FunctionParameters\EnableUnsolicitedMessages.cs" />
+    <Compile Include="FunctionParameters\InternalIndicationsMessage.cs" />
     <Compile Include="FunctionParameters\ReadAnalogOutputFunction.cs" />
     <Compile Include="FunctionParameters\ReadClass0DataFunction.cs" />
     <Compile Include="FunctionParameters\ReadDiscreteInFunction.cs" />
