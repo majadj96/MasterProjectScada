@@ -23,8 +23,6 @@ namespace FrontEndProcessorService.ViewModel
 		private ConnectionState connectionState;
         private IConnection connection;
         private Acquisitor acquisitor;
-        private UnsolicitedMessageProcessor unsolicitedMessageProcessor;
-        private AutoResetEvent funcExecuteUnsolicitedSync = new AutoResetEvent(true);
 		private AutoResetEvent acquisitionTrigger = new AutoResetEvent(false);
 		private TimeSpan elapsedTime = new TimeSpan();
 		private Dispatcher dispather = Dispatcher.CurrentDispatcher;
@@ -111,11 +109,9 @@ namespace FrontEndProcessorService.ViewModel
 			logBuilder = new StringBuilder();
 			configuration = new ConfigReader();
             this.connection = new TCPConnection(this, configuration);
-            commandExecutor = new FunctionExecutor(this, configuration, funcExecuteUnsolicitedSync, connection);
+            commandExecutor = new FunctionExecutor(this, configuration, connection);
             this.processingManager = new ProcessingManager(this, commandExecutor);
             this.acquisitor = new Acquisitor(acquisitionTrigger, this.processingManager, this, configuration);
-            this.unsolicitedMessageProcessor = new UnsolicitedMessageProcessor(this, configuration, funcExecuteUnsolicitedSync, connection, processingManager);
-			this.automationManager = new AutomationManager(this, processingManager);
 			InitializePointCollection();
 			InitializeAndStartThreads();
 			ConnectionState = connection.ConnectionState;
@@ -234,7 +230,6 @@ namespace FrontEndProcessorService.ViewModel
 			timerThreadStopSignal = false;
 			(commandExecutor as IDisposable).Dispose();
 			this.acquisitor.Dispose();
-            this.unsolicitedMessageProcessor.Dispose();
 			acquisitionTrigger.Dispose();
 			automationManager.Stop();
 		}

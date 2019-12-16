@@ -19,7 +19,6 @@ namespace ScadaCommon.Connection
         private bool threadCancellationSignal = true;
 		private AutoResetEvent processConnection;
 		private Thread connectionProcessorThread;
-        private AutoResetEvent funcExecuteUnsolicitedSync;
         private ConcurrentQueue<IDNP3Functions> commandQueue = new ConcurrentQueue<IDNP3Functions>();
         private IConfiguration configuration;
         private string RECEIVED_MESSAGE = "Point of type {0} on address {1:d5} received value: {2}";
@@ -32,11 +31,10 @@ namespace ScadaCommon.Connection
         /// </summary>
         /// <param name="stateUpdater">The state updater.</param>
         /// <param name="configuration">The configuration.</param>
-		public FunctionExecutor(IStateUpdater stateUpdater, IConfiguration configuration, AutoResetEvent funcExecuteUnsolicitedSync, IConnection connection)
+		public FunctionExecutor(IStateUpdater stateUpdater, IConfiguration configuration, IConnection connection)
 		{
 			this.stateUpdater = stateUpdater;
 			this.configuration = configuration;
-            this.funcExecuteUnsolicitedSync = funcExecuteUnsolicitedSync;
             this.connection = connection;
 			this.processConnection = new AutoResetEvent(false);
 			connectionProcessorThread = new Thread(new ThreadStart(ConnectionProcessorThread));
@@ -84,8 +82,6 @@ namespace ScadaCommon.Connection
 				try
 				{
 					processConnection.WaitOne();
-                    funcExecuteUnsolicitedSync.WaitOne();      //Sinhronizacioni mehanizam za unsolicited poruke
-                                                               //Koja metoda prva udje zakljucava semafor i na kraju ga pusta
 					while (commandQueue.TryDequeue(out currentCommand))
 					{
 						this.connection.SendBytes(this.currentCommand.PackRequest());
@@ -121,7 +117,6 @@ namespace ScadaCommon.Connection
 						this.currentCommand = null;
 					}
 
-                    funcExecuteUnsolicitedSync.Set();
 				}
 				catch (SocketException se)
 				{
@@ -144,9 +139,30 @@ namespace ScadaCommon.Connection
 			}
 		}
 
-        private void ProccessMsg(IDNP3Functions message)
+        private void ProccessMsg(byte[] message, int messageLength)
         {
-            //ovde obradjujem sve poruke
+            byte lengthData = (byte)(BitConverter.ToChar(message, 2) - 5);
+            byte[] dataArray = new byte[lengthData];
+
+            PreproccessMsg(message, messageLength, ref dataArray, lengthData);
+
+
+        }
+        private void PreproccessMsg(byte[] message, int messageLength, ref byte[] dataArray, int lengthData)
+        {
+            int dataChunkLen = 0;
+            int srcOffset = 10, dstOffset = 0;
+
+            dataChunkLen = lengthData / 16;
+
+            for (int i = 0; i < dataChunkLen; i++)
+            {
+                Buffer.BlockCopy(message, srcOffset, dataArray, dstOffset, 16);
+                dstOffset += 16;
+                srcOffset += 18;
+            }
+
+            Buffer.BlockCopy(message, srcOffset, dataArray, dstOffset, lengthData % 16);
         }
         public void SendMessage(IDNP3Functions message)
         {

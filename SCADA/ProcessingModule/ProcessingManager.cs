@@ -15,8 +15,6 @@ namespace ProcessingModule
     {
         private IFunctionExecutor functionExecutor;
         private IStorage storage;
-        private AlarmProcessor alarmProcessor;
-        private EGUConverter eguConverter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessingManager"/> class.
@@ -27,8 +25,6 @@ namespace ProcessingModule
         {
             this.storage = storage;
             this.functionExecutor = functionExecutor;
-            this.alarmProcessor = new AlarmProcessor();
-            this.eguConverter = new EGUConverter();
             this.functionExecutor.UpdatePointEvent += CommandExecutor_UpdatePointEvent;
         }
 
