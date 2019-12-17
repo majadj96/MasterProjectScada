@@ -65,12 +65,26 @@ namespace DNP3
             {
                 case DNP3FunctionCode.CONFIRM:
                     return new SendConfirmMessage(commandParameters);
-				case DNP3FunctionCode.WRITE:
-                    return new TimeMessage(commandParameters);
 
-                case DNP3FunctionCode.COLD_RESTART:
-                case DNP3FunctionCode.WARM_RESTART:
-                    return null;
+				case DNP3FunctionCode.WRITE:
+                    if ((TypeField)commandParameters.TypeField == TypeField.TIME_MESSAGE)
+                        return new TimeMessage(commandParameters);
+                    else if ((TypeField)commandParameters.TypeField == TypeField.INTERNAL_INDICATIONS)
+                        return new InternalIndicationsMessage(commandParameters);
+                    else
+                        return null;
+
+                case DNP3FunctionCode.DISABLE_UNSOLICITED:
+                    return new DisableUnsolicitedMessages(commandParameters);
+
+                case DNP3FunctionCode.READ:
+                    return new Class0123(commandParameters);
+
+                case DNP3FunctionCode.DELAY_MEASUREMENT:
+                    return new DelayMeasurement(commandParameters);
+
+                case DNP3FunctionCode.ENABLE_UNSOLICITED:
+                    return new EnableUnsolicitedMessages(commandParameters);
 
                 default:
                     return null;

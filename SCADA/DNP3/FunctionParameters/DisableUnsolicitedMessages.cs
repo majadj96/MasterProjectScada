@@ -32,13 +32,13 @@ namespace DNP3.FunctionParameters
             dnp3Request[11] = CommandParameters.AplicationControl;//0xc0-prvi put //0xc2-drugi put
             dnp3Request[12] = CommandParameters.FunctionCode;//0x15
             //Class1 0x3c02 (2) 
-            Buffer.BlockCopy(BitConverter.GetBytes(0x3c02), 0, dnp3Request, 13, 2);
+            Buffer.BlockCopy(BitConverter.GetBytes(0x023c), 0, dnp3Request, 13, 2);
             dnp3Request[15] = CommandParameters.Qualifier;//Qual   0x06
             //Class2 0x3c03 (2) 
-            Buffer.BlockCopy(BitConverter.GetBytes(0x3c03), 0, dnp3Request, 16, 2);
+            Buffer.BlockCopy(BitConverter.GetBytes(0x033c), 0, dnp3Request, 16, 2);
             dnp3Request[18] = CommandParameters.Qualifier;//Qual   0x06
             //Class3 0x3c04 (2) 
-            Buffer.BlockCopy(BitConverter.GetBytes(0x3c04), 0, dnp3Request, 19, 2);
+            Buffer.BlockCopy(BitConverter.GetBytes(0x043c), 0, dnp3Request, 19, 2);
             dnp3Request[21] = CommandParameters.Qualifier;//Qual   0x06
 
             ushort crc2 = 0;

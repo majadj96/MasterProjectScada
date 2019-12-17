@@ -45,7 +45,7 @@ namespace DNP3.FunctionParameters
             }
             crc2 = (ushort)(~crc2);
             Buffer.BlockCopy(BitConverter.GetBytes(crc2), 0, dnp3Request, 16, 2);
-
+            
             return dnp3Request;
         }
 

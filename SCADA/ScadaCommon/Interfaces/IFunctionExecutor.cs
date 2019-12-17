@@ -27,5 +27,5 @@ namespace ScadaCommon.Interfaces
 		event UpdatePointDelegate UpdatePointEvent;
 
         void SendMessage(IDNP3Functions message);
-	}
+    }
 }

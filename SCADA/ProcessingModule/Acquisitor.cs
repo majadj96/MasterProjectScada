@@ -68,17 +68,22 @@ namespace ProcessingModule
 
                 while (true)
                 {
-                    state = acquisitionTrigger.WaitOne();
-
-                    if (cnt < configuration.Class0Acquisition && state)
-                        cnt++;
-
-                    if (cnt == configuration.Class0Acquisition)
+                    //if (FunctionExecutor.acquisitionDone)
                     {
-                        processingManager.ExecuteReadCommand(configuration.GetConfigurationItems()[configuration.GetConfigurationItems().Count - 1], 0x00, 0, 0x00, 0x00);
+                        state = acquisitionTrigger.WaitOne();
 
-                        cnt = 0;
+                        if (cnt < configuration.Class0Acquisition && state)
+                            cnt++;
+
+                        if (cnt == configuration.Class0Acquisition)
+                        {
+                            processingManager.ExecuteReadCommand(configuration.GetConfigurationItems()[configuration.GetConfigurationItems().Count - 1], 0x00, 0, 0x00, 0x00);
+                            FunctionExecutor.acquisitionDone = false;
+                            cnt = 0;
+                        }
                     }
+                    //else
+                        //acquisitionTrigger.WaitOne();
                 }
             }
             catch (Exception ex)
