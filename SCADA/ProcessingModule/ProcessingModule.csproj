@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acquisitor.cs" />
+    <Compile Include="FunctionExecutor.cs" />
     <Compile Include="ProcessingManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

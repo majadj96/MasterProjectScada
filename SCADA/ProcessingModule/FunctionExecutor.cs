@@ -1,27 +1,31 @@
-﻿using ScadaCommon.Interfaces;
+﻿using DNP3.FunctionParameters;
+using DNP3.DNP3Functions;
+using ScadaCommon;
+using ScadaCommon.Connection;
+using ScadaCommon.Interfaces;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using DNP3;
 
-namespace ScadaCommon.Connection
+namespace ProcessingModule
 {
     /// <summary>
     /// Class containing logic for sending modbus requests and receiving point values. 
     /// </summary>
     public class FunctionExecutor : IDisposable, IFunctionExecutor
-	{
-		private IConnection connection;
-		private IStateUpdater stateUpdater;
+    {
+        private IConnection connection;
+        private IStateUpdater stateUpdater;
         private IDNP3Functions currentCommand;
         private bool threadCancellationSignal = true;
-		private AutoResetEvent processConnection;
-		private Thread connectionProcessorThread;
+        private AutoResetEvent processConnection;
+        private Thread connectionProcessorThread;
         private ConcurrentQueue<IDNP3Functions> commandQueue = new ConcurrentQueue<IDNP3Functions>();
         private IConfiguration configuration;
-        private string RECEIVED_MESSAGE = "Point of type {0} on address {1:d5} received value: {2}";
 
         /// <inheritdoc />
         public event UpdatePointDelegate UpdatePointEvent;
@@ -32,44 +36,42 @@ namespace ScadaCommon.Connection
         /// <param name="stateUpdater">The state updater.</param>
         /// <param name="configuration">The configuration.</param>
 		public FunctionExecutor(IStateUpdater stateUpdater, IConfiguration configuration, IConnection connection)
-		{
-			this.stateUpdater = stateUpdater;
-			this.configuration = configuration;
+        {
+            MessagesForUnsolicited();
+            this.stateUpdater = stateUpdater;
+            this.configuration = configuration;
             this.connection = connection;
-			this.processConnection = new AutoResetEvent(false);
-			connectionProcessorThread = new Thread(new ThreadStart(ConnectionProcessorThread));
-			connectionProcessorThread.Name = "Communication thread";
-			connectionProcessorThread.Start();
-		}
+            this.processConnection = new AutoResetEvent(true);
+            connectionProcessorThread = new Thread(new ThreadStart(ConnectionProcessorThread));
+            connectionProcessorThread.Name = "Communication thread";
+            connectionProcessorThread.Start();
+        }
 
         /// <inheritdoc />
         public void EnqueueCommand(IDNP3Functions commandToExecute)
-		{
-			if (connection.ConnectionState == ConnectionState.CONNECTED)
-			{
-				this.commandQueue.Enqueue(commandToExecute);
-				this.processConnection.Set();
-			}
-		}
+        {
+            if (connection.ConnectionState == ConnectionState.CONNECTED)
+            {
+                this.commandQueue.Enqueue(commandToExecute);
+                this.processConnection.Set();
+            }
+        }
 
         /// <summary>
         /// Invokes the update point event after the response is parsed.
         /// </summary>
         /// <param name="receivedBytes">The received response.</param>
 		public void HandleReceivedBytes(byte[] receivedBytes)
-		{
-            if (receivedBytes.Length != 17)
+        {
+            Dictionary<Tuple<PointType, ushort>, ushort> pointsToupdate = this.currentCommand?.ParseResponse(receivedBytes);
+            if (UpdatePointEvent != null)
             {
-                Dictionary<Tuple<PointType, ushort>, ushort> pointsToupdate = this.currentCommand?.ParseResponse(receivedBytes);
-                if (UpdatePointEvent != null)
+                foreach (var point in pointsToupdate)
                 {
-                    foreach (var point in pointsToupdate)
-                    {
-                        UpdatePointEvent.Invoke(point.Key.Item1, point.Key.Item2, point.Value);
-                    }
+                    UpdatePointEvent.Invoke(point.Key.Item1, point.Key.Item2, point.Value);
                 }
             }
-		}
+        }
 
         public void HandleReceivedChangesOfPoints(Dictionary<Tuple<PointType, ushort>, ushort> pointsToupdate)
         {
@@ -82,17 +84,49 @@ namespace ScadaCommon.Connection
             }
         }
 
+        public void MessagesForUnsolicited()
+        {
+            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(0xc0, (byte)DNP3FunctionCode.DISABLE_UNSOLICITED, 0x00, 0x06, 0, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc0);
+            IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Message(p);
+            commandQueue.Enqueue(fn);
+
+            p = new DNP3ApplicationObjectParameters(0xc1, (byte)DNP3FunctionCode.WRITE, (ushort)TypeField.INTERNAL_INDICATIONS, 0x00, 0x0707, 0x00, 0x00, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc2);
+            fn = DNP3FunctionFactory.CreateDNP3Message(p);
+            commandQueue.Enqueue(fn);
+
+            p = new DNP3ApplicationObjectParameters(0xc2, (byte)DNP3FunctionCode.DISABLE_UNSOLICITED, 0x00, 0x06, 0, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc3);
+            fn = DNP3FunctionFactory.CreateDNP3Message(p);
+            commandQueue.Enqueue(fn);
+
+            p = new DNP3ApplicationObjectParameters(0xc3, (byte)DNP3FunctionCode.READ, 0x00, 0x06, 0, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc4);
+            fn = DNP3FunctionFactory.CreateDNP3Message(p);
+            commandQueue.Enqueue(fn);
+
+            p = new DNP3ApplicationObjectParameters(0xc4, (byte)DNP3FunctionCode.DELAY_MEASUREMENT, 0x00, 0x00, 0, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc5);
+            fn = DNP3FunctionFactory.CreateDNP3Message(p);
+            commandQueue.Enqueue(fn);
+
+            p = new DNP3ApplicationObjectParameters(0xc5, (byte)DNP3FunctionCode.WRITE, (ushort)TypeField.TIME_MESSAGE, 0x07, 0x0001, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc6);
+            fn = DNP3FunctionFactory.CreateDNP3Message(p);
+            commandQueue.Enqueue(fn);
+
+            p = new DNP3ApplicationObjectParameters(0xc6, (byte)DNP3FunctionCode.ENABLE_UNSOLICITED, 0x00, 0x06, 0, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc7);
+            fn = DNP3FunctionFactory.CreateDNP3Message(p);
+            commandQueue.Enqueue(fn);
+        }
+
         /// <summary>
         /// Logic for handling the connection.
         /// </summary>
 		private void ConnectionProcessorThread()
-		{
-			while (this.threadCancellationSignal)
-			{
-				try
-				{
-                    if (connection.ConnectionState == ConnectionState.CONNECTED) {
-                        if (processConnection.WaitOne())
+        {
+            while (this.threadCancellationSignal)
+            {
+                try
+                {
+                    if (connection.ConnectionState == ConnectionState.CONNECTED)
+                    {
+                        if (processConnection.WaitOne() && !commandQueue.IsEmpty)
                         {
                             while (commandQueue.TryDequeue(out currentCommand))
                             {
@@ -182,26 +216,26 @@ namespace ScadaCommon.Connection
                         Thread.Sleep(30);
                     }
                 }
-				catch (SocketException se)
-				{
-					if (se.ErrorCode != 10054)
-					{
-						throw se;
-					}
-					currentCommand = null;
-					connection.ConnectionState = ConnectionState.DISCONNECTED;
-					this.stateUpdater.UpdateConnectionState(ConnectionState.DISCONNECTED);
-					string message = $"{se.TargetSite.ReflectedType.Name}.{se.TargetSite.Name}: {se.Message}";
-					stateUpdater.LogMessage(message);
-				}
-				catch (Exception ex)
-				{
-					string message = $"{ex.TargetSite.ReflectedType.Name}.{ex.TargetSite.Name}: {ex.Message}";
-					stateUpdater.LogMessage(message);
-					currentCommand = null;
-				}
-			}
-		}
+                catch (SocketException se)
+                {
+                    if (se.ErrorCode != 10054)
+                    {
+                        throw se;
+                    }
+                    currentCommand = null;
+                    connection.ConnectionState = ConnectionState.DISCONNECTED;
+                    this.stateUpdater.UpdateConnectionState(ConnectionState.DISCONNECTED);
+                    string message = $"{se.TargetSite.ReflectedType.Name}.{se.TargetSite.Name}: {se.Message}";
+                    stateUpdater.LogMessage(message);
+                }
+                catch (Exception ex)
+                {
+                    string message = $"{ex.TargetSite.ReflectedType.Name}.{ex.TargetSite.Name}: {ex.Message}";
+                    stateUpdater.LogMessage(message);
+                    currentCommand = null;
+                }
+            }
+        }
 
         private void ProccessMsg(byte[] message, int messageLength)
         {
@@ -210,6 +244,8 @@ namespace ScadaCommon.Connection
             byte[] dataArray = new byte[lengthData];
             int byteProcessed = 0;
             byte qualifier, quality;
+
+            CheckUnsMessage(message);
 
             PreproccessMsg(message, messageLength, ref dataArray, lengthData);
 
@@ -221,7 +257,7 @@ namespace ScadaCommon.Connection
 
             short objectType, prefixMeaning, rangeMeaning;
             int prefixOffset = 0, rangeOffset = 0;
-            int start = 0, stop = 0, octetNumber, objectNumber, i, regValue, value, objectPrefix;
+            int start = 0, stop = 0, octetNumber, objectNumber, i, regValue, value;
 
             while (byteProcessed < lengthData)
             {
@@ -263,7 +299,7 @@ namespace ScadaCommon.Connection
                         {
                             regValue = dataArray[byteProcessed + i / 8];
                             value = (regValue & (1 << (i % 8))) != 0 ? 1 : 0;
-                            pointsToupdate.Add(new Tuple<PointType, ushort> (PointType.BINARY_INPUT, (ushort)i), (ushort)value);
+                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.BINARY_INPUT, (ushort)i), (ushort)value);
                         }
                         if (objectNumber % 8 == 0)
                         {
@@ -343,6 +379,7 @@ namespace ScadaCommon.Connection
                 HandleReceivedChangesOfPoints(pointsToupdate);
             }
         }
+
         private void PreproccessMsg(byte[] message, int messageLength, ref byte[] dataArray, int lengthData)
         {
             int dataChunkLen = 0;
@@ -444,6 +481,7 @@ namespace ScadaCommon.Connection
 
             return;
         }
+
         private bool ChechIfUnsolicited(byte unsolicited)
         {
             int uns = (unsolicited & 0x10) >> 4;
@@ -451,30 +489,48 @@ namespace ScadaCommon.Connection
         }
 
 
-        //private void CheckUnsMessage(byte[] messageByte)
-        //{
-        //    //CONFIRM
-        //    byte mask = 0x20;
-        //    byte confirmRestartTime = (byte)((messageByte[11] & mask) >> 5);
-        //    if (confirmRestartTime == 1)
-        //    {
-        //        this.processingManager.SendRawBytesMessage(DNP3FunctionCode.CONFIRM, messageByte);
-        //    }
-        //    //RESTART
-        //    mask = 0x80;
-        //    confirmRestartTime = (byte)((messageByte[13] & mask) >> 7);
-        //    if (confirmRestartTime == 1)
-        //    {
-        //        this.processingManager.SendRawBytesMessage(DNP3FunctionCode.WARM_RESTART, messageByte);
-        //    }
-        //    //TIME SYNC
-        //    mask = 0x10;
-        //    confirmRestartTime = (byte)((messageByte[13] & mask) >> 4);
-        //    if (confirmRestartTime == 1)
-        //    {
-        //        this.processingManager.SendRawBytesMessage(DNP3FunctionCode.WRITE, messageByte);
-        //    }
-        //}
+        private void CheckUnsMessage(byte[] message)
+        {
+            DNP3ApplicationObjectParameters p;
+            IDNP3Functions fn;
+
+            //CONFIRM
+            byte mask = 0x20;
+            byte confirmRestartTime = (byte)((message[11] & mask) >> 5);
+            if (confirmRestartTime == 1)
+            {
+                byte transportHeaderSeq = (byte)(message[10] & 0xf);
+                byte applicationControl = (byte)(message[11] & 0xf);
+
+                p = new DNP3ApplicationObjectParameters((byte)(0xc0 | applicationControl), (byte)DNP3FunctionCode.CONFIRM, 0, 0, 0x0001, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, (byte)((0xc0 | transportHeaderSeq) + 1));
+                fn = DNP3FunctionFactory.CreateDNP3Message(p);
+                SendMessage(fn);
+            }
+            //RESTART
+            mask = 0x80;
+            confirmRestartTime = (byte)((message[13] & mask) >> 7);
+            if (confirmRestartTime == 1)
+            {
+                byte tran = (byte)(message[10] & 0xf);
+                byte app = (byte)(message[11] & 0xf);
+
+                p = new DNP3ApplicationObjectParameters((byte)(0xc0 | app), (byte)DNP3FunctionCode.WRITE, (ushort)TypeField.INTERNAL_INDICATIONS, 0x00, 0x0707, 0x00, 0x00, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, (byte)(0xc0 | tran));
+                fn = DNP3FunctionFactory.CreateDNP3Message(p);
+                SendMessage(fn);
+            }
+            //TIME SYNC
+            mask = 0x10;
+            confirmRestartTime = (byte)((message[13] & mask) >> 4);
+            if (confirmRestartTime == 1)
+            {
+                byte tran = (byte)(message[10] & 0xf);
+                byte app = (byte)(message[11] & 0xf);
+
+                p = new DNP3ApplicationObjectParameters((byte)(0xc0 | app), (byte)DNP3FunctionCode.WRITE, (ushort)TypeField.TIME_MESSAGE, 0x07, 0x0001, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, (byte)(0xc0 | tran));
+                fn = DNP3FunctionFactory.CreateDNP3Message(p);
+                SendMessage(fn);
+            }
+        }
 
         public void SendMessage(IDNP3Functions message)
         {
@@ -483,9 +539,9 @@ namespace ScadaCommon.Connection
 
         /// <inheritdoc />
         public void Dispose()
-		{
-			connectionProcessorThread.Abort();
-		}
+        {
+            connectionProcessorThread.Abort();
+        }
 
     }
 }

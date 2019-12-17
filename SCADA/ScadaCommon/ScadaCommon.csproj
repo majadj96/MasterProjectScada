@@ -41,7 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connection\FunctionExecutor.cs" />
     <Compile Include="Connection\IConnection.cs" />
     <Compile Include="Connection\TCPConnection.cs" />
     <Compile Include="CRCCalculator\CRCCalculator.cs" />
