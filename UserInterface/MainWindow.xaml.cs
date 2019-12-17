@@ -26,6 +26,7 @@ namespace UserInterface
             DataContext = new MainViewModel(this);
             InitializeComponent();
         }
+        
 
 
         //private void breaker_MouseDown(object sender, MouseButtonEventArgs e)

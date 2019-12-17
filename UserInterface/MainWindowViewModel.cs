@@ -1,68 +1,181 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using UserInterface.Command;
+using UserInterface.Subscription;
 
 namespace UserInterface
 {
-    public class MyLine
-    {
-        public int X1 { get; set; }
-        public int Y1 { get; set; }
-        public int X2 { get; set; }
-        public int Y2 { get; set; }
-    }
-
-    class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : INotifyPropertyChanged
     {
 
         public MainViewModel(Window window)
         {
-            window.WindowState = WindowState.Maximized;
-            window.WindowStyle = WindowStyle.None;
-            Line_1 = new MyLine();
-            Line_1.X1 = Line_1.X2 = Line_1.Y1 = 0;
-            Line_1.Y2 = 40;
+            SubNMS subNMS = new SubNMS();
+            subNMS.OnSubscribe();
+
+           // window.WindowState = WindowState.Maximized;
+          //  window.WindowStyle = WindowStyle.None;
+            DisconectorCommand = new DisconectorCommand(this);
+            BreakerCommand = new BreakerCommand(this);
+
+            disconector = breaker = 20;
+            breaker_state = disconector_state = "ON";
+            dis_color = breaker_color = line_1_color = line_2_color = line_3_color = "Black";
+            statistics = "";
+            pubSub = "pocetna vrednost";
+            Messenger.Default.Register<NotificationMessage>(this, (message) => { OnNav(message.Notification); });
+
             //setMesh();
         }
         public Window Window { get; set; }
-        public MyLine line_1 { get; set; }
-        public MyLine disconector { get; set; }
-        public MyLine breaker { get; set; }
-        public MyLine line_2 { get; set; }
-        public MyLine line_3 { get; set; }
+        public int breaker { get; set; }
+        public int disconector { get; set; }
+        public string disconector_state { get; set; }
+        public string breaker_state { get; set; }
 
+        public string dis_color { get; set; }
+        public string breaker_color { get; set; }
+        public string line_1_color { get; set; }
+        public string line_2_color { get; set; }
+        public string line_3_color { get; set; }
+        public string statistics { get; set; }
+        public string pubSub { get; set; }
 
-        public MyLine Line_1
+        public string PubSub
         {
             get
             {
-                return line_1 ;
+                return pubSub;
             }
             set
             {
-                line_1 = value;
-                OnPropertyChanged("Line_1");
+                pubSub = value;
+                OnPropertyChanged("PubSub");
             }
         }
-        public MyLine Breker
+
+
+        public ICommand DisconectorCommand
+        {
+            get;
+            private set;
+        }
+         public ICommand BreakerCommand
+        {
+            get;
+            private set;
+        }
+
+        public string Dis_color
         {
             get
             {
-                return breaker;
+                return dis_color;
             }
             set
             {
-                breaker = value;
-                OnPropertyChanged("Breker");
+                dis_color = value;
+                OnPropertyChanged("Dis_color");
             }
         }
-        public MyLine Disconector
+        public string Statistics
+        {
+            get
+            {
+                return statistics;
+            }
+            set
+            {
+                statistics = value;
+                OnPropertyChanged("Statistics");
+            }
+        }
+        public string Line_1_color
+        {
+            get
+            {
+                return line_1_color;
+            }
+            set
+            {
+                line_1_color = value;
+                OnPropertyChanged("Line_1_color");
+            }
+        }
+        public string Line_2_color
+        {
+            get
+            {
+                return line_2_color;
+            }
+            set
+            {
+                line_2_color = value;
+                OnPropertyChanged("Line_2_color");
+            }
+        }
+        public string Line_3_color
+        {
+            get
+            {
+                return line_3_color;
+            }
+            set
+            {
+                line_3_color = value;
+                OnPropertyChanged("Line_3_color");
+            }
+        }
+          public string Breaker_color
+        {
+            get
+            {
+                return breaker_color;
+            }
+            set
+            {
+                breaker_color = value;
+                OnPropertyChanged("Breaker_color");
+            }
+        }
+
+
+        public string Disconector_state
+        {
+            get
+            {
+                return disconector_state;
+            }
+            set
+            {
+                disconector_state = value;
+                OnPropertyChanged("Disconector_state");
+            }
+        }
+
+        public string Breaker_state
+        {
+            get
+            {
+                return breaker_state;
+            }
+            set
+            {
+                breaker_state = value;
+                OnPropertyChanged("Breaker_state");
+            }
+        }
+
+        public int Disconector
         {
             get
             {
@@ -74,30 +187,20 @@ namespace UserInterface
                 OnPropertyChanged("Disconector");
             }
         }
-        public MyLine Line_2
+        
+        public int Breaker
         {
             get
             {
-                return line_2;
+                return breaker;
             }
             set
             {
-                line_2 = value;
-                OnPropertyChanged("Line_2");
+                breaker = value;
+                OnPropertyChanged("Breaker");
             }
         }
-        public MyLine Line_3
-        {
-            get
-            {
-                return line_3;
-            }
-            set
-            {
-                line_3 = value;
-                OnPropertyChanged("Line_3");
-            }
-        }
+      
         #region INotifyPropertyChanged Members
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -120,20 +223,62 @@ namespace UserInterface
 
         private void setMesh()
         {
-            if (disconector.X1 == 0)
+        }
+        public void DisconectorOperation()
+        {
+            if (Disconector == 0)
             {
-               // line_1.Stroke = getColor(Colors.Yellow);
+                Disconector = 20;
+                Disconector_state = "ON";
+                Dis_color = Line_1_color = Breaker_color = Line_2_color = Line_3_color = "Black";
+                Statistics = "Disconector status: OFF";
+            }
+            else if (Disconector == 20)
+            {
+                Disconector = 0;
+                Disconector_state = "OFF";
+                Dis_color = Line_1_color = "Yellow";
+                Statistics = "Disconector status: ON";
+
+                if (Breaker == 0)
+                {
+                    Breaker_color = Line_2_color = Line_3_color = "Yellow";
+                }
             }
         }
-        public void Prijava(string loz)
+
+        public void OnNav(string newValue)
         {
-
+            PubSub = newValue;
         }
-
-        public void Registracija()
+        public void BreakerOperation()
         {
+            if (Breaker == 0)
+            {
+                Breaker = 20;
+                Breaker_state = "ON";
+                Statistics = "Breaker status: OFF";
+                Breaker_color = Line_2_color = Line_3_color = "Black";
 
+
+            }
+            else if (Breaker == 20)
+            {
+                Breaker = 0;
+                Breaker_state = "OFF";
+                Statistics = "Breaker status: ON";
+
+                if(Disconector == 0)
+                {
+                    Breaker_color = Line_2_color = Line_3_color = "Yellow";
+
+                } else if(Disconector == 20)
+                {
+                    Breaker_color = Line_2_color = Line_3_color = "Black";
+
+                }
+
+            }
         }
-
     }
 }
