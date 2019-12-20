@@ -67,9 +67,9 @@
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ProjekatMaster2019CIMProfile_ProjekatMaster2019, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ProjekatMaster2019CIMProfile_Labs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Lib\ProjekatMaster2019CIMProfile_ProjekatMaster2019.dll</HintPath>
+      <HintPath>Lib\ProjekatMaster2019CIMProfile_Labs.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -91,9 +91,6 @@
     <Compile Include="TransformAndLoadReport.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Lib\ProjekatMaster2019CIMProfile_ProjekatMaster2019.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\CIMParser\CIMParser.csproj">
       <Project>{3c03a41c-be4c-40a8-97d5-5dbac0c34102}</Project>
       <Name>CIMParser</Name>
@@ -106,6 +103,9 @@
       <Project>{60eedd71-25c6-488a-870a-a16acfc91d88}</Project>
       <Name>NetworkModelGDAContract</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Lib\ProjekatMaster2019CIMProfile_Labs.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

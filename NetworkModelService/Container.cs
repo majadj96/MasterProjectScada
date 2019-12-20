@@ -1,7 +1,7 @@
 ﻿using Common;
 using DataModel.Core;
 using DataModel.Meas;
-using DataModel.TDMS;
+using DataModel.Core;
 using DataModel.Topology;
 using DataModel.Wires;
 using System;

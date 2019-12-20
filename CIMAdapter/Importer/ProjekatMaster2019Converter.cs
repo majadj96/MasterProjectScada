@@ -141,16 +141,16 @@
                     }
                     rd.AddProperty(new Property(ModelCode.TERMINAL_CONNNODE, gid));
                 }
-                //if (cimTerminal.ConnectivityNodeHasValue)
-                //{
-                //    long gid = importHelper.GetMappedGID(cimTerminal.ConnectivityNode.ID);
-                //    if (gid < 0)
-                //    {
-                //        report.Report.Append("WARNING: Convert ").Append(cimTerminal.GetType().ToString()).Append(" rdfID = \"").Append(cimTerminal.ID);
-                //        report.Report.Append("\" - Failed to set reference to ConnectivityNode: rdfID \"").Append(cimTerminal.ConnectivityNode.ID).AppendLine(" \" is not mapped to GID!");
-                //    }
-                //    rd.AddProperty(new Property(ModelCode.TERMINAL_CONNNODE, gid));
-                //} TODO for condEquip
+                if (cimTerminal.ConductingEquipmentHasValue)
+                {
+                    long gid = importHelper.GetMappedGID(cimTerminal.ConductingEquipment.ID);
+                    if (gid < 0)
+                    {
+                        report.Report.Append("WARNING: Convert ").Append(cimTerminal.GetType().ToString()).Append(" rdfID = \"").Append(cimTerminal.ID);
+                        report.Report.Append("\" - Failed to set reference to ConductingEquipment: rdfID \"").Append(cimTerminal.ConductingEquipment.ID).AppendLine(" \" is not mapped to GID!");
+                    }
+                    rd.AddProperty(new Property(ModelCode.TERMINAL_CONDEQUIPMENT, gid));
+                }
             }
         }
 
