@@ -101,13 +101,13 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
             ImportDisconnectors();
             ImportBreakers();
             ImportAsynchronousMachines();
-            ImportTerminals();
             ImportConnectivityNodes();
-            ImportAnalogs();
-            ImportDiscretes();
             ImportPowerTransformers();
             ImportTransformerWindings();
             ImportRatioTapChangers();
+            ImportTerminals();
+            ImportAnalogs();
+            ImportDiscretes();
 
             LogManager.Log("Loading elements and creating delta completed.", LogLevel.Info);
         }

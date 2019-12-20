@@ -872,13 +872,13 @@ namespace Common
             typeIdsInInsertOrder.Add(ModelCode.DISCONNECTOR);
             typeIdsInInsertOrder.Add(ModelCode.BREAKER);
             typeIdsInInsertOrder.Add(ModelCode.ASYNCMACHINE);
-            typeIdsInInsertOrder.Add(ModelCode.TERMINAL);
-            typeIdsInInsertOrder.Add(ModelCode.CONNECTIVITYNODE);
-            typeIdsInInsertOrder.Add(ModelCode.ANALOG);
-            typeIdsInInsertOrder.Add(ModelCode.DISCRETE);
             typeIdsInInsertOrder.Add(ModelCode.POWERTRANSFORMER);
             typeIdsInInsertOrder.Add(ModelCode.TRANSFORMERWINDING);
             typeIdsInInsertOrder.Add(ModelCode.RATIOTAPCHANGER);
+            typeIdsInInsertOrder.Add(ModelCode.CONNECTIVITYNODE);
+            typeIdsInInsertOrder.Add(ModelCode.TERMINAL);
+            typeIdsInInsertOrder.Add(ModelCode.ANALOG);
+            typeIdsInInsertOrder.Add(ModelCode.DISCRETE);
         }
 
         private void InitializeNotSettablePropertyIds()

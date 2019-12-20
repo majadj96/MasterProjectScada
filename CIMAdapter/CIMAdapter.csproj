@@ -109,6 +109,7 @@
       <Name>NetworkModelGDAContract</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Lib\ProjekatMaster2019CIMProfile_Labs.dll" />
   </ItemGroup>
