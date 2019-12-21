@@ -359,7 +359,8 @@ namespace NetworkModelService
 
                                 // get referenced entity for update
                                 IdentifiedObject targetEntity = GetEntity(targetGlobalId);
-                                targetEntity.AddReference(property.Id, io.GID);
+                                
+                                targetEntity.AddReference(property.Id, io.GID);                                
                             }
 
                             io.SetProperty(property);

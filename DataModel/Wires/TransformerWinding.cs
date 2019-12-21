@@ -102,6 +102,44 @@ namespace DataModel.Wires
 
             base.GetReferences(references, refType);
         }
+
+        public override void AddReference(ModelCode referenceId, long globalId)
+        {
+            switch (referenceId)
+            {
+                case ModelCode.RATIOTAPCHANGER_TRWINDING:
+                    ratioTapChanger = globalId;
+                    break;
+
+                default:
+                    base.AddReference(referenceId, globalId);
+                    break;
+            }
+        }
+
+        public override void RemoveReference(ModelCode referenceId, long globalId)
+        {
+            switch (referenceId)
+            {
+                case ModelCode.RATIOTAPCHANGER_TRWINDING:
+
+                    if (ratioTapChanger == globalId)
+                    {
+                        ratioTapChanger = 0;
+                    }
+                    else
+                    {
+                        CommonTrace.WriteTrace(CommonTrace.TraceWarning, "Entity (GID = 0x{0:x16}) doesn't contain reference 0x{1:x16}.", this.GID, globalId);
+                    }
+
+                    break;
+
+                default:
+                    base.RemoveReference(referenceId, globalId);
+                    break;
+            }
+        }
+
         #endregion
     }
 }
