@@ -1,5 +1,4 @@
-﻿using DNP3.FunctionParameters;
-using DNP3.DNP3Functions;
+﻿using DNP3.DNP3Functions;
 using ScadaCommon;
 using ScadaCommon.Connection;
 using ScadaCommon.Interfaces;
@@ -94,15 +93,7 @@ namespace ProcessingModule
             fn = DNP3FunctionFactory.CreateDNP3Message(p);
             commandQueue.Enqueue(fn);
 
-            p = new DNP3ApplicationObjectParameters(0xc2, (byte)DNP3FunctionCode.DISABLE_UNSOLICITED, 0x00, 0x06, 0, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc3);
-            fn = DNP3FunctionFactory.CreateDNP3Message(p);
-            commandQueue.Enqueue(fn);
-
             p = new DNP3ApplicationObjectParameters(0xc3, (byte)DNP3FunctionCode.READ, 0x00, 0x06, 0, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc4);
-            fn = DNP3FunctionFactory.CreateDNP3Message(p);
-            commandQueue.Enqueue(fn);
-
-            p = new DNP3ApplicationObjectParameters(0xc4, (byte)DNP3FunctionCode.DELAY_MEASUREMENT, 0x00, 0x00, 0, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc5);
             fn = DNP3FunctionFactory.CreateDNP3Message(p);
             commandQueue.Enqueue(fn);
 
@@ -126,7 +117,7 @@ namespace ProcessingModule
                 {
                     if (connection.ConnectionState == ConnectionState.CONNECTED)
                     {
-                        if (processConnection.WaitOne() && !commandQueue.IsEmpty)
+                        if (!commandQueue.IsEmpty)
                         {
                             while (commandQueue.TryDequeue(out currentCommand))
                             {
@@ -159,7 +150,7 @@ namespace ProcessingModule
                                     }
 
                                     payload = this.connection.RecvBytes(len);
-
+                                    
                                     message = new byte[header.Length + payload.Length];
                                     Buffer.BlockCopy(header, 0, message, 0, 10);
                                     Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
@@ -171,42 +162,45 @@ namespace ProcessingModule
                                     }
 
                                     this.ProccessMsg(message, len + 10);
-                                    this.currentCommand = null;
                                 }
+                             this.currentCommand = null;
                             }
                         }
                         else
                         {
-                            byte[] message;
-                            byte[] header = this.connection.RecvBytes(10);
-                            byte payLoadSize = 0;
-                            int len = 0;
-                            unchecked
+                            if (this.connection.ReadReady())
                             {
-                                payLoadSize = (byte)BitConverter.ToChar(header, 2);
+                                byte[] message;
+                                byte[] header = this.connection.RecvBytes(10);
+                                byte payLoadSize = 0;
+                                int len = 0;
+                                unchecked
+                                {
+                                    payLoadSize = (byte)BitConverter.ToChar(header, 2);
+                                }
+                                byte[] payload;
+
+                                //Duzina poruke posle header-a (heder je duzine 5) racuna se tako sto od ukupne duzine oduzmemo header
+                                // i na tu duzinu dodajemo duzinu svih crc-ova koji su na svakih 16 bajtova
+                                payLoadSize = (byte)(payLoadSize - 5);
+
+                                if (payLoadSize % 16 == 0)
+                                {
+                                    len = payLoadSize + (payLoadSize / 16) * 2;
+                                }
+                                else
+                                {
+                                    len = (payLoadSize / 16) == 0 ? (byte)(payLoadSize + 2) : (byte)(payLoadSize + (payLoadSize / 16) * 2 + 2);
+                                }
+
+                                payload = this.connection.RecvBytes(len);
+
+                                message = new byte[header.Length + payload.Length];
+                                Buffer.BlockCopy(header, 0, message, 0, 10);
+                                Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
+                                this.ProccessMsg(message, len + 10);
+                                this.currentCommand = null;
                             }
-                            byte[] payload;
-
-                            //Duzina poruke posle header-a (heder je duzine 5) racuna se tako sto od ukupne duzine oduzmemo header
-                            // i na tu duzinu dodajemo duzinu svih crc-ova koji su na svakih 16 bajtova
-                            payLoadSize = (byte)(payLoadSize - 5);
-
-                            if (payLoadSize % 16 == 0)
-                            {
-                                len = payLoadSize + (payLoadSize / 16) * 2;
-                            }
-                            else
-                            {
-                                len = (payLoadSize / 16) == 0 ? (byte)(payLoadSize + 2) : (byte)(payLoadSize + (payLoadSize / 16) * 2 + 2);
-                            }
-
-                            payload = this.connection.RecvBytes(len);
-
-                            message = new byte[header.Length + payload.Length];
-                            Buffer.BlockCopy(header, 0, message, 0, 10);
-                            Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
-                            this.ProccessMsg(message, len + 10);
-                            this.currentCommand = null;
                         }
                         Thread.Sleep(30);
                     }
@@ -243,9 +237,9 @@ namespace ProcessingModule
             byte lengthData = (byte)(BitConverter.ToChar(message, 2) - 5);
             byte[] dataArray = new byte[lengthData];
             int byteProcessed = 0;
-            byte qualifier, quality;
+            byte qualifier, quality, controlStatus;
 
-            CheckUnsMessage(message);
+            ConfirmUnsMessage(message);
 
             PreproccessMsg(message, messageLength, ref dataArray, lengthData);
 
@@ -257,7 +251,7 @@ namespace ProcessingModule
 
             short objectType, prefixMeaning, rangeMeaning;
             int prefixOffset = 0, rangeOffset = 0;
-            int start = 0, stop = 0, octetNumber, objectNumber, i, regValue, value;
+            int start = 0, stop = 0, objectNumber = -1, adress, regValue, value, i, objectIndex = -1;
 
             while (byteProcessed < lengthData)
             {
@@ -267,39 +261,96 @@ namespace ProcessingModule
                 qualifier = dataArray[byteProcessed++];
                 ProcessQualifier(qualifier, out prefixOffset, out prefixMeaning, out rangeOffset, out rangeMeaning);
 
-                octetNumber = rangeOffset / 2;
-                if (octetNumber == 1)
+                if (rangeOffset == 1)
                 {
-                    start = (byte)BitConverter.ToChar(dataArray, byteProcessed);
-                    byteProcessed++;
-                    stop = (byte)BitConverter.ToChar(dataArray, byteProcessed);
-                    byteProcessed++;
+                    objectNumber = (byte)BitConverter.ToChar(dataArray, byteProcessed);
+                    byteProcessed ++;
                 }
-                else if (octetNumber == 2)
+                else if (rangeOffset == 2)
                 {
-                    start = BitConverter.ToInt16(dataArray, byteProcessed);
-                    byteProcessed += 2;
-                    stop = BitConverter.ToInt16(dataArray, byteProcessed);
-                    byteProcessed += 2;
-                }
-                else if (octetNumber == 4)
-                {
-                    start = BitConverter.ToInt32(dataArray, byteProcessed);
-                    byteProcessed += 4;
-                    stop = BitConverter.ToInt32(dataArray, byteProcessed);
-                    byteProcessed += 4;
-                }
+                    if (rangeMeaning == (short)Qualifier.START_STOP_INDEX)
+                    {
+                        start = (byte)BitConverter.ToChar(dataArray, byteProcessed);
+                        byteProcessed++;
+                        stop = (byte)BitConverter.ToChar(dataArray, byteProcessed);
+                        byteProcessed++;
 
-                objectNumber = stop - start + 1;
+                        objectNumber = stop - start + 1;
+                    }
+                    else if(rangeMeaning == (short)Qualifier.OBJECT_COUNT)
+                    {
+                        objectNumber = BitConverter.ToInt16(dataArray, byteProcessed);
+                        byteProcessed += 2;
+                    }
+                }
+                else if (rangeOffset == 4)
+                {
+                    if (rangeMeaning == (short)Qualifier.START_STOP_INDEX)
+                    {
+                        start = BitConverter.ToInt16(dataArray, byteProcessed);
+                        byteProcessed += 2;
+                        stop = BitConverter.ToInt16(dataArray, byteProcessed);
+                        byteProcessed += 2;
+
+                        objectNumber = stop - start + 1;
+                    }
+                    else if (rangeMeaning == (short)Qualifier.OBJECT_COUNT)
+                    {
+                        objectNumber = BitConverter.ToInt32(dataArray, byteProcessed);
+                        byteProcessed += 4;
+                    }
+                }
+                else if (rangeOffset == 8)
+                {
+                    if (rangeMeaning == (short)Qualifier.START_STOP_INDEX)
+                    {
+                        start = BitConverter.ToInt32(dataArray, byteProcessed);
+                        byteProcessed += 4;
+                        stop = BitConverter.ToInt32(dataArray, byteProcessed);
+                        byteProcessed += 4;
+
+                        objectNumber = stop - start + 1;
+                    }
+                }
 
                 switch ((TypeField)objectType)
                 {
-                    case TypeField.BINARY_INPUT_PACKED_FORMAT:
-                        for (i = start; i <= stop; i++)
+                    case TypeField.BINARY_COMMAND:
+                        for (i = 0; i < objectNumber; i++)
                         {
-                            regValue = dataArray[byteProcessed + i / 8];
-                            value = (regValue & (1 << (i % 8))) != 0 ? 1 : 0;
-                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.BINARY_INPUT, (ushort)i), (ushort)value);
+                            if (prefixOffset == 1)
+                            {
+                                objectIndex = BitConverter.ToChar(dataArray, byteProcessed);
+                                byteProcessed++;
+                            }
+                            else if (prefixOffset == 2)
+                            {
+                                objectIndex = BitConverter.ToInt16(dataArray, byteProcessed);
+                                byteProcessed +=2;
+                            }
+                            else if(prefixOffset == 4)
+                            {
+                                objectIndex = BitConverter.ToInt32(dataArray, byteProcessed);
+                                byteProcessed +=4;
+                            }
+                            regValue = dataArray[byteProcessed++];
+                            if (regValue == 0x41)
+                            {
+                                pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.BINARY_OUTPUT, (ushort)objectIndex), 1);
+                            }
+                            else
+                            {
+                                pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.BINARY_OUTPUT, (ushort)objectIndex), 0);
+                            }
+                            byteProcessed += 10;
+                        }
+                        break;
+                    case TypeField.BINARY_INPUT_PACKED_FORMAT:
+                        for (adress = start; adress <= stop; adress++)
+                        {
+                            regValue = dataArray[byteProcessed + adress / 8];
+                            value = (regValue & (1 << (adress % 8))) != 0 ? 1 : 0;
+                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.BINARY_INPUT, (ushort)adress), (ushort)value);
                         }
                         if (objectNumber % 8 == 0)
                         {
@@ -308,14 +359,22 @@ namespace ProcessingModule
                         else
                         {
                             byteProcessed += objectNumber / 8 + 1;
+                        }
+                        break;
+                    case TypeField.BINARY_INPUT_WITH_STATUS:
+                        for (adress = start; adress <= stop; adress++)
+                        {
+                            regValue = dataArray[byteProcessed++];
+                            value = (regValue & 0x80) >> 7;
+                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.BINARY_INPUT, (ushort)adress), (ushort)value);
                         }
                         break;
                     case TypeField.BINARY_OUTPUT_PACKED_FORMAT:
-                        for (i = start; i <= stop; i++)
+                        for (adress = start; adress <= stop; adress++)
                         {
-                            regValue = dataArray[byteProcessed + i / 8];
-                            value = (regValue & (1 << (i % 8))) != 0 ? 1 : 0;
-                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.BINARY_OUTPUT, (ushort)i), (ushort)value);
+                            regValue = dataArray[byteProcessed + adress / 8];
+                            value = (regValue & (1 << (adress % 8))) != 0 ? 1 : 0;
+                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.BINARY_OUTPUT, (ushort)adress), (ushort)value);
                         }
                         if (objectNumber % 8 == 0)
                         {
@@ -326,16 +385,49 @@ namespace ProcessingModule
                             byteProcessed += objectNumber / 8 + 1;
                         }
                         break;
+                    case TypeField.BINATY_OUTPUT_WITH_STATUS:
+                        for (adress = start; adress <= stop; adress++)
+                        {
+                            regValue = dataArray[byteProcessed++];
+                            value = regValue & 0x80;
+                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.BINARY_INPUT, (ushort)adress), (ushort)value);
+                        }
+                        break;
                     case TypeField.ANALOG_INPUT_16BIT:
-                        for (i = start; i <= stop; i++)
+                        for (adress = start; adress <= stop; adress++)
                         {
                             regValue = BitConverter.ToInt16(dataArray, byteProcessed);
                             byteProcessed += 2;
-                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.ANALOG_INPUT, (ushort)i), (ushort)regValue);
+                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.ANALOG_INPUT, (ushort)adress), (ushort)regValue);
+                        }
+                        break;
+                    case TypeField.ANALOG_OUTPUT_16BIT:
+                        for (i = 0; i < objectNumber; i++)
+                        {
+                            if (prefixOffset == 1)
+                            {
+                                objectIndex = BitConverter.ToChar(dataArray, byteProcessed);
+                                byteProcessed++;
+                            }
+                            else if (prefixOffset == 2)
+                            {
+                                objectIndex = BitConverter.ToInt16(dataArray, byteProcessed);
+                                byteProcessed += 2;
+                            }
+                            else if (prefixOffset == 4)
+                            {
+                                objectIndex = BitConverter.ToInt32(dataArray, byteProcessed);
+                                byteProcessed += 4;
+                            }
+                            regValue = BitConverter.ToInt16(dataArray, byteProcessed);
+                            byteProcessed += 2;
+
+                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.ANALOG_OUTPUT_16, (ushort)objectIndex), (ushort)regValue);
+                            controlStatus = dataArray[byteProcessed++];
                         }
                         break;
                     case TypeField.COUNTER_16BIT:
-                        for (i = start; i <= stop; i++)
+                        for (adress = start; adress <= stop; adress++)
                         {
                             regValue = BitConverter.ToInt16(dataArray, byteProcessed);
                             byteProcessed += 2;
@@ -344,7 +436,7 @@ namespace ProcessingModule
                         }
                         break;
                     case TypeField.FROZEN_COUNTER_16BIT:
-                        for (i = start; i <= stop; i++)
+                        for (adress = start; adress <= stop; adress++)
                         {
                             regValue = BitConverter.ToInt16(dataArray, byteProcessed);
                             byteProcessed += 2;
@@ -353,24 +445,108 @@ namespace ProcessingModule
                         }
                         break;
                     case TypeField.ANALOG_OUTPUT_STATUS_16BIT:
-                        for (i = start; i <= stop; i++)
+                        for (adress = start; adress <= stop; adress++)
                         {
                             quality = (byte)BitConverter.ToChar(dataArray, byteProcessed);
                             byteProcessed++;
                             regValue = BitConverter.ToInt16(dataArray, byteProcessed);
                             byteProcessed += 2;
-                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.ANALOG_OUTPUT, (ushort)i), (ushort)regValue);
+                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.ANALOG_OUTPUT, (ushort)adress), (ushort)regValue);
                         }
                         break;
-                    case TypeField.BINARY_OUTPUT_EVENT:
-                        break;
-                    case TypeField.ANALOG_INPUT_EVENT_16BIT:
+                    case TypeField.BINARY_OUTPUT_WITHOUT_TIME:
+                        for (i = 0; i < objectNumber; i++)
+                        {
+                            if (prefixOffset == 1)
+                            {
+                                objectIndex = BitConverter.ToChar(dataArray, byteProcessed);
+                                byteProcessed++;
+                            }
+                            else if (prefixOffset == 2)
+                            {
+                                objectIndex = BitConverter.ToInt16(dataArray, byteProcessed);
+                                byteProcessed += 2;
+                            }
+                            else if (prefixOffset == 4)
+                            {
+                                objectIndex = BitConverter.ToInt32(dataArray, byteProcessed);
+                                byteProcessed += 4;
+                            }
+                            regValue = dataArray[byteProcessed++];
+                            value = (regValue & 0x80) >> 7;
+                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.BINARY_OUTPUT, (ushort)objectIndex), (ushort)value);
+                        }
                         break;
                     case TypeField.BINARY_INPUT_EVENT_WITHOUT_TIME:
+                        for (i = 0; i < objectNumber; i++)
+                        {
+                            if (prefixOffset == 1)
+                            {
+                                objectIndex = BitConverter.ToChar(dataArray, byteProcessed);
+                                byteProcessed++;
+                            }
+                            else if (prefixOffset == 2)
+                            {
+                                objectIndex = BitConverter.ToInt16(dataArray, byteProcessed);
+                                byteProcessed += 2;
+                            }
+                            else if (prefixOffset == 4)
+                            {
+                                objectIndex = BitConverter.ToInt32(dataArray, byteProcessed);
+                                byteProcessed += 4;
+                            }
+                            regValue = dataArray[byteProcessed++];
+                            value = (regValue & 0x80) >> 7;
+                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.BINARY_INPUT, (ushort)objectIndex), (ushort)value);
+                        }
                         break;
-                    case TypeField.FLOATING_POINT_OUTPUT_EVENT_32BIT:
+                    case TypeField.ANALOG_INPUT_EVENT_16BIT:
+                        for (i = 0; i < objectNumber; i++)
+                        {
+                            if (prefixOffset == 1)
+                            {
+                                objectIndex = BitConverter.ToChar(dataArray, byteProcessed);
+                                byteProcessed++;
+                            }
+                            else if (prefixOffset == 2)
+                            {
+                                objectIndex = BitConverter.ToInt16(dataArray, byteProcessed);
+                                byteProcessed += 2;
+                            }
+                            else if (prefixOffset == 4)
+                            {
+                                objectIndex = BitConverter.ToInt32(dataArray, byteProcessed);
+                                byteProcessed += 4;
+                            }
+                            quality = dataArray[byteProcessed++];
+                            regValue = BitConverter.ToInt16(dataArray, byteProcessed);
+                            byteProcessed += 2;
+                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.ANALOG_INPUT, (ushort)objectIndex), (ushort)regValue);
+                        }
                         break;
-                    case TypeField.COUNTER_CHANGE_EVENT_16BIT:
+                    case TypeField.ANALOG_OUTPUT_EVENT_16BIT_WITHOUT_TIME:
+                        for (i = 0; i < objectNumber; i++)
+                        {
+                            if (prefixOffset == 1)
+                            {
+                                objectIndex = BitConverter.ToChar(dataArray, byteProcessed);
+                                byteProcessed++;
+                            }
+                            else if (prefixOffset == 2)
+                            {
+                                objectIndex = BitConverter.ToInt16(dataArray, byteProcessed);
+                                byteProcessed += 2;
+                            }
+                            else if (prefixOffset == 4)
+                            {
+                                objectIndex = BitConverter.ToInt32(dataArray, byteProcessed);
+                                byteProcessed += 4;
+                            }
+                            quality = dataArray[byteProcessed++];
+                            regValue = BitConverter.ToInt16(dataArray, byteProcessed);
+                            byteProcessed += 2;
+                            pointsToupdate.Add(new Tuple<PointType, ushort>(PointType.ANALOG_OUTPUT, (ushort)objectIndex), (ushort)regValue);
+                        }
                         break;
                     default:
 
@@ -440,15 +616,15 @@ namespace ProcessingModule
             {
                 case 0x0:
                     rangeOffset = 2;
-                    rangeMeaning = (short)Qualifier.INDEX;
+                    rangeMeaning = (short)Qualifier.START_STOP_INDEX;
                     break;
                 case 0x1:
                     rangeOffset = 4;
-                    rangeMeaning = (short)Qualifier.INDEX;
+                    rangeMeaning = (short)Qualifier.START_STOP_INDEX;
                     break;
                 case 0x2:
                     rangeOffset = 8;
-                    rangeMeaning = (short)Qualifier.INDEX;
+                    rangeMeaning = (short)Qualifier.START_STOP_INDEX;
                     break;
                 case 0x3:
                     rangeOffset = 2;
@@ -489,7 +665,7 @@ namespace ProcessingModule
         }
 
 
-        private void CheckUnsMessage(byte[] message)
+        private void ConfirmUnsMessage(byte[] message)
         {
             DNP3ApplicationObjectParameters p;
             IDNP3Functions fn;
@@ -502,37 +678,18 @@ namespace ProcessingModule
                 byte transportHeaderSeq = (byte)(message[10] & 0xf);
                 byte applicationControl = (byte)(message[11] & 0xf);
 
-                p = new DNP3ApplicationObjectParameters((byte)(0xc0 | applicationControl), (byte)DNP3FunctionCode.CONFIRM, 0, 0, 0x0001, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, (byte)((0xc0 | transportHeaderSeq) + 1));
+                p = new DNP3ApplicationObjectParameters((byte)(0xd0 | applicationControl), (byte)DNP3FunctionCode.CONFIRM, 0, 0, 0x0001, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, (byte)((0xc0 | transportHeaderSeq) + 1));
                 fn = DNP3FunctionFactory.CreateDNP3Message(p);
-                SendMessage(fn);
-            }
-            //RESTART
-            mask = 0x80;
-            confirmRestartTime = (byte)((message[13] & mask) >> 7);
-            if (confirmRestartTime == 1)
-            {
-                byte tran = (byte)(message[10] & 0xf);
-                byte app = (byte)(message[11] & 0xf);
-
-                p = new DNP3ApplicationObjectParameters((byte)(0xc0 | app), (byte)DNP3FunctionCode.WRITE, (ushort)TypeField.INTERNAL_INDICATIONS, 0x00, 0x0707, 0x00, 0x00, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, (byte)(0xc0 | tran));
-                fn = DNP3FunctionFactory.CreateDNP3Message(p);
-                SendMessage(fn);
-            }
-            //TIME SYNC
-            mask = 0x10;
-            confirmRestartTime = (byte)((message[13] & mask) >> 4);
-            if (confirmRestartTime == 1)
-            {
-                byte tran = (byte)(message[10] & 0xf);
-                byte app = (byte)(message[11] & 0xf);
-
-                p = new DNP3ApplicationObjectParameters((byte)(0xc0 | app), (byte)DNP3FunctionCode.WRITE, (ushort)TypeField.TIME_MESSAGE, 0x07, 0x0001, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, (byte)(0xc0 | tran));
-                fn = DNP3FunctionFactory.CreateDNP3Message(p);
-                SendMessage(fn);
+                SendDirectMessage(fn);
             }
         }
 
         public void SendMessage(IDNP3Functions message)
+        {
+            this.commandQueue.Enqueue(message);
+        }
+
+        public void SendDirectMessage(IDNP3Functions message)
         {
             this.connection.SendBytes(message.PackRequest());
         }
