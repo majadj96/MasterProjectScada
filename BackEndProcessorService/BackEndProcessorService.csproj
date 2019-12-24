@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{823D1355-EFD0-481C-A0D9-FDA0C4EA37DF}</ProjectGuid>
+    <ProjectGuid>{9E9F3E50-1395-46B5-8D75-B16A08B45CDF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ScadaCommon</RootNamespace>
-    <AssemblyName>ScadaCommon</AssemblyName>
+    <RootNamespace>BackEndProcessorService</RootNamespace>
+    <AssemblyName>BackEndProcessorService</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,31 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackEnd_FrontEnd\IProcessingObject.cs" />
-    <Compile Include="Connection\IConnection.cs" />
-    <Compile Include="Connection\TCPConnection.cs" />
-    <Compile Include="CRCCalculator\CRCCalculator.cs" />
-    <Compile Include="Enums.cs" />
-    <Compile Include="Interfaces\IAnalogPoint.cs" />
-    <Compile Include="Interfaces\IConfigItem.cs" />
-    <Compile Include="Interfaces\IConfiguration.cs" />
-    <Compile Include="Interfaces\IDigitalPoint.cs" />
-    <Compile Include="Interfaces\IDNP3Functions.cs" />
-    <Compile Include="Interfaces\IFunctionExecutor.cs" />
-    <Compile Include="Interfaces\IModbusFunction.cs" />
-    <Compile Include="Interfaces\IPoint.cs" />
-    <Compile Include="Interfaces\IProcessingManager.cs" />
-    <Compile Include="Interfaces\IStateUpdater.cs" />
-    <Compile Include="Interfaces\IStorage.cs" />
-    <Compile Include="PointIdentifierHelper.cs" />
+    <Compile Include="AlarmingModule.cs" />
+    <Compile Include="BackEndPocessingModule.cs" />
+    <Compile Include="EGUModule.cs" />
+    <Compile Include="IBackEndProcessingData.cs" />
+    <Compile Include="IProcessingData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SCADA\ScadaCommon\ScadaCommon.csproj">
+      <Project>{823D1355-EFD0-481C-A0D9-FDA0C4EA37DF}</Project>
+      <Name>ScadaCommon</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
