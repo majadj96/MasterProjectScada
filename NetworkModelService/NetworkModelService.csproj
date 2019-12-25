@@ -50,6 +50,7 @@
     <Compile Include="NetworkModel.cs" />
     <Compile Include="NetworkModelService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PubNMS.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
@@ -63,6 +64,10 @@
     <ProjectReference Include="..\NetworkModelGDAContract\NetworkModelGDAContract.csproj">
       <Project>{60EEDD71-25C6-488A-870A-A16ACFC91D88}</Project>
       <Name>NetworkModelGDAContract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PubSubCommon\PubSubCommon.csproj">
+      <Project>{6109286A-0DC9-469C-A271-0605C18ED32C}</Project>
+      <Name>PubSubCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
