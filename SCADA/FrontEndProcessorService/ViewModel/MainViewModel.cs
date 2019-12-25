@@ -34,6 +34,7 @@ namespace FrontEndProcessorService.ViewModel
 		private bool disposed = false;
 		IConfiguration configuration;
         private IProcessingManager processingManager = null;
+        private NetworkDynamicServiceProxy ndsProxy;
 		#endregion Fields
 
 		Dictionary<int, IPoint> pointsCache = new Dictionary<int, IPoint>();
@@ -101,7 +102,10 @@ namespace FrontEndProcessorService.ViewModel
 		public MainViewModel()
 		{
 			Thread.CurrentThread.Name = "Main Thread";
-			logBuilder = new StringBuilder();
+           // ndsProxy = new NetworkDynamicServiceProxy("NetworkDynamicServiceEndPoint");
+            //ndsProxy.Open();
+
+            logBuilder = new StringBuilder();
 			configuration = new ConfigReader();
             this.connection = new TCPConnection(this, configuration);
             commandExecutor = new FunctionExecutor(this, configuration, connection);
