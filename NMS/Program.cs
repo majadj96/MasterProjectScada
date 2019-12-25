@@ -15,8 +15,9 @@ namespace NMS
             {
                 String message = Console.ReadLine();
                 if (message.Contains("a"))
-                pub.SendEvent(message, null);
-
+                {
+                    pub.SendEvent(message, null);
+                }
             }
 
         }
