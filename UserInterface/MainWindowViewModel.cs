@@ -21,21 +21,30 @@ namespace UserInterface
         {
             SubNMS subNMS = new SubNMS();
             subNMS.OnSubscribe();
-
-           // window.WindowState = WindowState.Maximized;
-          //  window.WindowStyle = WindowStyle.None;
+            setUpLayout();
+            setUpInitState();
+            Messenger.Default.Register<NotificationMessage>(this, (message) => {PopulateModel(message.Notification); });
             DisconectorCommand = new DisconectorCommand(this);
             BreakerCommand = new BreakerCommand(this);
+        }
 
+        public void setUpLayout()
+        {
+            // window.WindowState = WindowState.Maximized;
+            //  window.WindowStyle = WindowStyle.None;
+        }
+
+        public void setUpInitState()
+        {
             disconector = breaker = 20;
             breaker_state = disconector_state = "ON";
             dis_color = breaker_color = line_1_color = line_2_color = line_3_color = "Black";
             statistics = "";
             pubSub = "pocetna vrednost";
-            Messenger.Default.Register<NotificationMessage>(this, (message) => { OnNav(message.Notification); });
-
-            //setMesh();
         }
+
+
+        #region Properties
         public Window Window { get; set; }
         public int breaker { get; set; }
         public int disconector { get; set; }
@@ -200,7 +209,9 @@ namespace UserInterface
                 OnPropertyChanged("Breaker");
             }
         }
-      
+
+        #endregion
+
         #region INotifyPropertyChanged Members
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -216,14 +227,7 @@ namespace UserInterface
         }
         #endregion
 
-        private SolidColorBrush getColor(Color color)
-        {
-            return new SolidColorBrush(color);
-        }
-
-        private void setMesh()
-        {
-        }
+  
         public void DisconectorOperation()
         {
             if (Disconector == 0)
@@ -247,10 +251,7 @@ namespace UserInterface
             }
         }
 
-        public void OnNav(string newValue)
-        {
-            PubSub = newValue;
-        }
+    
         public void BreakerOperation()
         {
             if (Breaker == 0)
@@ -279,6 +280,10 @@ namespace UserInterface
                 }
 
             }
+        }
+        public void PopulateModel(string newValue)
+        {
+            PubSub = newValue;
         }
     }
 }
