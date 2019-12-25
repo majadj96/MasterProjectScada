@@ -56,22 +56,6 @@ namespace ProcessingModule
             }
         }
 
-        /// <summary>
-        /// Invokes the update point event after the response is parsed.
-        /// </summary>
-        /// <param name="receivedBytes">The received response.</param>
-		public void HandleReceivedBytes(byte[] receivedBytes)
-        {
-            Dictionary<Tuple<PointType, ushort>, ushort> pointsToupdate = this.currentCommand?.ParseResponse(receivedBytes);
-            if (UpdatePointEvent != null)
-            {
-                foreach (var point in pointsToupdate)
-                {
-                    UpdatePointEvent.Invoke(point.Key.Item1, point.Key.Item2, point.Value);
-                }
-            }
-        }
-
         public void HandleReceivedChangesOfPoints(Dictionary<Tuple<PointType, ushort>, ushort> pointsToupdate)
         {
             if (UpdatePointEvent != null)
