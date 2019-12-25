@@ -42,6 +42,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -71,6 +72,7 @@
     <Compile Include="ControlWindow.xaml.cs">
       <DependentUpon>ControlWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NetworkDynamicServiceProxy.cs" />
     <Compile Include="Utils\RelayCommand.cs" />
     <Compile Include="ViewModel\PointViewModels\AnalaogInput.cs" />
     <Compile Include="ViewModel\PointViewModels\AnalogBase.cs" />

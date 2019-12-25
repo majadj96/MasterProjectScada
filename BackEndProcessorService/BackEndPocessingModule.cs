@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using ScadaCommon.BackEnd_FrontEnd;
+using ScadaCommon.ServiceContract;
 
 namespace BackEndProcessorService
 {
-    public class BackEndPocessingModule : IBackEndProcessingData
+    public class BackEndPocessingModule : IBackEndProessingData
     {
         public List<IProcessingData> ProcessingModules { get; set; }
         public BackEndPocessingModule()
