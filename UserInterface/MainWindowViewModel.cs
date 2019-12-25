@@ -31,7 +31,7 @@ namespace UserInterface
         public void setUpLayout()
         {
             // window.WindowState = WindowState.Maximized;
-            //  window.WindowStyle = WindowStyle.None;
+              Window.WindowStyle = WindowStyle.None;
         }
 
         public void setUpInitState()
