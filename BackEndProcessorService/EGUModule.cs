@@ -11,7 +11,7 @@ namespace BackEndProcessorService
     {
         public void Process(IProcessingObject processingObject)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Egu radi!");
         }
     }
 }

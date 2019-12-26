@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using ScadaCommon.BackEnd_FrontEnd;
 using ScadaCommon.ServiceContract;
 
