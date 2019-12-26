@@ -102,8 +102,10 @@ namespace FrontEndProcessorService.ViewModel
 		public MainViewModel()
 		{
 			Thread.CurrentThread.Name = "Main Thread";
-           // ndsProxy = new NetworkDynamicServiceProxy("NetworkDynamicServiceEndPoint");
-            //ndsProxy.Open();
+            ndsProxy = new NetworkDynamicServiceProxy("NetworkDynamicServiceEndPoint");
+            ndsProxy.Open();
+
+            ndsProxy.Process(null);
 
             logBuilder = new StringBuilder();
 			configuration = new ConfigReader();

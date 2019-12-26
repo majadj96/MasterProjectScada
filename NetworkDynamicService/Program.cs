@@ -10,6 +10,14 @@ namespace NetworkDynamicService
     {
         static void Main(string[] args)
         {
+            using (NetworkDynamicService nds = new NetworkDynamicService())
+            {
+                nds.Start();
+
+                Console.WriteLine("Kao krenulo!");
+                Console.ReadLine();
+            }
+
             Console.ReadKey();
         }
     }

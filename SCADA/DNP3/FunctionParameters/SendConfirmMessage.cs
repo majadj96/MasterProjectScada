@@ -37,10 +37,7 @@ namespace DNP3.FunctionParameters
             dnp3Message[10] = CommandParameters.TransportHeader;
             dnp3Message[11] = CommandParameters.AplicationControl;
             dnp3Message[12] = CommandParameters.FunctionCode;
-            //dnp3Message[13] = BitConverter.GetBytes((short)CommandParameters.TypeField)[1];
-            //dnp3Message[14] = BitConverter.GetBytes((short)CommandParameters.TypeField)[0];
-            //dnp3Message[15] = CommandParameters.Qualifier;
-            //Buffer.BlockCopy(BitConverter.GetBytes(Convert.ToUInt16(CommandParameters.Range)), 0, dnp3Message, 16, 2);
+
             ushort crc1 = 0;
             for (int i = 10; i < 13; i++)
             {
@@ -51,11 +48,6 @@ namespace DNP3.FunctionParameters
             Buffer.BlockCopy(BitConverter.GetBytes(crc1), 0, dnp3Message, 13, 2);
 
             return dnp3Message;
-        }
-
-        public override Dictionary<Tuple<PointType, ushort>, ushort> ParseResponse(byte[] receivedBytes)
-        {
-            throw new NotImplementedException();
         }
     }
 }
