@@ -18,7 +18,6 @@ namespace ProcessingModule
     public class FunctionExecutor : IDisposable, IFunctionExecutor
     {
         private IConnection connection;
-        private IStateUpdater stateUpdater;
         private IDNP3Functions currentCommand;
         private bool threadCancellationSignal = true;
         private AutoResetEvent processConnection;
@@ -34,10 +33,9 @@ namespace ProcessingModule
         /// </summary>
         /// <param name="stateUpdater">The state updater.</param>
         /// <param name="configuration">The configuration.</param>
-		public FunctionExecutor(IStateUpdater stateUpdater, IConfiguration configuration, IConnection connection)
+		public FunctionExecutor(IConfiguration configuration, IConnection connection)
         {
             MessagesForUnsolicited();
-            this.stateUpdater = stateUpdater;
             this.configuration = configuration;
             this.connection = connection;
             this.processConnection = new AutoResetEvent(true);
@@ -202,14 +200,11 @@ namespace ProcessingModule
                     }
                     currentCommand = null;
                     connection.ConnectionState = ConnectionState.DISCONNECTED;
-                    this.stateUpdater.UpdateConnectionState(ConnectionState.DISCONNECTED);
                     string message = $"{se.TargetSite.ReflectedType.Name}.{se.TargetSite.Name}: {se.Message}";
-                    stateUpdater.LogMessage(message);
                 }
                 catch (Exception ex)
                 {
                     string message = $"{ex.TargetSite.ReflectedType.Name}.{ex.TargetSite.Name}: {ex.Message}";
-                    stateUpdater.LogMessage(message);
                     currentCommand = null;
                 }
             }

@@ -11,7 +11,6 @@ namespace ScadaCommon.Connection
     /// </summary>
     public class TCPConnection : IConnection
 	{
-		private IStateUpdater stateUpdater;
 		private IPEndPoint remoteEP;
 		private Socket socket;
 		private IConfiguration configuration;
@@ -21,9 +20,8 @@ namespace ScadaCommon.Connection
         /// </summary>
         /// <param name="stateUpdater">The state updater.</param>
         /// <param name="configuration">The configuration.</param>
-        public TCPConnection(IStateUpdater stateUpdater, IConfiguration configuration)
+        public TCPConnection(IConfiguration configuration)
 		{
-			this.stateUpdater = stateUpdater;
 			this.configuration = configuration;
 			this.remoteEP = CreateRemoteEndpoint();
             PrepairConnection();
@@ -58,7 +56,6 @@ namespace ScadaCommon.Connection
                     if (CheckState())
                     {
                         ConnectionState = ConnectionState.CONNECTED;
-                        this.stateUpdater.UpdateConnectionState(this.ConnectionState);
                         numberOfConnectionRetries = 0;
                         break;
                     }
@@ -69,7 +66,6 @@ namespace ScadaCommon.Connection
                         {
                             Disconnect();
                             ConnectionState = ConnectionState.DISCONNECTED;
-                            this.stateUpdater.UpdateConnectionState(this.ConnectionState);
                         }
                     }
                 }
@@ -81,14 +77,11 @@ namespace ScadaCommon.Connection
                     throw se;
                 }
                 ConnectionState = ConnectionState.DISCONNECTED;
-                this.stateUpdater.UpdateConnectionState(ConnectionState.DISCONNECTED);
                 string message = $"{se.TargetSite.ReflectedType.Name}.{se.TargetSite.Name}: {se.Message}";
-                stateUpdater.LogMessage(message);
             }
             catch (Exception ex)
             {
                 string message = $"{ex.TargetSite.ReflectedType.Name}.{ex.TargetSite.Name}: {ex.Message}";
-                stateUpdater.LogMessage(message);
             }
         }
 

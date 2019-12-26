@@ -16,7 +16,6 @@ namespace ProcessingModule
 		private AutoResetEvent acquisitionTrigger;
         private IProcessingManager processingManager;
         private Thread acquisitionWorker;
-		private IStateUpdater stateUpdater;
 		private IConfiguration configuration;
 
         /// <summary>
@@ -26,9 +25,8 @@ namespace ProcessingModule
         /// <param name="processingManager">The processing manager.</param>
         /// <param name="stateUpdater">The state updater.</param>
         /// <param name="configuration">The configuration.</param>
-		public Acquisitor(AutoResetEvent acquisitionTrigger, IProcessingManager processingManager, IStateUpdater stateUpdater, IConfiguration configuration)
+		public Acquisitor(AutoResetEvent acquisitionTrigger, IProcessingManager processingManager, IConfiguration configuration)
 		{
-			this.stateUpdater = stateUpdater;
 			this.acquisitionTrigger = acquisitionTrigger;
 			this.processingManager = processingManager;
 			this.configuration = configuration;
@@ -84,7 +82,6 @@ namespace ProcessingModule
             catch (Exception ex)
             {
                 string message = $"{ex.TargetSite.ReflectedType.Name}.{ex.TargetSite.Name}: {ex.Message}";
-                stateUpdater.LogMessage(message);
             }
         }
         
