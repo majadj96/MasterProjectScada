@@ -61,6 +61,7 @@
     <Compile Include="PointIdentifierHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceContract\IBackEndProessingData.cs" />
+    <Compile Include="ServiceContract\IFieldCommunicationService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
