@@ -72,10 +72,5 @@ namespace DNP3.FunctionParameters
 
             return dnp3Message;
         }
-
-        public override Dictionary<Tuple<PointType, ushort>, ushort> ParseResponse(byte[] receivedBytes)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

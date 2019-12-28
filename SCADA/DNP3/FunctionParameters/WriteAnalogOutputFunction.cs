@@ -51,15 +51,5 @@ namespace DNP3.FunctionParameters
 
             return dnp3Request;
         }
-        //RADI
-        public override Dictionary<Tuple<PointType, ushort>, ushort> ParseResponse(byte[] receivedBytes) // 27 bytes
-        {
-            Dictionary<Tuple<PointType, ushort>, ushort> dic = new Dictionary<Tuple<PointType, ushort>, ushort>();
-            ushort address = BitConverter.ToUInt16(new byte[2] { receivedBytes[20], receivedBytes[19] }, 0);
-            ushort value = BitConverter.ToUInt16(new byte[2] { receivedBytes[22], receivedBytes[21] }, 0);
-            dic.Add(new Tuple<PointType, ushort>(PointType.ANALOG_OUTPUT_16, address), value);
-
-            return dic;
-        }
     }
 }

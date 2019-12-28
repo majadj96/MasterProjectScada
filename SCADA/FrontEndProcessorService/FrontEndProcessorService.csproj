@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B5697AB8-53AC-4230-9B79-E43A6AA54436}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FrontEndProcessorService</RootNamespace>
     <AssemblyName>FrontEndProcessorService</AssemblyName>
@@ -42,6 +42,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -56,47 +57,20 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
     <Compile Include="Configuration\ConfigItemEqualityComparer.cs" />
-    <Compile Include="Configuration\Converters\AlarmToBackgroundColorConverter.cs" />
-    <Compile Include="Configuration\Converters\StringToVisibilityConverter.cs" />
     <Compile Include="Exceptions\ConfigurationException.cs" />
-    <Compile Include="Configuration\Converters\ConnectionStateToColorConverter.cs" />
-    <Compile Include="Configuration\Converters\PointTypeToVisibilityConverter.cs" />
     <Compile Include="Configuration\ConfigItem.cs" />
     <Compile Include="Configuration\ConfigReader.cs" />
-    <Compile Include="ControlWindow.xaml.cs">
-      <DependentUpon>ControlWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Utils\RelayCommand.cs" />
-    <Compile Include="ViewModel\PointViewModels\AnalaogInput.cs" />
-    <Compile Include="ViewModel\PointViewModels\AnalogBase.cs" />
-    <Compile Include="ViewModel\PointViewModels\AnalogOutput.cs" />
-    <Compile Include="ViewModel\PointViewModels\BasePointItem.cs" />
-    <Compile Include="ViewModel\PointViewModels\DigitalBase.cs" />
-    <Compile Include="ViewModel\PointViewModels\DigitalInput.cs" />
-    <Compile Include="ViewModel\PointViewModels\DigitalOutput.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\ViewModelBase.cs" />
-    <Page Include="ControlWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="FieldCommunicationService.cs" />
+    <Compile Include="NetworkDynamicServiceProxy.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="PointDataModel\AnalaogInput.cs" />
+    <Compile Include="PointDataModel\AnalogBase.cs" />
+    <Compile Include="PointDataModel\AnalogOutput.cs" />
+    <Compile Include="PointDataModel\BasePointItem.cs" />
+    <Compile Include="PointDataModel\DigitalBase.cs" />
+    <Compile Include="PointDataModel\DigitalInput.cs" />
+    <Compile Include="PointDataModel\DigitalOutput.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

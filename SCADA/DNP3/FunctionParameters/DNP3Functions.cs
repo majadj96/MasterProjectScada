@@ -20,8 +20,6 @@ namespace DNP3.FunctionParameters
 
         public abstract byte[] PackRequest();
 
-        public abstract Dictionary<Tuple<PointType, ushort>, ushort> ParseResponse(byte[] receivedBytes);
-
         /// <summary>
         /// Gets or sets the command parameters.
         /// </summary>

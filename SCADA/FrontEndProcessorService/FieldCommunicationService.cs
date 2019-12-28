@@ -4,22 +4,22 @@ using ScadaCommon.Connection;
 using ProcessingModule;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading;
 using System.Windows.Threading;
 using ScadaCommon.Interfaces;
+using ScadaCommon.ServiceContract;
+using System.ServiceModel;
+using FrontEndProcessorService.PointDataModel;
 
 namespace FrontEndProcessorService.ViewModel
 {
-    internal class MainViewModel : ViewModelBase, IDisposable, IStateUpdater, IStorage
-	{
-		public ObservableCollection<BasePointItem> Points { get; set; }
-
+    public class FieldCommunicationService : IDisposable, IStorage, IFieldCommunicationService
+    {
 		#region Fields
-
 		private object lockObject = new object();
-		private Thread timerWorker;
+        private List<ServiceHost> hosts = null;
+        private Thread timerWorker;
 		private ConnectionState connectionState;
         private IConnection connection;
         private Acquisitor acquisitor;
@@ -27,13 +27,13 @@ namespace FrontEndProcessorService.ViewModel
 		private TimeSpan elapsedTime = new TimeSpan();
 		private Dispatcher dispather = Dispatcher.CurrentDispatcher;
 		private string logText;
-		private StringBuilder logBuilder;
 		private DateTime currentTime;
 		private IFunctionExecutor commandExecutor;
 		private bool timerThreadStopSignal = true;
 		private bool disposed = false;
 		IConfiguration configuration;
         private IProcessingManager processingManager = null;
+        private NetworkDynamicServiceProxy ndsProxy;
 		#endregion Fields
 
 		Dictionary<int, IPoint> pointsCache = new Dictionary<int, IPoint>();
@@ -50,7 +50,6 @@ namespace FrontEndProcessorService.ViewModel
 			set
 			{
 				currentTime = value;
-				OnPropertyChanged("CurrentTime");
 			}
 		}
 
@@ -64,7 +63,6 @@ namespace FrontEndProcessorService.ViewModel
 			set
 			{
 				connectionState = value;
-				OnPropertyChanged("ConnectionState");
 			}
 		}
 
@@ -78,7 +76,6 @@ namespace FrontEndProcessorService.ViewModel
 			set
 			{
 				logText = value;
-				OnPropertyChanged("LogText");
 			}
 		}
 
@@ -92,21 +89,25 @@ namespace FrontEndProcessorService.ViewModel
 			set
 			{
 				elapsedTime = value;
-				OnPropertyChanged("ElapsedTime");
 			}
 		}
 
 		#endregion Properties
 
-		public MainViewModel()
+		public FieldCommunicationService()
 		{
 			Thread.CurrentThread.Name = "Main Thread";
-			logBuilder = new StringBuilder();
+            ndsProxy = new NetworkDynamicServiceProxy("NetworkDynamicServiceEndPoint");
+            ndsProxy.Open();
+
+            ndsProxy.Process(null);
+
+            InitializeHosts();
 			configuration = new ConfigReader();
-            this.connection = new TCPConnection(this, configuration);
-            commandExecutor = new FunctionExecutor(this, configuration, connection);
+            this.connection = new TCPConnection(configuration);
+            commandExecutor = new FunctionExecutor(configuration, connection);
             this.processingManager = new ProcessingManager(this, commandExecutor);
-            this.acquisitor = new Acquisitor(acquisitionTrigger, this.processingManager, this, configuration);
+            this.acquisitor = new Acquisitor(acquisitionTrigger, this.processingManager, configuration);
 			InitializePointCollection();
 			InitializeAndStartThreads();
 			ConnectionState = connection.ConnectionState;
@@ -116,7 +117,6 @@ namespace FrontEndProcessorService.ViewModel
 
 		private void InitializePointCollection()
 		{
-			Points = new ObservableCollection<BasePointItem>();
 			foreach (var c in configuration.GetConfigurationItems())
 			{
 				for (int i = 0; i < c.NumberOfRegisters; i++)
@@ -124,7 +124,6 @@ namespace FrontEndProcessorService.ViewModel
 					BasePointItem pi = CreatePoint(c, i, this.processingManager);
 					if (pi != null)
 					{
-						Points.Add(pi);
 						pointsCache.Add(pi.PointId, pi as IPoint);
                         processingManager.InitializePoint(pi.Type, pi.Address, pi.RawValue);
 					}
@@ -137,23 +136,60 @@ namespace FrontEndProcessorService.ViewModel
 			switch (c.RegistryType)
 			{
 				case PointType.DIGITAL_INPUT:
-					return new DigitalInput(c, processingManager, this, configuration, i);
+					return new DigitalInput(c, i);
 
 				case PointType.DIGITAL_OUTPUT:
-					return new DigitalOutput(c, processingManager, this, configuration, i);
+					return new DigitalOutput(c, i);
 
 				case PointType.ANALOG_INPUT:
-					return new AnalaogInput(c, processingManager, this, configuration, i);
+					return new AnalaogInput(c, i);
 
 				case PointType.ANALOG_OUTPUT:
-					return new AnalogOutput(c, processingManager, this, configuration, i);
+					return new AnalogOutput(c, i);
 
 				default:
 					return null;
 			}
 		}
 
-		private void InitializeAndStartThreads()
+        public void Start()
+        {
+            StartHosts();
+        }
+        private void StartHosts()
+        {
+            if (hosts == null || hosts.Count == 0)
+            {
+                throw new Exception("Field Communication Services can not be opend because it is not initialized.");
+            }
+
+            foreach (ServiceHost host in hosts)
+            {
+                host.Open();
+            }
+        }
+
+
+        private void InitializeHosts()
+        {
+            hosts = new List<ServiceHost>();
+            hosts.Add(new ServiceHost(typeof(FrontEndProcessorService.ViewModel.FieldCommunicationService)));
+        }
+
+        public void CloseHosts()
+        {
+            if (hosts == null || hosts.Count == 0)
+            {
+                throw new Exception("Network Dynamic Services can not be closed because it is not initialized.");
+            }
+
+            foreach (ServiceHost host in hosts)
+            {
+                host.Close();
+            }
+        }
+
+        private void InitializeAndStartThreads()
 		{
 			InitializeTimerThread();
 			StartTimerThread();
@@ -190,35 +226,6 @@ namespace FrontEndProcessorService.ViewModel
 
 		#endregion Private methods
 
-		#region IStateUpdater implementation
-
-		public void UpdateConnectionState(ConnectionState currentConnectionState)
-		{
-			dispather.Invoke((Action)(() =>
-			{
-				ConnectionState = currentConnectionState;
-			}));
-		}
-
-		public void LogMessage(string message)
-		{
-			if (disposed)
-				return;
-
-			string threadName = Thread.CurrentThread.Name;
-
-			dispather.Invoke((Action)(() =>
-			{
-				lock (lockObject)
-				{
-					logBuilder.Append($"{DateTime.Now} [{threadName}]: {message}{Environment.NewLine}");
-					LogText = logBuilder.ToString();
-				}
-			}));
-		}
-
-		#endregion IStateUpdater implementation
-
 		public void Dispose()
 		{
 			disposed = true;
@@ -226,7 +233,9 @@ namespace FrontEndProcessorService.ViewModel
 			(commandExecutor as IDisposable).Dispose();
 			this.acquisitor.Dispose();
 			acquisitionTrigger.Dispose();
-		}
+            CloseHosts();
+            GC.SuppressFinalize(this);
+        }
 
 		public List<IPoint> GetPoints(List<PointIdentifier> pointIds)
 		{
@@ -242,5 +251,35 @@ namespace FrontEndProcessorService.ViewModel
 			}
 			return retVal;
 		}
-	}
+
+        public void WriteDigitalOutput(int adress, int value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WriteAnalogOutput(int adress, int value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReadDigitalInput(int adress)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReadAnalogInput(int adress)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReadDigitalOutput(int adress)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReadAnalogOutput(int adress)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
