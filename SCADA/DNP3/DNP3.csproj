@@ -62,10 +62,9 @@
     <Compile Include="FunctionParameters\WriteDiscreteOutFunction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\ScadaCommon\ScadaCommon.csproj">
-      <Project>{823D1355-EFD0-481C-A0D9-FDA0C4EA37DF}</Project>
+      <Project>{823d1355-efd0-481c-a0d9-fda0c4ea37df}</Project>
       <Name>ScadaCommon</Name>
     </ProjectReference>
   </ItemGroup>
