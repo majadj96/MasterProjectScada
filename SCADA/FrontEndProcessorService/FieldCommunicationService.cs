@@ -34,9 +34,10 @@ namespace FrontEndProcessorService.ViewModel
 		IConfiguration configuration;
         private IProcessingManager processingManager = null;
         private NetworkDynamicServiceProxy ndsProxy;
-		#endregion Fields
+        private NetworkDynamicStateServiceProxy ndsStateProxy;
+        #endregion Fields
 
-		Dictionary<int, IPoint> pointsCache = new Dictionary<int, IPoint>();
+        Dictionary<int, IPoint> pointsCache = new Dictionary<int, IPoint>();
 
 		#region Properties
 
@@ -99,10 +100,14 @@ namespace FrontEndProcessorService.ViewModel
 			Thread.CurrentThread.Name = "Main Thread";
             ndsProxy = new NetworkDynamicServiceProxy("NetworkDynamicServiceEndPoint");
             ndsProxy.Open();
-
             ndsProxy.Process(null);
 
+            ndsStateProxy = new NetworkDynamicStateServiceProxy("NetworkDynamicStateServiceEndPoint");
+            ndsStateProxy.Open();
+            ndsStateProxy.ProcessState(null);
+
             InitializeHosts();
+
 			configuration = new ConfigReader();
             this.connection = new TCPConnection(configuration);
             commandExecutor = new FunctionExecutor(configuration, connection);
@@ -173,7 +178,7 @@ namespace FrontEndProcessorService.ViewModel
         private void InitializeHosts()
         {
             hosts = new List<ServiceHost>();
-            hosts.Add(new ServiceHost(typeof(FrontEndProcessorService.ViewModel.FieldCommunicationService)));
+            hosts.Add(new ServiceHost(typeof(FieldCommunicationService)));
         }
 
         public void CloseHosts()

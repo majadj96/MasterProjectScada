@@ -21,6 +21,7 @@ namespace NetworkDynamicService
         {
             StartHosts();
         }
+
         private void StartHosts()
         {
             if (hosts == null || hosts.Count == 0)
@@ -33,12 +34,12 @@ namespace NetworkDynamicService
                 host.Open();
             }
         }
-
-
+        
         private void InitializeHosts()
         {
             hosts = new List<ServiceHost>();
             hosts.Add(new ServiceHost(typeof(BackEndPocessingModule)));
+            hosts.Add(new ServiceHost(typeof(StateProcessingModule)));
         }
 
         public void Dispose()
@@ -46,6 +47,7 @@ namespace NetworkDynamicService
             CloseHosts();
             GC.SuppressFinalize(this);
         }
+
         public void CloseHosts()
         {
             if (hosts == null || hosts.Count == 0)

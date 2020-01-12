@@ -1,6 +1,7 @@
 ﻿using ScadaCommon.BackEnd_FrontEnd;
 using ScadaCommon.ServiceContract;
 using System.ServiceModel;
+
 namespace FrontEndProcessorService
 {
     public class NetworkDynamicServiceProxy : ClientBase<IBackEndProessingData>, IBackEndProessingData
