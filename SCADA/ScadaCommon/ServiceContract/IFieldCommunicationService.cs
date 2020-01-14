@@ -11,16 +11,16 @@ namespace ScadaCommon.ServiceContract
     public interface IFieldCommunicationService
     {
         [OperationContract]
-        void WriteDigitalOutput(int adress, int value);
+        void WriteDigitalOutput(int address, int value);
         [OperationContract]
-        void WriteAnalogOutput(int adress, int value);
+        void WriteAnalogOutput(int address, int value);
         [OperationContract]
-        void ReadDigitalInput(int adress);
+        void ReadDigitalInput(int address);
         [OperationContract]
-        void ReadAnalogInput(int adress);
+        void ReadAnalogInput(int address);
         [OperationContract]
-        void ReadDigitalOutput(int adress);
+        void ReadDigitalOutput(int address);
         [OperationContract]
-        void ReadAnalogOutput(int adress);
+        void ReadAnalogOutput(int address);
     }
 }

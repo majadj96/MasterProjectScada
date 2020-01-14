@@ -1,6 +1,4 @@
-﻿using FrontEndProcessorService.ViewModel;
-using ScadaCommon.ServiceContract;
-using System;
+﻿using System;
 
 namespace FrontEndProcessorService
 {

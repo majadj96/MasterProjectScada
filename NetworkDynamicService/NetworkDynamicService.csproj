@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FrontEndProcessorServiceProxy.cs" />
     <Compile Include="NetworkDynamicService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -55,6 +56,10 @@
     <ProjectReference Include="..\BackEndProcessorService\BackEndProcessorService.csproj">
       <Project>{9E9F3E50-1395-46B5-8D75-B16A08B45CDF}</Project>
       <Name>BackEndProcessorService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SCADA\ScadaCommon\ScadaCommon.csproj">
+      <Project>{823D1355-EFD0-481C-A0D9-FDA0C4EA37DF}</Project>
+      <Name>ScadaCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

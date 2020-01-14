@@ -12,7 +12,7 @@ using ScadaCommon.ServiceContract;
 using System.ServiceModel;
 using FrontEndProcessorService.PointDataModel;
 
-namespace FrontEndProcessorService.ViewModel
+namespace FrontEndProcessorService
 {
     public class FieldCommunicationService : IDisposable, IStorage, IFieldCommunicationService
     {
@@ -173,7 +173,7 @@ namespace FrontEndProcessorService.ViewModel
         private void InitializeHosts()
         {
             hosts = new List<ServiceHost>();
-            hosts.Add(new ServiceHost(typeof(FrontEndProcessorService.ViewModel.FieldCommunicationService)));
+            hosts.Add(new ServiceHost(typeof(FieldCommunicationService)));
         }
 
         public void CloseHosts()
@@ -269,7 +269,7 @@ namespace FrontEndProcessorService.ViewModel
 
         public void ReadAnalogInput(int adress)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("RAI radi!");
         }
 
         public void ReadDigitalOutput(int adress)
