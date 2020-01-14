@@ -33,7 +33,7 @@ namespace ProcessingModule
         /// </summary>
         /// <param name="stateUpdater">The state updater.</param>
         /// <param name="configuration">The configuration.</param>
-		public FunctionExecutor(IConfiguration configuration, IConnection connection)
+        public FunctionExecutor(IConfiguration configuration, IConnection connection)
         {
             MessagesForUnsolicited();
             this.configuration = configuration;
@@ -91,7 +91,7 @@ namespace ProcessingModule
         /// <summary>
         /// Logic for handling the connection.
         /// </summary>
-		private void ConnectionProcessorThread()
+        private void ConnectionProcessorThread()
         {
             while (this.threadCancellationSignal)
             {
@@ -132,7 +132,7 @@ namespace ProcessingModule
                                     }
 
                                     payload = this.connection.RecvBytes(len);
-                                    
+
                                     message = new byte[header.Length + payload.Length];
                                     Buffer.BlockCopy(header, 0, message, 0, 10);
                                     Buffer.BlockCopy(payload, 0, message, 10, payload.Length);
@@ -145,7 +145,7 @@ namespace ProcessingModule
 
                                     this.ProccessMsg(message, len + 10);
                                 }
-                             this.currentCommand = null;
+                                this.currentCommand = null;
                             }
                         }
                         else
@@ -243,7 +243,7 @@ namespace ProcessingModule
                 if (rangeOffset == 1)
                 {
                     objectNumber = (byte)BitConverter.ToChar(dataArray, byteProcessed);
-                    byteProcessed ++;
+                    byteProcessed++;
                 }
                 else if (rangeOffset == 2)
                 {
@@ -256,7 +256,7 @@ namespace ProcessingModule
 
                         objectNumber = stop - start + 1;
                     }
-                    else if(rangeMeaning == (short)Qualifier.OBJECT_COUNT)
+                    else if (rangeMeaning == (short)Qualifier.OBJECT_COUNT)
                     {
                         objectNumber = BitConverter.ToInt16(dataArray, byteProcessed);
                         byteProcessed += 2;
@@ -305,12 +305,12 @@ namespace ProcessingModule
                             else if (prefixOffset == 2)
                             {
                                 objectIndex = BitConverter.ToInt16(dataArray, byteProcessed);
-                                byteProcessed +=2;
+                                byteProcessed += 2;
                             }
-                            else if(prefixOffset == 4)
+                            else if (prefixOffset == 4)
                             {
                                 objectIndex = BitConverter.ToInt32(dataArray, byteProcessed);
-                                byteProcessed +=4;
+                                byteProcessed += 4;
                             }
                             regValue = dataArray[byteProcessed++];
                             if (regValue == 0x41)
@@ -681,3 +681,4 @@ namespace ProcessingModule
 
     }
 }
+

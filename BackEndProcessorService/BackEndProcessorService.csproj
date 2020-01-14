@@ -46,6 +46,7 @@
     <Compile Include="EGUModule.cs" />
     <Compile Include="IProcessingData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StateProcessingModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SCADA\ScadaCommon\ScadaCommon.csproj">
@@ -53,5 +54,6 @@
       <Name>ScadaCommon</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

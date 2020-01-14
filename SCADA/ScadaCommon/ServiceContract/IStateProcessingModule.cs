@@ -4,9 +4,9 @@ using System.ServiceModel;
 namespace ScadaCommon.ServiceContract
 {
     [ServiceContract]
-    public interface IBackEndProessingData
+    public interface IStateProcessingModule
     {
         [OperationContract]
-        void Process(IProcessingObject processingObject);
+        void ProcessState(IProcessingState processingObject);
     }
 }
