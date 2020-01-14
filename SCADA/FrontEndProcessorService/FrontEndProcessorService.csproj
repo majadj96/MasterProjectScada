@@ -62,6 +62,7 @@
     <Compile Include="Configuration\ConfigItem.cs" />
     <Compile Include="Configuration\ConfigReader.cs" />
     <Compile Include="FieldCommunicationService.cs" />
+    <Compile Include="FrontEndProcessorService.cs" />
     <Compile Include="NetworkDynamicServiceProxy.cs" />
     <Compile Include="NetworkDynamicStateServiceProxy.cs" />
     <Compile Include="Program.cs" />

@@ -6,11 +6,11 @@ namespace FrontEndProcessorService
     {
         static void Main(string[] args)
         {
-            using (FieldCommunicationService fcs = new FieldCommunicationService())
+            using (FrontEndProcessorService fcs = new FrontEndProcessorService())
             {
                 fcs.Start();
+                Console.ReadKey();
             }
-            Console.ReadKey();
         }
     }
 }

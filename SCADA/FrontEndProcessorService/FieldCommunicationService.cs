@@ -14,11 +14,11 @@ using FrontEndProcessorService.PointDataModel;
 
 namespace FrontEndProcessorService
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class FieldCommunicationService : IDisposable, IStorage, IFieldCommunicationService
     {
-		#region Fields
-		private object lockObject = new object();
-        private List<ServiceHost> hosts = null;
+        #region Fields
+        private object lockObject = new object();
         private Thread timerWorker;
 		private ConnectionState connectionState;
         private IConnection connection;
@@ -106,17 +106,15 @@ namespace FrontEndProcessorService
             ndsStateProxy.Open();
             ndsStateProxy.ProcessState(null);
 
-            InitializeHosts();
-
-			configuration = new ConfigReader();
+            configuration = new ConfigReader();
             this.connection = new TCPConnection(configuration);
             commandExecutor = new FunctionExecutor(configuration, connection);
             this.processingManager = new ProcessingManager(this, commandExecutor);
             this.acquisitor = new Acquisitor(acquisitionTrigger, this.processingManager, configuration);
-			InitializePointCollection();
-			InitializeAndStartThreads();
-			ConnectionState = connection.ConnectionState;
-		}
+            InitializePointCollection();
+            InitializeAndStartThreads();
+            ConnectionState = connection.ConnectionState;
+        }
 
 		#region Private methods
 
@@ -156,43 +154,6 @@ namespace FrontEndProcessorService
 					return null;
 			}
 		}
-
-        public void Start()
-        {
-            StartHosts();
-        }
-        private void StartHosts()
-        {
-            if (hosts == null || hosts.Count == 0)
-            {
-                throw new Exception("Field Communication Services can not be opend because it is not initialized.");
-            }
-
-            foreach (ServiceHost host in hosts)
-            {
-                host.Open();
-            }
-        }
-
-
-        private void InitializeHosts()
-        {
-            hosts = new List<ServiceHost>();
-            hosts.Add(new ServiceHost(typeof(FieldCommunicationService)));
-        }
-
-        public void CloseHosts()
-        {
-            if (hosts == null || hosts.Count == 0)
-            {
-                throw new Exception("Network Dynamic Services can not be closed because it is not initialized.");
-            }
-
-            foreach (ServiceHost host in hosts)
-            {
-                host.Close();
-            }
-        }
 
         private void InitializeAndStartThreads()
 		{
@@ -235,10 +196,9 @@ namespace FrontEndProcessorService
 		{
 			disposed = true;
 			timerThreadStopSignal = false;
-			(commandExecutor as IDisposable).Dispose();
-			this.acquisitor.Dispose();
-			acquisitionTrigger.Dispose();
-            CloseHosts();
+            (commandExecutor as IDisposable).Dispose();
+            this.acquisitor.Dispose();
+            acquisitionTrigger.Dispose();
             GC.SuppressFinalize(this);
         }
 
