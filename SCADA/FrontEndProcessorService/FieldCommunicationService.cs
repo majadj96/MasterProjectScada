@@ -98,13 +98,13 @@ namespace FrontEndProcessorService
 		public FieldCommunicationService()
 		{
 			Thread.CurrentThread.Name = "Main Thread";
-            ndsProxy = new NetworkDynamicServiceProxy("NetworkDynamicServiceEndPoint");
-            ndsProxy.Open();
-            ndsProxy.Process(null);
+            //ndsProxy = new NetworkDynamicServiceProxy("NetworkDynamicServiceEndPoint");
+            //ndsProxy.Open();
+            //ndsProxy.Process(null);
 
-            ndsStateProxy = new NetworkDynamicStateServiceProxy("NetworkDynamicStateServiceEndPoint");
-            ndsStateProxy.Open();
-            ndsStateProxy.ProcessState(null);
+            //ndsStateProxy = new NetworkDynamicStateServiceProxy("NetworkDynamicStateServiceEndPoint");
+            //ndsStateProxy.Open();
+            //ndsStateProxy.ProcessState(null);
 
             configuration = new ConfigReader();
             this.connection = new TCPConnection(configuration);

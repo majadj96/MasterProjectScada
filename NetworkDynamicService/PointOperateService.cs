@@ -16,6 +16,7 @@ namespace NetworkDynamicService
         public PointOperateService()
         {
             InitializeHosts();
+            fepsProxy.Open();
         }
 
         public void Start()
@@ -72,22 +73,22 @@ namespace NetworkDynamicService
 
         public void ReadDigitalInput(int address)
         {
-            this.ReadDigitalInput(address);
+            this.fepsProxy.ReadDigitalInput(address);
         }
 
         public void ReadDigitalOutput(int address)
         {
-            this.ReadDigitalOutput(address);
+            this.fepsProxy.ReadDigitalOutput(address);
         }
 
         public void WriteAnalogOutput(int address, int value)
         {
-            this.WriteAnalogOutput(address, value);
+            this.fepsProxy.WriteAnalogOutput(address, value);
         }
 
         public void WriteDigitalOutput(int address, int value)
         {
-            this.WriteDigitalOutput(address, value);
+            this.fepsProxy.WriteDigitalOutput(address, value);
         }
     }
 }
