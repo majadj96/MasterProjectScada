@@ -104,29 +104,10 @@ namespace FrontEndProcessorService.Configuration
                         Class0Acquisition = Convert.ToInt32(filtered[filtered.Count - 1]);
                         continue;
                     }
-                    //if (s.StartsWith("DBC"))
-                    //{
-                    //	DelayBetweenCommands = Convert.ToInt32(filtered[filtered.Count - 1]);
-                    //	continue;
-                    //}
                     try
                     {
                         ConfigItem ci = new ConfigItem(filtered);
-                        //if (pointTypeToConfiguration.Count > 0)
-                        //{
-                        //    foreach (ConfigItem cf in pointTypeToConfiguration.Values)
-                        //    {
-                        //        if (!confItemEqComp.Equals(cf, ci))
-                        //        {
-                        //            pointTypeToConfiguration.Add(ci.Description, ci);
-                        //            break;
-                        //        }
-                        //    }
-                        //}
-                        //else
-                        //{
-                            pointTypeToConfiguration.Add(ci.Description, ci);
-                        //}
+                        pointTypeToConfiguration.Add(ci.Description, ci);
                     }
                     catch (ArgumentException argEx)
                     {
