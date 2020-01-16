@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ScadaCommon.BackEnd_FrontEnd;
+using ScadaCommon.Interfaces;
 using ScadaCommon.ServiceContract;
 
 namespace BackEndProcessorService
