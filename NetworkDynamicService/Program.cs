@@ -10,13 +10,10 @@ namespace NetworkDynamicService
     {
         static void Main(string[] args)
         {
-            PointOperateService pos = new PointOperateService();
-            NetworkDynamicService nds = new NetworkDynamicService();
-            
+            NetworkDynamicService nds = new NetworkDynamicService(); 
             try
             {
                 nds.Start();
-                pos.Start();
                 Console.WriteLine("Kao krenulo!");
             }
             catch(Exception e)

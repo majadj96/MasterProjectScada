@@ -40,6 +40,7 @@ namespace NetworkDynamicService
             hosts = new List<ServiceHost>();
             hosts.Add(new ServiceHost(typeof(BackEndPocessingModule)));
             hosts.Add(new ServiceHost(typeof(StateProcessingModule)));
+            hosts.Add(new ServiceHost(typeof(PointOperateService)));
         }
 
         public void Dispose()

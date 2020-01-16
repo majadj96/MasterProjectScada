@@ -54,6 +54,8 @@
     <Compile Include="Interfaces\IDigitalPoint.cs" />
     <Compile Include="Interfaces\IDNP3Functions.cs" />
     <Compile Include="Interfaces\IFunctionExecutor.cs" />
+    <Compile Include="Interfaces\INDSConfigItem.cs" />
+    <Compile Include="Interfaces\INDSConfiguration.cs" />
     <Compile Include="Interfaces\IPoint.cs" />
     <Compile Include="Interfaces\IProcessingManager.cs" />
     <Compile Include="Interfaces\IStorage.cs" />
