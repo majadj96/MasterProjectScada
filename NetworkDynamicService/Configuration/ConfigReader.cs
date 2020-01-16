@@ -40,7 +40,7 @@ namespace NetworkDynamicService.Configuration
                     try
                     {
                         ConfigItem ci = new ConfigItem(filtered);
-                        itemToConfiguration.Add(ci.PointType, ci);
+                        itemToConfiguration.Add(ci.RegistryType, ci);
                     }
                     catch (ArgumentException argEx)
                     {
@@ -68,7 +68,7 @@ namespace NetworkDynamicService.Configuration
             INDSConfigItem item;
             if (itemToConfiguration.TryGetValue(pointType, out item))
             {
-                item.Deviation;
+                return item.Deviation;
             }
             throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointType)));
         }
@@ -78,7 +78,7 @@ namespace NetworkDynamicService.Configuration
             INDSConfigItem item;
             if (itemToConfiguration.TryGetValue(pointType, out item))
             {
-                item.HighLimit;
+                return item.HighLimit;
             }
             throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointType)));
         }
@@ -88,7 +88,7 @@ namespace NetworkDynamicService.Configuration
             INDSConfigItem item;
             if (itemToConfiguration.TryGetValue(pointType, out item))
             {
-                item.LowLimit;
+                return item.LowLimit;
             }
             throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointType)));
         }
@@ -98,7 +98,7 @@ namespace NetworkDynamicService.Configuration
             INDSConfigItem item;
             if (itemToConfiguration.TryGetValue(pointType, out item))
             {
-                item.NormalValue;
+                return item.NormalValue;
             }
             throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointType)));
         }
@@ -108,7 +108,7 @@ namespace NetworkDynamicService.Configuration
             INDSConfigItem item;
             if (itemToConfiguration.TryGetValue(pointType, out item))
             {
-                item.ScalingFactor;
+                return item.ScalingFactor;
             }
             throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointType)));
         }
