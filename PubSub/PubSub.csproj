@@ -54,6 +54,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{6C234280-508A-47A4-B9CA-2677082EF85F}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NMS\NMS.csproj">
       <Project>{8ce817fc-7226-4ae6-8f69-206bb834aa5e}</Project>
       <Name>NMS</Name>
@@ -61,6 +65,10 @@
     <ProjectReference Include="..\PubSubCommon\PubSubCommon.csproj">
       <Project>{6109286A-0DC9-469C-A271-0605C18ED32C}</Project>
       <Name>PubSubCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TransactionManagerContracts\TransactionManagerContracts.csproj">
+      <Project>{0A8F68EC-31CB-4FD1-B54A-DCF2FC97BBEC}</Project>
+      <Name>TransactionManagerContracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\UserInterface\UserInterface.csproj">
       <Project>{ebf3cbfd-9ccd-454d-8e3c-b619fd321055}</Project>

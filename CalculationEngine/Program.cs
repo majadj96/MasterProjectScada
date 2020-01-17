@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TransactionManager
+namespace CalculationEngine
 {
     class Program
     {
-       static void Main(string[] args)
+        static void Main(string[] args)
         {
-            EnlistManagerServiceHost host = new EnlistManagerServiceHost();
+            UpdateModelServiceHost host = new UpdateModelServiceHost();
             Console.ReadLine();
         }
     }

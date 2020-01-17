@@ -4,14 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{518AD2F0-337F-40A0-8091-5FD0B2364815}</ProjectGuid>
+    <ProjectGuid>{889D3515-83B6-4CBD-B85E-145DBF9BAD93}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>TransactionManager</RootNamespace>
-    <AssemblyName>TransactionManager</AssemblyName>
+    <RootNamespace>CalculationEngine</RootNamespace>
+    <AssemblyName>CalculationEngine</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -44,17 +44,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EnlistManager.cs" />
-    <Compile Include="EnlistManagerServiceHost.cs" />
+    <Compile Include="TransactionStuff\ModelUpdateContract.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TMData.cs" />
-    <Compile Include="TransactionSteps.cs" />
+    <Compile Include="TransactionStuff\TransactionService.cs" />
+    <Compile Include="TransactionStuff\UpdateModelServiceHost.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{6C234280-508A-47A4-B9CA-2677082EF85F}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TransactionManagerContracts\TransactionManagerContracts.csproj">
       <Project>{0a8f68ec-31cb-4fd1-b54a-dcf2fc97bbec}</Project>
       <Name>TransactionManagerContracts</Name>
