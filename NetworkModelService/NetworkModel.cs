@@ -6,23 +6,32 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using TransactionManagerContracts;
 
 namespace NetworkModelService
 {
-    public class NetworkModel
+    public class NetworkModel : ITransactionSteps, IModelUpdateContract
     {
         /// <summary>
-        /// Dictionaru which contains all data: Key - DMSType, Value - Container
+        /// Dictionary which contains all data: Key - DMSType, Value - Container
         /// </summary>
         private Dictionary<DMSType, Container> networkDataModel;
+
+        /// <summary>
+        /// Dictionary which contains all data: Key - DMSType, Value - Container. Model copy
+        /// </summary>
+        private Dictionary<DMSType, Container> networkDataModelCopy;
 
         /// <summary>
         /// ModelResourceDesc class contains metadata of the model
         /// </summary>
         private ModelResourcesDesc resourcesDescs;
+
+        private Delta _delta;
 
         /// <summary>
         /// Initializes a new instance of the Model class.
@@ -30,8 +39,25 @@ namespace NetworkModelService
         public NetworkModel()
         {
             networkDataModel = new Dictionary<DMSType, Container>();
+            networkDataModelCopy = new Dictionary<DMSType, Container>();
             resourcesDescs = new ModelResourcesDesc();
             Initialize();
+        }
+
+        public void EnlistTM(Delta delta)
+        {
+            _delta = delta;
+
+            Console.WriteLine("Update model invoked");
+
+            NetTcpBinding netTcpbinding = new NetTcpBinding(SecurityMode.None);
+            EndpointAddress endpointAddress = new EndpointAddress("net.tcp://localhost:20000/TM");
+            InstanceContext context = new InstanceContext(this);
+            DuplexChannelFactory<IEnlistManager> channelFactory = new DuplexChannelFactory<IEnlistManager>(context, netTcpbinding, endpointAddress);
+            var _proxy = channelFactory.CreateChannel();
+            _proxy.Enlist();
+
+            _proxy.EndEnlist(true);
         }
 
         #region Find
@@ -77,7 +103,7 @@ namespace NetworkModelService
         /// <returns>True if container exists, otherwise FALSE.</returns>
         private bool ContainerExists(DMSType type)
         {
-            if (networkDataModel.ContainsKey(type))
+            if (networkDataModelCopy.ContainsKey(type))
             {
                 return true;
             }
@@ -94,7 +120,7 @@ namespace NetworkModelService
         {
             if (ContainerExists(type))
             {
-                return networkDataModel[type];
+                return networkDataModelCopy[type];
             }
             else
             {
@@ -326,7 +352,7 @@ namespace NetworkModelService
                 else
                 {
                     container = new Container();
-                    networkDataModel.Add(type, container);
+                    networkDataModelCopy.Add(type, container);
                 }
 
                 // create entity and add it to container
@@ -755,7 +781,7 @@ namespace NetworkModelService
             {
                 typesCounters[(short)type] = 0;
 
-                if (networkDataModel.ContainsKey(type))
+                if (networkDataModelCopy.ContainsKey(type))
                 {
                     typesCounters[(short)type] = GetContainer(type).Count;
                 }
@@ -768,7 +794,7 @@ namespace NetworkModelService
         {
             List<long> retVal = new List<long>();
 
-            foreach (var item in networkDataModel)
+            foreach (var item in networkDataModelCopy)
             {
                 retVal.AddRange(item.Value.Entities.Keys);
             }
@@ -783,6 +809,37 @@ namespace NetworkModelService
             ret = resourcesDescs.GetAllPropertyIds((DMSType)type);
 
             return ret;
+        }
+
+        public bool Prepare()
+        {
+            Console.WriteLine("NMS Prepare. Delta operations: " + _delta.NumberOfOperations);
+
+            ApplyDelta(_delta);
+
+            return true;
+        }
+
+        public bool Commit()
+        {
+            Console.WriteLine("NMS Commit. Delta operations: " + _delta.NumberOfOperations);
+
+            networkDataModel = new Dictionary<DMSType, Container>(networkDataModelCopy);
+            networkDataModelCopy = new Dictionary<DMSType, Container>();
+
+            return true;
+        }
+
+        public void Rollback()
+        {
+            Console.WriteLine("NMS Rollback. Delta operations: " + _delta.NumberOfOperations);
+        }
+
+        public UpdateResult UpdateModel(Delta delta)
+        {
+            EnlistTM(delta);
+
+            return new UpdateResult();
         }
     }
 }

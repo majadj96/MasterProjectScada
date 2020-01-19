@@ -54,9 +54,17 @@
       <Project>{6C234280-508A-47A4-B9CA-2677082EF85F}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NetworkModelGDAContract\NetworkModelGDAContract.csproj">
+      <Project>{60eedd71-25c6-488a-870a-a16acfc91d88}</Project>
+      <Name>NetworkModelGDAContract</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NetworkModelService\NetworkModelService.csproj">
       <Project>{9BACAF37-6E01-4703-BB17-7B5262B4B686}</Project>
       <Name>NetworkModelService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TransactionManagerContracts\TransactionManagerContracts.csproj">
+      <Project>{0a8f68ec-31cb-4fd1-b54a-dcf2fc97bbec}</Project>
+      <Name>TransactionManagerContracts</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

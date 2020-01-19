@@ -9,16 +9,35 @@ using Common.GDA;
 using FTN.ESI.SIMES.CIM.CIMAdapter.Importer;
 using FTN.ESI.SIMES.CIM.CIMAdapter.Manager;
 using NetworkModelGDAContract;
+using TransactionManagerContracts;
 
 namespace FTN.ESI.SIMES.CIM.CIMAdapter
 {
 	public class CIMAdapter
 	{
         private NetworkModelGDAProxy gdaQueryProxy = null;
+        private ModelUpdateProxy modelUpdateProxy = null;
        
 		public CIMAdapter()
 		{
 		}
+
+        private ModelUpdateProxy ModelUpdateProxy
+        {
+            get
+            {
+                if (modelUpdateProxy != null)
+                {
+                    modelUpdateProxy.Abort();
+                    modelUpdateProxy = null;
+                }
+
+                modelUpdateProxy = new ModelUpdateProxy("ModelUpdateEndpoint");
+                modelUpdateProxy.Open();
+
+                return modelUpdateProxy;
+            }
+        }
 
         private NetworkModelGDAProxy GdaQueryProxy
         {
@@ -62,9 +81,10 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter
 
 			if ((delta != null) && (delta.NumberOfOperations != 0))
 			{
-				//// NetworkModelService->ApplyUpdates
-                updateResult = GdaQueryProxy.ApplyUpdate(delta).ToString();
-			}
+                //// NetworkModelService->ApplyUpdates
+                //updateResult = GdaQueryProxy.ApplyUpdate(delta).ToString();
+                updateResult = ModelUpdateProxy.UpdateModel(delta).ToString();
+            }
 
 			Thread.CurrentThread.CurrentCulture = culture;
 			return updateResult;

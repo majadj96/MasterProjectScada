@@ -129,6 +129,10 @@
       <Project>{60eedd71-25c6-488a-870a-a16acfc91d88}</Project>
       <Name>NetworkModelGDAContract</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TransactionManagerContracts\TransactionManagerContracts.csproj">
+      <Project>{0a8f68ec-31cb-4fd1-b54a-dcf2fc97bbec}</Project>
+      <Name>TransactionManagerContracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

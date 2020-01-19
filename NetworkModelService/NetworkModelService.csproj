@@ -69,6 +69,10 @@
       <Project>{6109286A-0DC9-469C-A271-0605C18ED32C}</Project>
       <Name>PubSubCommon</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TransactionManagerContracts\TransactionManagerContracts.csproj">
+      <Project>{0A8F68EC-31CB-4FD1-B54A-DCF2FC97BBEC}</Project>
+      <Name>TransactionManagerContracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

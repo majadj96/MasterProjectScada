@@ -108,6 +108,10 @@
       <Project>{60eedd71-25c6-488a-870a-a16acfc91d88}</Project>
       <Name>NetworkModelGDAContract</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TransactionManagerContracts\TransactionManagerContracts.csproj">
+      <Project>{0A8F68EC-31CB-4FD1-B54A-DCF2FC97BBEC}</Project>
+      <Name>TransactionManagerContracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -4,12 +4,14 @@ using NetworkModelGDAContract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using TransactionManagerContracts;
 
 namespace NetworkModelService.GDA
 {
-    public class GenericDataAccess : INetworkModelGDAContract
+    public class GenericDataAccess : INetworkModelGDAContract, IModelUpdateContract
     {
         private static Dictionary<int, ResourceIterator> resourceItMap = new Dictionary<int, ResourceIterator>();
         private static int resourceItId = 0;
@@ -223,6 +225,18 @@ namespace NetworkModelService.GDA
             }
 
             return retVal;
+        }
+
+        public UpdateResult UpdateModel(Delta delta)
+        {
+            NetTcpBinding netTcpbinding = new NetTcpBinding(SecurityMode.None);
+            EndpointAddress endpointAddress = new EndpointAddress("net.tcp://localhost:10000/CE");
+            //InstanceContext context = new InstanceContext(callbackinstance);
+            ChannelFactory<IModelUpdateContract> channelFactory = new ChannelFactory<IModelUpdateContract>(netTcpbinding, endpointAddress);
+            var _proxy = channelFactory.CreateChannel();
+            _proxy.UpdateModel(delta);
+
+            return nm.UpdateModel(delta);
         }
     }
 }

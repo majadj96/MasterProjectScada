@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TransactionManagerContracts
 {
-    class ModelUpdateProxy : ClientBase<IModelUpdateContract>, IModelUpdateContract
+    public class ModelUpdateProxy : ClientBase<IModelUpdateContract>, IModelUpdateContract
     {
         public ModelUpdateProxy(string endpointName)
             : base(endpointName)
