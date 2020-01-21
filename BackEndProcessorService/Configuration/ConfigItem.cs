@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetworkDynamicService.Configuration
+namespace BackEndProcessorService.Configuration
 {
     internal class ConfigItem : INDSConfigItem
     {
@@ -18,6 +18,8 @@ namespace NetworkDynamicService.Configuration
         private uint normalValue;
         private uint lowLimit;
         private uint highLimit;
+        private uint eguMin;
+        private uint eguMax;
         #endregion Fields
 
         #region Properties
@@ -98,6 +100,31 @@ namespace NetworkDynamicService.Configuration
                 highLimit = value;
             }
         }
+        public uint EguMin
+        {
+            get
+            {
+                return eguMin;
+            }
+
+            set
+            {
+                eguMin = value;
+            }
+        }
+
+        public uint EguMax
+        {
+            get
+            {
+                return eguMax;
+            }
+
+            set
+            {
+                eguMax = value;
+            }
+        }
         #endregion Properties
 
         public ConfigItem(List<string> configurationParameters)
@@ -114,6 +141,10 @@ namespace NetworkDynamicService.Configuration
             LowLimit = temp;
             UInt32.TryParse(configurationParameters[5], out temp);
             HighLimit = temp;
+            UInt32.TryParse(configurationParameters[6], out temp);
+            EguMin = temp;
+            UInt32.TryParse(configurationParameters[7], out temp);
+            EguMax = temp;
         }
 
         private PointType GetRegistryType(string registryTypeName)
@@ -136,9 +167,11 @@ namespace NetworkDynamicService.Configuration
                 case "AO_INT16":
                     registryType = PointType.ANALOG_OUTPUT_16;
                     break;
+
                 case "CI_REG16":
                     registryType = PointType.COUNTER_INPUT_16;
                     break;
+
                 default:
                     registryType = PointType.COUNTER_INPUT_16;
                     break;

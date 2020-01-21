@@ -14,7 +14,6 @@ namespace BackEndProcessorService
             InitializeProcessingModules();
         }
 
-
         public void Process(IProcessingObject processingObject)
         {
             foreach (var item in ProcessingModules)

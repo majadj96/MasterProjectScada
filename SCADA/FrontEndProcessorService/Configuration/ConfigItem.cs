@@ -332,9 +332,11 @@ namespace FrontEndProcessorService.Configuration
                 case "AO_INT16":
                     registryType = PointType.ANALOG_OUTPUT_16;
                     break;
+
                 case "CI_REG16":
                     registryType = PointType.COUNTER_INPUT_16;
                     break;
+
                 default:
 					registryType = PointType.COUNTER_INPUT_16;
 					break;

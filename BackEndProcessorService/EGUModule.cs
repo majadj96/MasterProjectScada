@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BackEndProcessorService.Configuration;
 using ScadaCommon.BackEnd_FrontEnd;
+using ScadaCommon.Interfaces;
 
 namespace BackEndProcessorService
 {
@@ -11,7 +13,12 @@ namespace BackEndProcessorService
     {
         public void Process(IProcessingObject processingObject)
         {
-            Console.WriteLine("Egu radi!");
+            processingObject.EguValue = NDSConfiguration.GetScalingFactor(processingObject.PointType) * processingObject.RawValue + NDSConfiguration.GetDeviation(processingObject.PointType);
+        }
+
+        public INDSConfiguration NDSConfiguration
+        {
+            get { return new ConfigReader(); }
         }
     }
 }

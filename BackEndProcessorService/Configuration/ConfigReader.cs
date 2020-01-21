@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetworkDynamicService.Configuration
+namespace BackEndProcessorService.Configuration
 {
     internal class ConfigReader : INDSConfiguration
     {
@@ -109,6 +109,26 @@ namespace NetworkDynamicService.Configuration
             if (itemToConfiguration.TryGetValue(pointType, out item))
             {
                 return item.ScalingFactor;
+            }
+            throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointType)));
+        }
+
+        public uint GetEguMin(PointType pointType)
+        {
+            INDSConfigItem item;
+            if (itemToConfiguration.TryGetValue(pointType, out item))
+            {
+                return item.EguMin;
+            }
+            throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointType)));
+        }
+
+        public uint GetEguMax(PointType pointType)
+        {
+            INDSConfigItem item;
+            if (itemToConfiguration.TryGetValue(pointType, out item))
+            {
+                return item.EguMax;
             }
             throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointType)));
         }

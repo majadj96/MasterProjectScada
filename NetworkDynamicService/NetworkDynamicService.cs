@@ -1,5 +1,4 @@
 ﻿using BackEndProcessorService;
-using NetworkDynamicService.Configuration;
 using NetworkDynamicService.PointUpdater;
 using ScadaCommon.Interfaces;
 using System;

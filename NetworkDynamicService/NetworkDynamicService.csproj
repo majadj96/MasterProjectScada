@@ -44,8 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\ConfigItem.cs" />
-    <Compile Include="Configuration\ConfigReader.cs" />
     <Compile Include="FrontEndProcessorServiceProxy.cs" />
     <Compile Include="NetworkDynamicService.cs" />
     <Compile Include="PointOperateService.cs" />
@@ -67,8 +65,5 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Content Include="NDSConfig.txt" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
