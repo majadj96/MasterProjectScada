@@ -47,9 +47,10 @@
     <Compile Include="FrontEndProcessorServiceProxy.cs" />
     <Compile Include="NetworkDynamicService.cs" />
     <Compile Include="PointOperateService.cs" />
-    <Compile Include="PointUpdater\StateUpdateService.cs" />
+    <Compile Include="StateUpdater\StateUpdateService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StateUpdateServiceProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

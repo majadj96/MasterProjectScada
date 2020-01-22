@@ -6,13 +6,16 @@ namespace NetworkDynamicService.PointUpdater
 {
     public class StateUpdateService : IStateUpdateService
     {
+        private StateUpdateServiceProxy proxy = new StateUpdateServiceProxy("StateUpdateServiceEndPoint");
+
         public void UpdateDateAndTime(DateTime dateTime)
         {
-            Console.WriteLine(dateTime.ToString());
+            proxy.UpdateDateAndTime(dateTime);
         }
 
         public void UpdateState(ConnectionState connectionState)
         {
+            proxy.UpdateState(connectionState);
             Console.WriteLine(connectionState.ToString());
         }
     }
