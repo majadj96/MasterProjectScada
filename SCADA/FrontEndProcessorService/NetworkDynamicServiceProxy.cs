@@ -13,7 +13,6 @@ namespace FrontEndProcessorService
 
         }
 
-
         public void Process(IProcessingObject processingObject)
         {
             Channel.Process(processingObject);
