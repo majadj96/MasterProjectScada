@@ -6,7 +6,7 @@ using System.ServiceModel;
 
 namespace FrontEndProcessorService
 {
-    public class NetworkDynamicStateServiceProxy : ClientBase<IPointUpdateService>, IPointUpdateService
+    public class NetworkDynamicStateServiceProxy : ClientBase<IStateUpdateService>, IStateUpdateService
     {
         public NetworkDynamicStateServiceProxy(string endpointName) : base(endpointName)
         {

@@ -41,7 +41,7 @@ namespace NetworkDynamicService
         {
             hosts = new List<ServiceHost>();
             hosts.Add(new ServiceHost(typeof(BackEndPocessingModule)));
-            hosts.Add(new ServiceHost(typeof(PointUpdateService)));
+            hosts.Add(new ServiceHost(typeof(StateUpdateService)));
             hosts.Add(new ServiceHost(typeof(PointOperateService)));
         }
 
