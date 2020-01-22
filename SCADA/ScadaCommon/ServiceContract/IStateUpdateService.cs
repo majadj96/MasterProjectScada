@@ -4,7 +4,7 @@ using System.ServiceModel;
 namespace ScadaCommon.ServiceContract
 {
     [ServiceContract]
-    public interface IPointUpdateService
+    public interface IStateUpdateService
     {
         [OperationContract]
         void UpdateState(ConnectionState connectionState);

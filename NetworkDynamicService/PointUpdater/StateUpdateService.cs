@@ -4,7 +4,7 @@ using ScadaCommon.ServiceContract;
 
 namespace NetworkDynamicService.PointUpdater
 {
-    public class PointUpdateService : IPointUpdateService
+    public class StateUpdateService : IStateUpdateService
     {
         public void UpdateDateAndTime(DateTime dateTime)
         {
