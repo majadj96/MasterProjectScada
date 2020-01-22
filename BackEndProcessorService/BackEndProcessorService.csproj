@@ -48,6 +48,7 @@
     <Compile Include="EGUModule.cs" />
     <Compile Include="IProcessingData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Proxy\PointUpdateProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SCADA\ScadaCommon\ScadaCommon.csproj">

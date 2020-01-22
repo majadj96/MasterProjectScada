@@ -8,6 +8,7 @@ namespace BackEndProcessorService
 {
     public class BackEndPocessingModule : IBackEndProessingData
     {
+
         public List<IProcessingData> ProcessingModules { get; set; }
         public BackEndPocessingModule()
         {
