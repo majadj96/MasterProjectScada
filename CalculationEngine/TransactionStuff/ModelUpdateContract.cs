@@ -14,15 +14,19 @@ namespace CalculationEngine
     {
         public UpdateResult UpdateModel(Delta delta)
         {
-            Console.WriteLine("Update model invoked");
+            try
+            {
+                Console.WriteLine("Update model invoked");
 
-            TMProxy _proxy = new TMProxy(new TransactionService());
-            _proxy.Enlist();
+                TMProxy _proxy = new TMProxy(new TransactionService());
+                _proxy.Enlist();
+            }
+            catch (Exception e)
+            {
+                return new UpdateResult() { Result = ResultType.Failed, Message = e.Message };
+            }
             
-
-            //_proxy.EndEnlist(true);
-
-            return new UpdateResult();
+            return new UpdateResult() { Result = ResultType.Succeeded };
         }
     }
 }

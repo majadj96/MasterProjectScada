@@ -27,11 +27,14 @@ namespace NetworkModelService
         private Dictionary<DMSType, Container> networkDataModelCopy;
 
         /// <summary>
+        /// Dictionary which contains all data: Key - DMSType, Value - Container. Old model
+        /// </summary>
+        private Dictionary<DMSType, Container> networkDataModelOld;
+
+        /// <summary>
         /// ModelResourceDesc class contains metadata of the model
         /// </summary>
         private ModelResourcesDesc resourcesDescs;
-
-        private Delta _delta;
 
         /// <summary>
         /// Initializes a new instance of the Model class.
@@ -42,22 +45,6 @@ namespace NetworkModelService
             networkDataModelCopy = new Dictionary<DMSType, Container>();
             resourcesDescs = new ModelResourcesDesc();
             Initialize();
-        }
-
-        public void EnlistTM(Delta delta)
-        {
-            _delta = delta;
-
-            Console.WriteLine("Update model invoked");
-
-            NetTcpBinding netTcpbinding = new NetTcpBinding(SecurityMode.None);
-            EndpointAddress endpointAddress = new EndpointAddress("net.tcp://localhost:20000/TM");
-            InstanceContext context = new InstanceContext(this);
-            DuplexChannelFactory<IEnlistManager> channelFactory = new DuplexChannelFactory<IEnlistManager>(context, netTcpbinding, endpointAddress);
-            var _proxy = channelFactory.CreateChannel();
-            _proxy.Enlist();
-
-            _proxy.EndEnlist(true);
         }
 
         #region Find
@@ -379,7 +366,7 @@ namespace NetworkModelService
 
                                 if (!EntityExists(targetGlobalId))
                                 {
-                                    string message = string.Format("Failed to get target entity with GID: 0x{0:X16}. {1}", targetGlobalId);
+                                    string message = string.Format("Failed to get target entity with GID: 0x{0:X16}. {0}", targetGlobalId);
                                     throw new Exception(message);
                                 }
 
@@ -813,33 +800,52 @@ namespace NetworkModelService
 
         public bool Prepare()
         {
-            Console.WriteLine("NMS Prepare. Delta operations: " + _delta.NumberOfOperations);
-
-            ApplyDelta(_delta);
+            Console.WriteLine("NMS Prepare.");
 
             return true;
         }
 
         public bool Commit()
         {
-            Console.WriteLine("NMS Commit. Delta operations: " + _delta.NumberOfOperations);
+            Console.WriteLine("NMS Commit.");
 
+            networkDataModelOld = new Dictionary<DMSType, Container>(networkDataModel);
             networkDataModel = new Dictionary<DMSType, Container>(networkDataModelCopy);
-            networkDataModelCopy = new Dictionary<DMSType, Container>();
+            networkDataModelCopy.Clear();
 
             return true;
         }
 
         public void Rollback()
         {
-            Console.WriteLine("NMS Rollback. Delta operations: " + _delta.NumberOfOperations);
+            Console.WriteLine("NMS Rollback.");
+
+            networkDataModel = new Dictionary<DMSType, Container>(networkDataModelOld);
+            networkDataModelCopy.Clear();
         }
 
         public UpdateResult UpdateModel(Delta delta)
         {
-            EnlistTM(delta);
+            Console.WriteLine("Update model invoked");
 
-            return new UpdateResult();
+            UpdateResult result = ApplyDelta(delta);
+            networkDataModelOld = new Dictionary<DMSType, Container>(networkDataModel);
+
+            TMProxy _proxyTM = new TMProxy(this);
+            _proxyTM.Enlist();
+
+            ModelUpdateProxy _proxyCE = new ModelUpdateProxy("CE");
+            if(_proxyCE.UpdateModel(delta).Result == ResultType.Failed)
+            {
+                _proxyTM.EndEnlist(false);
+                return new UpdateResult() { Result = ResultType.Failed, Message = "CE failed to update model." };
+            }
+
+            //provjeriti SCADU
+
+            _proxyTM.EndEnlist(true);
+
+            return result;
         }
     }
 }

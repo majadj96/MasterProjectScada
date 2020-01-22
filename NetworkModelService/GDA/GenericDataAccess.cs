@@ -229,13 +229,6 @@ namespace NetworkModelService.GDA
 
         public UpdateResult UpdateModel(Delta delta)
         {
-            NetTcpBinding netTcpbinding = new NetTcpBinding(SecurityMode.None);
-            EndpointAddress endpointAddress = new EndpointAddress("net.tcp://localhost:10000/CE");
-            //InstanceContext context = new InstanceContext(callbackinstance);
-            ChannelFactory<IModelUpdateContract> channelFactory = new ChannelFactory<IModelUpdateContract>(netTcpbinding, endpointAddress);
-            var _proxy = channelFactory.CreateChannel();
-            _proxy.UpdateModel(delta);
-
             return nm.UpdateModel(delta);
         }
     }
