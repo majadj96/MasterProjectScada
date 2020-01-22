@@ -17,7 +17,7 @@ namespace TransactionManager
             EndpointAddress endpointAddress = new EndpointAddress("net.tcp://localhost:20000/TM");
             InstanceContext context = new InstanceContext(callbackObject);
             DuplexChannelFactory<IEnlistManager> channelFactory = new DuplexChannelFactory<IEnlistManager>(context, netTcpbinding, endpointAddress);
-            var _proxy = channelFactory.CreateChannel();
+            _proxy = channelFactory.CreateChannel();
         }
 
         public void EndEnlist(bool v)
@@ -29,9 +29,5 @@ namespace TransactionManager
         {
             _proxy.Enlist();
         }
-
-
-
-        public void 
     }
 }
