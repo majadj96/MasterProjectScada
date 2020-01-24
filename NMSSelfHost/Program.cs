@@ -15,7 +15,7 @@ namespace NetworkModelService
             {
                 string message = "Starting Network Model Serivice...";
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
-                Console.WriteLine("\n{0}\n", message);
+                Console.WriteLine("\n{0}\n", message);               
 
                 using (NetworkModelService nms = new NetworkModelService())
                 {

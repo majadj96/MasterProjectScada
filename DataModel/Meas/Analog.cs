@@ -69,7 +69,7 @@ namespace DataModel.Meas
                     break;
 
                 default:
-                    base.GetProperty(property.Id);
+                    base.GetProperty(property);
                     break;
             }
         }

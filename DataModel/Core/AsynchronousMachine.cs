@@ -64,7 +64,7 @@ namespace DataModel.Core
                     break;
 
                 default:
-                    base.GetProperty(property.Id);
+                    base.GetProperty(property);
                     break;
             }
         }

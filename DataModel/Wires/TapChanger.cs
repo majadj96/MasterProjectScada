@@ -70,7 +70,7 @@ namespace DataModel.Wires
                     break;
                     
                 default:
-                    base.GetProperty(property.Id);
+                    base.GetProperty(property);
                     break;
             }
         }        

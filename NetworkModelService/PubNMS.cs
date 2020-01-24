@@ -26,12 +26,11 @@ namespace NetworkModelService
             _proxy = ChannelFactory<IPubNMS>.CreateChannel(netTcpBinding, endpointAddress);
         }
 
-        public void SendEvent(String message, EventArgs e)
+        public void SendEvent(NMSModel model, EventArgs e)
         {
             try
             {
-                NMSModel model = new NMSModel();
-                model.EventData = message;
+                model.EventData = "a";
                 model.TopicName = "nms";
                 _proxy.Publish(model, "nms");
                 _eventCounter += 1;

@@ -22,12 +22,12 @@ namespace PubSub
 
             //ModelUpdateProxy proxy = new ModelUpdateProxy("net.tcp://localhost:50000/CE");
             //proxy.UpdateModel(new Common.GDA.Delta());
-            NetTcpBinding netTcpbinding = new NetTcpBinding(SecurityMode.None);
-            EndpointAddress endpointAddress = new EndpointAddress("net.tcp://localhost:10000/CE");
+            //NetTcpBinding netTcpbinding = new NetTcpBinding(SecurityMode.None);
+            //EndpointAddress endpointAddress = new EndpointAddress("net.tcp://localhost:10000/CE");
             //InstanceContext context = new InstanceContext(callbackinstance);
-            ChannelFactory<IModelUpdateContract> channelFactory = new ChannelFactory<IModelUpdateContract>(netTcpbinding, endpointAddress);
-            var _proxy = channelFactory.CreateChannel();
-            _proxy.UpdateModel(new Common.GDA.Delta());
+            //ChannelFactory<IModelUpdateContract> channelFactory = new ChannelFactory<IModelUpdateContract>(netTcpbinding, endpointAddress);
+            //var _proxy = channelFactory.CreateChannel();
+            //_proxy.UpdateModel(new Common.GDA.Delta());
 
             Console.ReadLine();
         }

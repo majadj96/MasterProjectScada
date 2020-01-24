@@ -66,12 +66,55 @@ namespace NetworkModelService
             return false;
         }
 
+        public bool EntityExistsCopy(long globalId)
+        {
+            DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(globalId);
+
+            if (ContainerExistsCopy(type))
+            {
+                Container container = GetContainerCopy(type);
+
+                if (container.EntityExists(globalId))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool ContainerExistsCopy(DMSType type)
+        {
+            if (networkDataModelCopy.ContainsKey(type))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public IdentifiedObject GetEntity(long globalId)
         {
             if (EntityExists(globalId))
             {
                 DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(globalId);
                 IdentifiedObject io = GetContainer(type).GetEntity(globalId);
+
+                return io;
+            }
+            else
+            {
+                string message = string.Format("Entity  (GID = 0x{0:x16}) does not exist.", globalId);
+                throw new Exception(message);
+            }
+        }
+
+        public IdentifiedObject GetEntityCopy(long globalId)
+        {
+            if (EntityExistsCopy(globalId))
+            {
+                DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(globalId);
+                IdentifiedObject io = GetContainerCopy(type).GetEntity(globalId);
 
                 return io;
             }
@@ -90,7 +133,7 @@ namespace NetworkModelService
         /// <returns>True if container exists, otherwise FALSE.</returns>
         private bool ContainerExists(DMSType type)
         {
-            if (networkDataModelCopy.ContainsKey(type))
+            if (networkDataModel.ContainsKey(type))
             {
                 return true;
             }
@@ -106,6 +149,20 @@ namespace NetworkModelService
         private Container GetContainer(DMSType type)
         {
             if (ContainerExists(type))
+            {
+                return networkDataModel[type];
+            }
+            else
+            {
+                string message = string.Format("Container does not exist for type {0}.", type);
+                throw new Exception(message);
+            }
+
+        }
+
+        private Container GetContainerCopy(DMSType type)
+        {
+            if (ContainerExistsCopy(type))
             {
                 return networkDataModelCopy[type];
             }
@@ -241,6 +298,41 @@ namespace NetworkModelService
 
         #endregion GDA query	
 
+        public List<ResourceDescription> GetResourceDescriptions()
+        {
+            List<ResourceDescription> retVal = new List<ResourceDescription>();
+            List<long> gids = RetrieveAllGIDs();
+
+            try
+            {
+                foreach (long gid in gids)
+                {
+                    IdentifiedObject io = GetEntity(gid);
+
+                    ResourceDescription rd = new ResourceDescription(gid);
+                    Console.WriteLine("/////////" + gid);
+
+                    Property property = null;
+
+                    // insert all properties
+                    foreach (ModelCode propId in RetrieveAllProps(gid))
+                    {
+                        property = new Property(propId);
+                        io.GetProperty(property);
+                        rd.AddProperty(property);
+                    }
+
+                    retVal.Add(rd);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return retVal;
+        }
+
         public UpdateResult ApplyDelta(Delta delta)
         {
             bool applyingStarted = false;
@@ -317,7 +409,7 @@ namespace NetworkModelService
             CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Inserting entity with GID ({0:x16}).", globalId);
 
             // check if mapping for specified global id already exists			
-            if (this.EntityExists(globalId))
+            if (this.EntityExistsCopy(globalId))
             {
                 string message = String.Format("Failed to insert entity because entity with specified GID ({0:x16}) already exists in network model.", globalId);
                 CommonTrace.WriteTrace(CommonTrace.TraceError, message);
@@ -332,9 +424,9 @@ namespace NetworkModelService
                 Container container = null;
 
                 // get container or create container 
-                if (ContainerExists(type))
+                if (ContainerExistsCopy(type))
                 {
-                    container = GetContainer(type);
+                    container = GetContainerCopy(type);
                 }
                 else
                 {
@@ -364,14 +456,14 @@ namespace NetworkModelService
                             if (targetGlobalId != 0)
                             {
 
-                                if (!EntityExists(targetGlobalId))
+                                if (!EntityExistsCopy(targetGlobalId))
                                 {
                                     string message = string.Format("Failed to get target entity with GID: 0x{0:X16}. {0}", targetGlobalId);
                                     throw new Exception(message);
                                 }
 
                                 // get referenced entity for update
-                                IdentifiedObject targetEntity = GetEntity(targetGlobalId);
+                                IdentifiedObject targetEntity = GetEntityCopy(targetGlobalId);
                                 
                                 targetEntity.AddReference(property.Id, io.GID);                                
                             }
@@ -413,14 +505,14 @@ namespace NetworkModelService
 
                 CommonTrace.WriteTrace(CommonTrace.TraceVerbose, "Updating entity with GID ({0:x16}).", globalId);
 
-                if (!this.EntityExists(globalId))
+                if (!this.EntityExistsCopy(globalId))
                 {
                     string message = String.Format("Failed to update entity because entity with specified GID ({0:x16}) does not exist in network model.", globalId);
                     CommonTrace.WriteTrace(CommonTrace.TraceError, message);
                     throw new Exception(message);
                 }
 
-                IdentifiedObject io = GetEntity(globalId);
+                IdentifiedObject io = GetEntityCopy(globalId);
 
                 // updating properties of entity
                 foreach (Property property in rd.Properties)
@@ -431,7 +523,7 @@ namespace NetworkModelService
 
                         if (oldTargetGlobalId != 0)
                         {
-                            IdentifiedObject oldTargetEntity = GetEntity(oldTargetGlobalId);
+                            IdentifiedObject oldTargetEntity = GetEntityCopy(oldTargetGlobalId);
                             oldTargetEntity.RemoveReference(property.Id, globalId);
                         }
 
@@ -440,13 +532,13 @@ namespace NetworkModelService
 
                         if (targetGlobalId != 0)
                         {
-                            if (!EntityExists(targetGlobalId))
+                            if (!EntityExistsCopy(targetGlobalId))
                             {
                                 string message = string.Format("Failed to get target entity with GID: 0x{0:X16}.", targetGlobalId);
                                 throw new Exception(message);
                             }
 
-                            IdentifiedObject targetEntity = GetEntity(targetGlobalId);
+                            IdentifiedObject targetEntity = GetEntityCopy(targetGlobalId);
                             targetEntity.AddReference(property.Id, globalId);
                         }
 
@@ -489,7 +581,7 @@ namespace NetworkModelService
                 CommonTrace.WriteTrace(CommonTrace.TraceVerbose, "Deleting entity with GID ({0:x16}).", globalId);
 
                 // check if entity exists
-                if (!this.EntityExists(globalId))
+                if (!this.EntityExistsCopy(globalId))
                 {
                     string message = String.Format("Failed to delete entity because entity with specified GID ({0:x16}) does not exist in network model.", globalId);
                     CommonTrace.WriteTrace(CommonTrace.TraceError, message);
@@ -497,7 +589,7 @@ namespace NetworkModelService
                 }
 
                 // get entity to be deleted
-                IdentifiedObject io = GetEntity(globalId);
+                IdentifiedObject io = GetEntityCopy(globalId);
 
                 // check if entity could be deleted (if it is not referenced by any other entity)
                 if (io.IsReferenced)
@@ -542,7 +634,7 @@ namespace NetworkModelService
                             if (targetGlobalId != 0)
                             {
                                 // get target entity
-                                IdentifiedObject targetEntity = GetEntity(targetGlobalId);
+                                IdentifiedObject targetEntity = GetEntityCopy(targetGlobalId);
 
                                 // remove reference to another entity
                                 targetEntity.RemoveReference(propertyId, globalId);
@@ -553,7 +645,7 @@ namespace NetworkModelService
 
               // remove entity form netowrk model
               DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(globalId);
-                Container container = GetContainer(type);
+                Container container = GetContainerCopy(type);
                 container.RemoveEntity(globalId);
 
                 CommonTrace.WriteTrace(CommonTrace.TraceVerbose, "Deleting entity with GID ({0:x16}) successfully finished.", globalId);
@@ -770,7 +862,7 @@ namespace NetworkModelService
 
                 if (networkDataModelCopy.ContainsKey(type))
                 {
-                    typesCounters[(short)type] = GetContainer(type).Count;
+                    typesCounters[(short)type] = GetContainerCopy(type).Count;
                 }
             }
 
@@ -781,7 +873,7 @@ namespace NetworkModelService
         {
             List<long> retVal = new List<long>();
 
-            foreach (var item in networkDataModelCopy)
+            foreach (var item in networkDataModel)
             {
                 retVal.AddRange(item.Value.Entities.Keys);
             }
@@ -812,6 +904,10 @@ namespace NetworkModelService
             networkDataModelOld = new Dictionary<DMSType, Container>(networkDataModel);
             networkDataModel = new Dictionary<DMSType, Container>(networkDataModelCopy);
             networkDataModelCopy.Clear();
+
+            PubNMS pub = new PubNMS();
+
+            pub.SendEvent(new PubSubCommon.NMSModel() { ResourceDescs = GetResourceDescriptions() }, null);
 
             return true;
         }
