@@ -39,7 +39,7 @@ namespace NetworkModelService
         {
             hosts = new List<ServiceHost>();
             hosts.Add(new ServiceHost(typeof(GenericDataAccess)));
-            //hosts.Add(new ServiceHost(typeof(NotifyNMSService)));
+            hosts.Add(new ServiceHost(typeof(NotifyNMSService)));
         }
 
         private void StartHosts()

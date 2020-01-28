@@ -905,9 +905,9 @@ namespace NetworkModelService
             networkDataModelCopy.Clear();
 
 
-            PubNMS pub = new PubNMS();
+            //PubNMS pub = new PubNMS();
 
-            pub.SendEvent(new PubSubCommon.NMSModel() { ResourceDescs = GetResourceDescriptions() }, null);
+            //pub.SendEvent(new PubSubCommon.NMSModel() { ResourceDescs = GetResourceDescriptions() }, null);
 
             return true;
         }
