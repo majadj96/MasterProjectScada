@@ -310,7 +310,6 @@ namespace NetworkModelService
                     IdentifiedObject io = GetEntity(gid);
 
                     ResourceDescription rd = new ResourceDescription(gid);
-                    Console.WriteLine("/////////" + gid);
 
                     Property property = null;
 
@@ -904,6 +903,7 @@ namespace NetworkModelService
             networkDataModelOld = new Dictionary<DMSType, Container>(networkDataModel);
             networkDataModel = new Dictionary<DMSType, Container>(networkDataModelCopy);
             networkDataModelCopy.Clear();
+
 
             PubNMS pub = new PubNMS();
 

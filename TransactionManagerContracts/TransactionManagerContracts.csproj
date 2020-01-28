@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="IEnlistManager.cs" />
     <Compile Include="IModelUpdateContract.cs" />
+    <Compile Include="INotifyNMS.cs" />
     <Compile Include="ITransactionSteps.cs" />
     <Compile Include="ModelUpdateProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

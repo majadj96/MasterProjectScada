@@ -24,6 +24,10 @@ namespace TransactionManager
                 Rollback();
                 return;
             }
+            else
+            {
+              //  TMData.NotifyNMSProxy.UpdateUIModel();
+            }
 
             //prosao commit -> uskladjen je model na svim servisima.
         }
@@ -62,7 +66,7 @@ namespace TransactionManager
                 }
                 catch (Exception)
                 {
-                    //return false;
+                    return false;
                 }
 
             }

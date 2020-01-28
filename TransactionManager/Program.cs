@@ -11,6 +11,8 @@ namespace TransactionManager
        static void Main(string[] args)
         {
             EnlistManagerServiceHost host = new EnlistManagerServiceHost();
+            TMData.CreateNMSProxy();
+
             Console.ReadLine();
         }
     }

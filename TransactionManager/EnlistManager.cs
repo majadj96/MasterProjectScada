@@ -35,16 +35,15 @@ namespace TransactionManager
 
             //AKO try-catch radi posao u slucaju diskonektovanja pozivajuceg servisa, onda zanemari ovaj deo sa izbacivanjem iz liste
 
-            //context.Channel.Closing += Channel_Closing;
+            context.Channel.Closing += Channel_Closing;
         }
 
-        //private void Channel_Closing(object sender, EventArgs e)
-        //{
-        //    var service = sender as ITransactionSteps;
+        private void Channel_Closing(object sender, EventArgs e)
+        {
+            var service = sender as ITransactionSteps;
 
-        //    var serv = sender as IContextChannel;
-        //    if (service != null)
-        //        TMData.CurrentlyEnlistedServices.Remove(service);
-        //}
+            if (service != null)
+                TMData.CompleteEnlistedServices.Remove(service);
+        }
     }
 }

@@ -11,7 +11,7 @@ namespace PubSub.PubSubEngine
 {
 
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
-    class PubNMS : IPubNMS
+    public class PubNMS : IPubNMS
     {
         #region IPublishing Members
         public void Publish(NMSModel e, string topicName)
