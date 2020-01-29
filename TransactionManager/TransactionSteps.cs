@@ -24,8 +24,12 @@ namespace TransactionManager
                 Rollback();
                 return;
             }
+            else //uspesan commit -> uskladjen je model na svim servisima -> kazi NMS-u da prosledi model na UI
+            {
+                TMData.NotifyNMSProxy.UpdateUIModel();
+            }
 
-            //prosao commit -> uskladjen je model na svim servisima.
+            
         }
 
         private static bool Prepare()
@@ -62,7 +66,7 @@ namespace TransactionManager
                 }
                 catch (Exception)
                 {
-                    //return false;
+                    return false;
                 }
 
             }

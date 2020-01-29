@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using TransactionManagerContracts;
@@ -15,5 +16,14 @@ namespace TransactionManager
 
         public static List<ITransactionSteps> CompleteEnlistedServices = new List<ITransactionSteps>();
 
+        public static INotifyNMS NotifyNMSProxy = null;
+
+        public static void CreateNMSProxy()
+        {
+            NetTcpBinding netTcpbinding = new NetTcpBinding(SecurityMode.None);
+            EndpointAddress endpointAddress = new EndpointAddress("net.tcp://localhost:10010/NetworkModelService/NotifyNMS");
+            ChannelFactory<INotifyNMS> channelFactory = new ChannelFactory<INotifyNMS>(netTcpbinding, endpointAddress);
+            NotifyNMSProxy = channelFactory.CreateChannel();
+        }
     }
 }

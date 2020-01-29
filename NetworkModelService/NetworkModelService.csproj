@@ -49,6 +49,7 @@
     <Compile Include="GDA\ResourceIterator.cs" />
     <Compile Include="NetworkModel.cs" />
     <Compile Include="NetworkModelService.cs" />
+    <Compile Include="NotifyNMSService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PubNMS.cs" />
   </ItemGroup>

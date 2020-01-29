@@ -35,7 +35,9 @@ namespace NetworkModelService
                 _proxy.Publish(model, "nms");
                 _eventCounter += 1;
             }
-            catch { }
+            catch(Exception ee) {
+                Console.WriteLine(ee.Message);
+            }
         }
 
         private NMSModel PrepareEvent()
