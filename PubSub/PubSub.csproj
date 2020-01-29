@@ -58,10 +58,6 @@
       <Project>{6C234280-508A-47A4-B9CA-2677082EF85F}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NMS\NMS.csproj">
-      <Project>{8ce817fc-7226-4ae6-8f69-206bb834aa5e}</Project>
-      <Name>NMS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PubSubCommon\PubSubCommon.csproj">
       <Project>{6109286A-0DC9-469C-A271-0605C18ED32C}</Project>
       <Name>PubSubCommon</Name>
