@@ -1,4 +1,7 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using Common;
+using Common.GDA;
+using GalaSoft.MvvmLight.Messaging;
+using PubSubCommon;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using UserInterface.Command;
+using UserInterface.Model;
 using UserInterface.Subscription;
 
 namespace UserInterface
@@ -23,7 +27,7 @@ namespace UserInterface
             subNMS.OnSubscribe();
             setUpLayout();
             setUpInitState();
-            Messenger.Default.Register<NotificationMessage>(this, (message) => {PopulateModel(message.Notification); });
+            Messenger.Default.Register<NotificationMessage>(this, (message) => {PopulateModel(message.Target); });
             DisconectorCommand = new DisconectorCommand(this);
             BreakerCommand = new BreakerCommand(this);
         }
@@ -66,10 +70,28 @@ namespace UserInterface
         public string connectedStatusBar { get; set; }
         public string timeStampStatusBar { get; set; }
 
+        public BindingList<UIModel> substationItems { get; set; }
+
+
+        public BindingList<UIModel> SubstationItems
+        {
+            get
+            {
+                return substationItems;
+            }
+            set
+            {
+                substationItems = value;
+                OnPropertyChanged("SubstationItems");
+            }
+        }
+
         //comboSubstations lista u comboBoxu
         //SelectedSubstation izabrani u comboBoxu
         //substationItems lista
         //substationItem oznacen u listi 
+
+
 
         public string ConnectedStatusBar
         {
@@ -318,9 +340,77 @@ namespace UserInterface
 
             }
         }
-        public void PopulateModel(string newValue)
+        public void PopulateModel(object resources)
         {
-            PubSub = newValue;
+            NMSModel nMSModel = (NMSModel)resources;
+            SubstationItems = toUIModelList(nMSModel.ResourceDescs);
+        }
+
+        public BindingList<UIModel> toUIModelList(List<ResourceDescription> resources)
+        {
+            BindingList<UIModel> response = new BindingList<UIModel>();
+
+            foreach (ResourceDescription resource in resources.Where(x => (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.DISCONNECTOR) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.BREAKER) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.RATIOTAPCHANGER) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ASYNCHRONOUSMACHINE))) 
+            {
+                UIModel model = new UIModel();
+
+                foreach (Property property in resource.Properties)
+                {
+                    switch (property.Id)
+                    {
+                        case Common.ModelCode.IDOBJ_GID:
+                            model.GID = property.GetValue().ToString();
+                            break;
+                        case Common.ModelCode.IDOBJ_DESC:
+                            model.Description = property.GetValue().ToString();
+                            break;
+                        case Common.ModelCode.IDOBJ_MRID:
+                            model.MRID = property.GetValue().ToString();
+                            break;
+                        case Common.ModelCode.IDOBJ_NAME:
+                            model.Name = property.GetValue().ToString();
+                            break;
+                        
+                        case Common.ModelCode.ASYNCMACHINE_COSPHI:
+                            model.Value = property.GetValue().ToString();
+                            break;
+                        case Common.ModelCode.ASYNCMACHINE_RATEDP:
+                            break;
+                        case Common.ModelCode.TAPCHANGER_HIGHSTEP:
+                            break;
+                        case Common.ModelCode.TAPCHANGER_LOWSTEP:
+                            break;
+                        case Common.ModelCode.TAPCHANGER_NORMALSTEP:
+                            model.Value = property.GetValue().ToString();
+                            break;
+                        case Common.ModelCode.MEASUREMENT_DIRECTION:
+                            break;
+                        case Common.ModelCode.MEASUREMENT_MEASTYPE:
+                            break;
+                        case Common.ModelCode.ANALOG_MAXVALUE:
+                            break;
+                        case Common.ModelCode.ANALOG_MINVALUE:
+                            break;
+                        case Common.ModelCode.ANALOG_NORMALVALUE:
+                            model.Value = property.GetValue().ToString();
+                            break;
+                        case Common.ModelCode.DISCRETE_MAXVALUE:
+                            break;
+                        case Common.ModelCode.DISCRETE_MINVALUE:
+                            break;
+                        case Common.ModelCode.DISCRETE_NORMALVALUE:
+                            model.Value = property.GetValue().ToString();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                response.Add(model);
+            }
+            return response;
         }
     }
 }
