@@ -1,14 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6109286A-0DC9-469C-A271-0605C18ED32C}</ProjectGuid>
+    <ProjectGuid>{A61FACB3-147E-4FD9-88C1-A3F226157C23}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PubSubCommon</RootNamespace>
-    <AssemblyName>PubSubCommon</AssemblyName>
+    <RootNamespace>ProcessingModule</RootNamespace>
+    <AssemblyName>ProcessingModule</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -33,7 +33,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -43,16 +42,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IPubNMS.cs" />
-    <Compile Include="ISubNMS.cs" />
-    <Compile Include="NMSModel.cs" />
+    <Compile Include="Acquisitor.cs" />
+    <Compile Include="FunctionExecutor.cs" />
+    <Compile Include="ProcessingManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{6C234280-508A-47A4-B9CA-2677082EF85F}</Project>
-      <Name>Common</Name>
+    <ProjectReference Include="..\DNP3\DNP3.csproj">
+      <Project>{8cc2c599-abc9-426e-8d54-4f9f25162417}</Project>
+      <Name>DNP3</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ScadaCommon\ScadaCommon.csproj">
+      <Project>{823D1355-EFD0-481C-A0D9-FDA0C4EA37DF}</Project>
+      <Name>ScadaCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

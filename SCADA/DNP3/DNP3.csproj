@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6109286A-0DC9-469C-A271-0605C18ED32C}</ProjectGuid>
+    <ProjectGuid>{8CC2C599-ABC9-426E-8D54-4F9F25162417}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PubSubCommon</RootNamespace>
-    <AssemblyName>PubSubCommon</AssemblyName>
+    <RootNamespace>DNP3</RootNamespace>
+    <AssemblyName>DNP3</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -33,8 +34,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,15 +42,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IPubNMS.cs" />
-    <Compile Include="ISubNMS.cs" />
-    <Compile Include="NMSModel.cs" />
+    <Compile Include="DNP3FunctionFactory.cs" />
+    <Compile Include="DNP3Functions\DNP3ApplicationObjectParameters.cs" />
+    <Compile Include="DNP3Functions\DNP3CommandParameters.cs" />
+    <Compile Include="FunctionParameters\Class0123.cs" />
+    <Compile Include="FunctionParameters\DelayMeasurement.cs" />
+    <Compile Include="FunctionParameters\DisableUnsolicitedMessages.cs" />
+    <Compile Include="FunctionParameters\DNP3Functions.cs" />
+    <Compile Include="FunctionParameters\EnableUnsolicitedMessages.cs" />
+    <Compile Include="FunctionParameters\InternalIndicationsMessage.cs" />
+    <Compile Include="FunctionParameters\ReadAnalogOutputFunction.cs" />
+    <Compile Include="FunctionParameters\ReadClass0DataFunction.cs" />
+    <Compile Include="FunctionParameters\ReadDiscreteInFunction.cs" />
+    <Compile Include="FunctionParameters\ReadDiscreteOutFunction.cs" />
+    <Compile Include="FunctionParameters\SendConfirmMessage.cs" />
+    <Compile Include="FunctionParameters\TimeMessage.cs" />
+    <Compile Include="FunctionParameters\WriteAnalogOutputFunction.cs" />
+    <Compile Include="FunctionParameters\ReadAnalogInFunction.cs" />
+    <Compile Include="FunctionParameters\WriteDiscreteOutFunction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{6C234280-508A-47A4-B9CA-2677082EF85F}</Project>
-      <Name>Common</Name>
+    <ProjectReference Include="..\ScadaCommon\ScadaCommon.csproj">
+      <Project>{823d1355-efd0-481c-a0d9-fda0c4ea37df}</Project>
+      <Name>ScadaCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

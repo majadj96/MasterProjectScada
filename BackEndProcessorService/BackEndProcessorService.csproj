@@ -4,14 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6109286A-0DC9-469C-A271-0605C18ED32C}</ProjectGuid>
+    <ProjectGuid>{9E9F3E50-1395-46B5-8D75-B16A08B45CDF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PubSubCommon</RootNamespace>
-    <AssemblyName>PubSubCommon</AssemblyName>
+    <RootNamespace>BackEndProcessorService</RootNamespace>
+    <AssemblyName>BackEndProcessorService</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,7 +33,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -43,16 +42,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IPubNMS.cs" />
-    <Compile Include="ISubNMS.cs" />
-    <Compile Include="NMSModel.cs" />
+    <Compile Include="AlarmingModule.cs" />
+    <Compile Include="BackEndPocessingModule.cs" />
+    <Compile Include="Configuration\ConfigItem.cs" />
+    <Compile Include="Configuration\ConfigReader.cs" />
+    <Compile Include="EGUModule.cs" />
+    <Compile Include="IProcessingData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{6C234280-508A-47A4-B9CA-2677082EF85F}</Project>
-      <Name>Common</Name>
+    <ProjectReference Include="..\SCADA\ScadaCommon\ScadaCommon.csproj">
+      <Project>{823D1355-EFD0-481C-A0D9-FDA0C4EA37DF}</Project>
+      <Name>ScadaCommon</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="NDSConfig.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Proxy\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
