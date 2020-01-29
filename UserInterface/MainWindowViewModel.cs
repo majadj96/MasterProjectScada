@@ -41,6 +41,10 @@ namespace UserInterface
             dis_color = breaker_color = line_1_color = line_2_color = line_3_color = "Black";
             statistics = "";
             pubSub = "pocetna vrednost";
+
+            connectedStatusBar = "Dissconnected"; //SCADA konekcija
+            timeStampStatusBar = DateTime.Now.ToLongDateString();  //SCADA konekcija
+
         }
 
 
@@ -58,6 +62,39 @@ namespace UserInterface
         public string line_3_color { get; set; }
         public string statistics { get; set; }
         public string pubSub { get; set; }
+
+        public string connectedStatusBar { get; set; }
+        public string timeStampStatusBar { get; set; }
+
+        //comboSubstations lista u comboBoxu
+        //SelectedSubstation izabrani u comboBoxu
+        //substationItems lista
+        //substationItem oznacen u listi 
+
+        public string ConnectedStatusBar
+        {
+            get
+            {
+                return connectedStatusBar;
+            }
+            set
+            {
+                connectedStatusBar = value;
+                OnPropertyChanged("ConnectedStatusBar");
+            }
+        }
+        public string TimeStampStatusBar
+        {
+            get
+            {
+                return timeStampStatusBar;
+            }
+            set
+            {
+                timeStampStatusBar = value;
+                OnPropertyChanged("TimeStampStatusBar");
+            }
+        }
 
         public string PubSub
         {

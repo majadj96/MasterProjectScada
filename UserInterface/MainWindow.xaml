@@ -5,22 +5,264 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UserInterface"
         mc:Ignorable="d"
-        Title="MainWindow" Height="628" Width="1522">
+        Title="SCADA SISTEM" Height="628" Width="1522"  WindowState="Maximized" Background="LightGray" >
+    <Window.Resources>
+        <Style x:Key="ControlStyle" TargetType="{x:Type Control}">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Background" Value="#FF6DB4EF"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Ellipse Fill="{TemplateBinding Background}"/>
+                            <Ellipse>
+                                <Ellipse.Fill>
+                                    <RadialGradientBrush>
+                                        <GradientStop Offset="0" Color="#00000000"/>
+                                        <GradientStop Offset="0.88" Color="#00000000"/>
+                                        <GradientStop Offset="1" Color="#80000000"/>
+                                    </RadialGradientBrush>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <Ellipse Margin="10" x:Name="highlightCircle" >
+                                <Ellipse.Fill >
+                                    <LinearGradientBrush >
+                                        <GradientStop Offset="0" Color="#50FFFFFF"/>
+                                        <GradientStop Offset="0.5" Color="#00FFFFFF"/>
+                                        <GradientStop Offset="1" Color="#50FFFFFF"/>
+                                    </LinearGradientBrush>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <ContentPresenter x:Name="content" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="highlightCircle" Property="Fill">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0.3,0" EndPoint="0.7,1">
+                                            <GradientStop Offset="0" Color="#50FFFFFF"/>
+                                            <GradientStop Offset="0.5" Color="#00FFFFFF"/>
+                                            <GradientStop Offset="1" Color="#50FFFFFF"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="content" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <TranslateTransform Y="0.5" X="0.5"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ControlStyle}"/>
+        <Style TargetType="TabItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border Name="Border" BorderThickness="1,1,1,0" BorderBrush="Gainsboro" CornerRadius="4,4,0,0" Margin="2,0">
+                            <ContentPresenter x:Name="ContentSite"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        ContentSource="Header"
+                                        Margin="10,2"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="LightSkyBlue" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter TargetName="Border" Property="Background" Value="LightGray" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="DataGrid">
+            <!-- Make the border and grid lines a little less imposing -->
+            <Setter Property="BorderBrush" Value="LightBlue" />
+            <Setter Property="HorizontalGridLinesBrush" Value="#DDDDDD" />
+            <Setter Property="VerticalGridLinesBrush" Value="#DDDDDD" />
+
+            <Setter Property="RowStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridRow">
+                        <Style.Triggers>
+                            <!-- Highlight a grid row as the mouse passes over -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="LightBlue" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="CellStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridCell">
+                        <Style.Triggers>
+                            <!-- Highlight selected rows -->
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#ff66ccff" />
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                                <Setter Property="Foreground" Value="Black" />
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="Background" Value="#ff66ccff" />
+                                <Setter Property="BorderBrush" Value="Black" />
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="Foreground" Value="Black" />
+                            </Trigger>
+                        </Style.Triggers>
+                        <!-- Add some padding around the contents of a cell -->
+                        <Setter Property="Padding" Value="4,3,4,3" />
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="DataGridCell">
+                                    <Border Padding="{TemplateBinding Padding}" 
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            Background="{TemplateBinding Background}">
+                                        <ContentPresenter />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="FocusVisualStyle">
+                            <Setter.Value>
+                                <Style TargetType="Control">
+                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                </Style>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="{x:Type StatusBar}"
+       TargetType="{x:Type StatusBar}">
+            <Setter Property="SnapsToDevicePixels"
+          Value="True" />
+            <Setter Property="OverridesDefaultStyle"
+          Value="true" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type StatusBar}">
+                        <Border Padding="1">
+                            <Border.BorderBrush>
+                                <LinearGradientBrush StartPoint="0,0"
+                                 EndPoint="0,1">
+                                    <LinearGradientBrush.GradientStops>
+                                        <GradientStopCollection>
+                                            <GradientStop Color="LightGray"
+                                Offset="0.0" />
+                                            <GradientStop Color="LightGray"
+                                Offset="1.0" />
+                                        </GradientStopCollection>
+                                    </LinearGradientBrush.GradientStops>
+                                </LinearGradientBrush>
+                            </Border.BorderBrush>
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0"
+                                 EndPoint="0,1">
+                                    <LinearGradientBrush.GradientStops>
+                                        <GradientStopCollection>
+                                            <GradientStop Color="Gray"
+                                Offset="0.0" />
+                                            <GradientStop Color="white"
+                                Offset="1.0" />
+                                        </GradientStopCollection>
+                                    </LinearGradientBrush.GradientStops>
+                                </LinearGradientBrush>
+
+                            </Border.Background>
+                            <ItemsPresenter />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="{x:Static StatusBar.SeparatorStyleKey}"
+       TargetType="{x:Type Separator}">
+            <Setter Property="OverridesDefaultStyle"
+          Value="True" />
+            <Setter Property="SnapsToDevicePixels"
+          Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Separator}">
+                        <Rectangle Width="1"
+                   Margin="3">
+                            <Rectangle.Fill>
+                                <SolidColorBrush Color="DarkGray" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="{x:Type StatusBarItem}"
+       TargetType="{x:Type StatusBarItem}">
+            <Setter Property="OverridesDefaultStyle"
+          Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type StatusBarItem}">
+                        <ContentPresenter Margin="3"
+                          Name="ContentSite" />
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled"
+                   Value="false">
+                                <Setter Property="Foreground">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="LightBlue" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="59*"/>
-            <ColumnDefinition Width="58*"/>
-            <ColumnDefinition Width="15*"/>
+            <ColumnDefinition Width="751*"/>
+            <ColumnDefinition Width="643*"/>
+            <ColumnDefinition Width="120*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="122*"/>
-            <RowDefinition Height="297*"/>
+            <RowDefinition Height="37*"/>
+            <RowDefinition Height="525*"/>
+            <RowDefinition Height="35*"/>
         </Grid.RowDefinitions>
-        <DataGrid Margin="10,32,10,7" Grid.ColumnSpan="3"/>
-        <Button Content="X" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top" Width="29" Height="20"/>
-        <Button Content="Expand" Margin="6,0,10,0" Grid.Column="2" Grid.Row="1" Height="20" VerticalAlignment="Top"/>
+        <DataGrid x:Name="SubstationItems"
+                  ItemsSource="{Binding SubstationItems, UpdateSourceTrigger=PropertyChanged}"
+                  IsReadOnly="True"
+                  SelectedItem="{Binding SubstationItem, UpdateSourceTrigger=PropertyChanged}"
+                  Height="563"
+                  Margin="10,10,10,0"
+                  VerticalAlignment="Top"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False" Grid.Column="1" Grid.RowSpan="3" Background="Transparent">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Width="*"  Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Description" Width="*" Binding="{Binding Description}"/>
+                <DataGridTextColumn Header="Value" Width="*" Binding="{Binding Value}"/>
+                <DataGridTextColumn Header="Time" Width="*" Binding="{Binding Time}"/>
+                <DataGridTextColumn Header="Alarm" Width="*" Binding="{Binding Alarm}"/>
+            </DataGrid.Columns>
+        </DataGrid>
 
-        <Canvas Margin="10,8,16,10" Background="#FFF1ABAB" Grid.Row="1">
+        <Canvas Margin="10,10,16,24" Background="LightBlue" Grid.Row="1" Grid.RowSpan="2">
+
             <Line
             X1="0" Y1="0"
             X2="0" Y2="40"
@@ -83,42 +325,61 @@
                 Stroke="Black" Canvas.Left="107" Canvas.Top="266"/>
             <Button Content="{Binding Disconector_state}" Canvas.Left="10" Canvas.Top="60" Width="53" FontSize="8" Background="#FF73B470" Command="{Binding DisconectorCommand}"/>
             <Button Content="{Binding Breaker_state}" Canvas.Left="10" Canvas.Top="138" Width="53" FontSize="8" Background="#FF73B470" Command="{Binding BreakerCommand}"/>
-        </Canvas>
-        <Canvas Margin="17,8,3,10" Background="#FFC1F1AB" Grid.Column="1" Grid.Row="1">
-            <TextBox Name="statistics" Height="188" Canvas.Left="132" TextWrapping="Wrap" Text="{Binding Statistics}" Canvas.Top="130" Width="320" Background="#33FFFFFF"/>
+            <TextBox Name="statistics" Height="82" Canvas.Left="590" TextWrapping="Wrap" Text="{Binding Statistics}" Width="135" Background="#33FFFFFF"/>
         </Canvas>
 
         <Line
         X1="0" Y1="10"
         X2="150" Y2="10"
         Stroke="Black"
-        StrokeThickness="3" Margin="51,10,153,268" Grid.Row="1"/>
+        StrokeThickness="3" Margin="51,10,153,185" Grid.Row="1"/>
 
         <Line
          X1="{Binding Disconector, UpdateSourceTrigger=PropertyChanged}" Y1= "0"
          X2="0" Y2="40"
         Stroke="{Binding Dis_color, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
         Name="disconector"
-        StrokeThickness="3" Margin="120,59,529,325" Grid.Row="1" />
+        StrokeThickness="3" Margin="120,59,529,242" Grid.Row="1" />
 
         <Line
             X1="{Binding Breaker, UpdateSourceTrigger=PropertyChanged}" Y1="0"
             X2="0" Y2="40"
             Stroke="{Binding Breaker_color}"
             Name="breaker"
-            StrokeThickness="3" Margin="120,138,530,245" Grid.Row="1" />
+            StrokeThickness="3" Margin="120,138,530,162" Grid.Row="1" />
 
 
 
         <Polygon
         Points="0,0 60,0 60,50 0,50"
         Stroke="Black" 
-        StrokeThickness="3" Canvas.Left="173" Canvas.Top="17" Margin="90,314,192,45" Grid.Row="1">
+        StrokeThickness="3" Margin="90,314,192,1" Grid.Row="1">
             <Polygon.Fill>
                 <SolidColorBrush Color="Gray" Opacity="0.2"/>
             </Polygon.Fill>
         </Polygon>
         <Label Content="AM" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="90,318,0,0" Grid.Row="1" VerticalAlignment="Top" Height="40" Width="58" FontFamily="Vijaya" FontSize="16"/>
-        <Label Content="{Binding PubSub}" Grid.Column="2" Margin="10,111,10,0" Grid.Row="1" VerticalAlignment="Top"/>
+        <Label Content="{Binding PubSub}" Grid.Column="2" Margin="10,111,10,0" Grid.Row="1" VerticalAlignment="Top" Height="10"/>
+        <StatusBar Margin="10,11,10,0" Grid.Row="2" Grid.ColumnSpan="3">
+
+            <StatusBarItem>
+                <Label Content="{Binding TimeStampStatusBar}"   />
+            </StatusBarItem>
+            <Separator Grid.Column="1" />
+            <StatusBarItem>
+                <Label Content="{Binding ConnectedStatusBar}"  />
+            </StatusBarItem>
+            <Separator Grid.Column="1" />
+            <StatusBarItem>
+                <Label  Content="SCADA SISTEM"  />
+
+            </StatusBarItem>
+        </StatusBar>
+
+        <Button  Content="Alarm states"  Grid.Column="2" HorizontalAlignment="Left" Height="24" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100"/>
+
+        <ComboBox ItemsSource="{Binding ComboSubstations}"  SelectedItem="{Binding SelectedSubstation}" HorizontalAlignment="Left" Margin="120,5,0,0" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Select Substation" HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top"/>
+
     </Grid>
 </Window>
