@@ -185,7 +185,7 @@ namespace ScadaCommon.Connection
             set
             {
                 connection = value;
-                ndsStateProxy.UpdateState((short)connection);
+                ndsStateProxy.UpdateState(connection);
             }
         }
     }

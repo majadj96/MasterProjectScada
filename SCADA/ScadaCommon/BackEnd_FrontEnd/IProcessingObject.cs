@@ -8,17 +8,22 @@ using System.Threading.Tasks;
 
 namespace ScadaCommon.BackEnd_FrontEnd
 {
-    public interface IProcessingObject
+    [DataContract]
+    [KnownTypeAttribute(typeof(AnalogPoint))]
+    [KnownTypeAttribute(typeof(DigitalPoint))]
+    [KnownTypeAttribute(typeof(PointType))]
+    public class IProcessingObject
     {
+        public IProcessingObject() { }
         [DataMember]
-        double RawValue { get; set; }
+        public double RawValue { get; set; }
         [DataMember]
-        PointType PointType { get; set; }
+        public PointType PointType { get; set; }
         [DataMember]
-        int Adress { get; set; }
+        public int Adress { get; set; }
         [DataMember]
-        DateTime Timestamp { get; set; }
+        public DateTime Timestamp { get; set; }
         [DataMember]
-        bool InAlarm { get; set; }
+        public bool InAlarm { get; set; }
     }
 }

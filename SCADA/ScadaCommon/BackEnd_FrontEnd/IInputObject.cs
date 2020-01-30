@@ -9,6 +9,7 @@ namespace ScadaCommon.BackEnd_FrontEnd
 {
     public interface IInputObject
     {
-        IProcessingObject[] Changes { get; set; }
+       // [DataMember]
+        DigitalPoint[] Changes { get; set; }
     }
 }

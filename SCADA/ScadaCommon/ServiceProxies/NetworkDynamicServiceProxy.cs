@@ -12,7 +12,7 @@ namespace ScadaCommon.ServiceProxies
 
         }
 
-        public void Process(IInputObject inputObj)
+        public void Process(IProcessingObject[] inputObj)
         {
             Channel.Process(inputObj);
         }

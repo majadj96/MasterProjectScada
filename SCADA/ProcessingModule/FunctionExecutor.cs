@@ -35,7 +35,7 @@ namespace ProcessingModule
         /// <param name="configuration">The configuration.</param>
         public FunctionExecutor(IConfiguration configuration, IConnection connection)
         {
-            MessagesForUnsolicited();
+            //MessagesForUnsolicited();
             this.configuration = configuration;
             this.connection = connection;
             this.processConnection = new AutoResetEvent(true);

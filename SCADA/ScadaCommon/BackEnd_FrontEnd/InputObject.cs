@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace ScadaCommon.BackEnd_FrontEnd
 {
-    [DataContract]
+    //[KnownType(typeof(AnalogPoint))]
+   // [DataContract]
     public class InputObject : IInputObject
     {
-        [DataMember]
-        public IProcessingObject[] Changes { get; set; }
+        //[DataMember]
+        public DigitalPoint[] Changes { get; set; }
     }
 }
