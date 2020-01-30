@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{889D3515-83B6-4CBD-B85E-145DBF9BAD93}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>CalculationEngine</RootNamespace>
-    <AssemblyName>CalculationEngine</AssemblyName>
+    <ProjectGuid>{5B9135BD-40C9-4DFB-AE6C-054A8CDBE18F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ScadaContracts</RootNamespace>
+    <AssemblyName>ScadaContracts</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -44,33 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SCADAStuff\ScadaService.cs" />
-    <Compile Include="TransactionStuff\ModelUpdateContract.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="IScadaService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TransactionStuff\TransactionService.cs" />
-    <Compile Include="TransactionStuff\UpdateModelServiceHost.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{6C234280-508A-47A4-B9CA-2677082EF85F}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ScadaContracts\ScadaContracts.csproj">
-      <Project>{5B9135BD-40C9-4DFB-AE6C-054A8CDBE18F}</Project>
-      <Name>ScadaContracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TransactionManagerContracts\TransactionManagerContracts.csproj">
-      <Project>{0a8f68ec-31cb-4fd1-b54a-dcf2fc97bbec}</Project>
-      <Name>TransactionManagerContracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TransactionManager\TransactionManager.csproj">
-      <Project>{518AD2F0-337F-40A0-8091-5FD0B2364815}</Project>
-      <Name>TransactionManager</Name>
-    </ProjectReference>
+    <Compile Include="ScadaServiceProxy.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
