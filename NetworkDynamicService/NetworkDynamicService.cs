@@ -1,13 +1,10 @@
 ﻿using BackEndProcessorService;
 using NetworkDynamicService.PointUpdater;
 using NetworkDynamicService.ProxyPool;
-using ScadaCommon.Interfaces;
+using NetworkDynamicService.Transaction;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NetworkDynamicService
 {
@@ -41,6 +38,9 @@ namespace NetworkDynamicService
             {
                 host.Open();
             }
+
+            string message = "The Network Dynamic Service is started.";
+            Console.WriteLine("\n{0}", message);
         }
         
         private void InitializeHosts()
@@ -49,6 +49,7 @@ namespace NetworkDynamicService
             hosts.Add(new ServiceHost(backEndPocessingModule));
             hosts.Add(new ServiceHost(typeof(StateUpdateService)));
             hosts.Add(new ServiceHost(typeof(PointOperateService)));
+            hosts.Add(new ServiceHost(typeof(ModelUpdateContract))); //transaction
         }
 
         public void Dispose()
@@ -68,6 +69,9 @@ namespace NetworkDynamicService
             {
                 host.Close();
             }
+
+            string message = "The Network Dynamic Service is closed.";
+            Console.WriteLine("\n\n{0}", message);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace NetworkDynamicService
             try
             {
                 nds.Start();
-                Console.WriteLine("Kao krenulo!");
+                //Console.WriteLine("Kao krenulo!");
             }
             catch(Exception e)
             {
