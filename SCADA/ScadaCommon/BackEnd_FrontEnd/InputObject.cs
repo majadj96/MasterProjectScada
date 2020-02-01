@@ -11,6 +11,6 @@ namespace ScadaCommon.BackEnd_FrontEnd
     public class InputObject : IInputObject
     {
         [DataMember]
-        public IProcessingObject[] Changes { get; set; }
+        public ProcessingObject[] Changes { get; set; }
     }
 }

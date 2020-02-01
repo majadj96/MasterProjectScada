@@ -17,17 +17,17 @@ namespace BackEndProcessorService
             this.pointUpdateProxy = pointUpdateProxy;
         }
 
-        public void Process(IInputObject inputObj)
+        public void Process(ProcessingObject[] inputObj)
         {
-            for (int index = 0; index < inputObj.Changes.Length; index++)
+            for (int index = 0; index < inputObj.Length; index++)
             {
                 foreach (var item in ProcessingModules)
                 {
-                    item.Process(inputObj.Changes[index]);
+                    item.Process(inputObj);
                 }
-
-                this.pointUpdateProxy.UpdatePoint(inputObj.Changes[index]);
             }
+
+            this.pointUpdateProxy.UpdatePoint(inputObj);
         }
 
         private void InitializeProcessingModules()

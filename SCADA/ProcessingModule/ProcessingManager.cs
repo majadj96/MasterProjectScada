@@ -163,40 +163,67 @@ namespace ProcessingModule
         /// <param name="newValue">The new value.</param>
         private void CommandExecutor_UpdatePointEvent(Dictionary<Tuple<PointType, ushort>, ushort> pointsToupdate)
         {
-            List<IProcessingObject> changes = new List<IProcessingObject>();
-            InputObject inputObj = new InputObject();
+            List<ProcessingObject> changes = new List<ProcessingObject>();
+            ProcessingObject[] inputObj;
 
             foreach (var item in pointsToupdate)
             {
                 List<IPoint> points = storage.GetPoints(new List<PointIdentifier>(1) { new PointIdentifier(item.Key.Item1, item.Key.Item2) });
 
-                if (item.Value != points.First().RawValue) {
-                    if (item.Key.Item1 == PointType.ANALOG_INPUT || item.Key.Item1 == PointType.ANALOG_OUTPUT)
+                if (item.Value != points.First().RawValue)
+                {
+                    if (item.Key.Item1 == PointType.ANALOG_INPUT_16)
                     {
                         ProcessAnalogPoint(points.First() as IAnalogPoint, item.Value);
-                        changes.Add(IPointToIProcessingObj(points.First()));
+                        changes.Add(IPointToProcessingObj(points.First(), PointType.ANALOG_INPUT_16, item.Key.Item2));
+                    }
+                    else if (item.Key.Item1 == PointType.ANALOG_OUTPUT_16)
+                    {
+                        ProcessAnalogPoint(points.First() as IAnalogPoint, item.Value);
+                        changes.Add(IPointToProcessingObj(points.First(), PointType.ANALOG_OUTPUT_16, item.Key.Item2));
+                    }
+                    else if (item.Key.Item1 == PointType.BINARY_INPUT)
+                    {
+                        ProcessDigitalPoint(points.First() as IDigitalPoint, item.Value);
+                        changes.Add(IPointToProcessingObj(points.First(), PointType.BINARY_INPUT, item.Key.Item2));
                     }
                     else
                     {
                         ProcessDigitalPoint(points.First() as IDigitalPoint, item.Value);
-                        changes.Add(IPointToIProcessingObj(points.First()));
+                        changes.Add(IPointToProcessingObj(points.First(), PointType.BINARY_OUTPUT, item.Key.Item2));
                     }
                 }
             }
-            inputObj.Changes = changes.ToArray();
-            ndsProxy.Process(inputObj);
+            if (changes.Count > 0)
+            {
+                inputObj = changes.ToArray();
+                ndsProxy.Process(inputObj);
+            }
         }
 
-        private IProcessingObject IPointToIProcessingObj(IPoint point)
+        private ProcessingObject IPointToProcessingObj(IPoint point, PointType pointType, ushort address)
         {
-            if (point is IAnalogPoint)
+
+            //AnalogPoint analog = new AnalogPoint() { RawValue = point.RawValue, Timestamp = DateTime.Now };
+            //return analog;
+            if (pointType == PointType.ANALOG_INPUT_16)
             {
-                AnalogPoint analog = new AnalogPoint() { RawValue = point.RawValue, Timestamp = DateTime.Now };
+                AnalogPoint analog = new AnalogPoint() { RawValue = point.RawValue, Timestamp = DateTime.Now, PointType = PointType.ANALOG_INPUT_16, Adress = address };
                 return analog;
+            }
+            else if (pointType == PointType.ANALOG_OUTPUT_16)
+            {
+                AnalogPoint analog = new AnalogPoint() { RawValue = point.RawValue, Timestamp = DateTime.Now, PointType = PointType.ANALOG_OUTPUT_16, Adress = address };
+                return analog;
+            }
+            else if (pointType == PointType.BINARY_INPUT)
+            {
+                DigitalPoint digital = new DigitalPoint() { RawValue = point.RawValue, Timestamp = DateTime.Now, PointType = PointType.BINARY_INPUT, Adress = address };
+                return digital;
             }
             else
             {
-                DigitalPoint digital = new DigitalPoint() { RawValue = point.RawValue, Timestamp = DateTime.Now };
+                DigitalPoint digital = new DigitalPoint() { RawValue = point.RawValue, Timestamp = DateTime.Now, PointType = PointType.BINARY_OUTPUT, Adress = address };
                 return digital;
             }
         }

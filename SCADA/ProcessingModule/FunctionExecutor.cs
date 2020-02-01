@@ -529,8 +529,8 @@ namespace ProcessingModule
 
                         break;
                 }
-                HandleReceivedChangesOfPoints(pointsToupdate);
             }
+            HandleReceivedChangesOfPoints(pointsToupdate);
         }
 
         private void PreproccessMsg(byte[] message, int messageLength, ref byte[] dataArray, int lengthData)
