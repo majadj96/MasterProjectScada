@@ -8,13 +8,13 @@ using System.ServiceModel;
 
 namespace NetworkDynamicService
 {
-    public class NetworkDynamicService : IDisposable
+    public class NetworkDynamicServiceHost : IDisposable
     {
         private List<ServiceHost> hosts = null;
         private PointUpdateProxy pointUpdateProxy;
         private BackEndPocessingModule backEndPocessingModule;
 
-        public NetworkDynamicService()
+        public NetworkDynamicServiceHost()
         {
             //pointUpdateProxy = new PointUpdateProxy("UpdatePointEndPoint");
             //pointUpdateProxy.Open();
