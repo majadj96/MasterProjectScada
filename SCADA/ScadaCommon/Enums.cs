@@ -162,4 +162,10 @@ namespace ScadaCommon
         HIGH_ALARM = 0x04,
         ABNORMAL_VALUE = 0x05,
 	}
+
+    public enum AlarmEventType : short
+    {
+        SCADA = 0x01,
+        CE = 0x02
+    }
 }

@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,6 +13,9 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,8 +37,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,28 +56,121 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connected Services\AlarmServiceRef\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\EventServiceRef\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="FrontEndProcessorServiceProxy.cs" />
-    <Compile Include="NetworkDynamicService.cs" />
+    <Compile Include="NetworkDynamicServiceHost.cs" />
     <Compile Include="PointOperateService.cs" />
     <Compile Include="ProxyPool\PointUpdateProxy.cs" />
     <Compile Include="StateUpdater\StateUpdateService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StateUpdateServiceProxy.cs" />
+    <Compile Include="Transaction\ModelUpdateContract.cs" />
+    <Compile Include="Transaction\TransactionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations.wsdl" />
+    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\EventServiceRef\EventServiceOperations.wsdl" />
+    <None Include="Connected Services\EventServiceRef\EventServiceOperations.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\EventServiceRef\EventServiceOperations1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\EventServiceRef\EventServiceOperations2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\EventServiceRef\EventServiceOperations3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\DataSources\ScadaCommon.Database.Alarm.datasource" />
+    <None Include="Properties\DataSources\ScadaCommon.Database.Event.datasource" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BackEndProcessorService\BackEndProcessorService.csproj">
       <Project>{9E9F3E50-1395-46B5-8D75-B16A08B45CDF}</Project>
       <Name>BackEndProcessorService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{6C234280-508A-47A4-B9CA-2677082EF85F}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SCADA\ScadaCommon\ScadaCommon.csproj">
       <Project>{823D1355-EFD0-481C-A0D9-FDA0C4EA37DF}</Project>
       <Name>ScadaCommon</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TransactionManagerContracts\TransactionManagerContracts.csproj">
+      <Project>{0A8F68EC-31CB-4FD1-B54A-DCF2FC97BBEC}</Project>
+      <Name>TransactionManagerContracts</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\AlarmServiceRef\" />
+    <WCFMetadataStorage Include="Connected Services\EventServiceRef\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AlarmServiceRef\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AlarmServiceRef\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AlarmServiceRef\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\EventServiceRef\EventServiceOperations.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\EventServiceRef\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\EventServiceRef\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\EventServiceRef\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.0\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.0\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.0\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.targets')" />
 </Project>

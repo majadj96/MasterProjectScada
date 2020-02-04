@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -47,10 +48,14 @@
     <Compile Include="BackEnd_FrontEnd\DigitalPoint.cs" />
     <Compile Include="BackEnd_FrontEnd\IInputObject.cs" />
     <Compile Include="BackEnd_FrontEnd\InputObject.cs" />
-    <Compile Include="BackEnd_FrontEnd\IProcessingObject.cs" />
+    <Compile Include="BackEnd_FrontEnd\ProcessingObject.cs" />
     <Compile Include="Connection\IConnection.cs" />
     <Compile Include="Connection\TCPConnection.cs" />
     <Compile Include="CRCCalculator\CRCCalculator.cs" />
+    <Compile Include="Database\Alarm.cs" />
+    <Compile Include="Database\Event.cs" />
+    <Compile Include="Database\IAlarm.cs" />
+    <Compile Include="Database\IEvent.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Interfaces\IAnalogPoint.cs" />
     <Compile Include="Interfaces\IConfigItem.cs" />

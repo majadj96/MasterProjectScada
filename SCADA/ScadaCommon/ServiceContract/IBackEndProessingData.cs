@@ -8,6 +8,6 @@ namespace ScadaCommon.ServiceContract
     public interface IBackEndProessingData
     {
         [OperationContract]
-        void Process(IInputObject inputObj);
+        void Process(ProcessingObject[] inputObj);
     }
 }

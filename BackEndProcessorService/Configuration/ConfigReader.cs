@@ -12,7 +12,7 @@ namespace BackEndProcessorService.Configuration
     internal class ConfigReader : INDSConfiguration
     {
         private Dictionary<PointType, INDSConfigItem> itemToConfiguration = new Dictionary<PointType, INDSConfigItem>();
-        private string path = "NDSConfig.txt";
+        private string path = "../../../BackEndProcessorService/NDSConfig.txt";
 
         public ConfigReader()
         {
