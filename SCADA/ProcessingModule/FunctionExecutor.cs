@@ -526,7 +526,7 @@ namespace ProcessingModule
                         }
                         break;
                     default:
-
+                        Console.WriteLine("Prosledjeni objekat ne postoji u case-ovima:   " + objectType);
                         break;
                 }
             }

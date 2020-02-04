@@ -16,8 +16,8 @@ namespace NetworkDynamicService
 
         public NetworkDynamicService()
         {
-            pointUpdateProxy = new PointUpdateProxy("UpdatePointEndPoint");
-            pointUpdateProxy.Open();
+            //pointUpdateProxy = new PointUpdateProxy("UpdatePointEndPoint");
+            //pointUpdateProxy.Open();
             backEndPocessingModule = new BackEndPocessingModule(pointUpdateProxy);
             InitializeHosts();
         }

@@ -20,14 +20,17 @@ namespace BackEndProcessorService
                 {
                     if (!CheckReasonability(((AnalogPoint)item).EguValue, NDSConfiguration.GetEguMin(item.PointType), NDSConfiguration.GetEguMax(item.PointType)))
                     {
+                        item.InAlarm = true;
                         //alarm izvan mernih opsega
                     }
                     else if (((AnalogPoint)item).EguValue < NDSConfiguration.GetLowLimit(item.PointType))
                     {
+                        item.InAlarm = true;
                         //low alarm
                     }
                     else if (((AnalogPoint)item).EguValue > NDSConfiguration.GetHighLimit(item.PointType))
                     {
+                        item.InAlarm = true;
                         //high alarm
                     }
                 }
@@ -35,6 +38,7 @@ namespace BackEndProcessorService
                 {
                     if (NDSConfiguration.GetNormalValue(PointType.BINARY_INPUT) != item.RawValue)
                     {
+                        item.InAlarm = true;
                         //alarm treba da se napravi (ABNORMAL ALARM)
                     }
                 }
