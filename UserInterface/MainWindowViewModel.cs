@@ -28,50 +28,83 @@ namespace UserInterface
             setUpLayout();
             setUpInitState();
             Messenger.Default.Register<NotificationMessage>(this, (message) => {PopulateModel(message.Target); });
-            DisconectorCommand = new DisconectorCommand(this);
-            BreakerCommand = new BreakerCommand(this);
+            CommandDis1 = CommandDis2 = new DisconectorCommand(this);
+            CommandBreaker = new BreakerCommand(this);
+            CommandPT = new TapChangerCommand(this);
         }
 
         public void setUpLayout()
         {
             // window.WindowState = WindowState.Maximized;
-            //  window.WindowStyle = WindowStyle.None;
+            // window.WindowStyle = WindowStyle.None;
         }
 
         public void setUpInitState()
-        {
-            disconector = breaker = 20;
-            breaker_state = disconector_state = "ON";
-            dis_color = breaker_color = line_1_color = line_2_color = line_3_color = "#FFEE2020";
-            statistics = "";
-            pubSub = "pocetna vrednost";
-
+        {        
+            populateUI();
+            setState();
             connectedStatusBar = "Dissconnected"; //SCADA konekcija
             timeStampStatusBar = DateTime.Now.ToLongDateString();  //SCADA konekcija
-            Two_AM_Visible = "Visible";
-
         }
 
+        public void setState()
+        {
+            breakerState = disconector1State = disconector2State =     
+            ptState = pump1State = pump2State = pumpState = true;
+        }
+        public void populateUI()
+        {
+            //Green color: #FF7DFB4E
+            //Red color: #FFFF634D
+            lineFirst = lineSecond = lineThird = lineUpDis1 = lineDownDis1 = lineUpBreaker = lineDownBreaker = lineUpDis2 =
+            lineDownDis2 = lineUpPT = lineDownPT = lineUpPump = lineFourth = lineStart = lineUpFirstPump = lineUpMultiPump = 
+            lineUpSecondPump = "#FF7DFB4E";
+            Two_AM_Visible = "Visible";
+            breakerImage = "Assets/breaker-on.png";
+            disconector1Image = disconector2Image = "Assets/recloser-on.png";
+            ptImage = "Assets/transformator-on.png";
+            pumpImage = pump1Image = pump2Image = "Assets/pump-on.png";
+        }
+
+        //flags for elements state
+        private bool breakerState { get; set; }
+        private bool disconector1State { get; set; }
+        private bool disconector2State { get; set; }
+        private bool ptState { get; set; }
+        private bool pumpState { get; set; }
+        private bool pump1State { get; set; }
+        private bool pump2State { get; set; }
 
         #region Properties
+        //Lines
+        #region Line_colors
+        public string lineStart { get; set; }
+        public string lineFirst { get; set; }
+        public string lineSecond { get; set; }
+        public string lineThird { get; set; }
+        public string lineFourth { get; set; }
+        public string lineUpDis1 { get; set; }
+        public string lineUpDis2 { get; set; }
+        public string lineDownDis1 { get; set; }
+        public string lineDownDis2 { get; set; }
+        public string lineUpPT { get; set; }
+        public string lineDownPT { get; set; }
+        public string lineUpBreaker { get; set; }
+        public string lineDownBreaker { get; set; }
+        public string lineUpPump { get; set; }
+        public string lineUpFirstPump { get; set; }
+        public string lineUpSecondPump { get; set; }
+        public string lineUpMultiPump { get; set; }
+        #endregion
+        
         public Window Window { get; set; }
-        public int breaker { get; set; }
-        public int disconector { get; set; }
-        public string disconector_state { get; set; }
-        public string breaker_state { get; set; }
-
-        public string dis_color { get; set; }
-        public string breaker_color { get; set; }
-        public string line_1_color { get; set; }
-        public string line_2_color { get; set; }
-        public string line_3_color { get; set; }
         public string statistics { get; set; }
         public string pubSub { get; set; }
-
         public string connectedStatusBar { get; set; }
         public string timeStampStatusBar { get; set; }
-        public string two_AM_Visible { get; set; }
 
+        //Depends on model - one or two async machine
+        public string two_AM_Visible { get; set; }
         public string Two_AM_Visible
         {
             get
@@ -85,9 +118,311 @@ namespace UserInterface
             }
         }
 
+        //Elements on EEM
+        #region Elements_Of_Mesh
+        //Elements
+        public string disconector1Image { get; set; }
+        public string Disconector1Image
+        {
+            get
+            {
+                return disconector1Image;
+            }
+            set
+            {
+                disconector1Image = value;
+                OnPropertyChanged("Disconector1Image");
+            }
+        }
+        public string disconector2Image { get; set; }
+        public string Disconector2Image
+        {
+            get
+            {
+                return disconector2Image;
+            }
+            set
+            {
+                disconector2Image = value;
+                OnPropertyChanged("Disconector2Image");
+            }
+        }
+        public string breakerImage { get; set; }
+        public string BreakerImage
+        {
+            get
+            {
+                return breakerImage;
+            }
+            set
+            {
+                breakerImage = value;
+                OnPropertyChanged("BreakerImage");
+            }
+        }
+        public string pumpImage { get; set; }
+        public string PumpImage
+        {
+            get
+            {
+                return pumpImage;
+            }
+            set
+            {
+                pumpImage = value;
+                OnPropertyChanged("PumpImage");
+            }
+        }
+        public string pump1Image { get; set; }
+        public string Pump1Image
+        {
+            get
+            {
+                return pump1Image;
+            }
+            set
+            {
+                pump1Image = value;
+                OnPropertyChanged("Pump1Image");
+            }
+        }
+        public string pump2Image { get; set; }
+        public string Pump2Image
+        {
+            get
+            {
+                return pump2Image;
+            }
+            set
+            {
+                pump2Image = value;
+                OnPropertyChanged("Pump2Image");
+            }
+        }
+        public string ptImage { get; set; }
+        public string PTImage
+        {
+            get
+            {
+                return ptImage;
+            }
+            set
+            {
+                ptImage = value;
+                OnPropertyChanged("PTImage");
+            }
+        }
+        #endregion
+        
+        //Lines properties
+        #region Line_prop_colors
+        public string LineStart
+        {
+            get
+            {
+                return lineStart;
+            }
+            set
+            {
+                lineStart = value;
+                OnPropertyChanged("LineStart");
+            }
+        }
+        public string LineFirst
+        {
+            get
+            {
+                return lineFirst;
+            }
+            set
+            {
+                lineFirst = value;
+                OnPropertyChanged("LineFirst");
+            }
+        }
+        public string LineSecond
+        {
+            get
+            {
+                return lineSecond;
+            }
+            set
+            {
+                lineSecond = value;
+                OnPropertyChanged("LineSecond");
+            }
+        }
+        public string LineThird
+        {
+            get
+            {
+                return lineThird;
+            }
+            set
+            {
+                lineThird = value;
+                OnPropertyChanged("LineThird");
+            }
+        }
+        public string LineFourth
+        {
+            get
+            {
+                return lineFourth;
+            }
+            set
+            {
+                lineFourth = value;
+                OnPropertyChanged("LineFourth");
+            }
+        }
+        public string LineUpDis1
+        {
+            get
+            {
+                return lineUpDis1;
+            }
+            set
+            {
+                lineUpDis1 = value;
+                OnPropertyChanged("LineUpDis1");
+            }
+        }
+        public string LineUpDis2
+        {
+            get
+            {
+                return lineUpDis2;
+            }
+            set
+            {
+                lineUpDis2 = value;
+                OnPropertyChanged("LineUpDis2");
+            }
+        }
+        public string LineDownDis1
+        {
+            get
+            {
+                return lineDownDis1;
+            }
+            set
+            {
+                lineDownDis1 = value;
+                OnPropertyChanged("LineDownDis1");
+            }
+        }
+        public string LineDownDis2
+        {
+            get
+            {
+                return lineDownDis2;
+            }
+            set
+            {
+                lineDownDis2 = value;
+                OnPropertyChanged("LineDownDis2");
+            }
+        }
+        public string LineUpBreaker
+        {
+            get
+            {
+                return lineUpBreaker;
+            }
+            set
+            {
+                lineUpBreaker = value;
+                OnPropertyChanged("LineUpBreaker");
+            }
+        }
+        public string LineDownBreaker
+        {
+            get
+            {
+                return lineDownBreaker;
+            }
+            set
+            {
+                lineDownBreaker = value;
+                OnPropertyChanged("LineDownBreaker");
+            }
+        }
+        public string LineDownPT
+        {
+            get
+            {
+                return lineDownPT;
+            }
+            set
+            {
+                lineDownPT = value;
+                OnPropertyChanged("LineDownPT");
+            }
+        }
+        public string LineUpPT
+        {
+            get
+            {
+                return lineUpPT;
+            }
+            set
+            {
+                lineUpPT = value;
+                OnPropertyChanged("LineUpPT");
+            }
+        }
+        public string LineUpPump
+        {
+            get
+            {
+                return lineUpPump;
+            }
+            set
+            {
+                lineUpPump = value;
+                OnPropertyChanged("LineUpPump");
+            }
+        }
+        public string LineUpFirstPump
+        {
+            get
+            {
+                return lineUpFirstPump;
+            }
+            set
+            {
+                lineUpFirstPump = value;
+                OnPropertyChanged("LineUpFirstPump");
+            }
+        }
+        public string LineUpSecondPump
+        {
+            get
+            {
+                return lineUpSecondPump;
+            }
+            set
+            {
+                lineUpSecondPump = value;
+                OnPropertyChanged("LineUpSecondPump");
+            }
+        }
+        public string LineUpMultiPump
+        {
+            get
+            {
+                return lineUpMultiPump;
+            }
+            set
+            {
+                lineUpMultiPump = value;
+                OnPropertyChanged("LineUpMultiPump");
+            }
+        }
+        #endregion
 
         public BindingList<UIModel> substationItems { get; set; }
-
 
         public BindingList<UIModel> SubstationItems
         {
@@ -147,30 +482,29 @@ namespace UserInterface
             }
         }
 
-
-        public ICommand DisconectorCommand
+        #region Commands
+        public ICommand CommandDis1
         {
             get;
             private set;
         }
-         public ICommand BreakerCommand
+        public ICommand CommandDis2
         {
             get;
             private set;
         }
-
-        public string Dis_color
+        public ICommand CommandBreaker
         {
-            get
-            {
-                return dis_color;
-            }
-            set
-            {
-                dis_color = value;
-                OnPropertyChanged("Dis_color");
-            }
+            get;
+            private set;
         }
+        public ICommand CommandPT
+        {
+            get;
+            private set;
+        }
+        #endregion
+
         public string Statistics
         {
             get
@@ -183,107 +517,7 @@ namespace UserInterface
                 OnPropertyChanged("Statistics");
             }
         }
-        public string Line_1_color
-        {
-            get
-            {
-                return line_1_color;
-            }
-            set
-            {
-                line_1_color = value;
-                OnPropertyChanged("Line_1_color");
-            }
-        }
-        public string Line_2_color
-        {
-            get
-            {
-                return line_2_color;
-            }
-            set
-            {
-                line_2_color = value;
-                OnPropertyChanged("Line_2_color");
-            }
-        }
-        public string Line_3_color
-        {
-            get
-            {
-                return line_3_color;
-            }
-            set
-            {
-                line_3_color = value;
-                OnPropertyChanged("Line_3_color");
-            }
-        }
-          public string Breaker_color
-        {
-            get
-            {
-                return breaker_color;
-            }
-            set
-            {
-                breaker_color = value;
-                OnPropertyChanged("Breaker_color");
-            }
-        }
-
-
-        public string Disconector_state
-        {
-            get
-            {
-                return disconector_state;
-            }
-            set
-            {
-                disconector_state = value;
-                OnPropertyChanged("Disconector_state");
-            }
-        }
-
-        public string Breaker_state
-        {
-            get
-            {
-                return breaker_state;
-            }
-            set
-            {
-                breaker_state = value;
-                OnPropertyChanged("Breaker_state");
-            }
-        }
-
-        public int Disconector
-        {
-            get
-            {
-                return disconector;
-            }
-            set
-            {
-                disconector = value;
-                OnPropertyChanged("Disconector");
-            }
-        }
-        
-        public int Breaker
-        {
-            get
-            {
-                return breaker;
-            }
-            set
-            {
-                breaker = value;
-                OnPropertyChanged("Breaker");
-            }
-        }
+      
 
         #endregion
 
@@ -302,60 +536,109 @@ namespace UserInterface
         }
         #endregion
 
-  
-        public void DisconectorOperation()
+        public void DisconectorOperation(string type)
         {
-            if (Disconector == 0)
+            switch (type)
             {
-                Disconector = 20;
-                Disconector_state = "ON";
-                Dis_color = Line_1_color = Breaker_color = Line_2_color = Line_3_color = "Black";
-                Statistics = "Disconector status: OFF";
-            }
-            else if (Disconector == 20)
-            {
-                Disconector = 0;
-                Disconector_state = "OFF";
-                Dis_color = Line_1_color = "Yellow";
-                Statistics = "Disconector status: ON";
+                case "1":
+                    if (disconector1State)
+                    {
+                        disconector1State = false;
+                        Disconector1Image = "Assets/resloser-off.png";
+                        LineUpDis1 = LineDownDis1 = LineSecond = "#FFFF634D";
+                        drawBreakerOff();
+                    } else
+                    {
+                        disconector1State = true;
+                        Disconector1Image = "Assets/recloser-on.png";
+                        LineUpDis1 = LineDownDis1 = LineSecond = "#FF7DFB4E";
 
-                if (Breaker == 0)
-                {
-                    Breaker_color = Line_2_color = Line_3_color = "Yellow";
-                }
+                        if (breakerState)
+                        {
+                            drawBreakerOn();
+                        }
+                    }
+                    break;
+                case "2":
+                    if (disconector2State)
+                    {
+                        disconector2State = false;
+                        Disconector2Image = "Assets/resloser-off.png";
+                        drawDis2Off();
+                    }
+                    else
+                    {
+                        disconector2State = true;
+                        Disconector2Image = "Assets/recloser-on.png";
+                        if (disconector1State && breakerState)
+                        drawDis2On();
+                    }
+                    break;
+                default:
+                    break;
             }
         }
-
-    
+        
         public void BreakerOperation()
         {
-            if (Breaker == 0)
+            if (!breakerState)
             {
-                Breaker = 20;
-                Breaker_state = "ON";
-                Statistics = "Breaker status: OFF";
-                Breaker_color = Line_2_color = Line_3_color = "Black";
-
-
+                breakerState = true;
+                BreakerImage = "Assets/breaker-on.png";
+                drawBreakerOn();
             }
-            else if (Breaker == 20)
+            else
             {
-                Breaker = 0;
-                Breaker_state = "OFF";
-                Statistics = "Breaker status: ON";
-
-                if(Disconector == 0)
-                {
-                    Breaker_color = Line_2_color = Line_3_color = "Yellow";
-
-                } else if(Disconector == 20)
-                {
-                    Breaker_color = Line_2_color = Line_3_color = "Black";
-
-                }
-
+                breakerState = false;
+                BreakerImage = "Assets/breaker-off.png";
+                drawBreakerOff();
             }
         }
+
+        public void TapChangerOperation()
+        {
+            if (Two_AM_Visible == "Visible")
+            {
+                Two_AM_Visible = "Hidden";
+            }
+            else
+            {
+                Two_AM_Visible = "Visible";
+            }
+        }
+
+
+        #region Coloring lines
+        private void drawBreakerOn()
+        {
+            if (disconector1State)
+            {
+                LineUpBreaker = LineDownBreaker = LineThird = "#FF7DFB4E";
+                if (disconector2State)
+                    drawDis2On();
+            }
+        }
+        private void drawDis2On()
+        {
+            LineUpDis2 = LineDownDis2 = LineFourth = LineUpPT = LineDownPT = LineUpPump =
+                LineUpMultiPump = LineUpFirstPump = LineUpSecondPump = "#FF7DFB4E";
+            PTImage = "Assets/transformator-on.png";
+            PumpImage = Pump1Image = Pump2Image = "Assets/pump-on.png";
+        }
+        private void drawDis2Off()
+        {
+            LineUpDis2 = LineDownDis2 = LineFourth = LineUpPT = LineDownPT = LineUpPump = LineUpMultiPump = LineUpFirstPump = LineUpSecondPump = "#FFFF634D";
+            PTImage = "Assets/transformator-off.png";
+            PumpImage = Pump1Image = Pump2Image = "Assets/pump-off.png";
+        }
+        private void drawBreakerOff()
+        {
+            LineDownBreaker = LineUpBreaker = LineThird = "#FFFF634D";
+            drawDis2Off();
+
+        }
+        #endregion
+
         public void PopulateModel(object resources)
         {
             NMSModel nMSModel = (NMSModel)resources;

@@ -7,10 +7,10 @@ using System.Windows.Input;
 
 namespace UserInterface.Command
 {
-    class DisconectorCommand : ICommand
+    class TapChangerCommand : ICommand
     {
         private MainViewModel mainViewModel;
-        public DisconectorCommand(MainViewModel mainViewModel)
+        public TapChangerCommand(MainViewModel mainViewModel)
         {
             this.mainViewModel = mainViewModel;
         }
@@ -30,12 +30,11 @@ namespace UserInterface.Command
         public bool CanExecute(object parameter)
         {
             return true;
-            //   return mainWindowViewModel.CanLogIn;
         }
 
         public void Execute(object parameter)
         {
-            mainViewModel.DisconectorOperation(parameter.ToString());
+            mainViewModel.TapChangerOperation();
         }
     }
 }

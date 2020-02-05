@@ -71,6 +71,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Command\TapChangerCommand.cs" />
     <Compile Include="Model\UIModel.cs" />
     <Compile Include="Subscription\SubNMS.cs" />
     <Page Include="MainWindow.xaml">
