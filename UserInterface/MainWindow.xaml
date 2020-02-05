@@ -7,58 +7,6 @@
         mc:Ignorable="d"
         Title="SCADA SISTEM" Height="628" Width="1522"  WindowState="Maximized" Background="LightGray" >
     <Window.Resources>
-        <Style x:Key="ControlStyle" TargetType="{x:Type Control}">
-            <Setter Property="OverridesDefaultStyle" Value="True"/>
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="Background" Value="#FF6DB4EF"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <Ellipse Fill="{TemplateBinding Background}"/>
-                            <Ellipse>
-                                <Ellipse.Fill>
-                                    <RadialGradientBrush>
-                                        <GradientStop Offset="0" Color="#00000000"/>
-                                        <GradientStop Offset="0.88" Color="#00000000"/>
-                                        <GradientStop Offset="1" Color="#80000000"/>
-                                    </RadialGradientBrush>
-                                </Ellipse.Fill>
-                            </Ellipse>
-                            <Ellipse Margin="10" x:Name="highlightCircle" >
-                                <Ellipse.Fill >
-                                    <LinearGradientBrush >
-                                        <GradientStop Offset="0" Color="#50FFFFFF"/>
-                                        <GradientStop Offset="0.5" Color="#00FFFFFF"/>
-                                        <GradientStop Offset="1" Color="#50FFFFFF"/>
-                                    </LinearGradientBrush>
-                                </Ellipse.Fill>
-                            </Ellipse>
-                            <ContentPresenter x:Name="content" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="highlightCircle" Property="Fill">
-                                    <Setter.Value>
-                                        <LinearGradientBrush StartPoint="0.3,0" EndPoint="0.7,1">
-                                            <GradientStop Offset="0" Color="#50FFFFFF"/>
-                                            <GradientStop Offset="0.5" Color="#00FFFFFF"/>
-                                            <GradientStop Offset="1" Color="#50FFFFFF"/>
-                                        </LinearGradientBrush>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter TargetName="content" Property="RenderTransform">
-                                    <Setter.Value>
-                                        <TranslateTransform Y="0.5" X="0.5"/>
-                                    </Setter.Value>
-                                </Setter>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ControlStyle}"/>
         <Style TargetType="TabItem">
             <Setter Property="Template">
                 <Setter.Value>
@@ -76,6 +24,29 @@
                             </Trigger>
                             <Trigger Property="IsSelected" Value="False">
                                 <Setter TargetName="Border" Property="Background" Value="LightGray" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="MyButtonStyle" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" 
+                            BorderThickness="0"
+                            Padding="4,2" 
+                            BorderBrush="DarkGray" 
+                            CornerRadius="3" 
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#FFF7CE12" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -261,104 +232,202 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Canvas Margin="10,10,16,24" Background="LightBlue" Grid.Row="1" Grid.RowSpan="2">
+        <Canvas Margin="10,10,16,24" Background="#FF5E5E5E" Grid.Row="1" Grid.RowSpan="2">
 
             <Line
-            X1="0" Y1="0"
-            X2="0" Y2="40"
-            Stroke="Yellow"
-            StrokeThickness="3" Grid.Row="1" Canvas.Left="110" Canvas.Top="11" />
-
-
+            X1="0" Y1="10"
+            X2="190" Y2="10"
+            Stroke="#FFFF4D4D"
+            StrokeThickness="2" Grid.Row="1" Canvas.Left="15" Canvas.Top="1"/>
             <Line
             X1="0" Y1="0"
-            X2="0" Y2="40"
-            Stroke="{Binding Line_1_color}"
-            StrokeThickness="3" Grid.Row="1" Canvas.Left="110" Canvas.Top="90" />
-            <Ellipse
-        Fill="#99F0FFF0"
-        Height="35"
-        Width="35"
-        StrokeThickness="2"
-        Stroke="Black" Canvas.Left="93" Canvas.Top="210"/>
-            <Ellipse
-                Fill="#99F0FFF0"
-                Height="35"
-                Width="35"
-                StrokeThickness="2"
-                Stroke="Black" Canvas.Left="93" Canvas.Top="233"/>
+            X2="0" Y2="20"
+            Stroke="#FFFF4D4D"
+            StrokeThickness="2" Grid.Row="1" Canvas.Left="110" Canvas.Top="11" />
+
+            <!--Stroke="{Binding Line_1_color}"-->
+            <Line
+            X1="0" Y1="0"
+            X2="0" Y2="20"
+            Stroke="#FFFF4D4D"
+            StrokeThickness="2" Grid.Row="1" Canvas.Left="110" Canvas.Top="81" />
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="125"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="99"/>
+            <!--Stroke="{Binding Line_2_color}"-->
             <Line
             X1="0" Y1="0"
-            X2="0" Y2="40"
-            Stroke="{Binding Line_2_color}"
+            X2="0" Y2="20"
             Name="line_2"
-            StrokeThickness="3" Grid.Row="1" Canvas.Left="110" Canvas.Top="170" />
+            Stroke="#FFFF4D4D"
+            StrokeThickness="2" Grid.Row="1" Canvas.Left="110" Canvas.Top="163" />
+            <!--Stroke="{Binding Line_3_color}"-->
             <Line
             X1="0" Y1="0"
-            X2="0" Y2="40"
-            Stroke="{Binding Line_3_color}"
+            X2="0" Y2="25"
+            Stroke="#FFFF4D4D"
             Name="line_3"
-            StrokeThickness="3" Grid.Row="1" Canvas.Left="110" Canvas.Top="267" />
+            StrokeThickness="2" Grid.Row="1" Canvas.Left="110" Canvas.Top="313" />
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="205"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="181"/>
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="45"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="29"/>
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="266"/>
-            <Button Content="{Binding Disconector_state}" Canvas.Left="10" Canvas.Top="60" Width="53" FontSize="8" Background="#FF73B470" Command="{Binding DisconectorCommand}"/>
-            <Button Content="{Binding Breaker_state}" Canvas.Left="10" Canvas.Top="138" Width="53" FontSize="8" Background="#FF73B470" Command="{Binding BreakerCommand}"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="307"/>
+            <Ellipse
+                Fill="Black"
+                Height="6"
+                Width="6"
+                StrokeThickness="2"
+                Stroke="Black" Canvas.Left="107" Canvas.Top="338"/>
             <TextBox Name="statistics" Height="82" Canvas.Left="590" TextWrapping="Wrap" Text="{Binding Statistics}" Width="135" Background="#33FFFFFF"/>
+            <Ellipse
+                Fill="Black"
+                Height="6"
+                Width="6"
+                StrokeThickness="2"
+                Stroke="Black" Canvas.Left="107" Canvas.Top="76"/>
+            <Line
+                Name="Up_Disconector"
+                X1="0" Y1="0"
+                X2="0" Y2="10"
+                Stroke="#FFFF4D4D"
+                StrokeThickness="2" Canvas.Left="110" Canvas.Top="35" Height="10" />
+            <Line
+                x:Name="Down_Disconector_Copy"
+                X1="0" Y1="0"
+                X2="0" Y2="10"
+                Stroke="#FFFF4D4D"
+                StrokeThickness="2" Canvas.Left="110" Canvas.Top="66" Height="10" />
+            <Line
+                x:Name="Up_Breaker"
+                X1="0" Y1="0"
+                X2="0" Y2="10"
+                Stroke="#FFFF4D4D"
+                StrokeThickness="2" Canvas.Left="110" Canvas.Top="106" Height="10" />
+            <Line
+                x:Name="Down_Breaker"
+                X1="0" Y1="0"
+                X2="0" Y2="10"
+                Stroke="#FFFF4D4D"
+                StrokeThickness="2" Canvas.Left="110" Canvas.Top="147" Height="10" />
+            <Ellipse
+                Fill="Black"
+                Height="6"
+                Width="6"
+                StrokeThickness="2"
+                Stroke="Black" Canvas.Left="107" Canvas.Top="157"/>
+            <Line
+                x:Name="Up_Disconector_2"
+                X1="0" Y1="0"
+                X2="0" Y2="10"
+                Stroke="#FFFF4D4D"
+                StrokeThickness="2" Canvas.Left="110" Canvas.Top="187" Height="10" />
+            <Line
+                x:Name="Down_Disconector_2"
+                X1="0" Y1="0"
+                X2="0" Y2="10"
+                Stroke="#FFFF4D4D"
+                StrokeThickness="2" Canvas.Left="110" Canvas.Top="219" Height="10" />
+            <Ellipse
+                Fill="Black"
+                Height="6"
+                Width="6"
+                StrokeThickness="2"
+                Stroke="Black" Canvas.Left="107" Canvas.Top="228"/>
+            <Line
+                x:Name="Up_PT"
+                X1="0" Y1="0"
+                X2="0" Y2="10"
+                Stroke="#FFFF4D4D"
+                StrokeThickness="2" Canvas.Left="110" Canvas.Top="234" Height="10" />
+            <Line
+                x:Name="Down_PT"
+                X1="0" Y1="0"
+                X2="0" Y2="10"
+                Stroke="#FFEE2020"
+                StrokeThickness="2" Canvas.Left="110" Canvas.Top="297" Height="10" />
+            <Line
+                x:Name="Up_AM"
+                X1="0" Y1="0"
+                X2="0" Y2="10"
+                Stroke="#FFFF4D4D"
+                StrokeThickness="2" Canvas.Left="110" Canvas.Top="344" Height="10" />
+            <Button Name="Disc_1" Content="" Canvas.Left="97" Margin="0" Canvas.Top="43" Width="25" Height="25" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
+                <Button.Background>
+                    <ImageBrush ImageSource="Assets/resloser-off.png"/>
+                </Button.Background>
+            </Button>
+            <Button Name="Disc_2" Content="" Canvas.Left="97" Margin="0" Canvas.Top="194" Width="25" Height="25" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
+                <Button.Background>
+                    <ImageBrush ImageSource="Assets/recloser-on.png"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="Breaker" Content="" Canvas.Left="93" Margin="0" Canvas.Top="113" Width="35" Height="35" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
+                <Button.Background>
+                    <ImageBrush ImageSource="Assets/breaker-on.png"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="PT" Content="" Canvas.Left="66" Margin="0" Canvas.Top="244" Width="86" Height="70" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen" FontFamily="Segoe UI Semibold">
+                <Button.Background>
+                    <ImageBrush ImageSource="Assets/transformator-on.png"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="AM_1" Content="" Canvas.Left="92" Margin="0" Canvas.Top="348" Width="67" Height="87" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
+                <Button.Background>
+                    <ImageBrush ImageSource="Assets/pump-on.png"/>
+                </Button.Background>
+            </Button>
+            <Canvas Visibility="{Binding Two_AM_Visible}" Height="111" Canvas.Left="1" Canvas.Top="349" Width="247" Background="#FF5E5E5E">
+                <Button x:Name="AM_2" Content="" Canvas.Left="153" Margin="0" Width="67" Height="87" BorderBrush="{x:Null}" Canvas.Top="21" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
+                    <Button.Background>
+                        <ImageBrush ImageSource="Assets/pump-off.png"/>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="AM_1_Copy" Content="" Canvas.Left="34" Margin="0" Width="67" Height="87" BorderBrush="{x:Null}" Canvas.Top="22" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
+                    <Button.Background>
+                        <ImageBrush ImageSource="Assets/pump-on.png"/>
+                    </Button.Background>
+                </Button>
+                <Rectangle Height="20" Canvas.Left="51" Stroke="#FFFF4D4D" StrokeThickness="2" Canvas.Top="4" Width="2"/>
+                <Rectangle Height="20" Canvas.Left="169" Stroke="#FFFF4D4D" StrokeThickness="2" Canvas.Top="4" Width="2"/>
+                <Rectangle Height="2" Canvas.Left="51" Stroke="#FFFF4D4D" StrokeThickness="2" Width="120" Canvas.Top="-1"/>
+                <Ellipse
+                Fill="Black"
+                Height="6"
+                Width="6"
+                StrokeThickness="2"
+                Stroke="Black" Canvas.Left="49" Canvas.Top="-2"/>
+                <Ellipse
+                    Fill="Black"
+                    Height="6"
+                    Width="6"
+                    StrokeThickness="2"
+                    Stroke="Black" Canvas.Left="167" Canvas.Top="-2"/>
+            </Canvas>
+            <Ellipse
+                Fill="Black"
+                Height="6"
+                Width="6"
+                StrokeThickness="2"
+                Stroke="Black" Canvas.Left="107" Canvas.Top="8"/>
         </Canvas>
 
-        <Line
-        X1="0" Y1="10"
-        X2="150" Y2="10"
-        Stroke="Black"
-        StrokeThickness="3" Margin="51,10,153,185" Grid.Row="1"/>
-
-        <Line
-         X1="{Binding Disconector, UpdateSourceTrigger=PropertyChanged}" Y1= "0"
-         X2="0" Y2="40"
-        Stroke="{Binding Dis_color, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-        Name="disconector"
-        StrokeThickness="3" Margin="120,59,529,242" Grid.Row="1" />
-
-        <Line
-            X1="{Binding Breaker, UpdateSourceTrigger=PropertyChanged}" Y1="0"
-            X2="0" Y2="40"
-            Stroke="{Binding Breaker_color}"
-            Name="breaker"
-            StrokeThickness="3" Margin="120,138,530,162" Grid.Row="1" />
-
-
-
-        <Polygon
-        Points="0,0 60,0 60,50 0,50"
-        Stroke="Black" 
-        StrokeThickness="3" Margin="90,314,192,1" Grid.Row="1">
-            <Polygon.Fill>
-                <SolidColorBrush Color="Gray" Opacity="0.2"/>
-            </Polygon.Fill>
-        </Polygon>
-        <Label Content="AM" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="90,318,0,0" Grid.Row="1" VerticalAlignment="Top" Height="40" Width="58" FontFamily="Vijaya" FontSize="16"/>
         <Label Content="{Binding PubSub}" Grid.Column="2" Margin="10,111,10,0" Grid.Row="1" VerticalAlignment="Top" Height="10"/>
         <StatusBar Margin="10,11,10,0" Grid.Row="2" Grid.ColumnSpan="3">
 

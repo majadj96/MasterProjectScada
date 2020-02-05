@@ -42,12 +42,13 @@ namespace UserInterface
         {
             disconector = breaker = 20;
             breaker_state = disconector_state = "ON";
-            dis_color = breaker_color = line_1_color = line_2_color = line_3_color = "Black";
+            dis_color = breaker_color = line_1_color = line_2_color = line_3_color = "#FFEE2020";
             statistics = "";
             pubSub = "pocetna vrednost";
 
             connectedStatusBar = "Dissconnected"; //SCADA konekcija
             timeStampStatusBar = DateTime.Now.ToLongDateString();  //SCADA konekcija
+            Two_AM_Visible = "Visible";
 
         }
 
@@ -69,6 +70,21 @@ namespace UserInterface
 
         public string connectedStatusBar { get; set; }
         public string timeStampStatusBar { get; set; }
+        public string two_AM_Visible { get; set; }
+
+        public string Two_AM_Visible
+        {
+            get
+            {
+                return two_AM_Visible;
+            }
+            set
+            {
+                two_AM_Visible = value;
+                OnPropertyChanged("Two_AM_Visible");
+            }
+        }
+
 
         public BindingList<UIModel> substationItems { get; set; }
 

@@ -28,7 +28,6 @@ namespace UserInterface
             //WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             this.FontFamily = new FontFamily("Batang");
         }
-        
 
 
         //private void breaker_MouseDown(object sender, MouseButtonEventArgs e)
