@@ -10,7 +10,7 @@ using TransactionManagerContracts;
 namespace PubSub.PubSubEngine
 {
 
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)] //mozda per session treba
     class SubNMS : ISubNMS
     {
         #region ISubscription Members
