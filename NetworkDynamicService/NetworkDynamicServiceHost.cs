@@ -1,4 +1,5 @@
 ﻿using BackEndProcessorService;
+using NetworkDynamicService.Cache;
 using NetworkDynamicService.PointUpdater;
 using NetworkDynamicService.ProxyPool;
 using NetworkDynamicService.Transaction;
@@ -13,12 +14,18 @@ namespace NetworkDynamicService
         private List<ServiceHost> hosts = null;
         private PointUpdateProxy pointUpdateProxy;
         private BackEndPocessingModule backEndPocessingModule;
+        private INDSRealTimePointCache nDSRealTimePointCache;
+        private ModelUpdateContract modelUpdateContract;
 
         public NetworkDynamicServiceHost()
         {
             //pointUpdateProxy = new PointUpdateProxy("UpdatePointEndPoint");
             //pointUpdateProxy.Open();
+
+            nDSRealTimePointCache = new NDSRealTimePointCache();
+
             backEndPocessingModule = new BackEndPocessingModule(pointUpdateProxy);
+            modelUpdateContract = new ModelUpdateContract(nDSRealTimePointCache);
             InitializeHosts();
         }
 
@@ -49,7 +56,7 @@ namespace NetworkDynamicService
             hosts.Add(new ServiceHost(backEndPocessingModule));
             hosts.Add(new ServiceHost(typeof(StateUpdateService)));
             hosts.Add(new ServiceHost(typeof(PointOperateService)));
-            hosts.Add(new ServiceHost(typeof(ModelUpdateContract))); //transaction
+            hosts.Add(new ServiceHost(modelUpdateContract)); //transaction
         }
 
         public void Dispose()
