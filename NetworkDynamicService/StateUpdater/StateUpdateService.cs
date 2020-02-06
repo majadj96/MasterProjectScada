@@ -10,7 +10,7 @@ namespace NetworkDynamicService.PointUpdater
 
         public StateUpdateService()
         {
-            proxy.Open();
+            //proxy.Open();
         }
         public void UpdateDateAndTime(DateTime dateTime)
         {
@@ -19,7 +19,7 @@ namespace NetworkDynamicService.PointUpdater
 
         public void UpdateState(ConnectionState connectionState)
         {
-            proxy.UpdateState(connectionState);
+            //proxy.UpdateState(connectionState);
             Console.WriteLine(connectionState.ToString());
         }
     }

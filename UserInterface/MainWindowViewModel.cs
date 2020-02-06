@@ -321,6 +321,7 @@ namespace UserInterface
         public void PopulateModel(string newValue)
         {
             PubSub = newValue;
+            Statistics = newValue;
         }
     }
 }
