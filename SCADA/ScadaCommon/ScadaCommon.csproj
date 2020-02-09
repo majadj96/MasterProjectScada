@@ -74,6 +74,7 @@
     <Compile Include="NDSDataModel\DigitalPointCacheItem.cs" />
     <Compile Include="PointIdentifierHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceContract\IAlarmEventService.cs" />
     <Compile Include="ServiceContract\IBackEndProessingData.cs" />
     <Compile Include="ServiceContract\IFieldCommunicationService.cs" />
     <Compile Include="ServiceContract\IPointUpdateService.cs" />

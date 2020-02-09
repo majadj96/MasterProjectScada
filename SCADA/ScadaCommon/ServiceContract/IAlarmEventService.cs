@@ -2,22 +2,21 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 
-namespace AlarmEventServiceDatabase
+namespace ScadaCommon.ServiceContract
 {
-    [ServiceKnownType(typeof(Alarm))]
     [ServiceContract]
-    public interface IAlarmServiceOperations
+    public interface IAlarmEventService
     {
         [OperationContract]
         bool AddAlarm(IAlarm alarm);
-
-        [OperationContract]
-        bool DeleteAlarm(int id);
 
         [OperationContract]
         bool AcknowledgeAlarm(IAlarm alarm);
 
         [OperationContract]
         List<Alarm> GetAllAlarms();
+
+        [OperationContract]
+        bool AddEvent(IEvent newEvent);
     }
 }

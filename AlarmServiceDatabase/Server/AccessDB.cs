@@ -1,7 +1,7 @@
 ﻿using ScadaCommon.Database;
 using System.Data.Entity;
 
-namespace AlarmEventService.Server
+namespace AlarmEventServiceDatabase.Server
 {
     public class AccessDB : DbContext
     {

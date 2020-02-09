@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
-using AlarmEventService.Server;
+using AlarmEventServiceDatabase.Server;
 using ScadaCommon.Database;
 
-namespace AlarmEventService
+namespace AlarmEventServiceDatabase
 {
     [ServiceKnownType(typeof(Event))]
     public class EventServiceOperations : IEventServiceOperations

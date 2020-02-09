@@ -49,6 +49,7 @@
     <Compile Include="EGUModule.cs" />
     <Compile Include="IProcessingData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Proxy\AlarmEventServiceProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SCADA\ScadaCommon\ScadaCommon.csproj">
@@ -62,8 +63,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Proxy\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

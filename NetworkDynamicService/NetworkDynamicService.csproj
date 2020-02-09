@@ -37,12 +37,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -58,16 +52,6 @@
   <ItemGroup>
     <Compile Include="Cache\INDSRealTimePointCache.cs" />
     <Compile Include="Cache\NDSRealTimePointCache.cs" />
-    <Compile Include="Connected Services\AlarmServiceRef\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
-    <Compile Include="Connected Services\EventServiceRef\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="FrontEndProcessorServiceProxy.cs" />
     <Compile Include="NetworkDynamicServiceHost.cs" />
     <Compile Include="PointOperateService.cs" />
@@ -81,32 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations.wsdl" />
-    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\EventServiceRef\EventServiceOperations.wsdl" />
-    <None Include="Connected Services\EventServiceRef\EventServiceOperations.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\EventServiceRef\EventServiceOperations1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\EventServiceRef\EventServiceOperations2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\EventServiceRef\EventServiceOperations3.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\ScadaCommon.Database.Alarm.datasource" />
     <None Include="Properties\DataSources\ScadaCommon.Database.Event.datasource" />
@@ -128,43 +86,6 @@
       <Project>{0A8F68EC-31CB-4FD1-B54A-DCF2FC97BBEC}</Project>
       <Name>TransactionManagerContracts</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\AlarmServiceRef\" />
-    <WCFMetadataStorage Include="Connected Services\EventServiceRef\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\AlarmServiceRef\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\AlarmServiceRef\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\AlarmServiceRef\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\EventServiceRef\EventServiceOperations.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\EventServiceRef\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\EventServiceRef\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\EventServiceRef\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

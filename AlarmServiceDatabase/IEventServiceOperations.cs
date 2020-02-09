@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 
-namespace AlarmEventService
+namespace AlarmEventServiceDatabase
 {
     [ServiceKnownType(typeof(Event))]
     [ServiceContract]

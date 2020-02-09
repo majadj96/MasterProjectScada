@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NetworkDynamicService.AlarmServiceRef {
+namespace AlarmEventService.AlarmServiceRef {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -47,12 +47,12 @@ namespace NetworkDynamicService.AlarmServiceRef {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IAlarmServiceOperationsChannel : NetworkDynamicService.AlarmServiceRef.IAlarmServiceOperations, System.ServiceModel.IClientChannel {
+    public interface IAlarmServiceOperationsChannel : AlarmEventService.AlarmServiceRef.IAlarmServiceOperations, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class AlarmServiceOperationsClient : System.ServiceModel.ClientBase<NetworkDynamicService.AlarmServiceRef.IAlarmServiceOperations>, NetworkDynamicService.AlarmServiceRef.IAlarmServiceOperations {
+    public partial class AlarmServiceOperationsClient : System.ServiceModel.ClientBase<AlarmEventService.AlarmServiceRef.IAlarmServiceOperations>, AlarmEventService.AlarmServiceRef.IAlarmServiceOperations {
         
         public AlarmServiceOperationsClient() {
         }
