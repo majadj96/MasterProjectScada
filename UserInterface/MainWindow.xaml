@@ -385,18 +385,18 @@
                     <ImageBrush ImageSource="{Binding PTImage}"/>
                 </Button.Background>
             </Button>
-            <Button x:Name="AM_1" Content="" Canvas.Left="92" Margin="0" Canvas.Top="354" Width="67" Height="87" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}">
+            <Button x:Name="AM_1" Content="" Canvas.Left="96" Margin="0" Canvas.Top="354" Width="67" Height="87" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}">
                 <Button.Background>
                     <ImageBrush ImageSource="{Binding PumpImage}"/>
                 </Button.Background>
             </Button>
             <Canvas Visibility="{Binding Two_AM_Visible}" Height="111" Canvas.Left="1" Canvas.Top="349" Width="247" Background="#FF5E5E5E">
-                <Button x:Name="AM_2_Multi" Content="" Canvas.Left="153" Margin="0" Width="67" Height="87" BorderBrush="{x:Null}" Canvas.Top="21" Style="{StaticResource MyButtonStyle}">
+                <Button x:Name="AM_2_Multi" Content="" Canvas.Left="157" Margin="0" Width="67" Height="87" BorderBrush="{x:Null}" Canvas.Top="24" Style="{StaticResource MyButtonStyle}">
                     <Button.Background>
                         <ImageBrush ImageSource="{Binding Pump2Image}"/>
                     </Button.Background>
                 </Button>
-                <Button x:Name="AM_1_Multi" Content="" Canvas.Left="34" Margin="0" Width="67" Height="87" BorderBrush="{x:Null}" Canvas.Top="22" Style="{StaticResource MyButtonStyle}">
+                <Button x:Name="AM_1_Multi" Content="" Canvas.Left="38" Margin="0" Width="67" Height="89" BorderBrush="{x:Null}" Canvas.Top="24" Style="{StaticResource MyButtonStyle}">
                     <Button.Background>
                         <ImageBrush ImageSource="{Binding Pump1Image}"/>
                     </Button.Background>

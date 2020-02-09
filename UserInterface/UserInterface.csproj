@@ -129,23 +129,19 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\breaker-off.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Assets\breaker-on.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\recloser-on.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\pump-off.png" />
-    <Resource Include="Assets\pump-on.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\transformator-off.png" />
     <Resource Include="Assets\transformator-on.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Assets\recloser-on.png" />
     <Resource Include="Assets\resloser-off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\pump-off.png" />
+    <Resource Include="Assets\pump-on.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

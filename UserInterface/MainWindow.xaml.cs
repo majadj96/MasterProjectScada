@@ -26,7 +26,6 @@ namespace UserInterface
             DataContext = new MainViewModel(this);
             InitializeComponent();
             //WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
-            //this.FontFamily = new FontFamily("Batang");
         }
     }
 }
