@@ -20,7 +20,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="LightSkyBlue" />
+                                <Setter TargetName="Border" Property="Background" Value="#FF6DEA3E" />
                             </Trigger>
                             <Trigger Property="IsSelected" Value="False">
                                 <Setter TargetName="Border" Property="Background" Value="LightGray" />
@@ -54,8 +54,8 @@
             </Setter>
         </Style>
         <Style TargetType="DataGrid">
-            <!-- Make the border and grid lines a little less imposing -->
-            <Setter Property="BorderBrush" Value="LightBlue" />
+            <!-- On mouse hover -->
+            <Setter Property="BorderBrush" Value="#FF999999" />
             <Setter Property="HorizontalGridLinesBrush" Value="#DDDDDD" />
             <Setter Property="VerticalGridLinesBrush" Value="#DDDDDD" />
 
@@ -65,7 +65,7 @@
                         <Style.Triggers>
                             <!-- Highlight a grid row as the mouse passes over -->
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="LightBlue" />
+                                <Setter Property="Background" Value="#FF999999" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -75,16 +75,10 @@
                 <Setter.Value>
                     <Style TargetType="DataGridCell">
                         <Style.Triggers>
-                            <!-- Highlight selected rows -->
+                            <!-- On row select -->
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="#ff66ccff" />
+                                <Setter Property="Background" Value="#FF6DEA3E" />
                                 <Setter Property="BorderBrush" Value="Transparent" />
-                                <Setter Property="Foreground" Value="Black" />
-                            </Trigger>
-                            <Trigger Property="IsFocused" Value="True">
-                                <Setter Property="Background" Value="#ff66ccff" />
-                                <Setter Property="BorderBrush" Value="Black" />
-                                <Setter Property="BorderThickness" Value="1"/>
                                 <Setter Property="Foreground" Value="Black" />
                             </Trigger>
                         </Style.Triggers>
@@ -193,7 +187,7 @@
                    Value="false">
                                 <Setter Property="Foreground">
                                     <Setter.Value>
-                                        <SolidColorBrush Color="LightBlue" />
+                                        <SolidColorBrush Color="#FF6AF735" />
                                     </Setter.Value>
                                 </Setter>
                             </Trigger>
@@ -223,7 +217,8 @@
                   Margin="10,66,0,0"
                   VerticalAlignment="Top"
                   AutoGenerateColumns="False"
-                  CanUserAddRows="False" Grid.Column="1" Background="#FF5E5E5E" Grid.Row="1" BorderBrush="#FF3C3C3C" FontFamily="Consolas" FontSize="14">
+                  CanUserResizeRows="False"
+                  CanUserAddRows="False" Grid.Column="1" Background="#665E5E5E" Grid.Row="1" BorderBrush="#FF3C3C3C" FontFamily="Consolas" FontSize="14">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Width="*"  Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Description" Width="*" Binding="{Binding Description}"/>
