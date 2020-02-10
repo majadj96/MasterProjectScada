@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,15 +9,18 @@ namespace ScadaCommon.NDSDataModel
 {
     public abstract class BasePointCacheItem
     {
+        protected MeasurementType measurementType;
+        protected string description = String.Empty;
+        protected string mrId = String.Empty;
         protected PointType type;
         protected ushort address;
         protected long gid;
-        private DateTime timestamp = DateTime.Now;
-        private string name = string.Empty;
+        protected DateTime timestamp;
+        protected string name = string.Empty;
         protected float minValue;
         protected float maxValue;
         protected float normalValue;
-        protected bool inAlarm;
+        protected bool inAlarm = false;
 
         public BasePointCacheItem()
         {
@@ -45,6 +49,30 @@ namespace ScadaCommon.NDSDataModel
                 minValue = value;
             }
         }
+
+        public string Description
+        {
+            get
+            {
+                return description;
+            }
+            set
+            {
+                description = value;
+            }
+        }
+        public string MrId
+        {
+            get
+            {
+                return mrId;
+            }
+            set
+            {
+                mrId = value;
+            }
+        }
+
         public float MaxValue
         {
             get
@@ -87,6 +115,19 @@ namespace ScadaCommon.NDSDataModel
             set
             {
                 type = value;
+            }
+        }
+
+        public MeasurementType MeasurementType
+        {
+            get
+            {
+                return measurementType;
+            }
+
+            set
+            {
+                measurementType = value;
             }
         }
 

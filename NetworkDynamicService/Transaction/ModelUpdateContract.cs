@@ -1,10 +1,12 @@
 ﻿using Common.GDA;
 using NetworkDynamicService.Cache;
 using System;
+using System.ServiceModel;
 using TransactionManagerContracts;
 
 namespace NetworkDynamicService.Transaction
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class ModelUpdateContract : IModelUpdateContract
     {
         private INDSRealTimePointCache nDSRealTimePointCache;
@@ -17,8 +19,8 @@ namespace NetworkDynamicService.Transaction
             try
             {
                 Console.WriteLine("Update model invoked");
-
-                TMProxy _proxy = new TMProxy(new TransactionService());
+                TransactionService transaction = new TransactionService(nDSRealTimePointCache);
+                TMProxy _proxy = new TMProxy(transaction);
                 _proxy.Enlist();
             }
             catch (Exception e)
