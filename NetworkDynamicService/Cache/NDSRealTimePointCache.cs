@@ -41,6 +41,7 @@ namespace NetworkDynamicService.Cache
             int digitalOutputAdress = 0;
             int analogInputAdress = 0;
             int analogOutputAdress = 0;
+            int adress = 0;
 
             string description = String.Empty;
             string mrId = String.Empty;
@@ -75,10 +76,14 @@ namespace NetworkDynamicService.Cache
                                 if((SignalDirection)item2.GetValue() == SignalDirection.Read)
                                 {
                                     pointType = PointType.BINARY_INPUT;
+                                    adress = digitalInputAdress;
+                                    digitalInputAdress++;
                                 }
                                 else if((SignalDirection)item2.GetValue() == SignalDirection.ReadWrite)
                                 {
                                     pointType = PointType.BINARY_OUTPUT;
+                                    adress = digitalOutputAdress;
+                                    digitalOutputAdress++;
                                 }
                                 break;
                             case ModelCode.MEASUREMENT_MEASTYPE:
@@ -106,7 +111,8 @@ namespace NetworkDynamicService.Cache
                         MeasurementType = measurementType,
                         MinValue = minDiscrete,
                         MaxValue = maxDiscrete,
-                        NormalValue = normalDiscrete
+                        NormalValue = normalDiscrete,
+                        Address = (ushort)adress
                     };
                     ndsModelNew.Add(item.Id, digital);
                 }
@@ -129,10 +135,14 @@ namespace NetworkDynamicService.Cache
                                 if ((SignalDirection)item2.GetValue() == SignalDirection.Read)
                                 {
                                     pointType = PointType.ANALOG_INPUT;
+                                    adress = analogInputAdress;
+                                    analogInputAdress++;
                                 }
                                 else if ((SignalDirection)item2.GetValue() == SignalDirection.ReadWrite)
                                 {
                                     pointType = PointType.ANALOG_OUTPUT;
+                                    adress = analogOutputAdress;
+                                    analogOutputAdress++;
                                 }
                                 break;
                             case ModelCode.MEASUREMENT_MEASTYPE:
@@ -160,11 +170,18 @@ namespace NetworkDynamicService.Cache
                         MeasurementType = measurementType,
                         MinValue = minAnalog,
                         MaxValue = maxAnalog,
-                        NormalValue = normalAnalog
+                        NormalValue = normalAnalog,
+                        Address = (ushort)adress
                     };
                     ndsModelNew.Add(item.Id, analog);
                 }
             }
+        }
+
+        //prilikom commit-a preuzmi novi model i postavi za vazeci
+        public void ApplyUpdate()
+        {
+            this.ndsModel = this.ndsModelNew;
         }
 
         public bool TryGetBasePointItem(long gid, out BasePointCacheItem basePointCacheItem)

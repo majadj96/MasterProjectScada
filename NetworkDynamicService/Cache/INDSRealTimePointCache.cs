@@ -12,5 +12,6 @@ namespace NetworkDynamicService.Cache
     {
         bool TryGetBasePointItem(long gid, out BasePointCacheItem basePointCacheItem);
         void StoreDelta(Delta delta);
+        void ApplyUpdate();
     }
 }

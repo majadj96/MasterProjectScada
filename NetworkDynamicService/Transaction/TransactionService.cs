@@ -14,6 +14,9 @@ namespace NetworkDynamicService.Transaction
         public bool Commit()
         {
             Console.WriteLine("Commit called");
+
+            //usvajanje novog modela
+            this.nDSRealTimePointCache.ApplyUpdate();
             return true;
         }
 
