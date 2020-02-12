@@ -10,8 +10,8 @@ namespace NetworkDynamicService.Cache
 {
     public interface INDSRealTimePointCache
     {
-        void InitializePointCache(List<ResourceDescription> inputPoints);
         bool TryGetBasePointItem(long gid, out BasePointCacheItem basePointCacheItem);
         void StoreDelta(Delta delta);
+        void ApplyUpdate();
     }
 }

@@ -1,13 +1,22 @@
-﻿using System;
+﻿using NetworkDynamicService.Cache;
+using System;
 using TransactionManagerContracts;
 
 namespace NetworkDynamicService.Transaction
 {
     public class TransactionService : ITransactionSteps
     {
+        private INDSRealTimePointCache nDSRealTimePointCache;
+        public TransactionService(INDSRealTimePointCache nDSRealTimePointCache)
+        {
+            this.nDSRealTimePointCache = nDSRealTimePointCache;
+        }
         public bool Commit()
         {
             Console.WriteLine("Commit called");
+
+            //usvajanje novog modela
+            this.nDSRealTimePointCache.ApplyUpdate();
             return true;
         }
 
