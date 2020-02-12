@@ -31,6 +31,7 @@ namespace UserInterface
             CommandDis1 = CommandDis2 = new DisconectorCommand(this);
             CommandBreaker = new BreakerCommand(this);
             CommandPT = new TapChangerCommand(this);
+            CommandOpenCommand = new CommandOpenCommand(this);
         }
 
         public void setUpLayout()
@@ -74,6 +75,9 @@ namespace UserInterface
         private bool pumpState { get; set; }
         private bool pump1State { get; set; }
         private bool pump2State { get; set; }
+        private string disc1Id { get; set; }
+        private string disc2Id { get; set; }
+        private string breakerId { get; set; }
 
         #region Properties
         //Lines
@@ -115,6 +119,45 @@ namespace UserInterface
             {
                 two_AM_Visible = value;
                 OnPropertyChanged("Two_AM_Visible");
+            }
+        }
+
+        public string Disc1Id
+        {
+            get
+            {
+                return disc1Id;
+            }
+            set
+            {
+                disc1Id = value;
+                OnPropertyChanged("Disc1Id");
+            }
+        }
+
+        public string Disc2Id
+        {
+            get
+            {
+                return disc2Id;
+            }
+            set
+            {
+                disc2Id = value;
+                OnPropertyChanged("Disc2Id");
+            }
+        }
+
+        public string BreakerId
+        {
+            get
+            {
+                return breakerId;
+            }
+            set
+            {
+                breakerId = value;
+                OnPropertyChanged("BreakerId");
             }
         }
 
@@ -483,6 +526,12 @@ namespace UserInterface
         }
 
         #region Commands
+        
+        public ICommand CommandOpenCommand
+        {
+            get;
+            private set;
+        }
         public ICommand CommandDis1
         {
             get;
@@ -639,6 +688,12 @@ namespace UserInterface
         }
         #endregion
 
+        public void OpenCommandWindow()
+        {
+            View.Command commandWindow = new View.Command();
+            commandWindow.Show();
+        }
+
         public void PopulateModel(object resources)
         {
             NMSModel nMSModel = (NMSModel)resources;
@@ -648,6 +703,7 @@ namespace UserInterface
         public BindingList<UIModel> toUIModelList(List<ResourceDescription> resources)
         {
             BindingList<UIModel> response = new BindingList<UIModel>();
+            int disconectors = 1;
 
             foreach (ResourceDescription resource in resources.Where(x => (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.DISCONNECTOR) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.BREAKER) ||
@@ -661,7 +717,22 @@ namespace UserInterface
                     switch (property.Id)
                     {
                         case Common.ModelCode.IDOBJ_GID:
-                            model.GID = property.GetValue().ToString();
+                            if (ModelCodeHelper.ExtractTypeFromGlobalId(resource.Id) == (short)DMSType.DISCONNECTOR)
+                            {
+                                if(disconectors == 1)
+                                {
+                                    Disc1Id = property.GetValue().ToString();
+                                    disconectors++;
+                                } else if (disconectors == 2)
+                                {
+                                    Disc2Id = property.GetValue().ToString();
+                                    disconectors = 0;
+                                }
+                            } else if (ModelCodeHelper.ExtractTypeFromGlobalId(resource.Id) == (short)DMSType.BREAKER)
+                            {
+                                BreakerId = property.GetValue().ToString();
+                            }
+                                model.GID = property.GetValue().ToString();
                             break;
                         case Common.ModelCode.IDOBJ_DESC:
                             model.Description = property.GetValue().ToString();

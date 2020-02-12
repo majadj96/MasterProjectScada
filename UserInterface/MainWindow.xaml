@@ -360,7 +360,7 @@
                 X2="0" Y2="10"
                 Stroke="{Binding LineUpPump}"
                 StrokeThickness="2" Canvas.Left="110" Canvas.Top="344" Height="10" />
-            <Button Name="Disc_1" Content="" Canvas.Left="97" Margin="0" Canvas.Top="43" Width="25" Height="25" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen" Command="{Binding CommandDis1}" CommandParameter="1">
+            <Button Name="Disc_1" Content="" Canvas.Left="97" Margin="0" Canvas.Top="43" Width="25" Height="25" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen" Command="{Binding CommandOpenCommand}" CommandParameter="1">
                 <Button.Background>
                     <ImageBrush ImageSource="{Binding Disconector1Image}"/>
                 </Button.Background>
