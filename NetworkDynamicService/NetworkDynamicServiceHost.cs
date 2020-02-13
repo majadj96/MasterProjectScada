@@ -1,4 +1,5 @@
 ﻿using BackEndProcessorService;
+using BackEndProcessorService.Proxy;
 using NetworkDynamicService.Cache;
 using NetworkDynamicService.PointUpdater;
 using NetworkDynamicService.ProxyPool;
@@ -13,6 +14,7 @@ namespace NetworkDynamicService
     {
         private List<ServiceHost> hosts = null;
         private PointUpdateProxy pointUpdateProxy;
+        private AlarmEventServiceProxy alarmEventServiceProxy;
         private BackEndPocessingModule backEndPocessingModule;
         private INDSRealTimePointCache nDSRealTimePointCache;
         private ModelUpdateContract modelUpdateContract;
@@ -22,9 +24,12 @@ namespace NetworkDynamicService
             //pointUpdateProxy = new PointUpdateProxy("UpdatePointEndPoint");
             //pointUpdateProxy.Open();
 
+            alarmEventServiceProxy = new AlarmEventServiceProxy("AlarmEventServiceEndPoint");
+            alarmEventServiceProxy.Open();
+
             nDSRealTimePointCache = new NDSRealTimePointCache();
 
-            backEndPocessingModule = new BackEndPocessingModule(pointUpdateProxy);
+            backEndPocessingModule = new BackEndPocessingModule(pointUpdateProxy, this.alarmEventServiceProxy);
             modelUpdateContract = new ModelUpdateContract(nDSRealTimePointCache);
             InitializeHosts();
         }

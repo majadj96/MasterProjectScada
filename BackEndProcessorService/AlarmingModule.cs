@@ -16,10 +16,9 @@ namespace BackEndProcessorService
     {
         private AlarmEventServiceProxy alarmEventServiceProxy;
 
-        public AlarmingModule()
+        public AlarmingModule(AlarmEventServiceProxy alarmEventServiceProxy)
         {
-            alarmEventServiceProxy = new AlarmEventServiceProxy("AlarmEventServiceEndPoint");
-            alarmEventServiceProxy.Open();
+            this.alarmEventServiceProxy = alarmEventServiceProxy;
         }
 
         public void Process(ProcessingObject[] processingObject)

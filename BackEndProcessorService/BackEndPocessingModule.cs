@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
+using BackEndProcessorService.Proxy;
 using ScadaCommon.BackEnd_FrontEnd;
 using ScadaCommon.Interfaces;
 using ScadaCommon.ServiceContract;
@@ -10,9 +11,11 @@ namespace BackEndProcessorService
     public class BackEndPocessingModule : IBackEndProessingData
     {
         private IPointUpdateService pointUpdateProxy;
+        private AlarmEventServiceProxy alarmEventServiceProxy;
         public List<IProcessingData> ProcessingModules { get; set; }
-        public BackEndPocessingModule(IPointUpdateService pointUpdateProxy)
+        public BackEndPocessingModule(IPointUpdateService pointUpdateProxy, AlarmEventServiceProxy alarmEventServiceProxy)
         {
+            this.alarmEventServiceProxy = alarmEventServiceProxy;
             InitializeProcessingModules();
             this.pointUpdateProxy = pointUpdateProxy;
         }
@@ -34,7 +37,7 @@ namespace BackEndProcessorService
         {
             this.ProcessingModules = new List<IProcessingData>();
             this.ProcessingModules.Add(new EGUModule());
-            this.ProcessingModules.Add(new AlarmingModule());
+            this.ProcessingModules.Add(new AlarmingModule(this.alarmEventServiceProxy));
         }
     }
 }

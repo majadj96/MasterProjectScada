@@ -57,7 +57,7 @@ namespace NetworkDynamicService.Cache
 
             foreach (ResourceDescription item in inputPoints.InsertOperations)
             {
-                if ((ModelCode)(ModelCodeHelper.ExtractTypeFromGlobalId(item.Id)) == ModelCode.DISCRETE)
+                if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(item.Id)) == DMSType.DISCRETE)
                 {                
                     foreach (Property item2 in item.Properties)
                     {
@@ -73,13 +73,13 @@ namespace NetworkDynamicService.Cache
                                 name = item2.ToString();
                                 break;
                             case ModelCode.MEASUREMENT_DIRECTION:
-                                if((SignalDirection)item2.GetValue() == SignalDirection.Read)
+                                if((SignalDirection)(long)item2.GetValue() == SignalDirection.Read)
                                 {
                                     pointType = PointType.BINARY_INPUT;
                                     adress = digitalInputAdress;
                                     digitalInputAdress++;
                                 }
-                                else if((SignalDirection)item2.GetValue() == SignalDirection.ReadWrite)
+                                else if((SignalDirection)(long)item2.GetValue() == SignalDirection.ReadWrite)
                                 {
                                     pointType = PointType.BINARY_OUTPUT;
                                     adress = digitalOutputAdress;
@@ -87,16 +87,16 @@ namespace NetworkDynamicService.Cache
                                 }
                                 break;
                             case ModelCode.MEASUREMENT_MEASTYPE:
-                                measurementType = (MeasurementType)item2.GetValue();
+                                measurementType = (MeasurementType)(long)item2.GetValue();
                                 break;
                             case ModelCode.DISCRETE_MINVALUE:
-                                minDiscrete = (int)item2.GetValue();
+                                minDiscrete = (int)(long)item2.GetValue();
                                 break;
                             case ModelCode.DISCRETE_MAXVALUE:
-                                maxDiscrete = (int)item2.GetValue();
+                                maxDiscrete = (int)(long)item2.GetValue();
                                 break;
                             case ModelCode.DISCRETE_NORMALVALUE:
-                                normalDiscrete = (int)item2.GetValue();
+                                normalDiscrete = (int)(long)item2.GetValue();
                                 break;
                             default:
                                 break;
@@ -104,6 +104,7 @@ namespace NetworkDynamicService.Cache
                     }
                     BasePointCacheItem digital = new DigitalPointCacheItem()
                     {
+                        Gid = item.Id,
                         Description = description,
                         MrId = mrId,
                         Name = name,
@@ -116,7 +117,7 @@ namespace NetworkDynamicService.Cache
                     };
                     ndsModelNew.Add(item.Id, digital);
                 }
-                else if ((ModelCode)(ModelCodeHelper.ExtractTypeFromGlobalId(item.Id)) == ModelCode.ANALOG)
+                else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(item.Id)) == DMSType.ANALOG)
                 {
                     foreach (Property item2 in item.Properties)
                     {
@@ -132,13 +133,13 @@ namespace NetworkDynamicService.Cache
                                 name = item2.ToString();
                                 break;
                             case ModelCode.MEASUREMENT_DIRECTION:
-                                if ((SignalDirection)item2.GetValue() == SignalDirection.Read)
+                                if ((SignalDirection)(long)item2.GetValue() == SignalDirection.Read)
                                 {
                                     pointType = PointType.ANALOG_INPUT;
                                     adress = analogInputAdress;
                                     analogInputAdress++;
                                 }
-                                else if ((SignalDirection)item2.GetValue() == SignalDirection.ReadWrite)
+                                else if ((SignalDirection)(long)item2.GetValue() == SignalDirection.ReadWrite)
                                 {
                                     pointType = PointType.ANALOG_OUTPUT;
                                     adress = analogOutputAdress;
@@ -146,7 +147,7 @@ namespace NetworkDynamicService.Cache
                                 }
                                 break;
                             case ModelCode.MEASUREMENT_MEASTYPE:
-                                measurementType = (MeasurementType)item2.GetValue();
+                                measurementType = (MeasurementType)(long)item2.GetValue();
                                 break;
                             case ModelCode.ANALOG_MINVALUE:
                                 minAnalog = (float)item2.GetValue();
@@ -163,6 +164,7 @@ namespace NetworkDynamicService.Cache
                     }
                     BasePointCacheItem analog = new AnalogPointCacheItem()
                     {
+                        Gid = item.Id,
                         Description = description,
                         MrId = mrId,
                         Name = name,
