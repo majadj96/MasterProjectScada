@@ -20,7 +20,7 @@ namespace UserInterface
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-
+        public Dictionary<long, Substation> substations;
         public MainViewModel(Window window)
         {
             SubNMS subNMS = new SubNMS();
@@ -32,6 +32,7 @@ namespace UserInterface
             CommandBreaker = new BreakerCommand(this);
             CommandPT = new TapChangerCommand(this);
             CommandOpenCommand = new CommandOpenCommand(this);
+            substations = new Dictionary<long, Substation>();
         }
 
         public void setUpLayout()
@@ -698,6 +699,128 @@ namespace UserInterface
         {
             NMSModel nMSModel = (NMSModel)resources;
             SubstationItems = toUIModelList(nMSModel.ResourceDescs);
+            setModel(nMSModel.ResourceDescs);
+        }
+
+
+        public void populateEquipment(IEquipment equipment, List<Property> properties)
+        {
+            foreach (Property prop in properties)
+            {
+                switch (prop.Id)
+                {
+                    case Common.ModelCode.IDOBJ_GID:
+                        equipment.GID = prop.GetValue().ToString();
+                        break;
+                    case Common.ModelCode.IDOBJ_DESC:
+                        equipment.Description = prop.GetValue().ToString();
+                        break;
+                    case Common.ModelCode.IDOBJ_MRID:
+                        equipment.MRID = prop.GetValue().ToString();
+                        break;
+                    case Common.ModelCode.IDOBJ_NAME:
+                        equipment.Name = prop.GetValue().ToString();
+                        break;
+                }
+            }
+        }
+
+        public void populateMachine(AsynchronousMachine asynchronousMachine, List<Property> properties)
+        {
+            foreach (Property prop in properties)
+            {
+                switch (prop.Id)
+                {
+                    case Common.ModelCode.ASYNCMACHINE_COSPHI:
+                        asynchronousMachine.CosPhi = Double.Parse(prop.GetValue().ToString());
+                        break;
+                }
+            }
+        }
+        public void populatTapChanger(TapChanger tapChanger, List<Property> properties)
+        {
+            foreach (Property prop in properties)
+            {
+                switch (prop.Id)
+                {
+                    case Common.ModelCode.TAPCHANGER_HIGHSTEP:
+                        tapChanger.HighStep = Int32.Parse(prop.GetValue().ToString());
+                        break;
+                    case Common.ModelCode.TAPCHANGER_LOWSTEP:
+                        tapChanger.LowStep = Int32.Parse(prop.GetValue().ToString());
+                        break;
+                    case Common.ModelCode.TAPCHANGER_NORMALSTEP:
+                        tapChanger.NormalStep = Int32.Parse(prop.GetValue().ToString());
+                        break;
+                }
+            }
+        }
+
+        public Substation getMySubstation(List<Property> properties)
+        {
+            Property subGid = properties.Where(x => x.Id == ModelCode.EQUIPMENT_EQUIPCONTAINER).FirstOrDefault();
+            return substations[long.Parse(subGid.PropertyValue.LongValue.ToString())];
+        }
+
+        public Substation getSubstationForTapChaner(List<Property> properties, List<ResourceDescription> resources)
+        {
+            Property twGid = properties.Where(x => x.Id == ModelCode.RATIOTAPCHANGER_TRWINDING).FirstOrDefault();
+            ResourceDescription tw = resources.Where(x => x.Properties.Where(y => y.Id == ModelCode.IDOBJ_GID).FirstOrDefault().PropertyValue == twGid.PropertyValue).FirstOrDefault();
+            Property ptGid = tw.Properties.Where(x => x.Id == ModelCode.TRANSFORMERWINDING_POWERTR).FirstOrDefault();
+            ResourceDescription pt = resources.Where(x => x.Properties.Where(y => y.Id == ModelCode.IDOBJ_GID).FirstOrDefault().PropertyValue == ptGid.PropertyValue).FirstOrDefault();
+            return getMySubstation(pt.Properties);
+        }
+
+        public void setModel(List<ResourceDescription> resources)
+        {
+            int numberOfSubstations = resources.Where(x => (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.SUBSTATION)).Count();
+
+            foreach (ResourceDescription sub in resources.Where(x => ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.SUBSTATION))
+            {
+                Substation substation = new Substation();
+                Property gid = sub.Properties.Where(x => x.Id == ModelCode.IDOBJ_GID).FirstOrDefault();
+                substations.Add((long)gid.GetValue(), substation);
+            }
+
+            foreach (ResourceDescription resource in resources.Where(x => (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.DISCONNECTOR) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.BREAKER) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.RATIOTAPCHANGER) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.POWERTRANSFORMER) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ASYNCHRONOUSMACHINE)))
+            {
+
+                switch (ModelCodeHelper.ExtractTypeFromGlobalId(resource.Id)) {
+                    case (short)DMSType.DISCONNECTOR:
+                        Disconector disconector = new Disconector();
+                        populateEquipment(disconector, resource.Properties);
+                        getMySubstation(resource.Properties).Disconectors.Add(disconector);
+                        break;
+                    case (short)DMSType.BREAKER:
+                        Breaker breaker = new Breaker();
+                        populateEquipment(breaker, resource.Properties);
+                        getMySubstation(resource.Properties).Breaker = breaker;
+                        break;
+                    case (short)DMSType.RATIOTAPCHANGER:
+                        TapChanger tapChanger = new TapChanger();
+                        populateEquipment(tapChanger, resource.Properties);
+                        populatTapChanger(tapChanger, resource.Properties);
+                        getSubstationForTapChaner(resource.Properties, resources).TapChanger = tapChanger;
+                        break;
+                    case (short)DMSType.ASYNCHRONOUSMACHINE:
+                        AsynchronousMachine asynchronousMachine = new AsynchronousMachine();
+                        populateEquipment(asynchronousMachine, resource.Properties);
+                        populateMachine(asynchronousMachine, resource.Properties);
+                        getMySubstation(resource.Properties).AsynchronousMachines.Add(asynchronousMachine);
+                        break;
+                    case (short)DMSType.POWERTRANSFORMER:
+                        Transformator transformator = new Transformator();
+                        populateEquipment(transformator, resource.Properties);
+                        getMySubstation(resource.Properties).Transformator = transformator;
+                        break;
+                }
+
+            }
+            Console.Write(substations);
         }
 
         public BindingList<UIModel> toUIModelList(List<ResourceDescription> resources)
