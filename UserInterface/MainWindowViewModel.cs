@@ -1,7 +1,15 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using Common;
+using Common.GDA;
+using GalaSoft.MvvmLight.Messaging;
+using PubSubCommon;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using UserInterface.BaseError;
 using UserInterface.Command;
+using UserInterface.Model;
 using UserInterface.Subscription;
 using UserInterface.ViewModel;
 
@@ -19,6 +27,9 @@ namespace UserInterface
         private BindableBase currentMeshViewModel;
         private BindableBase currentTableViewModel;
 
+        public Dictionary<long, Substation> substations;
+        public ObservableCollection<UIModel> substationItems = new ObservableCollection<UIModel>();
+        
         public string statistics { get; set; }
         public string pubSub { get; set; }
         public string connectedStatusBar { get; set; }
@@ -35,6 +46,31 @@ namespace UserInterface
         {
             get { return currentTableViewModel; }
             set { SetProperty(ref currentTableViewModel, value); }
+        }
+
+        public Dictionary<long, Substation> Substations
+        {
+            get
+            {
+                return substations;
+            }
+            set
+            {
+                substations = value;
+                OnPropertyChanged("Substations");
+            }
+        }
+        public ObservableCollection<UIModel> SubstationItems
+        {
+            get
+            {
+                return substationItems;
+            }
+            set
+            {
+                substationItems = value;
+                OnPropertyChanged("SubstationItems");
+            }
         }
 
         public string ConnectedStatusBar
@@ -85,6 +121,8 @@ namespace UserInterface
             subNMS.OnSubscribe();
             setUpInitState();
             Messenger.Default.Register<NotificationMessage>(tableViewModel, (message) => { tableViewModel.PopulateModel(message.Target); });
+
+            substations = new Dictionary<long, Substation>();
         }
 
         private void OnNavigation(string destination)
@@ -111,7 +149,7 @@ namespace UserInterface
         //substationItems lista
         //substationItem oznacen u listi 
         
-        /*public void PopulateModel(object resources)
+        public void PopulateModel(object resources)
         {
             NMSModel nMSModel = (NMSModel)resources;
             SubstationItems = toUIModelList(nMSModel.ResourceDescs);
@@ -175,7 +213,7 @@ namespace UserInterface
         public Substation getMySubstation(List<Property> properties)
         {
             Property subGid = properties.Where(x => x.Id == ModelCode.EQUIPMENT_EQUIPCONTAINER).FirstOrDefault();
-            return substations[long.Parse(subGid.PropertyValue.LongValue.ToString())];
+            return Substations[int.Parse(subGid.PropertyValue.LongValue.ToString())];
         }
 
         public Substation getSubstationForTapChaner(List<Property> properties, List<ResourceDescription> resources)
@@ -239,9 +277,9 @@ namespace UserInterface
             Console.Write(substations);
         }
 
-        public BindingList<UIModel> toUIModelList(List<ResourceDescription> resources)
+        public ObservableCollection<UIModel> toUIModelList(List<ResourceDescription> resources)
         {
-            BindingList<UIModel> response = new BindingList<UIModel>();
+            ObservableCollection<UIModel> response = new ObservableCollection<UIModel>();
             int disconectors = 1;
 
             foreach (ResourceDescription resource in resources.Where(x => (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.DISCONNECTOR) ||
@@ -260,16 +298,16 @@ namespace UserInterface
                             {
                                 if(disconectors == 1)
                                 {
-                                    Disc1Id = property.GetValue().ToString();
+                                    //Disc1Id = property.GetValue().ToString();
                                     disconectors++;
                                 } else if (disconectors == 2)
                                 {
-                                    Disc2Id = property.GetValue().ToString();
+                                    //Disc2Id = property.GetValue().ToString();
                                     disconectors = 0;
                                 }
                             } else if (ModelCodeHelper.ExtractTypeFromGlobalId(resource.Id) == (short)DMSType.BREAKER)
                             {
-                                BreakerId = property.GetValue().ToString();
+                                //BreakerId = property.GetValue().ToString();
                             }
                                 model.GID = property.GetValue().ToString();
                             break;
@@ -320,6 +358,6 @@ namespace UserInterface
                 response.Add(model);
             }
             return response;
-        }*/
+        }
     } 
 }
