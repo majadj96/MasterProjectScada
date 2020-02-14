@@ -10,22 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace UserInterface
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for CommandingWindow.xaml
     /// </summary>
-    /// 
-    public partial class MainWindow : Window
+    public partial class CommandingWindow : Window
     {
-        public MainWindow()
+        public CommandingWindow()
         {
-            //DataContext = new MainWindowViewModel(this);
             InitializeComponent();
-            //WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
         }
     }
 }

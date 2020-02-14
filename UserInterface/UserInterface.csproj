@@ -71,13 +71,41 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Command\CommandOpenCommand.cs" />
-    <Compile Include="Command\TapChangerCommand.cs" />
+    <Compile Include="BaseError\BindableBase.cs" />
+    <Compile Include="BaseError\ValidationBase.cs" />
+    <Compile Include="BaseError\ValidationErrors.cs" />
+    <Compile Include="CommandingWindow.xaml.cs">
+      <DependentUpon>CommandingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CommandingWindowViewModel.cs" />
+    <Compile Include="Command\MyICommand.cs" />
+    <Compile Include="Model\Alarm.cs" />
     <Compile Include="Model\UIModel.cs" />
     <Compile Include="Subscription\SubNMS.cs" />
-    <Compile Include="View\Command.xaml.cs">
-      <DependentUpon>Command.xaml</DependentUpon>
+    <Compile Include="ViewModel\AlarmViewModel.cs" />
+    <Compile Include="ViewModel\CommandBreakerViewModel.cs" />
+    <Compile Include="ViewModel\CommandDisconnectorViewModel.cs" />
+    <Compile Include="ViewModel\MeshViewModel.cs" />
+    <Compile Include="ViewModel\TableViewModel.cs" />
+    <Compile Include="View\AlarmView.xaml.cs">
+      <DependentUpon>AlarmView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\CommandBreakerView.xaml.cs">
+      <DependentUpon>CommandBreakerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CommandDisconnectorView.xaml.cs">
+      <DependentUpon>CommandDisconnectorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MeshView.xaml.cs">
+      <DependentUpon>MeshView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TableView.xaml.cs">
+      <DependentUpon>TableView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="CommandingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -86,13 +114,27 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Command\BreakerCommand.cs" />
-    <Compile Include="Command\DisconectorCommand.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\Command.xaml">
+    <Page Include="View\AlarmView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CommandBreakerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CommandDisconnectorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MeshView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TableView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -150,6 +192,9 @@
   <ItemGroup>
     <Resource Include="Assets\pump-off.png" />
     <Resource Include="Assets\pump-on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\pump-on-rotate.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,9 +4,25 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UserInterface"
+        xmlns:views="clr-namespace:UserInterface.View"
+        xmlns:viewModel="clr-namespace:UserInterface.ViewModel"
         mc:Ignorable="d"
         Title="SCADA SISTEM" Height="890" Width="1522"  WindowState="Maximized" Background="LightGray" >
+    <Window.DataContext>
+        <local:MainWindowViewModel/>
+    </Window.DataContext>
+
     <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModel:MeshViewModel}">
+            <views:MeshView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:TableViewModel}">
+            <views:TableView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:AlarmViewModel}">
+            <views:AlarmView/>
+        </DataTemplate>
+
         <Style TargetType="TabItem">
             <Setter Property="Template">
                 <Setter.Value>
@@ -53,62 +69,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style TargetType="DataGrid">
-            <!-- On mouse hover -->
-            <Setter Property="BorderBrush" Value="#FF999999" />
-            <Setter Property="HorizontalGridLinesBrush" Value="#DDDDDD" />
-            <Setter Property="VerticalGridLinesBrush" Value="#DDDDDD" />
-
-            <Setter Property="RowStyle">
-                <Setter.Value>
-                    <Style TargetType="DataGridRow">
-                        <Style.Triggers>
-                            <!-- Highlight a grid row as the mouse passes over -->
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#FF999999" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="CellStyle">
-                <Setter.Value>
-                    <Style TargetType="DataGridCell">
-                        <Style.Triggers>
-                            <!-- On row select -->
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="#FF6DEA3E" />
-                                <Setter Property="BorderBrush" Value="Transparent" />
-                                <Setter Property="Foreground" Value="Black" />
-                            </Trigger>
-                        </Style.Triggers>
-                        <!-- Add some padding around the contents of a cell -->
-                        <Setter Property="Padding" Value="4,3,4,3" />
-                        <Setter Property="BorderBrush" Value="Transparent"/>
-                        <Setter Property="BorderThickness" Value="1"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="DataGridCell">
-                                    <Border Padding="{TemplateBinding Padding}" 
-                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                            BorderThickness="{TemplateBinding BorderThickness}"
-                                            Background="{TemplateBinding Background}">
-                                        <ContentPresenter />
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        <Setter Property="FocusVisualStyle">
-                            <Setter.Value>
-                                <Style TargetType="Control">
-                                    <Setter Property="BorderBrush" Value="Transparent" />
-                                </Style>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </Setter.Value>
-            </Setter>
-        </Style>
         <Style x:Key="{x:Type StatusBar}"
        TargetType="{x:Type StatusBar}">
             <Setter Property="SnapsToDevicePixels"
@@ -152,7 +112,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <Style x:Key="{x:Static StatusBar.SeparatorStyleKey}"
        TargetType="{x:Type Separator}">
             <Setter Property="OverridesDefaultStyle"
@@ -172,7 +131,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <Style x:Key="{x:Type StatusBarItem}"
        TargetType="{x:Type StatusBarItem}">
             <Setter Property="OverridesDefaultStyle"
@@ -197,6 +155,7 @@
             </Setter>
         </Style>
     </Window.Resources>
+
     <Grid Background="#FF474747">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="357*"/>
@@ -208,221 +167,24 @@
             <RowDefinition Height="525*"/>
             <RowDefinition Height="35*"/>
         </Grid.RowDefinitions>
-        <DataGrid x:Name="SubstationItems"
-                  ItemsSource="{Binding SubstationItems, UpdateSourceTrigger=PropertyChanged}"
-                  IsReadOnly="True"
-                  VerticalScrollBarVisibility="Auto"
-                  SelectedItem="{Binding SubstationItem, UpdateSourceTrigger=PropertyChanged}"
-                  Height="418"
-                  Margin="10,66,0,0"
-                  VerticalAlignment="Top"
-                  AutoGenerateColumns="False"
-                  CanUserResizeRows="False"
-                  CanUserAddRows="False" Grid.Column="1" Background="#665E5E5E" Grid.Row="1" BorderBrush="#FF3C3C3C" FontFamily="Consolas" FontSize="14">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Width="*"  Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Description" Width="*" Binding="{Binding Description}"/>
-                <DataGridTextColumn Header="Value" Width="*" Binding="{Binding Value}"/>
-                <DataGridTextColumn Header="Time" Width="*" Binding="{Binding Time}"/>
-                <DataGridTextColumn Header="Alarm" Width="*" Binding="{Binding Alarm}"/>
-            </DataGrid.Columns>
-        </DataGrid>
 
-        <Canvas Margin="10,66,16,10" Background="#FF5E5E5E" Grid.Row="1">
+        <DockPanel Margin="15,50,0,0" Grid.Row="1" Grid.Column="1" Background="#FF474747">
+            <Menu DockPanel.Dock="Top" Name="MenuTab" HorizontalContentAlignment="Center"  Background="#FF474747" Height="716" Margin="31,0,503.8,0">
+                <MenuItem Header="Point table" Command="{Binding NavigationCommand}" Height="25" CommandParameter="Points" Cursor="Hand" FontFamily="Consolas" FontSize="16" Background="#68CADE" Foreground="White" BorderBrush="#FFC5C5C5"/>
+                <MenuItem Header="Alarm table" Command="{Binding NavigationCommand}" Height="25" CommandParameter="Alarm" Cursor="Hand" FontFamily="Consolas" FontSize="16" Background="#FFFF6D6D" Foreground="White" BorderBrush="#FFC5C5C5"/>
+            </Menu>
+        </DockPanel>
 
-            <Line
-            X1="0" Y1="10"
-            X2="190" Y2="10"
-            Stroke="{Binding LineStart}"
-            StrokeThickness="2" Grid.Row="1" Canvas.Left="15" Canvas.Top="1"/>
-            <Line
-            X1="0" Y1="0"
-            X2="0" Y2="20"
-            Stroke="{Binding LineFirst}"
-            StrokeThickness="2" Grid.Row="1" Canvas.Left="110" Canvas.Top="11" />
+        <Grid Grid.Row="1" Grid.Column="0" Margin="10,66,16,10">
+            <ContentControl Content="{Binding CurrentMeshViewModel}"/>
+        </Grid>
 
-            <Line
-            X1="0" Y1="0"
-            X2="0" Y2="20"
-            Stroke="{Binding LineSecond}"
-            StrokeThickness="2" Grid.Row="1" Canvas.Left="110" Canvas.Top="81" />
-            <Ellipse
-                Fill="Black"
-                Height="6"
-                Width="6"
-                StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="99"/>
-            <Line
-            X1="0" Y1="0"
-            X2="0" Y2="20"
-            Name="line_2"
-            Stroke="{Binding LineThird}"
-            StrokeThickness="2" Grid.Row="1" Canvas.Left="110" Canvas.Top="163" />
-            <Line
-            X1="0" Y1="0"
-            X2="0" Y2="25"
-                Stroke="{Binding LineFourth}"
-            Name="line_3"
-            StrokeThickness="2" Grid.Row="1" Canvas.Left="110" Canvas.Top="313" />
-            <Ellipse
-                Fill="Black"
-                Height="6"
-                Width="6"
-                StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="181"/>
-            <Ellipse
-                Fill="Black"
-                Height="6"
-                Width="6"
-                StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="29"/>
-            <Ellipse
-                Fill="Black"
-                Height="6"
-                Width="6"
-                StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="307"/>
-            <Ellipse
-                Fill="Black"
-                Height="6"
-                Width="6"
-                StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="338"/>
-            <Ellipse
-                Fill="Black"
-                Height="6"
-                Width="6"
-                StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="76"/>
-            <Line
-                Stroke="{Binding LineUpDis1}"
-                Name="Up_Disconector"
-                X1="0" Y1="0"
-                X2="0" Y2="10"
-                StrokeThickness="2" Canvas.Left="110" Canvas.Top="35" Height="10" />
-            <Line
-                x:Name="Down_Disconector_Copy"
-                X1="0" Y1="0"
-                X2="0" Y2="10"
-                Stroke="{Binding LineDownDis1}"
-                StrokeThickness="2" Canvas.Left="110" Canvas.Top="66" Height="10" />
-            <Line
-                x:Name="Up_Breaker"
-                X1="0" Y1="0"
-                X2="0" Y2="10"
-                Stroke="{Binding LineUpBreaker}"
-                StrokeThickness="2" Canvas.Left="110" Canvas.Top="106" Height="10" />
-            <Line
-                x:Name="Down_Breaker"
-                X1="0" Y1="0"
-                X2="0" Y2="10"
-                Stroke="{Binding LineDownBreaker}"
-                StrokeThickness="2" Canvas.Left="110" Canvas.Top="147" Height="10" />
-            <Ellipse
-                Fill="Black"
-                Height="6"
-                Width="6"
-                StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="157"/>
-            <Line
-                x:Name="Up_Disconector_2"
-                X1="0" Y1="0"
-                X2="0" Y2="10"
-                Stroke="{Binding LineUpDis2}"
-                StrokeThickness="2" Canvas.Left="110" Canvas.Top="187" Height="10" />
-            <Line
-                x:Name="Down_Disconector_2"
-                X1="0" Y1="0"
-                X2="0" Y2="10"
-                Stroke="{Binding LineDownDis2}"
-                StrokeThickness="2" Canvas.Left="110" Canvas.Top="219" Height="10" />
-            <Ellipse
-                Fill="Black"
-                Height="6"
-                Width="6"
-                StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="228"/>
-            <Line
-                x:Name="Up_PT"
-                X1="0" Y1="0"
-                X2="0" Y2="10"
-                Stroke="{Binding LineUpPT}"
-                StrokeThickness="2" Canvas.Left="110" Canvas.Top="234" Height="10" />
-            <Line
-                x:Name="Down_PT"
-                X1="0" Y1="0"
-                X2="0" Y2="10"
-                Stroke="{Binding LineDownPT}"
-                StrokeThickness="2" Canvas.Left="110" Canvas.Top="297" Height="10" />
-            <Line
-                x:Name="Up_AM"
-                X1="0" Y1="0"
-                X2="0" Y2="10"
-                Stroke="{Binding LineUpPump}"
-                StrokeThickness="2" Canvas.Left="110" Canvas.Top="344" Height="10" />
-            <Button Name="Disc_1" Content="" Canvas.Left="97" Margin="0" Canvas.Top="43" Width="25" Height="25" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen" Command="{Binding CommandOpenCommand}" CommandParameter="1">
-                <Button.Background>
-                    <ImageBrush ImageSource="{Binding Disconector1Image}"/>
-                </Button.Background>
-            </Button>
-            <Button Name="Disc_2" Content="" Canvas.Left="97" Margin="0" Canvas.Top="194" Width="25" Height="25" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen" Command="{Binding CommandDis2}" CommandParameter="2">
-                <Button.Background>
-                    <ImageBrush ImageSource="{Binding disconector2Image}"/>
-                </Button.Background>
-            </Button>
-            <Button x:Name="Breaker" Content="" Canvas.Left="93" Margin="0" Canvas.Top="113" Width="35" Height="35" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen" Command="{Binding CommandBreaker}">
-                <Button.Background>
-                    <ImageBrush ImageSource="{Binding BreakerImage}"/>
-                </Button.Background>
-            </Button>
-            <Button x:Name="PT" Canvas.Left="74" Margin="0" Canvas.Top="239" Width="71" Height="61" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen" FontFamily="Segoe UI Semibold" Command="{Binding CommandPT}" Foreground="#00000000">
-                <Button.Background>
-                    <ImageBrush ImageSource="{Binding PTImage}"/>
-                </Button.Background>
-            </Button>
-            <Button x:Name="AM_1" Content="" Canvas.Left="96" Margin="0" Canvas.Top="354" Width="67" Height="87" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}">
-                <Button.Background>
-                    <ImageBrush ImageSource="{Binding PumpImage}"/>
-                </Button.Background>
-            </Button>
-            <Canvas Visibility="{Binding Two_AM_Visible}" Height="111" Canvas.Left="1" Canvas.Top="349" Width="247" Background="#FF5E5E5E">
-                <Button x:Name="AM_2_Multi" Content="" Canvas.Left="157" Margin="0" Width="67" Height="87" BorderBrush="{x:Null}" Canvas.Top="24" Style="{StaticResource MyButtonStyle}">
-                    <Button.Background>
-                        <ImageBrush ImageSource="{Binding Pump2Image}"/>
-                    </Button.Background>
-                </Button>
-                <Button x:Name="AM_1_Multi" Content="" Canvas.Left="38" Margin="0" Width="67" Height="89" BorderBrush="{x:Null}" Canvas.Top="24" Style="{StaticResource MyButtonStyle}">
-                    <Button.Background>
-                        <ImageBrush ImageSource="{Binding Pump1Image}"/>
-                    </Button.Background>
-                </Button>
-                <Rectangle Height="20" Canvas.Left="51" Stroke="{Binding LineUpFirstPump}" StrokeThickness="2" Canvas.Top="4" Width="2"/>
-                <Rectangle Height="20" Canvas.Left="169" Stroke="{Binding LineUpSecondPump}" StrokeThickness="2" Canvas.Top="4" Width="2"/>
-                <Rectangle Height="2" Canvas.Left="51" Stroke="{Binding LineUpMultiPump}" StrokeThickness="2" Width="120" Canvas.Top="-1"/>
-                <Ellipse
-                Fill="Black"
-                Height="6"
-                Width="6"
-                StrokeThickness="2"
-                Stroke="Black" Canvas.Left="49" Canvas.Top="-2"/>
-                <Ellipse
-                    Fill="Black"
-                    Height="6"
-                    Width="6"
-                    StrokeThickness="2"
-                    Stroke="Black" Canvas.Left="167" Canvas.Top="-2"/>
-            </Canvas>
-            <Ellipse
-                Fill="Black"
-                Height="6"
-                Width="6"
-                StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="8"/>
-        </Canvas>
+        <Grid Grid.Row="1" Grid.Column="1" Margin="0,75,0,0">
+            <ContentControl Content="{Binding CurrentTableViewModel}"/>
+        </Grid>
 
         <Label Content="{Binding PubSub}" Grid.Column="2" Margin="10,111,10,0" Grid.Row="1" VerticalAlignment="Top" Height="10"/>
         <StatusBar Margin="10,11,10,0" Grid.Row="2" Grid.ColumnSpan="3">
-
             <StatusBarItem>
                 <Label Content="{Binding TimeStampStatusBar}"   />
             </StatusBarItem>
@@ -433,23 +195,13 @@
             <Separator Grid.Column="1" />
             <StatusBarItem>
                 <Label  Content="SCADA SISTEM"  />
-
             </StatusBarItem>
         </StatusBar>
 
-        <Button  Content="Alarm Table"  Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="10,39,0,0" VerticalAlignment="Top" Width="116" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#FFFF6D6D" Foreground="White" BorderBrush="#FFC5C5C5"/>
+        <!--<Button  Content="Alarm Table"  Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="50.6,29,0,0" VerticalAlignment="Top" Width="116" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#FFFF6D6D" Foreground="White" BorderBrush="#FFC5C5C5"/>-->
 
         <ComboBox ItemsSource="{Binding ComboSubstations}"  SelectedItem="{Binding SelectedSubstation}" HorizontalAlignment="Left" Margin="224,48,0,0" VerticalAlignment="Top" Width="192" Height="22" Grid.RowSpan="2" FontFamily="Consolas" Foreground="White" Background="#FF5D5D5D" BorderBrush="#FF4D4D4D"/>
-        <Label Content="Select Substation" HorizontalAlignment="Left" Margin="226,11,0,0" HorizontalContentAlignment="Center" VerticalAlignment="Top" Height="38" Width="184" RenderTransformOrigin="0.5,0.5" Foreground="#FFF5D856" FontFamily="Consolas" FontSize="18">
-            <Label.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="-0.266"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Label.RenderTransform>
-        </Label>
+        <Label Content="Select Substation" HorizontalAlignment="Left" Margin="226,11,0,0" HorizontalContentAlignment="Center" VerticalAlignment="Top" Height="38" Width="184" RenderTransformOrigin="0.5,0.5" Foreground="#FFF5D856" FontFamily="Consolas" FontSize="18"/>
 
     </Grid>
 </Window>

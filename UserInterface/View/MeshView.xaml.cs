@@ -13,19 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace UserInterface
+namespace UserInterface.View
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for MeshView.xaml
     /// </summary>
-    /// 
-    public partial class MainWindow : Window
+    public partial class MeshView : UserControl
     {
-        public MainWindow()
+        public MeshView()
         {
-            //DataContext = new MainWindowViewModel(this);
             InitializeComponent();
-            //WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
         }
     }
 }
