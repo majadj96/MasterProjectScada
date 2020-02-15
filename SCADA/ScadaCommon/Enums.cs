@@ -35,6 +35,8 @@ namespace ScadaCommon
         ANALOG_OUTPUT = 0x04,
         HR_LONG = 0x05,
 
+        NONE = 0x0,
+
         //Ovo je za DNP3 protokol, gore su za MODBUS (njih brisemo)
         BINARY_OUTPUT = 0x01,
         BINARY_INPUT = 0x02,

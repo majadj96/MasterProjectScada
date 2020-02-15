@@ -4,11 +4,13 @@ using ScadaCommon.NDSDataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace FrontEndProcessorService
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class NDSConfigurationService : INDSBasePointCacheItems
     {
         private Dictionary<Tuple<ushort,PointType> , BasePointCacheItem> model = new Dictionary<Tuple<ushort, PointType>, BasePointCacheItem>();

@@ -16,6 +16,8 @@ namespace ScadaCommon.BackEnd_FrontEnd
     {
         public ProcessingObject() { }
         [DataMember]
+        public long Gid { get; set; }
+        [DataMember]
         public double RawValue { get; set; }
         [DataMember]
         public PointType PointType { get; set; }

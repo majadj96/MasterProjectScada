@@ -12,6 +12,7 @@ using ScadaCommon.ServiceContract;
 using System.ServiceModel;
 using FrontEndProcessorService.PointDataModel;
 using ScadaCommon.ServiceProxies;
+using ScadaCommon.NDSDataModel;
 
 namespace FrontEndProcessorService
 {
@@ -32,9 +33,8 @@ namespace FrontEndProcessorService
         private IProcessingManager processingManager = null;
         private NetworkDynamicServiceProxy ndsProxy;
         private NetworkDynamicStateServiceProxy ndsStateProxy;
+        private Dictionary<Tuple<ushort, PointType>, BasePointCacheItem> points;
         #endregion Fields
-
-        Dictionary<int, IPoint> pointsCache = new Dictionary<int, IPoint>();
 
 		#region Properties
 
@@ -53,9 +53,10 @@ namespace FrontEndProcessorService
 
 		#endregion Properties
 
-		public FieldCommunicationService()
+		public FieldCommunicationService(Dictionary<Tuple<ushort, PointType>, BasePointCacheItem> points)
 		{
 			Thread.CurrentThread.Name = "Main Thread";
+            this.points = points;
            // ndsProxy = new NetworkDynamicServiceProxy("NetworkDynamicServiceEndPoint");
            // ndsProxy.Open();
 
@@ -67,13 +68,13 @@ namespace FrontEndProcessorService
             commandExecutor = new FunctionExecutor(configuration, connection);
             this.processingManager = new ProcessingManager(this, commandExecutor, ndsProxy);
             this.acquisitor = new Acquisitor(acquisitionTrigger, this.processingManager, configuration);
-            InitializePointCollection();
+           // InitializePointCollection();
             InitializeAndStartThreads();
         }
 
 		#region Private methods
 
-		private void InitializePointCollection()
+	/*	private void InitializePointCollection()
 		{
 			foreach (var c in configuration.GetConfigurationItems())
 			{
@@ -87,9 +88,9 @@ namespace FrontEndProcessorService
 					}
 				}
 			}
-		}
+		}*/
 
-		private BasePointItem CreatePoint(IConfigItem c, int i, IProcessingManager processingManager)
+	/*	private BasePointItem CreatePoint(IConfigItem c, int i, IProcessingManager processingManager)
 		{
 			switch (c.RegistryType)
 			{
@@ -108,7 +109,7 @@ namespace FrontEndProcessorService
 				default:
 					return null;
 			}
-		}
+		}*/
 
         private void InitializeAndStartThreads()
 		{
@@ -156,14 +157,13 @@ namespace FrontEndProcessorService
             GC.SuppressFinalize(this);
         }
 
-		public List<IPoint> GetPoints(List<PointIdentifier> pointIds)
+		public List<BasePointCacheItem> GetPoints(List<PointIdentifier> pointIds)
 		{
-			List<IPoint> retVal = new List<IPoint>(pointIds.Count);
+			List<BasePointCacheItem> retVal = new List<BasePointCacheItem>(pointIds.Count);
 			foreach (var pid in pointIds)
 			{
-				int id = PointIdentifierHelper.GetNewPointId(pid);
-				IPoint p = null;
-				if (pointsCache.TryGetValue(id, out p))
+				BasePointCacheItem p = null;
+				if (points.TryGetValue(Tuple.Create(pointIds[0].Address, pointIds[0].PointType), out p))
 				{
 					retVal.Add(p);
 				}
@@ -173,38 +173,37 @@ namespace FrontEndProcessorService
 
         public void WriteDigitalOutput(int address, int value)
         {
-            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.DIGITAL_OUTPUT, (ushort)address));
-            this.processingManager.ExecuteWriteCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, value);
+            this.processingManager.ExecuteWriteCommand(PointType.DIGITAL_OUTPUT, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, value);
         }
 
         public void WriteAnalogOutput(int address, int value)
         {
             int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.ANALOG_OUTPUT, (ushort)address));
-            this.processingManager.ExecuteWriteCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, value);
+            this.processingManager.ExecuteWriteCommand(PointType.ANALOG_OUTPUT, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, value);
         }
 
         public void ReadDigitalInput(int address)
         {
             int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.DIGITAL_INPUT, (ushort)address));
-            this.processingManager.ExecuteReadCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
+            this.processingManager.ExecuteReadCommand(PointType.DIGITAL_INPUT, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
         }
 
         public void ReadAnalogInput(int address)
         {
             int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.ANALOG_INPUT, (ushort)address));
-            this.processingManager.ExecuteReadCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
+            this.processingManager.ExecuteReadCommand(PointType.ANALOG_INPUT, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
         }
 
         public void ReadDigitalOutput(int address)
         {
             int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.DIGITAL_OUTPUT, (ushort)address));
-            this.processingManager.ExecuteReadCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
+            this.processingManager.ExecuteReadCommand(PointType.DIGITAL_OUTPUT, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
         }
 
         public void ReadAnalogOutput(int address)
         {
             int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.ANALOG_OUTPUT, (ushort)address));
-            this.processingManager.ExecuteReadCommand(pointsCache[key].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
+            this.processingManager.ExecuteReadCommand(PointType.ANALOG_OUTPUT, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
         }
     }
 }

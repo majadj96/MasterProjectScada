@@ -104,24 +104,24 @@ namespace FrontEndProcessorService.Configuration
                         Class0Acquisition = Convert.ToInt32(filtered[filtered.Count - 1]);
                         continue;
                     }
-                    try
-                    {
-                        ConfigItem ci = new ConfigItem(filtered);
-                        pointTypeToConfiguration.Add(ci.Description, ci);
-                    }
-                    catch (ArgumentException argEx)
-                    {
-                        throw new ConfigurationException($"Configuration error: {argEx.Message}", argEx);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw ex;
-                    }
+                    //try
+                    //{
+                    //    ConfigItem ci = new ConfigItem(filtered);
+                    //    pointTypeToConfiguration.Add(ci.Description, ci);
+                    //}
+                    //catch (ArgumentException argEx)
+                    //{
+                    //    throw new ConfigurationException($"Configuration error: {argEx.Message}", argEx);
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    throw ex;
+                    //}
                 }
-				if (pointTypeToConfiguration.Count == 0)
-				{
-					throw new ConfigurationException("Configuration error! Check RtuCfg.txt file!");
-				}
+				//if (pointTypeToConfiguration.Count == 0)
+				//{
+				//	throw new ConfigurationException("Configuration error! Check RtuCfg.txt file!");
+				//}
 			}
 		}
 

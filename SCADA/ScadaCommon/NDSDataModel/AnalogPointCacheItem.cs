@@ -10,24 +10,11 @@ namespace ScadaCommon.NDSDataModel
     [DataContract]
     public class AnalogPointCacheItem : BasePointCacheItem
     {
-        private float rawValue;
         private float eguValue;
         public AnalogPointCacheItem() : base()
         {
         }
 
-        [DataMember]
-        public float RawValue
-        {
-            get
-            {
-                return rawValue;
-            }
-            set
-            {
-                rawValue = value;
-            }
-        }
         [DataMember]
         public float EguValue
         {

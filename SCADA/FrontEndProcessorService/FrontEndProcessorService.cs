@@ -11,9 +11,13 @@ namespace FrontEndProcessorService
     public class FrontEndProcessorService : IDisposable
     {
         private List<ServiceHost> hosts = null;
+        private FieldCommunicationService fieldCommunicationService;
+        private NDSConfigurationService nDSConfigurationService;
 
         public FrontEndProcessorService()
         {
+            nDSConfigurationService = new NDSConfigurationService();
+            fieldCommunicationService = new FieldCommunicationService(this.nDSConfigurationService.Model);
             InitializeHosts();
         }
 
@@ -38,8 +42,8 @@ namespace FrontEndProcessorService
         private void InitializeHosts()
         {
             hosts = new List<ServiceHost>();
-            hosts.Add(new ServiceHost(typeof(FieldCommunicationService)));
-            hosts.Add(new ServiceHost(typeof(NDSConfigurationService)));
+            hosts.Add(new ServiceHost(fieldCommunicationService));
+            hosts.Add(new ServiceHost(nDSConfigurationService));
         }
 
         public void CloseHosts()

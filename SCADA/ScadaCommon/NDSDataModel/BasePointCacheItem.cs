@@ -27,12 +27,25 @@ namespace ScadaCommon.NDSDataModel
         protected float maxValue;
         protected float normalValue;
         protected bool inAlarm = false;
+        private float rawValue;
 
         public BasePointCacheItem()
         {
 
         }
         #region Properties
+        [DataMember]
+        public float RawValue
+        {
+            get
+            {
+                return rawValue;
+            }
+            set
+            {
+                rawValue = value;
+            }
+        }
         [DataMember]
         public bool InAlarm
         {

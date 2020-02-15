@@ -69,7 +69,6 @@
     <Compile Include="Interfaces\IPoint.cs" />
     <Compile Include="Interfaces\IProcessingManager.cs" />
     <Compile Include="Interfaces\IStorage.cs" />
-    <Compile Include="Model\PointModel.cs" />
     <Compile Include="NDSDataModel\AnalogPointCacheItem.cs" />
     <Compile Include="NDSDataModel\BasePointCacheItem.cs" />
     <Compile Include="NDSDataModel\DigitalPointCacheItem.cs" />
