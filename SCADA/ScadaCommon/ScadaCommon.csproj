@@ -47,6 +47,7 @@
     <Compile Include="BackEnd_FrontEnd\AnalogPoint.cs" />
     <Compile Include="BackEnd_FrontEnd\DigitalPoint.cs" />
     <Compile Include="BackEnd_FrontEnd\IInputObject.cs" />
+    <Compile Include="BackEnd_FrontEnd\INDSBasePointCacheItems.cs" />
     <Compile Include="BackEnd_FrontEnd\InputObject.cs" />
     <Compile Include="BackEnd_FrontEnd\ProcessingObject.cs" />
     <Compile Include="Connection\IConnection.cs" />

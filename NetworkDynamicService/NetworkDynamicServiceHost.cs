@@ -4,6 +4,7 @@ using NetworkDynamicService.Cache;
 using NetworkDynamicService.PointUpdater;
 using NetworkDynamicService.ProxyPool;
 using NetworkDynamicService.Transaction;
+using ScadaCommon.BackEnd_FrontEnd;
 using System;
 using System.Collections.Generic;
 using System.ServiceModel;
@@ -14,6 +15,7 @@ namespace NetworkDynamicService
     {
         private List<ServiceHost> hosts = null;
         private PointUpdateProxy pointUpdateProxy;
+        private NDSConfigurationProxy ndSConfigurationProxy;
         private AlarmEventServiceProxy alarmEventServiceProxy;
         private BackEndPocessingModule backEndPocessingModule;
         private INDSRealTimePointCache nDSRealTimePointCache;
@@ -27,10 +29,13 @@ namespace NetworkDynamicService
             alarmEventServiceProxy = new AlarmEventServiceProxy("AlarmEventServiceEndPoint");
             alarmEventServiceProxy.Open();
 
+            ndSConfigurationProxy = new NDSConfigurationProxy("INDSBasePointCacheItemsEndPoint");
+            ndSConfigurationProxy.Open();
+
             nDSRealTimePointCache = new NDSRealTimePointCache();
 
             backEndPocessingModule = new BackEndPocessingModule(pointUpdateProxy, this.alarmEventServiceProxy);
-            modelUpdateContract = new ModelUpdateContract(nDSRealTimePointCache);
+            modelUpdateContract = new ModelUpdateContract(nDSRealTimePointCache, ndSConfigurationProxy);
             InitializeHosts();
         }
 

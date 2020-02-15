@@ -16,6 +16,7 @@ namespace NetworkDynamicService.Cache
     {
         private Dictionary<long, BasePointCacheItem> ndsModel = new Dictionary<long, BasePointCacheItem>();
         private Dictionary<long, BasePointCacheItem> ndsModelNew = new Dictionary<long, BasePointCacheItem>();
+        private INDSBasePointCacheItems nDSBasePointCacheItems;
         private bool modelUpdate = false;
         private Delta model;
 
@@ -178,6 +179,8 @@ namespace NetworkDynamicService.Cache
                     ndsModelNew.Add(item.Id, analog);
                 }
             }
+
+            this.nDSBasePointCacheItems.SendConfiguration(this.ndsModelNew.Values.ToList());
         }
 
         //prilikom commit-a preuzmi novi model i postavi za vazeci
@@ -191,8 +194,9 @@ namespace NetworkDynamicService.Cache
             return ndsModel.TryGetValue(gid, out basePointCacheItem);
         }
 
-        public void StoreDelta(Delta delta)
+        public void StoreDelta(Delta delta, INDSBasePointCacheItems nDSBasePointCacheItems)
         {
+            this.nDSBasePointCacheItems = nDSBasePointCacheItems;
             this.modelUpdate = true;
             this.model = delta;
             InitializePointCache(delta);

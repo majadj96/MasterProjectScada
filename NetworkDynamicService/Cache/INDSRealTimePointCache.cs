@@ -1,4 +1,5 @@
 ﻿using Common.GDA;
+using ScadaCommon.BackEnd_FrontEnd;
 using ScadaCommon.NDSDataModel;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace NetworkDynamicService.Cache
     public interface INDSRealTimePointCache
     {
         bool TryGetBasePointItem(long gid, out BasePointCacheItem basePointCacheItem);
-        void StoreDelta(Delta delta);
+        void StoreDelta(Delta delta, INDSBasePointCacheItems nDSBasePointCacheItems);
         void ApplyUpdate();
     }
 }

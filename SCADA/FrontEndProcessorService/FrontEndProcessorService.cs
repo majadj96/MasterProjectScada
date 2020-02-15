@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScadaCommon.NDSDataModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -38,6 +39,7 @@ namespace FrontEndProcessorService
         {
             hosts = new List<ServiceHost>();
             hosts.Add(new ServiceHost(typeof(FieldCommunicationService)));
+            hosts.Add(new ServiceHost(typeof(NDSConfigurationService)));
         }
 
         public void CloseHosts()

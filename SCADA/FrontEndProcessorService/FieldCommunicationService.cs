@@ -56,11 +56,11 @@ namespace FrontEndProcessorService
 		public FieldCommunicationService()
 		{
 			Thread.CurrentThread.Name = "Main Thread";
-            ndsProxy = new NetworkDynamicServiceProxy("NetworkDynamicServiceEndPoint");
-            ndsProxy.Open();
+           // ndsProxy = new NetworkDynamicServiceProxy("NetworkDynamicServiceEndPoint");
+           // ndsProxy.Open();
 
-            ndsStateProxy = new NetworkDynamicStateServiceProxy("NetworkDynamicStateServiceEndPoint");
-            ndsStateProxy.Open();
+           // ndsStateProxy = new NetworkDynamicStateServiceProxy("NetworkDynamicStateServiceEndPoint");
+           // ndsStateProxy.Open();
 
             configuration = new ConfigReader();
             this.connection = new TCPConnection(configuration, ndsStateProxy);

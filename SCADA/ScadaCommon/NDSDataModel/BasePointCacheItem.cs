@@ -2,11 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ScadaCommon.NDSDataModel
 {
+    [DataContract]
+    [KnownTypeAttribute(typeof(AnalogPointCacheItem))]
+    [KnownTypeAttribute(typeof(DigitalPointCacheItem))]
+    [KnownTypeAttribute(typeof(PointType))]
+    [KnownTypeAttribute(typeof(MeasurementType))]
     public abstract class BasePointCacheItem
     {
         protected MeasurementType measurementType;
@@ -27,6 +33,7 @@ namespace ScadaCommon.NDSDataModel
 
         }
         #region Properties
+        [DataMember]
         public bool InAlarm
         {
             get
@@ -38,6 +45,7 @@ namespace ScadaCommon.NDSDataModel
                 inAlarm = value;
             }
         }
+        [DataMember]
         public float MinValue
         {
             get
@@ -49,7 +57,7 @@ namespace ScadaCommon.NDSDataModel
                 minValue = value;
             }
         }
-
+        [DataMember]
         public string Description
         {
             get
@@ -61,6 +69,7 @@ namespace ScadaCommon.NDSDataModel
                 description = value;
             }
         }
+        [DataMember]
         public string MrId
         {
             get
@@ -72,7 +81,7 @@ namespace ScadaCommon.NDSDataModel
                 mrId = value;
             }
         }
-
+        [DataMember]
         public float MaxValue
         {
             get
@@ -84,6 +93,7 @@ namespace ScadaCommon.NDSDataModel
                 maxValue = value;
             }
         }
+        [DataMember]
         public float NormalValue
         {
             get
@@ -95,6 +105,7 @@ namespace ScadaCommon.NDSDataModel
                 normalValue = value;
             }
         }
+        [DataMember]
         public long Gid {
             get
             {
@@ -105,6 +116,7 @@ namespace ScadaCommon.NDSDataModel
                 gid = value;
             }
         }
+        [DataMember]
         public PointType Type
         {
             get
@@ -117,7 +129,7 @@ namespace ScadaCommon.NDSDataModel
                 type = value;
             }
         }
-
+        [DataMember]
         public MeasurementType MeasurementType
         {
             get
@@ -130,7 +142,7 @@ namespace ScadaCommon.NDSDataModel
                 measurementType = value;
             }
         }
-
+        [DataMember]
         /// <summary>
         /// Address of point on MdbSim Simulator
         /// </summary>
@@ -146,7 +158,7 @@ namespace ScadaCommon.NDSDataModel
                 address = value;
             }
         }
-
+        [DataMember]
         public DateTime Timestamp
         {
             get
@@ -159,7 +171,7 @@ namespace ScadaCommon.NDSDataModel
                 timestamp = value;
             }
         }
-
+        [DataMember]
         public string Name
         {
             get

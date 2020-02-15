@@ -1,5 +1,6 @@
 ﻿using Common.GDA;
 using NetworkDynamicService.Cache;
+using ScadaCommon.BackEnd_FrontEnd;
 using System;
 using System.ServiceModel;
 using TransactionManagerContracts;
@@ -10,9 +11,11 @@ namespace NetworkDynamicService.Transaction
     public class ModelUpdateContract : IModelUpdateContract
     {
         private INDSRealTimePointCache nDSRealTimePointCache;
-        public ModelUpdateContract(INDSRealTimePointCache nDSRealTimePointCache)
+        private INDSBasePointCacheItems nDSBasePointCacheItems;
+        public ModelUpdateContract(INDSRealTimePointCache nDSRealTimePointCache, INDSBasePointCacheItems nDSBasePointCacheItems)
         {
             this.nDSRealTimePointCache = nDSRealTimePointCache;
+            this.nDSBasePointCacheItems = nDSBasePointCacheItems;
         }
         public UpdateResult UpdateModel(Delta delta)
         {
@@ -29,7 +32,7 @@ namespace NetworkDynamicService.Transaction
             }
 
             //storuj deltu 
-            nDSRealTimePointCache.StoreDelta(delta);
+            nDSRealTimePointCache.StoreDelta(delta, this.nDSBasePointCacheItems);
 
             return new UpdateResult() { Result = ResultType.Succeeded };
         }
