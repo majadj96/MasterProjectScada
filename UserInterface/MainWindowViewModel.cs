@@ -17,11 +17,10 @@ namespace UserInterface
 {
     public class MainWindowViewModel : BindableBase
     {
-        public MyICommand<string> NavigationCommand { get; private set; }
+        public MyICommand<string> ButtonTablesCommand { get; private set; }
         
         private MeshViewModel meshViewModel = new MeshViewModel();
-        private TableViewModel tableViewModel = new TableViewModel();
-        private AlarmViewModel alarmViewModel = new AlarmViewModel();
+        
         
         #region Variables
         private BindableBase currentMeshViewModel;
@@ -114,28 +113,27 @@ namespace UserInterface
         public MainWindowViewModel()
         {
             CurrentMeshViewModel = meshViewModel;
-            CurrentTableViewModel = tableViewModel;
-            NavigationCommand = new MyICommand<string>(OnNavigation);
+            
+            ButtonTablesCommand = new MyICommand<string>(OnNavigation);
 
             SubNMS subNMS = new SubNMS();
             subNMS.OnSubscribe();
             setUpInitState();
-            Messenger.Default.Register<NotificationMessage>(tableViewModel, (message) => { tableViewModel.PopulateModel(message.Target); });
 
             substations = new Dictionary<long, Substation>();
         }
 
         private void OnNavigation(string destination)
         {
-            switch (destination)
-            {
-                case "Points":
-                    CurrentTableViewModel = tableViewModel;
-                    break;
-                case "Alarm":
-                    CurrentTableViewModel = alarmViewModel;
-                    break;
-            }
+            TablesWindow tablesWindow = new TablesWindow();
+
+            TablesWindowViewModel tablesWindowViewModel = new TablesWindowViewModel();
+
+            tablesWindow.DataContext = tablesWindowViewModel;
+
+            tablesWindowViewModel.SetView(destination);
+
+            tablesWindow.Show();
         }
 
         public void setUpInitState()

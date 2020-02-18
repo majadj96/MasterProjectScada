@@ -16,12 +16,6 @@
         <DataTemplate DataType="{x:Type viewModel:MeshViewModel}">
             <views:MeshView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:TableViewModel}">
-            <views:TableView/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:AlarmViewModel}">
-            <views:AlarmView/>
-        </DataTemplate>
 
         <Style TargetType="TabItem">
             <Setter Property="Template">
@@ -159,8 +153,6 @@
     <Grid Background="#FF474747">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="357*"/>
-            <ColumnDefinition Width="390*"/>
-            <ColumnDefinition Width="10*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="37*"/>
@@ -168,19 +160,15 @@
             <RowDefinition Height="35*"/>
         </Grid.RowDefinitions>
 
-        <DockPanel Margin="15,50,0,0" Grid.Row="1" Grid.Column="1" Background="#FF474747">
+        <!--<DockPanel Margin="15,50,0,0" Grid.Row="1" Grid.Column="1" Background="#FF474747">
             <Menu DockPanel.Dock="Top" Name="MenuTab" HorizontalContentAlignment="Center"  Background="#FF474747" Height="716" Margin="31,0,503.8,0">
                 <MenuItem Header="Point table" Command="{Binding NavigationCommand}" Height="25" CommandParameter="Points" Cursor="Hand" FontFamily="Consolas" FontSize="16" Background="#68CADE" Foreground="White" BorderBrush="#FFC5C5C5"/>
                 <MenuItem Header="Alarm table" Command="{Binding NavigationCommand}" Height="25" CommandParameter="Alarm" Cursor="Hand" FontFamily="Consolas" FontSize="16" Background="#FFFF6D6D" Foreground="White" BorderBrush="#FFC5C5C5"/>
             </Menu>
-        </DockPanel>
+        </DockPanel>-->
 
-        <Grid Grid.Row="1" Grid.Column="0" Margin="10,66,16,10">
+        <Grid Grid.Row="1" Grid.Column="0" Margin="20,66,20,10" Background="#FF5E5E5E">
             <ContentControl Content="{Binding CurrentMeshViewModel}"/>
-        </Grid>
-
-        <Grid Grid.Row="1" Grid.Column="1" Margin="0,75,0,0">
-            <ContentControl Content="{Binding CurrentTableViewModel}"/>
         </Grid>
 
         <Label Content="{Binding PubSub}" Grid.Column="2" Margin="10,111,10,0" Grid.Row="1" VerticalAlignment="Top" Height="10"/>
@@ -198,8 +186,10 @@
             </StatusBarItem>
         </StatusBar>
 
-        <!--<Button  Content="Alarm Table"  Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="50.6,29,0,0" VerticalAlignment="Top" Width="116" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#FFFF6D6D" Foreground="White" BorderBrush="#FFC5C5C5"/>-->
-
+        <Button  Content="Summary Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="827,29,0,0" VerticalAlignment="Top" Width="145" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#258565" Foreground="White" BorderBrush="#FFC5C5C5"/>
+        <Button  Content="Alarm Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Alarm" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="1012,29,0,0" VerticalAlignment="Top" Width="116" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#FFFF6D6D" Foreground="White" BorderBrush="#FFC5C5C5"/>
+        <Button  Content="Event Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Event" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="1166,29,0,0" VerticalAlignment="Top" Width="118" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#326492" Foreground="White" BorderBrush="#FFC5C5C5"/>
+        
         <ComboBox ItemsSource="{Binding ComboSubstations}"  SelectedItem="{Binding SelectedSubstation}" HorizontalAlignment="Left" Margin="224,48,0,0" VerticalAlignment="Top" Width="192" Height="22" Grid.RowSpan="2" FontFamily="Consolas" Foreground="White" Background="#FF5D5D5D" BorderBrush="#FF4D4D4D"/>
         <Label Content="Select Substation" HorizontalAlignment="Left" Margin="226,11,0,0" HorizontalContentAlignment="Center" VerticalAlignment="Top" Height="38" Width="184" RenderTransformOrigin="0.5,0.5" Foreground="#FFF5D856" FontFamily="Consolas" FontSize="18"/>
 

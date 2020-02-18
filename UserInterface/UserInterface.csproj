@@ -90,6 +90,10 @@
     <Compile Include="Model\Transformator.cs" />
     <Compile Include="Model\UIModel.cs" />
     <Compile Include="Subscription\SubNMS.cs" />
+    <Compile Include="TablesWindow.xaml.cs">
+      <DependentUpon>TablesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TablesWindowViewModel.cs" />
     <Compile Include="ViewModel\AlarmViewModel.cs" />
     <Compile Include="ViewModel\CommandBreakerViewModel.cs" />
     <Compile Include="ViewModel\CommandDisconnectorViewModel.cs" />
@@ -126,6 +130,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="TablesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\AlarmView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
