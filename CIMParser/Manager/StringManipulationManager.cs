@@ -6,7 +6,6 @@ namespace CIM.Manager
     /// <summary>
     /// StringManipulationManager contains methods for basic string manipulation and formating
     /// needed by application.
-    /// <para>@author: Stanislava Selena</para>
     /// </summary>
     public class StringManipulationManager
     {        

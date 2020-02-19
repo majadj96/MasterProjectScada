@@ -10,7 +10,6 @@ namespace CIM.Model
 	/// <para>Two most imporatant properties which represents the data of an attribute are:</para>
 	/// <para>FullName and Value.</para>
 	/// </para>
-	/// <para>@author: Stanislava Selena</para>
 	/// </summary>
 	public class ObjectAttribute
 	{

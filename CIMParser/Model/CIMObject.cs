@@ -16,7 +16,6 @@ namespace CIM.Model
     /// <para> parent == object that is referenced by this object (by one of it's attributes)</para>
     /// <para> child == object that has one reference to this object </para>
     /// </remarks>
-    /// <para>@author: Stanislava Selena</para>
     /// </summary>
     public class CIMObject
     {
@@ -51,16 +50,6 @@ namespace CIM.Model
         protected List<string> validationMessages = null;
 
         protected bool isModified = false;
-
-
-		//public CIMObject()
-		//{
-		//    type = string.Empty;
-		//    id = null;
-		//    myAttributes = new SortedDictionary<int, List<ObjectAttribute>>();
-		//    children = new SortedDictionary<string, List<string>>();
-		//    parents = new SortedDictionary<string, List<string>>();
-		//}
 
 		public CIMObject(CIMModelContext cimModelContext, string typeName)
         {

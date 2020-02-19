@@ -15,7 +15,6 @@ namespace CIM.Model
     /// <remarks>
     /// <para>Special case of connectivity is relationship between PowerTransformer and it's TransformerWindings.</para>
     /// </remarks>
-    /// <para>@author: Stanislava Selena</para>
     /// </summary>
     public class CIMModel
     {

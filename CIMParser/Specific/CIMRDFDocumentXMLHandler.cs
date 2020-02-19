@@ -11,7 +11,6 @@ namespace CIM.Specific
 	/// CIMRDFDocumentXMLHandler class is specific implementation of DefaultXMLHandler.
 	/// <para>Class implements handler methods for parsing CIM data in RDF format.</para>
 	/// <para>Outcome of processing file can be red from the Model property.</para>
-	/// <para>@author: Stanislava Selena</para>
 	/// </summary>
 	class CIMRDFDocumentXMLHandler : DefaultXMLHandler
 	{

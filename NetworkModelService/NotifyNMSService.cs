@@ -27,7 +27,14 @@ namespace NetworkModelService
 
         public void UpdateUIModel(bool commitSucceed = true)
         {
-            _pub.SendEvent(new PubSubCommon.NMSModel() { ResourceDescs = _nm.GetResourceDescriptions() }, null);
+            try
+            {
+                _pub.SendEvent(new PubSubCommon.NMSModel() { ResourceDescs = _nm.GetResourceDescriptions() }, null);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }            
         }
     }
 }

@@ -8,8 +8,7 @@ namespace CIMParser
 {
     /// <summary>
 	/// Class XMLParsingManager is incharge for preparing XML parsing environment 
-    /// and performing parsing of the given file.  
-    /// <para>@author: Stanislava Selena</para>
+    /// and performing parsing of the given file.
     /// </summary>
     static class XMLParsingManager
     {

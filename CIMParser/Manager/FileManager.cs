@@ -6,7 +6,6 @@ namespace CIM.Manager
 {
     /// <summary>
     /// FileManager manages all file system operations during application's execusion.
-    /// <para>@author: Stanislava Selena</para>
     /// </summary>
     static class FileManager
     {

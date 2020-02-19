@@ -904,11 +904,6 @@ namespace NetworkModelService
             networkDataModel = new Dictionary<DMSType, Container>(networkDataModelCopy);
             networkDataModelCopy.Clear();
 
-
-            //PubNMS pub = new PubNMS();
-
-            //pub.SendEvent(new PubSubCommon.NMSModel() { ResourceDescs = GetResourceDescriptions() }, null);
-
             return true;
         }
 
@@ -927,25 +922,40 @@ namespace NetworkModelService
             UpdateResult result = ApplyDelta(delta);
             networkDataModelOld = new Dictionary<DMSType, Container>(networkDataModel);
 
-            TMProxy _proxyTM = new TMProxy(this);
-            _proxyTM.Enlist();
-
-            ModelUpdateProxy _proxyCE = new ModelUpdateProxy("CE");
-            if(_proxyCE.UpdateModel(delta).Result == ResultType.Failed)
+            try
             {
-                _proxyTM.EndEnlist(false);
-                return new UpdateResult() { Result = ResultType.Failed, Message = "CE failed to update model." };
-            }
+                TMProxy _proxyTM = new TMProxy(this);
+                _proxyTM.Enlist();
 
-            //SCADA NDS
-            ModelUpdateProxy _proxyNDS = new ModelUpdateProxy("NDS");
-            if (_proxyNDS.UpdateModel(delta).Result == ResultType.Failed)
+                try
+                {
+                    ModelUpdateProxy _proxyCE = new ModelUpdateProxy("CE");
+                    if (_proxyCE.UpdateModel(delta).Result == ResultType.Failed)
+                    {
+                        _proxyTM.EndEnlist(false);
+                        return new UpdateResult() { Result = ResultType.Failed, Message = "CE failed to update model." };
+                    }
+
+                    //SCADA NDS
+                    ModelUpdateProxy _proxyNDS = new ModelUpdateProxy("NDS");
+                    if (_proxyNDS.UpdateModel(delta).Result == ResultType.Failed)
+                    {
+                        _proxyTM.EndEnlist(false);
+                        return new UpdateResult() { Result = ResultType.Failed, Message = "NDS failed to update model." };
+                    }
+
+                    _proxyTM.EndEnlist(true);
+                }
+                catch (Exception e)
+                {
+                    _proxyTM.EndEnlist(false);
+                    return new UpdateResult() { Message = e.Message, Result = ResultType.Failed };
+                }
+            }
+            catch (Exception ex)
             {
-                _proxyTM.EndEnlist(false);
-                return new UpdateResult() { Result = ResultType.Failed, Message = "NDS failed to update model." };
-            }
-
-            _proxyTM.EndEnlist(true);
+                return new UpdateResult() { Message = "NMS enlist failed: " + ex.Message, Result = ResultType.Failed };
+            }            
 
             return result;
         }
