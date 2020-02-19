@@ -32,7 +32,7 @@ namespace BackEndProcessorService
                         item.InAlarm = true;
                         //alarm izvan mernih opsega
                         //dodati u ProcessingObject sta jos ima u Alarmu TODO
-                        Alarm alarm = new Alarm() { Message = "Value is outside boundaries." };
+                        Alarm alarm = new Alarm() { AlarmAcknowledged = null, AlarmReported = DateTime.Now, AlarmReportedBy = AlarmEventType.SCADA, PointName = item.PointType.ToString(), GiD = item.Gid, Username = String.Empty, Message = "Value is outside boundaries." };
                         alarmEventServiceProxy.AddAlarm(alarm);
                     }
                     else if (((AnalogPoint)item).EguValue < NDSConfiguration.GetLowLimit(item.PointType))
@@ -40,7 +40,7 @@ namespace BackEndProcessorService
                         item.InAlarm = true;
                         //low alarm
                         //dodati u ProcessingObject sta jos ima u Alarmu TODO
-                        Alarm alarm = new Alarm() { Message = "Point is in low alarm state." };
+                        Alarm alarm = new Alarm() { AlarmAcknowledged = null, AlarmReported = DateTime.Now, AlarmReportedBy = AlarmEventType.SCADA, PointName = item.PointType.ToString(), GiD = item.Gid, Username = String.Empty, Message = "Point is in low alarm state." };
                         alarmEventServiceProxy.AddAlarm(alarm);
                     }
                     else if (((AnalogPoint)item).EguValue > NDSConfiguration.GetHighLimit(item.PointType))
@@ -48,7 +48,7 @@ namespace BackEndProcessorService
                         item.InAlarm = true;
                         //high alarm
                         //dodati u ProcessingObject sta jos ima u Alarmu TODO
-                        Alarm alarm = new Alarm() { Message = "Point is in high alarm state." };
+                        Alarm alarm = new Alarm() { AlarmAcknowledged = null, AlarmReported = DateTime.Now, AlarmReportedBy = AlarmEventType.SCADA, PointName = item.PointType.ToString(), GiD = item.Gid, Username = String.Empty, Message = "Point is in high alarm state." };
                         alarmEventServiceProxy.AddAlarm(alarm);
                     }
                 }
@@ -59,7 +59,7 @@ namespace BackEndProcessorService
                         item.InAlarm = true;
                         //alarm treba da se napravi (ABNORMAL ALARM)
                         //dodati u ProcessingObject sta jos ima u Alarmu TODO
-                        Alarm alarm = new Alarm() { Message = "Point is in abnormal alarm state." };
+                        Alarm alarm = new Alarm() { AlarmAcknowledged = null, AlarmReported = DateTime.Now, AlarmReportedBy = AlarmEventType.SCADA, PointName = item.PointType.ToString(), GiD = item.Gid, Username = String.Empty, Message = "Point is in abnormal alarm state." };
                         alarmEventServiceProxy.AddAlarm(alarm);
                     }
                 }

@@ -55,8 +55,6 @@
     <Compile Include="CRCCalculator\CRCCalculator.cs" />
     <Compile Include="Database\Alarm.cs" />
     <Compile Include="Database\Event.cs" />
-    <Compile Include="Database\IAlarm.cs" />
-    <Compile Include="Database\IEvent.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Interfaces\IAnalogPoint.cs" />
     <Compile Include="Interfaces\IConfigItem.cs" />

@@ -10,7 +10,7 @@ namespace AlarmEventServiceDatabase
     [ServiceKnownType(typeof(Alarm))]
     public class AlarmServiceOperations : IAlarmServiceOperations
     {
-        public bool AcknowledgeAlarm(IAlarm alarm)
+        public bool AcknowledgeAlarm(Alarm alarm)
         {
             using (AccessDB db = new AccessDB())
             {
@@ -43,13 +43,12 @@ namespace AlarmEventServiceDatabase
             }
         }
 
-        public bool AddAlarm(IAlarm alarm)
+        public bool AddAlarm(Alarm alarm)
         {
             using (AccessDB db = new AccessDB())
             {
                 try
                 {
-
                     db.Alarms.Add(new Alarm()
                     {
                         GiD = alarm.GiD,

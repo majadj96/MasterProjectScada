@@ -6,17 +6,18 @@ using System;
 namespace ScadaCommon.Database
 {
     [DataContract]
-    public class Alarm : IAlarm
+    [KnownTypeAttribute(typeof(AlarmEventType))]
+    public class Alarm
     {
         #region Variables
-        private int iD;
+      /*  private int iD;
         private long giD;
         private DateTime alarmReported;
         private AlarmEventType alarmReportedBy;
         private string message;
         private string pointName;
         private DateTime? alarmAcknowledged;
-        private string username;
+        private string username;*/
         #endregion
 
         #region Props
@@ -25,54 +26,50 @@ namespace ScadaCommon.Database
         [DataMember]
         public int ID
         {
-            get { return iD; }
-            set { iD = value; }
+            get;
+            set;
         }
         [DataMember]
         public long GiD
         {
-            get { return giD; }
-            set { giD = value; }
+            get;
+            set;
         }
         [DataMember]
         public DateTime AlarmReported
         {
-            get { return alarmReported; }
-            set { alarmReported = value; }
+            get;
+            set;
         }
         [DataMember]
         public AlarmEventType AlarmReportedBy
         {
-            get { return alarmReportedBy; }
-            set { alarmReportedBy = value; }
+            get;
+            set;
         }
         [DataMember]
         public string Message
         {
-            get { return message; }
-            set { message = value; }
+            get;
+            set;
         }
         [DataMember]
         public string PointName
         {
-            get { return pointName; }
-            set { pointName = value; }
+            get;
+            set;
         }
         [DataMember]
         public DateTime? AlarmAcknowledged
         {
-            get { return alarmAcknowledged; }
-            set
-            {
-                if(value != null)
-                    alarmAcknowledged = (DateTime)value;
-            }
+            get;
+            set;
         }
         [DataMember]
         public string Username
         {
-            get { return username; }
-            set { username = value; }
+            get;
+            set;
         }
         #endregion
 
