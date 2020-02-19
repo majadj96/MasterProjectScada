@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
+using System.Windows.Threading;
 using UserInterface.BaseError;
 using UserInterface.Command;
 using UserInterface.Model;
@@ -33,6 +35,10 @@ namespace UserInterface
         public string pubSub { get; set; }
         public string connectedStatusBar { get; set; }
         public string timeStampStatusBar { get; set; }
+        public string gaugeValue { get; set; }
+        public string anguarValue { get; set; }
+        public string gaugeClasic { get; set; }
+
         #endregion
 
         #region Props
@@ -84,6 +90,18 @@ namespace UserInterface
                 OnPropertyChanged("ConnectedStatusBar");
             }
         }
+        public string GaugeClasic
+        {
+            get
+            {
+                return gaugeClasic;
+            }
+            set
+            {
+                gaugeClasic = value;
+                OnPropertyChanged("GaugeClasic");
+            }
+        }
         public string TimeStampStatusBar
         {
             get
@@ -94,6 +112,30 @@ namespace UserInterface
             {
                 timeStampStatusBar = value;
                 OnPropertyChanged("TimeStampStatusBar");
+            }
+        }
+        public string GaugeValue
+        {
+            get
+            {
+                return gaugeValue;
+            }
+            set
+            {
+                gaugeValue = value;
+                OnPropertyChanged("GaugeValue");
+            }
+        }
+        public string AnguarValue
+        {
+            get
+            {
+                return anguarValue;
+            }
+            set
+            {
+                anguarValue = value;
+                OnPropertyChanged("AnguarValue");
             }
         }
         public string PubSub
@@ -109,6 +151,9 @@ namespace UserInterface
             }
         }
         #endregion
+        DispatcherTimer timer = new DispatcherTimer();
+        Random rand = new Random();
+
 
         public MainWindowViewModel()
         {
@@ -121,6 +166,20 @@ namespace UserInterface
             setUpInitState();
 
             substations = new Dictionary<long, Substation>();
+
+            timer.Tick += new EventHandler(Test);
+            timer.Interval = new TimeSpan(0, 0, 1);
+            timer.Start();
+        }
+
+
+        private void Test(object sender, EventArgs e)
+        {
+            GaugeValue = rand.Next(0, 100).ToString();
+
+            AnguarValue = rand.Next(0, 5).ToString();
+
+            GaugeClasic = rand.Next(300, 1000).ToString();
         }
 
         private void OnNavigation(string destination)

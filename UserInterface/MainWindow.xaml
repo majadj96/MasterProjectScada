@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:UserInterface"
         xmlns:views="clr-namespace:UserInterface.View"
         xmlns:viewModel="clr-namespace:UserInterface.ViewModel"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
         Title="SCADA SISTEM" Height="890" Width="1522"  WindowState="Maximized" Background="LightGray" >
     <Window.DataContext>
@@ -169,7 +170,14 @@
 
         <Grid Grid.Row="1" Grid.Column="0" Margin="20,66,20,10" Background="#FF5E5E5E">
             <ContentControl Content="{Binding CurrentMeshViewModel}"/>
+            <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="-12,0,1255,592" HorizontalAlignment="Right" Width="231" Height="27" VerticalAlignment="Bottom">Mesh Eletricity</Label>
+            <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,920,588" HorizontalAlignment="Right" Width="237" Height="27" VerticalAlignment="Bottom">Mesh Power</Label>
+            <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,432,584" HorizontalAlignment="Right" Width="141" Height="27" VerticalAlignment="Bottom">Fluid Level</Label>
+            <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,408,314" HorizontalAlignment="Right" Width="176" Height="27" VerticalAlignment="Bottom">Tap Changer Position</Label>
+            <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,85,586" HorizontalAlignment="Right" Width="233" Height="27" VerticalAlignment="Bottom">Water Presure</Label>
         </Grid>
+
+        <Canvas Background="#FF474747" Margin="10,714,20,39" Grid.Row="1" Grid.RowSpan="2"/>
 
         <Label Content="{Binding PubSub}" Grid.Column="2" Margin="10,111,10,0" Grid.Row="1" VerticalAlignment="Top" Height="10"/>
         <StatusBar Margin="10,11,10,0" Grid.Row="2" Grid.ColumnSpan="3">
@@ -189,9 +197,56 @@
         <Button  Content="Summary Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="827,29,0,0" VerticalAlignment="Top" Width="145" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#258565" Foreground="White" BorderBrush="#FFC5C5C5"/>
         <Button  Content="Alarm Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Alarm" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="1012,29,0,0" VerticalAlignment="Top" Width="116" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#FFFF6D6D" Foreground="White" BorderBrush="#FFC5C5C5"/>
         <Button  Content="Event Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Event" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="1166,29,0,0" VerticalAlignment="Top" Width="118" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#326492" Foreground="White" BorderBrush="#FFC5C5C5"/>
-        
+
         <ComboBox ItemsSource="{Binding ComboSubstations}"  SelectedItem="{Binding SelectedSubstation}" HorizontalAlignment="Left" Margin="224,48,0,0" VerticalAlignment="Top" Width="192" Height="22" Grid.RowSpan="2" FontFamily="Consolas" Foreground="White" Background="#FF5D5D5D" BorderBrush="#FF4D4D4D"/>
         <Label Content="Select Substation" HorizontalAlignment="Left" Margin="226,11,0,0" HorizontalContentAlignment="Center" VerticalAlignment="Top" Height="38" Width="184" RenderTransformOrigin="0.5,0.5" Foreground="#FFF5D856" FontFamily="Consolas" FontSize="18"/>
+
+        <lvc:Gauge Grid.Row="1" Grid.Column="0" Margin="970,158,413,469"
+                   Uses360Mode="True"
+                   From="0" To="100" Value="{Binding GaugeValue}"
+                   HighFontSize="20" Foreground="White"
+                   InnerRadius="0" GaugeBackground="#7F549EE9"/>
+
+        <lvc:AngularGauge Grid.Row="1" Value="{Binding AnguarValue}" FromValue="0" ToValue="5" 
+                          LabelsStep="1" TicksStep="1" Wedge="300"
+                          TicksForeground="White" Foreground="White" 
+                          FontWeight="Bold" FontSize="10"
+                          SectionsInnerRadius="0.5" Margin="970,424,413,207">
+            <lvc:AngularGauge.Sections>
+                <lvc:AngularSection FromValue="0" ToValue="5" Fill="#FFFF8C4A"/>
+            </lvc:AngularGauge.Sections>
+        </lvc:AngularGauge>
+
+        <lvc:Gauge Grid.Row="1"
+                   From="0" To="1000" Value="{Binding GaugeClasic}" Margin="1216,139,63,469">
+            <lvc:Gauge.GaugeActiveFill>
+                <LinearGradientBrush>
+                    <GradientStop Color="#FF00FFE8" Offset="0.0" />
+                    <GradientStop Color="#FF00A2FF" Offset="0.496" />
+                    <GradientStop Color="Blue" Offset="1.0" />
+                </LinearGradientBrush>
+            </lvc:Gauge.GaugeActiveFill>
+        </lvc:Gauge>
+        <lvc:Gauge Grid.Row="1"
+            From="0" To="1000" Value="{Binding GaugeClasic}" Margin="29,139,1250,469">
+            <lvc:Gauge.GaugeActiveFill>
+                <LinearGradientBrush>
+                    <GradientStop Color="#FFFFE800" Offset="0.0" />
+                    <GradientStop Color="#FFFFAE00" Offset="0.623" />
+                    <GradientStop Color="#FFFF5D00" Offset="1.0" />
+                </LinearGradientBrush>
+            </lvc:Gauge.GaugeActiveFill>
+        </lvc:Gauge>
+        <lvc:Gauge Grid.Row="1"
+            From="0" To="1000" Value="{Binding GaugeClasic}" Margin="373,139,906,469">
+            <lvc:Gauge.GaugeActiveFill>
+                <LinearGradientBrush>
+                    <GradientStop Color="#FF72FF53" Offset="0.0" />
+                    <GradientStop Color="#FF44C537" Offset="0.539" />
+                    <GradientStop Color="#FF35994C" Offset="1.0" />
+                </LinearGradientBrush>
+            </lvc:Gauge.GaugeActiveFill>
+        </lvc:Gauge>
 
     </Grid>
 </Window>
