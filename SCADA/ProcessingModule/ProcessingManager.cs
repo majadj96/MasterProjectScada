@@ -206,22 +206,22 @@ namespace ProcessingModule
         {
             if (pointType == PointType.ANALOG_INPUT_16)
             {
-                AnalogPoint analog = new AnalogPoint() {Gid = point.Gid, RawValue = ((AnalogPointCacheItem)point).RawValue, Timestamp = DateTime.Now, PointType = PointType.ANALOG_INPUT_16, Adress = address };
+                AnalogPoint analog = new AnalogPoint() {Gid = point.Gid, RawValue = ((AnalogPointCacheItem)point).RawValue, Timestamp = DateTime.Now, PointType = PointType.ANALOG_INPUT_16, Adress = address, MaxValue = point.MaxValue, MinValue = point.MinValue, NormalValue = point.NormalValue};
                 return analog;
             }
             else if (pointType == PointType.ANALOG_OUTPUT_16)
             {
-                AnalogPoint analog = new AnalogPoint() { Gid = point.Gid, RawValue = ((AnalogPointCacheItem)point).RawValue, Timestamp = DateTime.Now, PointType = PointType.ANALOG_OUTPUT_16, Adress = address };
+                AnalogPoint analog = new AnalogPoint() { Gid = point.Gid, RawValue = ((AnalogPointCacheItem)point).RawValue, Timestamp = DateTime.Now, PointType = PointType.ANALOG_OUTPUT_16, Adress = address, MaxValue = point.MaxValue, MinValue = point.MinValue, NormalValue = point.NormalValue};
                 return analog;
             }
             else if (pointType == PointType.BINARY_INPUT)
             {
-                DigitalPoint digital = new DigitalPoint() { Gid = point.Gid, RawValue = ((DigitalPointCacheItem)point).RawValue, Timestamp = DateTime.Now, PointType = PointType.BINARY_INPUT, Adress = address };
+                DigitalPoint digital = new DigitalPoint() { Gid = point.Gid, RawValue = ((DigitalPointCacheItem)point).RawValue, Timestamp = DateTime.Now, PointType = PointType.BINARY_INPUT, Adress = address, MaxValue = (int)(point.MaxValue), MinValue = (int)(point.MinValue), NormalValue = (int)(point.NormalValue)};
                 return digital;
             }
             else
             {
-                DigitalPoint digital = new DigitalPoint() { Gid = point.Gid, RawValue = ((DigitalPointCacheItem)point).RawValue, Timestamp = DateTime.Now, PointType = PointType.BINARY_OUTPUT, Adress = address };
+                DigitalPoint digital = new DigitalPoint() { Gid = point.Gid, RawValue = ((DigitalPointCacheItem)point).RawValue, Timestamp = DateTime.Now, PointType = PointType.BINARY_OUTPUT, Adress = address, MaxValue = (int)(point.MaxValue), MinValue = (int)(point.MinValue), NormalValue = (int)(point.NormalValue)};
                 return digital;
             }
         }

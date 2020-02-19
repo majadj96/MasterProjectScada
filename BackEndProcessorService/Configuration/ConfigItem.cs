@@ -15,9 +15,6 @@ namespace BackEndProcessorService.Configuration
 
         private uint scalingFactor;
         private uint deviation;
-        private uint normalValue;
-        private uint lowLimit;
-        private uint highLimit;
         private uint eguMin;
         private uint eguMax;
         #endregion Fields
@@ -62,44 +59,6 @@ namespace BackEndProcessorService.Configuration
             }
         }
 
-        public uint NormalValue
-        {
-            get
-            {
-                return normalValue;
-            }
-
-            set
-            {
-                normalValue = value;
-            }
-        }
-
-        public uint LowLimit
-        {
-            get
-            {
-                return lowLimit;
-            }
-
-            set
-            {
-                lowLimit = value;
-            }
-        }
-
-        public uint HighLimit
-        {
-            get
-            {
-                return highLimit;
-            }
-
-            set
-            {
-                highLimit = value;
-            }
-        }
         public uint EguMin
         {
             get
@@ -136,14 +95,8 @@ namespace BackEndProcessorService.Configuration
             UInt32.TryParse(configurationParameters[2], out temp);
             Deviation = temp;
             UInt32.TryParse(configurationParameters[3], out temp);
-            NormalValue = temp;
-            UInt32.TryParse(configurationParameters[4], out temp);
-            LowLimit = temp;
-            UInt32.TryParse(configurationParameters[5], out temp);
-            HighLimit = temp;
-            UInt32.TryParse(configurationParameters[6], out temp);
             EguMin = temp;
-            UInt32.TryParse(configurationParameters[7], out temp);
+            UInt32.TryParse(configurationParameters[4], out temp);
             EguMax = temp;
         }
 

@@ -16,8 +16,11 @@ namespace FrontEndProcessorService.Configuration
 		private byte unitAddress;
 		private int tcpPort;
         private int class0Acquisition;
+        private int class1Acquisition;
+        private int class2Acquisition;
+        private int class3Acquisition;
 
-		private Dictionary<string, IConfigItem> pointTypeToConfiguration = new Dictionary<string, IConfigItem>();
+        private Dictionary<string, IConfigItem> pointTypeToConfiguration = new Dictionary<string, IConfigItem>();
 
 		private string path = "RtuCfg.txt";
 
@@ -83,6 +86,21 @@ namespace FrontEndProcessorService.Configuration
                         Class0Acquisition = Convert.ToInt32(filtered[filtered.Count - 1]);
                         continue;
                     }
+                    if (s.StartsWith("CLASS1"))
+                    {
+                        Class1Acquisition = Convert.ToInt32(filtered[filtered.Count - 1]);
+                        continue;
+                    }
+                    if (s.StartsWith("CLASS2"))
+                    {
+                        Class2Acquisition = Convert.ToInt32(filtered[filtered.Count - 1]);
+                        continue;
+                    }
+                    if (s.StartsWith("CLASS3"))
+                    {
+                        Class3Acquisition = Convert.ToInt32(filtered[filtered.Count - 1]);
+                        continue;
+                    }
                 }
 			}
 		}
@@ -130,6 +148,42 @@ namespace FrontEndProcessorService.Configuration
                 class0Acquisition = value;
             }
         }
-        
-	}
+
+        public int Class1Acquisition
+        {
+            get
+            {
+                return class1Acquisition;
+            }
+
+            private set
+            {
+                class1Acquisition = value;
+            }
+        }
+        public int Class2Acquisition
+        {
+            get
+            {
+                return class2Acquisition;
+            }
+
+            private set
+            {
+                class2Acquisition = value;
+            }
+        }
+        public int Class3Acquisition
+        {
+            get
+            {
+                return class3Acquisition;
+            }
+
+            private set
+            {
+                class3Acquisition = value;
+            }
+        }
+    }
 }
