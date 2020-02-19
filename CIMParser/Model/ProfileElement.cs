@@ -31,7 +31,6 @@ namespace CIM.Model
     /// <summary>
     /// ProfileElement class represents one element founded during processing of profile's source file.
     /// <para>See also: <seealso cref="T:Profile"/></para>
-    /// <para>@author: Stanislava Selena</para>
     /// </summary>
     public class ProfileElement
     {

@@ -6,7 +6,6 @@ namespace CIMParser
 	/// <summary>
 	/// Class XMLParseError is used for reporting errors occured during running
 	/// of some specific DefaultXMLHandler.</para>
-	/// <para>@author: Stanislava Selena</para>
 	/// </summary>
 	class XMLParseError
 	{

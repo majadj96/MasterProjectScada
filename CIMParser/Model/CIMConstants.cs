@@ -3,8 +3,7 @@
 namespace CIM.Model
 {
     /// <summary>
-    /// CIMConstants class defines various constanst common for CIM files.  
-    /// <para>@author: Stanislava Selena</para>
+    /// CIMConstants class defines various constanst common for CIM files.
     /// </summary>
     public static class CIMConstants
     {

@@ -8,7 +8,6 @@ namespace CIM.Model
 {
     /// <summary>
     /// Profile class represents the CIM profile loaded from RDFS source file.
-    /// <para>@author: Stanislava Selena</para>
     /// </summary>
     public class Profile
     {

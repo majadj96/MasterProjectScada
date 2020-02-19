@@ -8,7 +8,6 @@ namespace CIMParser
 	/// Class DefaultXMLHandler represents an abstract XML parsing handler.
 	/// <para>Class is used for generalization of handlers needed in XMLParsingManager class.</para>
 	/// <remarks>See also:<seealso cref="T:XMLParsingManager"/></remarks>
-	/// <para>@author: Stanislava Selena</para>
 	/// </summary>
 	abstract class DefaultXMLHandler
 	{

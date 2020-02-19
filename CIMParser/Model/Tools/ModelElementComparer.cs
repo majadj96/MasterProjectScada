@@ -8,7 +8,6 @@ namespace CIM.Model
     /// <para>This class can be used for sorting lists of objects.</para>
     /// </summary>
     /// <typeparam name="T">one of the: ProfileElement, ProfileElementStereotype or CIMObject class</typeparam>
-    /// <para>@author: Stanislava Selena</para>
     public class ModelElementComparer<T> : IComparer<T> 
     {        
         /// <summary>

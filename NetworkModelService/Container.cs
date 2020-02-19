@@ -1,7 +1,6 @@
 ﻿using Common;
 using DataModel.Core;
 using DataModel.Meas;
-using DataModel.Core;
 using DataModel.Topology;
 using DataModel.Wires;
 using System;
@@ -194,7 +193,7 @@ namespace NetworkModelService
             }
             else
             {
-                string message = String.Format("Failed to retrieve entity (GID = 0x{1:x16}) because entity doesn't exist.", globalId);
+                string message = String.Format("Failed to retrieve entity (GID = 0x{0:x16}) because entity doesn't exist.", globalId);
                 CommonTrace.WriteTrace(CommonTrace.TraceError, message);
                 throw new Exception(message);
             }
@@ -213,7 +212,7 @@ namespace NetworkModelService
             }
             else
             {
-                string message = String.Format("Entity (GID = 0x{1:x16}) already exists.", io.GID);
+                string message = String.Format("Entity (GID = 0x{0:x16}) already exists.", io.GID);
                 CommonTrace.WriteTrace(CommonTrace.TraceError, message);
                 throw new Exception(message);
             }
