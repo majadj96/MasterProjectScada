@@ -6,7 +6,7 @@
         xmlns:views="clr-namespace:UserInterface.View"
         xmlns:viewModel="clr-namespace:UserInterface.ViewModel"
         mc:Ignorable="d"
-        Title="Commanding window" Height="350" Width="350" Background="#FF474747" WindowStartupLocation="CenterScreen">
+        Title="Commanding window" Height="400" Width="400" Background="#FF474747" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewModel:CommandDisconnectorViewModel}">
             <views:CommandDisconnectorView/>

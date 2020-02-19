@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using UserInterface.BaseError;
 using UserInterface.Command;
+using UserInterface.Model;
 
 namespace UserInterface.ViewModel
 {
@@ -9,49 +10,36 @@ namespace UserInterface.ViewModel
         public MyICommand Command { get; private set; }
 
         #region Variables
-        private string breakerName;
-        private string breakerDescription;
-        private int currentValue;
-        private int newValue;
+        private Breaker breaker;
+        private bool newState;
         #endregion
 
         #region Props
-        public string BreakerName
+        public Breaker BreakerCurrent
         {
-            get { return breakerName; }
-            set { SetProperty(ref breakerName, value); }
+            get { return breaker; }
+            set { breaker = value; OnPropertyChanged("Breaker"); }
         }
-        public string BreakerDescription
+        public bool NewState
         {
-            get { return breakerDescription; }
-            set { SetProperty(ref breakerDescription, value); }
-        }
-        public int CurrentValue
-        {
-            get { return currentValue; }
-            set { SetProperty(ref currentValue, value); }
-        }
-        public int NewValue
-        {
-            get { return newValue; }
-            set { SetProperty(ref newValue, value); }
+            get { return newState; }
+            set { newState = value; OnPropertyChanged("NewState"); }
         }
         #endregion
 
-        public CommandBreakerViewModel()
+        public CommandBreakerViewModel(Breaker breaker)
         {
-            Command = new MyICommand(CommandBreaker);
-        }
+            BreakerCurrent = new Breaker(breaker.MRID, breaker.GID, breaker.Name, breaker.Description, breaker.Time, breaker.State);
+            NewState = Converter.ConvertToBool(BreakerCurrent.State);
 
-        public void SetName(string name)
-        {
-            BreakerName = name;
-            BreakerDescription = "Description";
+            Command = new MyICommand(CommandBreaker);
         }
 
         public void CommandBreaker()
         {
-            Messenger.Default.Send(NewValue);
+            BreakerCurrent.NewState = Converter.ConvertToDiscreteState(NewState);
+
+            Messenger.Default.Send(new NotificationMessage("command", BreakerCurrent, "Breaker"));
         }
     }
 }

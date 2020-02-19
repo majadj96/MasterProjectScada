@@ -8,9 +8,6 @@
         xmlns:viewModel="clr-namespace:UserInterface.ViewModel"
         mc:Ignorable="d"
         Title="Table Window" Height="700" Width="800" Background="LightGray" WindowStartupLocation="CenterScreen">
-    <Window.DataContext>
-        <local:TablesWindowViewModel/>
-    </Window.DataContext>
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewModel:TableViewModel}">

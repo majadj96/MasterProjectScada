@@ -26,8 +26,10 @@ namespace UserInterface
         private BindableBase currentMeshViewModel;
         private BindableBase currentTableViewModel;
 
-        public Dictionary<long, Substation> substations;
-        public ObservableCollection<UIModel> substationItems = new ObservableCollection<UIModel>();
+        private Dictionary<long, Substation> substations;
+        private ObservableCollection<UIModel> substationItems = new ObservableCollection<UIModel>();
+
+        private Substation substationCurrent;
         
         public string statistics { get; set; }
         public string pubSub { get; set; }
@@ -45,6 +47,12 @@ namespace UserInterface
         {
             get { return currentTableViewModel; }
             set { SetProperty(ref currentTableViewModel, value); }
+        }
+
+        public Substation SubstationCurrent
+        {
+            get { return substationCurrent; }
+            set { substationCurrent = value; OnPropertyChanged("SubstationCurrent"); }
         }
 
         public Dictionary<long, Substation> Substations
@@ -121,14 +129,19 @@ namespace UserInterface
             setUpInitState();
 
             substations = new Dictionary<long, Substation>();
+            Messenger.Default.Register<NotificationMessage>(this, (message) => 
+            {
+                if(String.Compare(message.Notification, "model") == 0)
+                    PopulateModel(message.Target);
+            });
         }
 
         private void OnNavigation(string destination)
         {
             TablesWindow tablesWindow = new TablesWindow();
 
-            TablesWindowViewModel tablesWindowViewModel = new TablesWindowViewModel();
-
+            TablesWindowViewModel tablesWindowViewModel = new TablesWindowViewModel(SubstationItems);
+            
             tablesWindow.DataContext = tablesWindowViewModel;
 
             tablesWindowViewModel.SetView(destination);
@@ -146,12 +159,22 @@ namespace UserInterface
         //SelectedSubstation izabrani u comboBoxu
         //substationItems lista
         //substationItem oznacen u listi 
+
+        public void SetCurrentSubstation()
+        {
+            if(Substations.Count > 0)
+                SubstationCurrent = Substations.First().Value;
+        }
         
         public void PopulateModel(object resources)
         {
             NMSModel nMSModel = (NMSModel)resources;
             SubstationItems = toUIModelList(nMSModel.ResourceDescs);
             setModel(nMSModel.ResourceDescs);
+            SetCurrentSubstation();
+
+            if(SubstationCurrent != null)
+                meshViewModel.UpdateSubstationModel(SubstationCurrent);
         }
 
 
@@ -211,7 +234,7 @@ namespace UserInterface
         public Substation getMySubstation(List<Property> properties)
         {
             Property subGid = properties.Where(x => x.Id == ModelCode.EQUIPMENT_EQUIPCONTAINER).FirstOrDefault();
-            return Substations[int.Parse(subGid.PropertyValue.LongValue.ToString())];
+            return Substations[long.Parse(subGid.PropertyValue.LongValue.ToString())];
         }
 
         public Substation getSubstationForTapChaner(List<Property> properties, List<ResourceDescription> resources)

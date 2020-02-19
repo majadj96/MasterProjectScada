@@ -1,6 +1,6 @@
 ﻿namespace UserInterface.BaseError
 {
-    public class ValidationBase : BindableBase
+    public abstract class ValidationBase : BindableBase
     {
         public ValidationErrors ValidationErrors { get; set; }
         private bool isValid;
@@ -15,12 +15,12 @@
             this.ValidationErrors = new ValidationErrors();
         }
 
-        //protected abstract void ValidateSelf(); TODO
+        protected abstract void ValidateSelf();
 
         public void Validate()
         {
             this.ValidationErrors.Clear();
-            //this.ValidateSelf();
+            this.ValidateSelf();
             this.isValid = this.ValidationErrors.IsValid;
             this.OnPropertyChanged("IsValid");
             this.OnPropertyChanged("ValidationErrors");

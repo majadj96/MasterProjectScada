@@ -8,15 +8,9 @@ namespace UserInterface.Model
 {
     public class Substation
     {
-        private Disconector disconector_1;
-        private Disconector disconector_2;
-
         private Breaker breaker;
-
         private Transformator transformator;
-
         private TapChanger tapChanger;
-
         private List<AsynchronousMachine> asynchronousMachines;
         private List<Disconector> disconectors;
 
@@ -31,7 +25,5 @@ namespace UserInterface.Model
         public TapChanger TapChanger { get => tapChanger; set => tapChanger = value; }
         public List<AsynchronousMachine> AsynchronousMachines { get => asynchronousMachines; set => asynchronousMachines = value; }
         public List<Disconector> Disconectors { get => disconectors; set => disconectors = value; }
-
-
     }
 }

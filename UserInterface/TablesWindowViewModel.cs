@@ -17,8 +17,8 @@ namespace UserInterface
 {
     public class TablesWindowViewModel : BindableBase
     {
-        private TableViewModel tableViewModel = new TableViewModel();
-        private AlarmViewModel alarmViewModel = new AlarmViewModel();
+        private TableViewModel tableViewModel;
+        private AlarmViewModel alarmViewModel;
 
         #region Variables
         private BindableBase currentTableViewModel;
@@ -32,12 +32,12 @@ namespace UserInterface
         }
         #endregion
 
-        public TablesWindowViewModel()
+        public TablesWindowViewModel(ObservableCollection<UIModel> model)
         {
+            tableViewModel = new TableViewModel(model);
+            alarmViewModel = new AlarmViewModel();
+
             CurrentTableViewModel = tableViewModel;
-
-            Messenger.Default.Register<NotificationMessage>(tableViewModel, (message) => { tableViewModel.PopulateModel(message.Target); });
-
         }
 
         public void SetView(string window)

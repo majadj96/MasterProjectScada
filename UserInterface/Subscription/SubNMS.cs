@@ -36,7 +36,7 @@ namespace UserInterface.Subscription
             if (model != null)
             {
                 _eventCount += 1;
-                NotificationMessage n = new NotificationMessage(null, model, "send");
+                NotificationMessage n = new NotificationMessage(null, model, "model");
                 Messenger.Default.Send<NotificationMessage>(n);
             }
         }

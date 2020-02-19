@@ -4,6 +4,7 @@ using System.Threading;
 using System.Windows.Threading;
 using UserInterface.BaseError;
 using UserInterface.Command;
+using UserInterface.Model;
 
 namespace UserInterface.ViewModel
 {
@@ -11,7 +12,6 @@ namespace UserInterface.ViewModel
     {
         //flags for elements state
         #region Variables
-        private bool breakerState { get; set; }
         private bool disconector1State { get; set; }
         private bool disconector2State { get; set; }
         private bool ptState { get; set; }
@@ -21,6 +21,14 @@ namespace UserInterface.ViewModel
         private string disc1Id { get; set; }
         private string disc2Id { get; set; }
         private string breakerId { get; set; }
+
+        private Breaker breaker;
+        private Disconector disconector1;
+        private Disconector disconector2;
+        private Transformator transformator;
+        private AsynchronousMachine asynchronousMachine1;
+        private AsynchronousMachine asynchronousMachine2;
+        private Substation substationCurrent;
         #endregion
 
         #region Line_colors
@@ -44,6 +52,19 @@ namespace UserInterface.ViewModel
         #endregion
 
         #region Props
+        public Breaker Breaker
+        {
+            get { return breaker; }
+            set { breaker = value; OnPropertyChanged("Breaker"); }
+        }
+        public Disconector Disconector1 { get; set; }//TODO PROPS
+
+        public Substation SubstationCurrent
+        {
+            get { return substationCurrent; }
+            set { substationCurrent = value; OnPropertyChanged("SubstationCurrent"); }
+        }
+
         public string two_AM_Visible { get; set; }
         public string Two_AM_Visible
         {
@@ -418,22 +439,40 @@ namespace UserInterface.ViewModel
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Start();
 
-            Messenger.Default.Register<int>(this, (newValue) =>
+            DataSharingWithCommandingViewModels();
+        }
+
+        public void UpdateSubstationModel(Substation substation)
+        {
+            SubstationCurrent = substation;
+            Breaker = substation.Breaker;
+            //TODO
+        }
+
+        public void DataSharingWithCommandingViewModels()
+        {
+            Messenger.Default.Register<NotificationMessage>(this, (message) =>
             {
-                disconector1State = newValue == 1 ? true : false;
-                DisconectorOperation("1");
+                if (string.Compare(message.Notification, "Breaker") == 0)
+                {
+                    Breaker.State = ((Breaker)message.Target).NewState;
+                    BreakerOperation();
+                }
             });
         }
 
         public void setUpInitState()
         {
+            Breaker = new Breaker();
+
             populateUI();
             setState();
         }
 
         public void setState()
         {
-            breakerState = disconector1State = disconector2State =
+            Breaker.State = DiscreteState.ON;
+            disconector1State = disconector2State =
             ptState = true;
             pump1State = true;
             pump2State = true;
@@ -484,7 +523,7 @@ namespace UserInterface.ViewModel
         {
             CommandingWindow commandingWindow = new CommandingWindow();
 
-            CommandingWindowViewModel commandingWindowViewModel = new CommandingWindowViewModel();
+            CommandingWindowViewModel commandingWindowViewModel = new CommandingWindowViewModel(SubstationCurrent);
 
             commandingWindow.DataContext = commandingWindowViewModel;
 
@@ -511,7 +550,8 @@ namespace UserInterface.ViewModel
                         Disconector1Image = "Assets/recloser-on.png";
                         LineUpDis1 = LineDownDis1 = LineSecond = "#FF7DFB4E";
 
-                        if (breakerState)
+                        //if (breakerState)
+                        if(Breaker.State == DiscreteState.ON)
                         {
                             drawBreakerOn();
                         }
@@ -528,7 +568,7 @@ namespace UserInterface.ViewModel
                     {
                         disconector2State = true;
                         Disconector2Image = "Assets/recloser-on.png";
-                        if (disconector1State && breakerState)
+                        if (disconector1State && Breaker.State == DiscreteState.ON)
                             drawDis2On();
                     }
                     break;
@@ -539,15 +579,15 @@ namespace UserInterface.ViewModel
 
         public void BreakerOperation()
         {
-            if (!breakerState)
+            if (Breaker.State == DiscreteState.OFF)
             {
-                breakerState = true;
+                Breaker.State = DiscreteState.ON;
                 BreakerImage = "Assets/breaker-on.png";
                 drawBreakerOn();
             }
             else
             {
-                breakerState = false;
+                Breaker.State = DiscreteState.OFF;
                 BreakerImage = "Assets/breaker-off.png";
                 drawBreakerOff();
             }

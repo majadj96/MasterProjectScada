@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UserInterface.BaseError;
 
 namespace UserInterface.Model
 {
-    public class Breaker: IEquipment
+    public class Breaker : ValidationBase, IEquipment
     {
         private string mrid;
         private string gid;
@@ -14,6 +11,7 @@ namespace UserInterface.Model
         private string description;
         private string time;
         private DiscreteState state;
+        private DiscreteState newState;
 
         public Breaker(string mRID, string gID, string name, string description, string time, DiscreteState state)
         {
@@ -33,6 +31,29 @@ namespace UserInterface.Model
         public string Description { get => description; set => description = value; }
         public string Time { get => time; set => time = value; }
         public DiscreteState State { get => state; set => state = value; }
+        public DiscreteState NewState
+        {
+            get { return newState; }
+            set
+            {
+                newState = value;
+                OnPropertyChanged("NewState");
+            }
+        }
 
+        protected override void ValidateSelf()
+        {
+            /*if (NewState > 1 || NewState < 0)
+            {
+                this.ValidationErrors["NewState"] = "NewState cannot be less then 0 or more then 1...";
+            }*/
+        }
+
+        public void AddErrorNewState(string message)
+        {
+            this.ValidationErrors["NewState"] = message;
+            this.OnPropertyChanged("IsValid");
+            this.OnPropertyChanged("ValidationErrors");
+        }
     }
 }

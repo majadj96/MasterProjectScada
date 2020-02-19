@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using UserInterface.BaseError;
 using UserInterface.Command;
+using UserInterface.Model;
 
 namespace UserInterface.ViewModel
 {
@@ -38,7 +39,7 @@ namespace UserInterface.ViewModel
         }
         #endregion
 
-        public CommandDisconnectorViewModel()
+        public CommandDisconnectorViewModel(Disconector disconector)
         {
             Command = new MyICommand(CommandDisconnector);
         }
