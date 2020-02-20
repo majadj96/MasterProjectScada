@@ -33,6 +33,7 @@ namespace UserInterface
         
         public string statistics { get; set; }
         public string pubSub { get; set; }
+        public string switchLabel1 { get; set; }
         public string connectedStatusBar { get; set; }
         public string timeStampStatusBar { get; set; }
         public string gaugeValue { get; set; }
@@ -138,6 +139,19 @@ namespace UserInterface
                 OnPropertyChanged("AnguarValue");
             }
         }
+        public string SwitchLabel1
+        {
+            get
+            {
+                return switchLabel1;
+            }
+            set
+            {
+                switchLabel1 = value;
+                OnPropertyChanged("SwitchLabel1");
+            }
+        }
+
         public string PubSub
         {
             get
@@ -170,6 +184,11 @@ namespace UserInterface
             timer.Tick += new EventHandler(Test);
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Start();
+
+            if (meshViewModel.BreakerState)
+                SwitchLabel1 = "ON";
+            else
+                SwitchLabel1 = "OFF";
         }
 
 

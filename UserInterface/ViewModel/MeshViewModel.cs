@@ -21,6 +21,8 @@ namespace UserInterface.ViewModel
         private string disc1Id { get; set; }
         private string disc2Id { get; set; }
         private string breakerId { get; set; }
+
+        public string switchLabel1 { get; set; }
         #endregion
 
         #region Line_colors
@@ -44,7 +46,21 @@ namespace UserInterface.ViewModel
         #endregion
 
         #region Props
+        public string SwitchLabel1
+        {
+            get
+            {
+                return switchLabel1;
+            }
+            set
+            {
+                switchLabel1 = value;
+                OnPropertyChanged("SwitchLabel1");
+            }
+        }
         public string two_AM_Visible { get; set; }
+
+
         public string Two_AM_Visible
         {
             get
@@ -91,6 +107,43 @@ namespace UserInterface.ViewModel
             {
                 breakerId = value;
                 OnPropertyChanged("BreakerId");
+            }
+        }
+
+        public bool BreakerState
+        {
+            get
+            {
+                return breakerState;
+            }
+            set
+            {
+                breakerState = value;
+                OnPropertyChanged("BreakerState");
+            }
+        }
+        public bool Disconector1State
+        {
+            get
+            {
+                return disconector1State;
+            }
+            set
+            {
+                disconector1State = value;
+                OnPropertyChanged("Disconector1State");
+            }
+        }
+        public bool Disconector2State
+        {
+            get
+            {
+                return disconector2State;
+            }
+            set
+            {
+                disconector2State = value;
+                OnPropertyChanged("Disconector1State");
             }
         }
         #endregion
@@ -439,6 +492,9 @@ namespace UserInterface.ViewModel
             pump2State = true;
             pumpState = true;
         }
+
+      
+
         public void populateUI()
         {
             //Green color: #FF7DFB4E
@@ -504,6 +560,7 @@ namespace UserInterface.ViewModel
                         Disconector1Image = "Assets/resloser-off.png";
                         LineUpDis1 = LineDownDis1 = LineSecond = "#FFFF634D";
                         drawBreakerOff();
+
                     }
                     else
                     {
@@ -544,12 +601,14 @@ namespace UserInterface.ViewModel
                 breakerState = true;
                 BreakerImage = "Assets/breaker-on.png";
                 drawBreakerOn();
+                SwitchLabel1 = "ON";
             }
             else
             {
                 breakerState = false;
                 BreakerImage = "Assets/breaker-off.png";
                 drawBreakerOff();
+                SwitchLabel1 = "OFF";
             }
         }
 
