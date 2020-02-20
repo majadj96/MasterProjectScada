@@ -44,12 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackEnd_FrontEnd\AnalogPoint.cs" />
-    <Compile Include="BackEnd_FrontEnd\DigitalPoint.cs" />
-    <Compile Include="BackEnd_FrontEnd\IInputObject.cs" />
-    <Compile Include="BackEnd_FrontEnd\INDSBasePointCacheItems.cs" />
-    <Compile Include="BackEnd_FrontEnd\InputObject.cs" />
-    <Compile Include="BackEnd_FrontEnd\ProcessingObject.cs" />
+    <Compile Include="ComandingModel\FEPCommandObject.cs" />
+    <Compile Include="ComandingModel\CommandObject.cs" />
+    <Compile Include="Interfaces\IConfigItem.cs" />
+    <Compile Include="ProcesingModel\AnalogPoint.cs" />
+    <Compile Include="ProcesingModel\DigitalPoint.cs" />
+    <Compile Include="ProcesingModel\IInputObject.cs" />
+    <Compile Include="ProcesingModel\INDSBasePointCacheItems.cs" />
+    <Compile Include="ProcesingModel\InputObject.cs" />
+    <Compile Include="ProcesingModel\ProcessingObject.cs" />
     <Compile Include="Connection\IConnection.cs" />
     <Compile Include="Connection\TCPConnection.cs" />
     <Compile Include="CRCCalculator\CRCCalculator.cs" />
@@ -58,15 +61,11 @@
     <Compile Include="Database\IAlarm.cs" />
     <Compile Include="Database\IEvent.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="Interfaces\IAnalogPoint.cs" />
-    <Compile Include="Interfaces\IConfigItem.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
-    <Compile Include="Interfaces\IDigitalPoint.cs" />
     <Compile Include="Interfaces\IDNP3Functions.cs" />
     <Compile Include="Interfaces\IFunctionExecutor.cs" />
     <Compile Include="Interfaces\INDSConfigItem.cs" />
     <Compile Include="Interfaces\INDSConfiguration.cs" />
-    <Compile Include="Interfaces\IPoint.cs" />
     <Compile Include="Interfaces\IProcessingManager.cs" />
     <Compile Include="Interfaces\IStorage.cs" />
     <Compile Include="NDSDataModel\AnalogPointCacheItem.cs" />
@@ -76,6 +75,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceContract\IAlarmEventService.cs" />
     <Compile Include="ServiceContract\IBackEndProessingData.cs" />
+    <Compile Include="ServiceContract\ICommandingServiceContract.cs" />
     <Compile Include="ServiceContract\IFieldCommunicationService.cs" />
     <Compile Include="ServiceContract\IPointUpdateService.cs" />
     <Compile Include="ServiceContract\IStateUpdateService.cs" />

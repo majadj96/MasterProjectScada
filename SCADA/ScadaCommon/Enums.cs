@@ -45,6 +45,12 @@ namespace ScadaCommon
         COUNTER_INPUT_16 = 0x05,
     }
 
+    public enum CommandResult : short
+    {
+        Success = 0,
+        Failure = 1
+    }
+
     public enum TypeField : short
     {
         BINARY_INPUT_PACKED_FORMAT = 0x0101,

@@ -55,7 +55,7 @@
     <Compile Include="FrontEndProcessorServiceProxy.cs" />
     <Compile Include="NDSConfigurationProxy.cs" />
     <Compile Include="NetworkDynamicServiceHost.cs" />
-    <Compile Include="PointOperateService.cs" />
+    <Compile Include="CommandingService.cs" />
     <Compile Include="ProxyPool\PointUpdateProxy.cs" />
     <Compile Include="StateUpdater\StateUpdateService.cs" />
     <Compile Include="Program.cs" />

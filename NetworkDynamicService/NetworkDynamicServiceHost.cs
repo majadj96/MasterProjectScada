@@ -20,6 +20,7 @@ namespace NetworkDynamicService
         private NDSConfigurationProxy ndSConfigurationProxy;
         private AlarmEventServiceProxy alarmEventServiceProxy;
         private BackEndPocessingModule backEndPocessingModule;
+        private ICommandingServiceContract commandingService;
         private INDSRealTimePointCache nDSRealTimePointCache;
         private ModelUpdateContract modelUpdateContract;
         private ITransactionSteps transactionService;
@@ -39,6 +40,7 @@ namespace NetworkDynamicService
             transactionService =  new TransactionService(nDSRealTimePointCache, OpenProxies);
             modelUpdateContract = new ModelUpdateContract(nDSRealTimePointCache, ndSConfigurationProxy, transactionService);
             stateUpdateService = new StateUpdateService(stateUpdateProxy);
+            commandingService = new CommandingService();
             InitializeHosts();
         }
 
@@ -76,8 +78,8 @@ namespace NetworkDynamicService
             hosts = new List<ServiceHost>();
             hosts.Add(new ServiceHost(backEndPocessingModule));
             hosts.Add(new ServiceHost(stateUpdateService));
-            hosts.Add(new ServiceHost(typeof(PointOperateService)));
-            hosts.Add(new ServiceHost(modelUpdateContract)); //transaction
+            hosts.Add(new ServiceHost(commandingService));
+            hosts.Add(new ServiceHost(modelUpdateContract));
         }
 
         public void Dispose()
