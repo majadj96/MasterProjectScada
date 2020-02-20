@@ -10,7 +10,7 @@ namespace AlarmEventServiceDatabase
     [ServiceKnownType(typeof(Event))]
     public class EventServiceOperations : IEventServiceOperations
     {
-        public bool AddEvent(IEvent newEvent)
+        public bool AddEvent(Event newEvent)
         {
             using (AccessDB db = new AccessDB())
             {

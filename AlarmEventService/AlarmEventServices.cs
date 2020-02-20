@@ -16,7 +16,7 @@ namespace AlarmEventService
             eventServiceClient = new EventServiceRef.EventServiceOperationsClient();
         }
 
-        public bool AcknowledgeAlarm(IAlarm alarm)
+        public bool AcknowledgeAlarm(Alarm alarm)
         {
             bool ret = true;
             if (alarm == null)
@@ -30,7 +30,7 @@ namespace AlarmEventService
             return ret;
         }
 
-        public bool AddAlarm(IAlarm alarm)
+        public bool AddAlarm(Alarm alarm)
         {
             bool ret = true;
             if (alarm == null)
@@ -41,7 +41,7 @@ namespace AlarmEventService
             return ret;
         }
 
-        public bool AddEvent(IEvent newEvent)
+        public bool AddEvent(Event newEvent)
         {
             bool ret = true;
             if (newEvent == null)

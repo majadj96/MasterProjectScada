@@ -9,7 +9,7 @@ namespace AlarmEventServiceDatabase
     public interface IEventServiceOperations
     {
         [OperationContract]
-        bool AddEvent(IEvent newEvent);
+        bool AddEvent(Event newEvent);
 
         [OperationContract]
         List<Event> GetAllEvents();

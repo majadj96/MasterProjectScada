@@ -9,7 +9,7 @@ namespace BackEndProcessorService.Proxy
     {
         public AlarmEventServiceProxy(string endpointName) : base(endpointName) { }
 
-        public bool AcknowledgeAlarm(IAlarm alarm)
+        public bool AcknowledgeAlarm(Alarm alarm)
         {
             if (Channel.AcknowledgeAlarm(alarm))
                 return true;
@@ -17,7 +17,7 @@ namespace BackEndProcessorService.Proxy
             return false;
         }
 
-        public bool AddAlarm(IAlarm alarm)
+        public bool AddAlarm(Alarm alarm)
         {
             if (Channel.AddAlarm(alarm))
                 return true;
@@ -25,7 +25,7 @@ namespace BackEndProcessorService.Proxy
             return false;
         }
 
-        public bool AddEvent(IEvent newEvent)
+        public bool AddEvent(Event newEvent)
         {
             if (Channel.AddEvent(newEvent))
                 return true;

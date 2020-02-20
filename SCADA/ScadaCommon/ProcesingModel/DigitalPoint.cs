@@ -16,6 +16,13 @@ namespace ScadaCommon.BackEnd_FrontEnd
         }
 
         [DataMember]
+        public int NormalValue { get; set; }
+        [DataMember]
+        public int MinValue { get; set; }
+        [DataMember]
+        public int MaxValue { get; set; }
+
+        [DataMember]
         public DState State
         {
             get; set;

@@ -16,6 +16,13 @@ namespace ScadaCommon.BackEnd_FrontEnd
         }
 
         [DataMember]
+        public float NormalValue { get; set; }
+        [DataMember]
+        public float MinValue { get; set; }
+        [DataMember]
+        public float MaxValue { get; set; }
+
+        [DataMember]
         public double EguValue
         {
             get;
