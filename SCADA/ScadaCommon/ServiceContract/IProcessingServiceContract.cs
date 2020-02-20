@@ -5,7 +5,7 @@ using System.ServiceModel;
 namespace ScadaCommon.ServiceContract
 {
     [ServiceContract]
-    public interface IBackEndProessingData
+    public interface IProcessingServiceContract
     {
         [OperationContract]
         void Process(ProcessingObject[] inputObj);

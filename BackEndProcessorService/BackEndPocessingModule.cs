@@ -7,24 +7,26 @@ using ScadaCommon.ServiceContract;
 
 namespace BackEndProcessorService
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
-    public class BackEndPocessingModule : IBackEndProessingData
+    public class BackEndPocessingModule : IBackendProcessor
     {
         private IPointUpdateService pointUpdateProxy;
         private AlarmEventServiceProxy alarmEventServiceProxy;
-        public List<IProcessingData> ProcessingModules { get; set; }
+        public List<IProcessingData> ProcessingPipeline { get; set; }
+        public List<IProcessingData> CommandingPipeline { get; set; }
         public BackEndPocessingModule(IPointUpdateService pointUpdateProxy, AlarmEventServiceProxy alarmEventServiceProxy)
         {
             this.alarmEventServiceProxy = alarmEventServiceProxy;
             InitializeProcessingModules();
             this.pointUpdateProxy = pointUpdateProxy;
+            ProcessingPipeline = new List<IProcessingData>();
+            CommandingPipeline = new List<IProcessingData>();
         }
 
         public void Process(ProcessingObject[] inputObj)
         {
             for (int index = 0; index < inputObj.Length; index++)
             {
-                foreach (var item in ProcessingModules)
+                foreach (var item in ProcessingPipeline)
                 {
                     item.Process(inputObj);
                 }
@@ -33,11 +35,24 @@ namespace BackEndProcessorService
             this.pointUpdateProxy.UpdatePoint(inputObj);
         }
 
+        public void CommandingProcess(ProcessingObject[] inputObj)
+        {
+            for (int index = 0; index < inputObj.Length; index++)
+            {
+                foreach (var item in CommandingPipeline)
+                {
+                    item.Process(inputObj);
+                }
+            }
+        }
+
         private void InitializeProcessingModules()
         {
-            this.ProcessingModules = new List<IProcessingData>();
-            this.ProcessingModules.Add(new EGUModule());
-            this.ProcessingModules.Add(new AlarmingModule(this.alarmEventServiceProxy));
+            this.ProcessingPipeline.Add(new EGUConverterModule());
+            this.ProcessingPipeline.Add(new AlarmingModule(this.alarmEventServiceProxy));
+
+            this.CommandingPipeline.Add(new AlarmingModule(this.alarmEventServiceProxy));
+            this.CommandingPipeline.Add(new RawConverterModule());
         }
     }
 }

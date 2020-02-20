@@ -12,39 +12,42 @@ namespace NetworkDynamicService
 {
     public class CommandingService : ICommandingServiceContract
     {
-
-        public CommandingService()
+        private IFEPCommandingServiceContract fepCmdProxy;
+        private IBackendProcessor backendProcessor;
+        public CommandingService(IFEPCommandingServiceContract fepCmdProxy, IBackendProcessor backendProcessor)
         {
+            this.fepCmdProxy = fepCmdProxy;
+            this.backendProcessor = backendProcessor;
         }
 
         public CommandResult ReadAnalogInput(CommandObject command)
         {
-            throw new NotImplementedException();
+            return CommandResult.Success;
         }
 
         public CommandResult ReadAnalogOutput(CommandObject command)
         {
-            throw new NotImplementedException();
+            return CommandResult.Success;
         }
 
         public CommandResult ReadDigitalInput(CommandObject command)
         {
-            throw new NotImplementedException();
+            return CommandResult.Success;
         }
 
         public CommandResult ReadDigitalOutput(CommandObject command)
         {
-            throw new NotImplementedException();
+            return CommandResult.Success;
         }
 
         public CommandResult WriteAnalogOutput(CommandObject command)
         {
-            throw new NotImplementedException();
+            return CommandResult.Success;
         }
 
         public CommandResult WriteDigitalOutput(CommandObject command)
         {
-            throw new NotImplementedException();
+            return CommandResult.Success;
         }
     }
 }

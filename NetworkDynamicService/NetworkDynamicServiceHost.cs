@@ -26,6 +26,8 @@ namespace NetworkDynamicService
         private ITransactionSteps transactionService;
         private IStateUpdateService stateUpdateService;
         private StateUpdateServiceProxy stateUpdateProxy;
+        private FepCommandingServiceProxy fepCmdProxy;
+        private IProcessingServiceContract processingService;
 
         public NetworkDynamicServiceHost()
         {
@@ -33,14 +35,16 @@ namespace NetworkDynamicService
             alarmEventServiceProxy = new AlarmEventServiceProxy("AlarmEventServiceEndPoint");
             ndSConfigurationProxy = new NDSConfigurationProxy("IFEPConfigService");
             stateUpdateProxy = new StateUpdateServiceProxy("StateUpdateServiceEndPoint");
+            fepCmdProxy = new FepCommandingServiceProxy("FEPCommandingServiceContract");
 
             nDSRealTimePointCache = new NDSRealTimePointCache();
-
             backEndPocessingModule = new BackEndPocessingModule(pointUpdateProxy, this.alarmEventServiceProxy);
+
             transactionService =  new TransactionService(nDSRealTimePointCache, OpenProxies);
             modelUpdateContract = new ModelUpdateContract(nDSRealTimePointCache, ndSConfigurationProxy, transactionService);
             stateUpdateService = new StateUpdateService(stateUpdateProxy);
-            commandingService = new CommandingService();
+            commandingService = new CommandingService(fepCmdProxy, backEndPocessingModule);
+            processingService = new ProcessingService(backEndPocessingModule);
             InitializeHosts();
         }
 
@@ -55,6 +59,7 @@ namespace NetworkDynamicService
             alarmEventServiceProxy.Open();
             //ndSConfigurationProxy.Open();
             stateUpdateProxy.Open();
+            fepCmdProxy.Open();
         }
 
         private void StartHosts()
@@ -76,10 +81,11 @@ namespace NetworkDynamicService
         private void InitializeHosts()
         {
             hosts = new List<ServiceHost>();
-            hosts.Add(new ServiceHost(backEndPocessingModule));
             hosts.Add(new ServiceHost(stateUpdateService));
             hosts.Add(new ServiceHost(commandingService));
             hosts.Add(new ServiceHost(modelUpdateContract));
+            hosts.Add(new ServiceHost(commandingService));
+            hosts.Add(new ServiceHost(processingService));
         }
 
         public void Dispose()
