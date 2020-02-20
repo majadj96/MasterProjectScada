@@ -12,11 +12,9 @@ namespace NetworkDynamicService
 {
     public class CommandingService : ICommandingServiceContract
     {
-        private FrontEndProcessorServiceProxy fepsProxy = new FrontEndProcessorServiceProxy("FieldCommunicationServiceEndPoint");
 
         public CommandingService()
         {
-            fepsProxy.Open();
         }
 
         public CommandResult ReadAnalogInput(CommandObject command)

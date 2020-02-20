@@ -74,7 +74,7 @@
     <Compile Include="ServiceContract\IAlarmEventService.cs" />
     <Compile Include="ServiceContract\IBackEndProessingData.cs" />
     <Compile Include="ServiceContract\ICommandingServiceContract.cs" />
-    <Compile Include="ServiceContract\IFieldCommunicationService.cs" />
+    <Compile Include="ServiceContract\IFEPCommandingServiceContract.cs" />
     <Compile Include="ServiceContract\IPointUpdateService.cs" />
     <Compile Include="ServiceContract\IStateUpdateService.cs" />
     <Compile Include="ServiceProxies\NetworkDynamicServiceProxy.cs" />

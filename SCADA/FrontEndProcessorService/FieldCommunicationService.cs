@@ -16,7 +16,7 @@ using ScadaCommon.NDSDataModel;
 namespace FrontEndProcessorService
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
-    public class FieldCommunicationService : IDisposable, IStorage, IFieldCommunicationService
+    public class FieldCommunicationService : IDisposable, IStorage
     {
         #region Fields
         private Thread timerWorker;
@@ -143,31 +143,26 @@ namespace FrontEndProcessorService
 
         public void WriteAnalogOutput(int address, int value)
         {
-            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.ANALOG_OUTPUT, (ushort)address));
             this.processingManager.ExecuteWriteCommand(PointType.ANALOG_OUTPUT, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, value);
         }
 
         public void ReadDigitalInput(int address)
         {
-            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.DIGITAL_INPUT, (ushort)address));
             this.processingManager.ExecuteReadCommand(PointType.DIGITAL_INPUT, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
         }
 
         public void ReadAnalogInput(int address)
         {
-            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.ANALOG_INPUT, (ushort)address));
             this.processingManager.ExecuteReadCommand(PointType.ANALOG_INPUT, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
         }
 
         public void ReadDigitalOutput(int address)
         {
-            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.DIGITAL_OUTPUT, (ushort)address));
             this.processingManager.ExecuteReadCommand(PointType.DIGITAL_OUTPUT, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
         }
 
         public void ReadAnalogOutput(int address)
         {
-            int key = PointIdentifierHelper.GetNewPointId(new PointIdentifier(PointType.ANALOG_OUTPUT, (ushort)address));
             this.processingManager.ExecuteReadCommand(PointType.ANALOG_OUTPUT, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
         }
     }
