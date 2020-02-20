@@ -15,7 +15,6 @@ using ScadaCommon.NDSDataModel;
 
 namespace FrontEndProcessorService
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class FieldCommunicationService : IDisposable, IStorage
     {
         #region Fields
@@ -49,6 +48,16 @@ namespace FrontEndProcessorService
                 }
 			}
 		}
+
+        public IConfiguration Configuration
+        {
+            get { return configuration; }
+        }
+
+        public IProcessingManager ProcessingManager
+        {
+            get { return processingManager; }
+        }
 
 		#endregion Properties
 
@@ -135,35 +144,5 @@ namespace FrontEndProcessorService
 			}
 			return retVal;
 		}
-
-        public void WriteDigitalOutput(int address, int value)
-        {
-            this.processingManager.ExecuteWriteCommand(PointType.DIGITAL_OUTPUT, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, value);
-        }
-
-        public void WriteAnalogOutput(int address, int value)
-        {
-            this.processingManager.ExecuteWriteCommand(PointType.ANALOG_OUTPUT, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, value);
-        }
-
-        public void ReadDigitalInput(int address)
-        {
-            this.processingManager.ExecuteReadCommand(PointType.DIGITAL_INPUT, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
-        }
-
-        public void ReadAnalogInput(int address)
-        {
-            this.processingManager.ExecuteReadCommand(PointType.ANALOG_INPUT, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
-        }
-
-        public void ReadDigitalOutput(int address)
-        {
-            this.processingManager.ExecuteReadCommand(PointType.DIGITAL_OUTPUT, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
-        }
-
-        public void ReadAnalogOutput(int address)
-        {
-            this.processingManager.ExecuteReadCommand(PointType.ANALOG_OUTPUT, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, 0);
-        }
     }
 }

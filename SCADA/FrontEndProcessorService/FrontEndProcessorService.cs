@@ -14,12 +14,14 @@ namespace FrontEndProcessorService
     {
         private List<ServiceHost> hosts = null;
         private FieldCommunicationService fieldCommunicationService;
+        private FEPCommandingService fEPCommandingService;
         private IFEPConfigService nDSConfigurationService;
         
 
         public FrontEndProcessorService()
         {
             fieldCommunicationService = new FieldCommunicationService();
+            fEPCommandingService = new FEPCommandingService(this.fieldCommunicationService.ProcessingManager, this.fieldCommunicationService.Configuration);
             nDSConfigurationService = new NDSConfigurationService(StartFCS);
             InitializeHosts();
         }
@@ -50,8 +52,8 @@ namespace FrontEndProcessorService
         private void InitializeHosts()
         {
             hosts = new List<ServiceHost>();
-            hosts.Add(new ServiceHost(fieldCommunicationService));
             hosts.Add(new ServiceHost(nDSConfigurationService));
+            hosts.Add(new ServiceHost(fEPCommandingService));
         }
 
         public void CloseHosts()
