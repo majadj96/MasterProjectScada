@@ -8,6 +8,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
+using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Threading;
 using UserInterface.BaseError;
 using UserInterface.Command;
@@ -22,8 +24,9 @@ namespace UserInterface
         public MyICommand<string> ButtonTablesCommand { get; private set; }
         
         private MeshViewModel meshViewModel = new MeshViewModel();
-        
-        
+
+        private ObservableCollection<RadioButton> radioButtons = new ObservableCollection<RadioButton>();
+
         #region Variables
         private BindableBase currentMeshViewModel;
         private BindableBase currentTableViewModel;
@@ -75,6 +78,18 @@ namespace UserInterface
             {
                 substationItems = value;
                 OnPropertyChanged("SubstationItems");
+            }
+        }
+        public ObservableCollection<RadioButton> RadioButtons
+        {
+            get
+            {
+                return radioButtons;
+            }
+            set
+            {
+                radioButtons = value;
+                OnPropertyChanged("RadioButtons");
             }
         }
 
@@ -170,6 +185,7 @@ namespace UserInterface
             timer.Tick += new EventHandler(Test);
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Start();
+            Messenger.Default.Register<NotificationMessage>(this, (message) => { PopulateModel(message.Target); });
         }
 
 
@@ -270,7 +286,7 @@ namespace UserInterface
         public Substation getMySubstation(List<Property> properties)
         {
             Property subGid = properties.Where(x => x.Id == ModelCode.EQUIPMENT_EQUIPCONTAINER).FirstOrDefault();
-            return Substations[int.Parse(subGid.PropertyValue.LongValue.ToString())];
+            return Substations[long.Parse(subGid.PropertyValue.LongValue.ToString())];
         }
 
         public Substation getSubstationForTapChaner(List<Property> properties, List<ResourceDescription> resources)
@@ -282,17 +298,54 @@ namespace UserInterface
             return getMySubstation(pt.Properties);
         }
 
+        public void setRadioButtons()
+        {
+            ObservableCollection<RadioButton> test = new ObservableCollection<RadioButton>();
+            int i = 0;
+            foreach(KeyValuePair<long, Substation> sub in substations)
+            {
+                RadioButton rb = new RadioButton() { Content = (i+1) + ". " + sub.Value.Name + "(" + sub.Key + ")", IsChecked = i == 0 };
+                rb.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFE8D856"));
+                rb.Checked += (sender, args) =>
+                {
+                    foreach (RadioButton radioBut in test)
+                    {
+                        if(radioBut.Tag != (sender as RadioButton).Tag)
+                        {
+                            radioBut.IsChecked = false;
+                        }
+                    }
+
+                    String[] gidList = (sender as RadioButton).Content.ToString().Split('(');
+                    String[] gidL = gidList[1].Split(')');
+                    String gid = gidL[0];
+                    setSelectedSubstation(gid);
+
+
+                    RadioButtons = test;
+                };
+                rb.Tag = i;
+                i++;
+                test.Add(rb);
+            }
+            RadioButtons = test;
+        }
+
+        public void setSelectedSubstation(String gid) { }
+
         public void setModel(List<ResourceDescription> resources)
         {
             int numberOfSubstations = resources.Where(x => (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.SUBSTATION)).Count();
 
             foreach (ResourceDescription sub in resources.Where(x => ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.SUBSTATION))
             {
-                Substation substation = new Substation();
+                Property name = sub.Properties.Where(x => x.Id == ModelCode.IDOBJ_NAME).FirstOrDefault();
+                Property description = sub.Properties.Where(x => x.Id == ModelCode.IDOBJ_DESC).FirstOrDefault();
+                Substation substation = new Substation(name.GetValue().ToString(), description.GetValue().ToString());
                 Property gid = sub.Properties.Where(x => x.Id == ModelCode.IDOBJ_GID).FirstOrDefault();
                 substations.Add((long)gid.GetValue(), substation);
             }
-
+            setRadioButtons();
             foreach (ResourceDescription resource in resources.Where(x => (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.DISCONNECTOR) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.BREAKER) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.RATIOTAPCHANGER) ||

@@ -8,9 +8,9 @@ namespace UserInterface.Model
 {
     public class Substation
     {
-        private Disconector disconector_1;
-        private Disconector disconector_2;
-
+        private string description;
+        private string name;
+    
         private Breaker breaker;
 
         private Transformator transformator;
@@ -20,10 +20,12 @@ namespace UserInterface.Model
         private List<AsynchronousMachine> asynchronousMachines;
         private List<Disconector> disconectors;
 
-        public Substation()
+        public Substation(string description, string name)
         {
             AsynchronousMachines = new List<AsynchronousMachine>();
             Disconectors = new List<Disconector>();
+            Description = description;
+            Name = name;
         }
 
         public Breaker Breaker { get => breaker; set => breaker = value; }
@@ -31,7 +33,7 @@ namespace UserInterface.Model
         public TapChanger TapChanger { get => tapChanger; set => tapChanger = value; }
         public List<AsynchronousMachine> AsynchronousMachines { get => asynchronousMachines; set => asynchronousMachines = value; }
         public List<Disconector> Disconectors { get => disconectors; set => disconectors = value; }
-
-
+        public string Description { get => description; set => description = value; }
+        public string Name { get => name; set => name = value; }
     }
 }

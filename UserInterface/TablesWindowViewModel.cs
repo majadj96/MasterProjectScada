@@ -36,7 +36,7 @@ namespace UserInterface
         {
             CurrentTableViewModel = tableViewModel;
 
-            Messenger.Default.Register<NotificationMessage>(tableViewModel, (message) => { tableViewModel.PopulateModel(message.Target); });
+           // Messenger.Default.Register<NotificationMessage>(tableViewModel, (message) => { tableViewModel.PopulateModel(message.Target); });
 
         }
 
