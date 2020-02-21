@@ -193,7 +193,7 @@
 		<cim:Discrete.minValue>0</cim:Discrete.minValue>
 		<cim:Discrete.normalValue>26</cim:Discrete.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
-		<cim:Measurement.measurementType></cim:Measurement.measurementType>
+		<cim:Measurement.measurementType>Discrete</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#RatioTC_1"/>
 		<cim:IdentifiedObject.description>Discrete measurement</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>Discrete_1</cim:IdentifiedObject.mRID>

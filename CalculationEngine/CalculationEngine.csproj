@@ -44,11 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalcEngine.cs" />
+    <Compile Include="Model\Analog.cs" />
+    <Compile Include="Model\Discrete.cs" />
+    <Compile Include="Model\IdObject.cs" />
     <Compile Include="TransactionStuff\ModelUpdateContract.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransactionStuff\TransactionService.cs" />
-    <Compile Include="TransactionStuff\UpdateModelServiceHost.cs" />
+    <Compile Include="TransactionStuff\CEServiceHost.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

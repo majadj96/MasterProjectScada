@@ -8,11 +8,12 @@ using TransactionManagerContracts;
 
 namespace CalculationEngine
 {
-    public class UpdateModelServiceHost : IDisposable
+    public class CEServiceHost : IDisposable
     {
         private List<ServiceHost> hosts = null;
+        private CalcEngine calcEngine = null;
 
-        public UpdateModelServiceHost()
+        public CEServiceHost()
         {
             InitializeHosts();
             StartHosts();
