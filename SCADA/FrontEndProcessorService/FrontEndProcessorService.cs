@@ -21,7 +21,7 @@ namespace FrontEndProcessorService
         public FrontEndProcessorService()
         {
             fieldCommunicationService = new FieldCommunicationService();
-            fEPCommandingService = new FEPCommandingService(this.fieldCommunicationService.ProcessingManager, this.fieldCommunicationService.Configuration);
+            fEPCommandingService = new FEPCommandingService(fieldCommunicationService.ProcessingManager, fieldCommunicationService.Configuration);
             nDSConfigurationService = new NDSConfigurationService(StartFCS);
             InitializeHosts();
         }
@@ -34,6 +34,7 @@ namespace FrontEndProcessorService
         private void StartFCS(Dictionary<Tuple<ushort, PointType>, BasePointCacheItem> model)
         {
             fieldCommunicationService.StartService(model);
+            Console.WriteLine("con" + fEPCommandingService.ProcessingManager);
         }
         private void StartHosts()
         {
@@ -47,7 +48,6 @@ namespace FrontEndProcessorService
                 host.Open();
             }
         }
-
 
         private void InitializeHosts()
         {

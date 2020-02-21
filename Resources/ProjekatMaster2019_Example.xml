@@ -178,9 +178,9 @@
 		<ftn:IdentifiedObject.name>Terminal_9</ftn:IdentifiedObject.name>
 	</cim:Terminal>
 	<cim:Analog rdf:ID="Analog_1">
-		<cim:Analog.maxValue>1</cim:Analog.maxValue>
+		<cim:Analog.maxValue>2000</cim:Analog.maxValue>
 		<cim:Analog.minValue>0</cim:Analog.minValue>
-		<cim:Analog.normalValue>0</cim:Analog.normalValue>
+		<cim:Analog.normalValue>150</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>CosPhi</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#AsyncM_1"/>
@@ -189,9 +189,9 @@
 		<ftn:IdentifiedObject.name>Analog_1</ftn:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Discrete rdf:ID="Discrete_1">
-		<cim:Discrete.maxValue>32</cim:Discrete.maxValue>
+		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0</cim:Discrete.minValue>
-		<cim:Discrete.normalValue>26</cim:Discrete.normalValue>
+		<cim:Discrete.normalValue>0</cim:Discrete.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType></cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#RatioTC_1"/>

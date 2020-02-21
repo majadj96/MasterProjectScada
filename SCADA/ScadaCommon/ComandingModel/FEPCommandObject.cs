@@ -9,7 +9,6 @@ namespace ScadaCommon.ComandingModel
     public class FEPCommandObject
     {
         private ushort adress;
-        private string commandOwner;
         private int rawValue;
 
         public ushort Address
@@ -21,17 +20,6 @@ namespace ScadaCommon.ComandingModel
             set
             {
                 adress = value;
-            }
-        }
-        public string CommandOwner
-        {
-            get
-            {
-                return commandOwner;
-            }
-            set
-            {
-                commandOwner = value;
             }
         }
         public int RawValue

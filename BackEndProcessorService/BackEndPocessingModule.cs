@@ -16,10 +16,10 @@ namespace BackEndProcessorService
         public BackEndPocessingModule(IPointUpdateService pointUpdateProxy, AlarmEventServiceProxy alarmEventServiceProxy)
         {
             this.alarmEventServiceProxy = alarmEventServiceProxy;
-            InitializeProcessingModules();
             this.pointUpdateProxy = pointUpdateProxy;
             ProcessingPipeline = new List<IProcessingData>();
             CommandingPipeline = new List<IProcessingData>();
+            InitializeProcessingModules();
         }
 
         public void Process(ProcessingObject[] inputObj)

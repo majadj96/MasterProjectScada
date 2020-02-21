@@ -43,7 +43,7 @@ namespace NetworkDynamicService
             transactionService =  new TransactionService(nDSRealTimePointCache, OpenProxies);
             modelUpdateContract = new ModelUpdateContract(nDSRealTimePointCache, ndSConfigurationProxy, transactionService);
             stateUpdateService = new StateUpdateService(stateUpdateProxy);
-            commandingService = new CommandingService(fepCmdProxy, backEndPocessingModule);
+            commandingService = new CommandingService(fepCmdProxy, backEndPocessingModule, nDSRealTimePointCache);
             processingService = new ProcessingService(backEndPocessingModule);
             InitializeHosts();
         }
@@ -55,10 +55,10 @@ namespace NetworkDynamicService
 
         private void OpenProxies()
         {
-            pointUpdateProxy.Open();
+            //pointUpdateProxy.Open();
             alarmEventServiceProxy.Open();
             //ndSConfigurationProxy.Open();
-            stateUpdateProxy.Open();
+            //stateUpdateProxy.Open();
             fepCmdProxy.Open();
         }
 
@@ -84,7 +84,6 @@ namespace NetworkDynamicService
             hosts.Add(new ServiceHost(stateUpdateService));
             hosts.Add(new ServiceHost(commandingService));
             hosts.Add(new ServiceHost(modelUpdateContract));
-            hosts.Add(new ServiceHost(commandingService));
             hosts.Add(new ServiceHost(processingService));
         }
 

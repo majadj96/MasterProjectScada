@@ -76,10 +76,10 @@ namespace FrontEndProcessorService
             ndsStateProxy.Open();
 
             configuration = new ConfigReader();
-            this.connection = new TCPConnection(configuration, ndsStateProxy);
-            this.commandExecutor = new FunctionExecutor(configuration, connection);
-            this.processingManager = new ProcessingManager(this, commandExecutor, ndsProxy);
-            this.acquisitor = new Acquisitor(acquisitionTrigger, this.processingManager, configuration);
+            connection = new TCPConnection(Configuration, ndsStateProxy);
+            commandExecutor = new FunctionExecutor(Configuration, connection);
+            processingManager = new ProcessingManager(this, commandExecutor, ndsProxy);
+            acquisitor = new Acquisitor(acquisitionTrigger, ProcessingManager, Configuration);
             InitializeAndStartThreads();
         }
 
