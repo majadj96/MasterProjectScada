@@ -1,5 +1,4 @@
-﻿using CalculationEngine.SCADAStuff;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -9,12 +8,12 @@ using TransactionManagerContracts;
 
 namespace CalculationEngine
 {
-    //TODO: Promeniti ime klase zato sto se koristi za razlicite vrste hostova
-    public class UpdateModelServiceHost : IDisposable
+    public class CEServiceHost : IDisposable
     {
         private List<ServiceHost> hosts = null;
+        private CalcEngine calcEngine = null;
 
-        public UpdateModelServiceHost()
+        public CEServiceHost()
         {
             InitializeHosts();
             StartHosts();
@@ -30,7 +29,6 @@ namespace CalculationEngine
         {
             hosts = new List<ServiceHost>();
             hosts.Add(new ServiceHost(typeof(ModelUpdateContract)));
-            hosts.Add(new ServiceHost(typeof(ScadaService)));
         }
 
         private void StartHosts()
