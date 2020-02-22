@@ -8,7 +8,7 @@
         xmlns:viewModel="clr-namespace:UserInterface.ViewModel"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="SCADA SISTEM" Height="890" Width="1522"  WindowState="Maximized" Background="LightGray" >
+        Title="SCADA SISTEM" Height="890" Width="1622"  WindowState="Maximized" Background="LightGray" >
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
@@ -17,7 +17,62 @@
         <DataTemplate DataType="{x:Type viewModel:MeshViewModel}">
             <views:MeshView/>
         </DataTemplate>
+        <Style TargetType="DataGrid">
+            <!-- On mouse hover -->
+            <Setter Property="BorderBrush" Value="#FF999999" />
+            <Setter Property="HorizontalGridLinesBrush" Value="#DDDDDD" />
+            <Setter Property="VerticalGridLinesBrush" Value="#DDDDDD" />
 
+            <Setter Property="RowStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridRow">
+                        <Style.Triggers>
+                            <!-- Highlight a grid row as the mouse passes over -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF999999" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="CellStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridCell">
+                        <Style.Triggers>
+                            <!-- On row select -->
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#FFDBC352" />
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                                <Setter Property="Foreground" Value="Black" />
+                            </Trigger>
+                        </Style.Triggers>
+                        <!-- Add some padding around the contents of a cell -->
+                        <Setter Property="Padding" Value="4,3,4,3" />
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="DataGridCell">
+                                    <Border Padding="{TemplateBinding Padding}" 
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            Background="{TemplateBinding Background}">
+                                        <ContentPresenter />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="FocusVisualStyle">
+                            <Setter.Value>
+                                <Style TargetType="Control">
+                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                </Style>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style TargetType="TabItem">
             <Setter Property="Template">
                 <Setter.Value>
@@ -153,12 +208,14 @@
 
     <Grid Background="#FF474747">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="357*"/>
+            <ColumnDefinition Width="121*"/>
+            <ColumnDefinition Width="686*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="37*"/>
-            <RowDefinition Height="525*"/>
-            <RowDefinition Height="35*"/>
+            <RowDefinition Height="53*"/>
+            <RowDefinition Height="566*"/>
+            <RowDefinition Height="189*"/>
+            <RowDefinition Height="51*"/>
         </Grid.RowDefinitions>
 
         <!--<DockPanel Margin="15,50,0,0" Grid.Row="1" Grid.Column="1" Background="#FF474747">
@@ -168,7 +225,7 @@
             </Menu>
         </DockPanel>-->
 
-        <Grid Grid.Row="1" Grid.Column="0" Margin="20,66,20,10" Background="#FF5E5E5E">
+        <Grid Grid.Row="1" Grid.Column="0" Margin="20,66,20,10" Background="#FF5E5E5E" Grid.ColumnSpan="2" Grid.RowSpan="2">
             <ContentControl Content="{Binding CurrentMeshViewModel}"/>
             <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,880,287" HorizontalAlignment="Right" Width="231" Height="27" VerticalAlignment="Bottom">Mesh Eletricity</Label>
             <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,920,588" HorizontalAlignment="Right" Width="237" Height="27" VerticalAlignment="Bottom">Mesh Power</Label>
@@ -177,10 +234,10 @@
             <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,85,586" HorizontalAlignment="Right" Width="233" Height="27" VerticalAlignment="Bottom">Water Presure</Label>
         </Grid>
 
-        <Canvas Background="#FF474747" Margin="10,714,20,39" Grid.Row="1" Grid.RowSpan="2"/>
+        <Canvas Background="#FF474747" Margin="10,152,20,35" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
 
-        <Label Content="{Binding PubSub}" Grid.Column="2" Margin="10,111,10,0" Grid.Row="1" VerticalAlignment="Top" Height="10"/>
-        <StatusBar Margin="10,11,10,0" Grid.Row="2" Grid.ColumnSpan="3">
+        <Label Content="{Binding PubSub}" Margin="10,111,10,0" Grid.Row="1" VerticalAlignment="Top" Height="10" Grid.ColumnSpan="2"/>
+        <StatusBar Margin="10,11,10,0" Grid.Row="3" Grid.ColumnSpan="2">
             <StatusBarItem>
                 <Label Content="{Binding TimeStampStatusBar}"   />
             </StatusBarItem>
@@ -194,29 +251,29 @@
             </StatusBarItem>
         </StatusBar>
 
-        <Button  Content="Summary Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="827,29,0,0" VerticalAlignment="Top" Width="145" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#258565" Foreground="White" BorderBrush="#FFC5C5C5"/>
-        <Button  Content="Alarm Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Alarm" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="1012,29,0,0" VerticalAlignment="Top" Width="116" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#FFFF6D6D" Foreground="White" BorderBrush="#FFC5C5C5"/>
-        <Button  Content="Event Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Event" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="1166,29,0,0" VerticalAlignment="Top" Width="118" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#326492" Foreground="White" BorderBrush="#FFC5C5C5"/>
-        <Label Content="Select Substation" HorizontalAlignment="Left" Margin="66,10,0,0" HorizontalContentAlignment="Center" VerticalAlignment="Top" Height="38" Width="184" RenderTransformOrigin="0.5,0.5" Foreground="#FFF5D856" FontFamily="Consolas" FontSize="18" Grid.Row="1"/>
+        <Button  Content="Summary Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="585,29,0,0" VerticalAlignment="Top" Width="145" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#258565" Foreground="White" BorderBrush="#FFC5C5C5" Grid.Column="1"/>
+        <Button  Content="Alarm Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Alarm" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="770,29,0,0" VerticalAlignment="Top" Width="116" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#FFFF6D6D" Foreground="White" BorderBrush="#FFC5C5C5" Grid.Column="1"/>
+        <Button  Content="Event Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Event" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="924,29,0,0" VerticalAlignment="Top" Width="118" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#326492" Foreground="White" BorderBrush="#FFC5C5C5" Grid.Column="1"/>
+        <Label Content="Select Substation" HorizontalAlignment="Left" Margin="37,37,0,0" HorizontalContentAlignment="Center" VerticalAlignment="Top" Height="38" Width="292" RenderTransformOrigin="0.5,0.5" Foreground="#FFF5D856" FontFamily="Consolas" FontSize="18" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
 
-        <lvc:Gauge Grid.Row="1" Grid.Column="0" Margin="970,158,413,469"
+        <lvc:Gauge Grid.Row="1" Grid.Column="1" Margin="728,158,413,280"
                    Uses360Mode="True"
                    From="0" To="100" Value="{Binding GaugeValue}"
                    HighFontSize="20" Foreground="White"
                    InnerRadius="0" GaugeBackground="#7F549EE9"/>
 
-        <lvc:AngularGauge Grid.Row="1" Value="{Binding AnguarValue}" FromValue="0" ToValue="5" 
+        <lvc:AngularGauge Grid.Row="1" Value="{Binding AnguarValue}" FromValue="-7" ToValue="7" 
                           LabelsStep="1" TicksStep="1" Wedge="300"
                           TicksForeground="White" Foreground="White" 
                           FontWeight="Bold" FontSize="10"
-                          SectionsInnerRadius="0.5" Margin="970,424,413,207">
+                          SectionsInnerRadius="0.5" Margin="726,434,415,8" Grid.Column="1">
             <lvc:AngularGauge.Sections>
-                <lvc:AngularSection FromValue="0" ToValue="5" Fill="#FFFF8C4A"/>
+                <lvc:AngularSection FromValue="-7" ToValue="7" Fill="#FFFF8C4A"/>
             </lvc:AngularGauge.Sections>
         </lvc:AngularGauge>
 
         <lvc:Gauge Grid.Row="1"
-                   From="0" To="1000" Value="{Binding GaugeClasic}" Margin="1216,139,63,469">
+                   From="0" To="1000" Value="{Binding GaugeClasic}" Margin="974,139,63,280" Grid.Column="1">
             <lvc:Gauge.GaugeActiveFill>
                 <LinearGradientBrush>
                     <GradientStop Color="#FF00FFE8" Offset="0.0" />
@@ -226,7 +283,7 @@
             </lvc:Gauge.GaugeActiveFill>
         </lvc:Gauge>
         <lvc:Gauge Grid.Row="1"
-            From="0" To="1000" Value="{Binding GaugeClasic}" Margin="373,447,906,162">
+            From="0" To="1000" Value="{Binding GaugeClasic}" Margin="131,447,906,162" Grid.Column="1" Grid.RowSpan="2">
             <lvc:Gauge.GaugeActiveFill>
                 <LinearGradientBrush>
                     <GradientStop Color="#FFFFE800" Offset="0.0" />
@@ -236,7 +293,7 @@
             </lvc:Gauge.GaugeActiveFill>
         </lvc:Gauge>
         <lvc:Gauge Grid.Row="1"
-            From="0" To="1000" Value="{Binding GaugeClasic}" Margin="373,139,906,469">
+            From="0" To="1000" Value="{Binding GaugeClasic}" Margin="131,139,906,280" Grid.Column="1">
             <lvc:Gauge.GaugeActiveFill>
                 <LinearGradientBrush>
                     <GradientStop Color="#FF72FF53" Offset="0.0" />
@@ -245,8 +302,17 @@
                 </LinearGradientBrush>
             </lvc:Gauge.GaugeActiveFill>
         </lvc:Gauge>
-        <Canvas Background="#FF474747" Margin="20,58,1222,27" Grid.Row="1">
-            <StackPanel x:Name="SubstationsPanel" Height="660" Canvas.Top="10" Width="272">
+        <Canvas Background="#FF474747" Margin="20,58,1222,10" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2">
+            <DataGrid x:Name="dataGridSub"
+            ItemsSource="{Binding SubstationsList , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding SelectedSubstation}" HorizontalAlignment="Left" CanUserResizeRows="False" HorizontalScrollBarVisibility="Disabled" VerticalAlignment="Bottom" Height="551" Width="296" AutoGenerateColumns="False" IsReadOnly="True" FontFamily="Consolas" FontSize="14" Background="#66F0F0F0" Canvas.Left="9" Canvas.Top="6">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Width="150" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="GID" Width="150" Binding="{Binding Gid}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <StackPanel x:Name="SubstationsPanel" Height="683" Canvas.Top="10" Width="272">
                 <ItemsControl FontFamily="Consolas" ItemsSource="{Binding RadioButtons}" FontSize="16">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -255,6 +321,21 @@
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </StackPanel>
+            <Button Content="Load substation" Command="{Binding LoadSubstationCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41"  VerticalAlignment="Top" Width="148" FontFamily="Consolas" FontSize="16" Background="#FFE8D856" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0" HorizontalAlignment="Right" Canvas.Left="87" Canvas.Top="-41"/>
+            <TextBox Height="26" Canvas.Left="9" TextWrapping="Wrap" Text="{Binding SearchTerm}" Canvas.Top="567" Width="178" FontFamily="Consolas" FontSize="16" Background="#FFEBEBEB"/>
+            <ComboBox Canvas.Left="192" FontFamily="Consolas" SelectedIndex="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Canvas.Top="567" Width="113" Height="26" ItemsSource="{Binding Path=SearchType}" SelectedValue="{Binding Path=SearchTypeSelected}" />
+            <Button Content="" Command="{Binding SearchSubsCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="59"  VerticalAlignment="Top" Width="59" FontFamily="Consolas" FontSize="16" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0" HorizontalAlignment="Right" Canvas.Left="9" Canvas.Top="598">
+                <Button.Background>
+                    <ImageBrush ImageSource="Assets/search.png"/>
+                </Button.Background>
+            </Button>
+            <Button Content="" Command="{Binding DissmisSubsCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="44"  VerticalAlignment="Top" Width="47" FontFamily="Consolas" FontSize="16" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0" HorizontalAlignment="Right" Canvas.Left="73" Canvas.Top="606">
+                <Button.Background>
+                    <ImageBrush ImageSource="Assets/dismiss.png"/>
+                </Button.Background>
+            </Button>
+            <Label Content="(search by)" FontFamily="Consolas" FontSize="11" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Canvas.Left="192" Canvas.Top="593" Height="26" Width="98" Foreground="#FF1B1B1B"/>
+
         </Canvas>
 
     </Grid>

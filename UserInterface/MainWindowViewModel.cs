@@ -22,14 +22,24 @@ namespace UserInterface
     public class MainWindowViewModel : BindableBase
     {
         public MyICommand<string> ButtonTablesCommand { get; private set; }
-        
+        public MyICommand<string> SearchSubsCommand { get; private set; }
+        public MyICommand<string> DissmisSubsCommand { get; private set; }
+        public MyICommand<string> LoadSubstationCommand { get; private set; }
+
         private MeshViewModel meshViewModel = new MeshViewModel();
 
         private ObservableCollection<RadioButton> radioButtons = new ObservableCollection<RadioButton>();
+        private ObservableCollection<Substation> substationsList = new ObservableCollection<Substation>();
+        private ObservableCollection<Substation> substationsListCopy = new ObservableCollection<Substation>();
+        private ObservableCollection<string> searchType = new ObservableCollection<string> {"Name", "GID" };
+        List<Substation> searchedSubs = new List<Substation>();
+
 
         #region Variables
         private BindableBase currentMeshViewModel;
         private BindableBase currentTableViewModel;
+
+        private Substation selectedSubstation;
 
         public Dictionary<long, Substation> substations;
         public ObservableCollection<UIModel> substationItems = new ObservableCollection<UIModel>();
@@ -41,6 +51,8 @@ namespace UserInterface
         public string gaugeValue { get; set; }
         public string anguarValue { get; set; }
         public string gaugeClasic { get; set; }
+        public string searchTerm { get; set; }
+        public string searchTypeSelected { get; set; }
 
         #endregion
 
@@ -80,6 +92,30 @@ namespace UserInterface
                 OnPropertyChanged("SubstationItems");
             }
         }
+        public ObservableCollection<Substation> SubstationsList
+        {
+            get
+            {
+                return substationsList;
+            }
+            set
+            {
+                substationsList = value;
+                OnPropertyChanged("SubstationsList");
+            }
+        }
+        public ObservableCollection<string> SearchType
+        {
+            get
+            {
+                return searchType;
+            }
+            set
+            {
+                searchType = value;
+                OnPropertyChanged("SearchType");
+            }
+        }
         public ObservableCollection<RadioButton> RadioButtons
         {
             get
@@ -105,6 +141,18 @@ namespace UserInterface
                 OnPropertyChanged("ConnectedStatusBar");
             }
         }
+        public Substation SelectedSubstation
+        {
+            get
+            {
+                return selectedSubstation;
+            }
+            set
+            {
+                selectedSubstation = value;
+                OnPropertyChanged("SelectedSubstation");
+            }
+        }
         public string GaugeClasic
         {
             get
@@ -115,6 +163,30 @@ namespace UserInterface
             {
                 gaugeClasic = value;
                 OnPropertyChanged("GaugeClasic");
+            }
+        }
+        public string SearchTypeSelected
+        {
+            get
+            {
+                return searchTypeSelected;
+            }
+            set
+            {
+                searchTypeSelected = value;
+                OnPropertyChanged("SearchTypeSelected");
+            }
+        }
+        public string SearchTerm
+        {
+            get
+            {
+                return searchTerm;
+            }
+            set
+            {
+                searchTerm = value;
+                OnPropertyChanged("SearchTerm");
             }
         }
         public string TimeStampStatusBar
@@ -175,7 +247,9 @@ namespace UserInterface
             CurrentMeshViewModel = meshViewModel;
             
             ButtonTablesCommand = new MyICommand<string>(OnNavigation);
-
+            LoadSubstationCommand = new MyICommand<string>(changeGrid);
+            SearchSubsCommand = new MyICommand<string>(searchSubstation);
+            DissmisSubsCommand = new MyICommand<string>(dissmisSubstation);
             SubNMS subNMS = new SubNMS();
             subNMS.OnSubscribe();
             setUpInitState();
@@ -188,12 +262,38 @@ namespace UserInterface
             Messenger.Default.Register<NotificationMessage>(this, (message) => { PopulateModel(message.Target); });
         }
 
+        private void changeGrid(string a)
+        {
+            meshViewModel.setSubstation(SelectedSubstation);
+        }
+        private void searchSubstation(string a)
+        {
+            Console.WriteLine(SearchTerm);
+            Console.WriteLine(SearchTypeSelected);
 
-        private void Test(object sender, EventArgs e)
+            if(SearchTypeSelected == "Name")
+            {
+                searchedSubs = substationsListCopy.Where(x => x.Name.Contains(SearchTerm)).ToList();
+                SubstationsList = new ObservableCollection<Substation>(searchedSubs);
+            }else
+            {
+                searchedSubs = substationsListCopy.Where(x => x.Gid.Contains(SearchTerm)).ToList();
+                SubstationsList = new ObservableCollection<Substation>(searchedSubs);
+            }
+           
+        }
+        private void dissmisSubstation(string a)
+        {
+            SubstationsList = substationsListCopy;
+            SearchTerm = "";
+        }
+
+
+    private void Test(object sender, EventArgs e)
         {
             GaugeValue = rand.Next(0, 100).ToString();
 
-            AnguarValue = rand.Next(0, 5).ToString();
+            AnguarValue = rand.Next(-7, 7).ToString();
 
             GaugeClasic = rand.Next(300, 1000).ToString();
         }
@@ -216,11 +316,6 @@ namespace UserInterface
             connectedStatusBar = "Dissconnected"; //SCADA konekcija
             timeStampStatusBar = DateTime.Now.ToLongDateString();  //SCADA konekcija
         }
-        
-        //comboSubstations lista u comboBoxu
-        //SelectedSubstation izabrani u comboBoxu
-        //substationItems lista
-        //substationItem oznacen u listi 
         
         public void PopulateModel(object resources)
         {
@@ -341,11 +436,14 @@ namespace UserInterface
             {
                 Property name = sub.Properties.Where(x => x.Id == ModelCode.IDOBJ_NAME).FirstOrDefault();
                 Property description = sub.Properties.Where(x => x.Id == ModelCode.IDOBJ_DESC).FirstOrDefault();
-                Substation substation = new Substation(name.GetValue().ToString(), description.GetValue().ToString());
                 Property gid = sub.Properties.Where(x => x.Id == ModelCode.IDOBJ_GID).FirstOrDefault();
+                Substation substation = new Substation(name.GetValue().ToString(), description.GetValue().ToString(), gid.GetValue().ToString());
                 substations.Add((long)gid.GetValue(), substation);
             }
-            setRadioButtons();
+            ObservableCollection<Substation> subs = new ObservableCollection<Substation>(substations.Values);
+            SubstationsList = subs;
+            substationsListCopy = subs;
+           // setRadioButtons();
             foreach (ResourceDescription resource in resources.Where(x => (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.DISCONNECTOR) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.BREAKER) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.RATIOTAPCHANGER) ||

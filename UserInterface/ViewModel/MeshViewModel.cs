@@ -4,6 +4,7 @@ using System.Threading;
 using System.Windows.Threading;
 using UserInterface.BaseError;
 using UserInterface.Command;
+using UserInterface.Model;
 
 namespace UserInterface.ViewModel
 {
@@ -21,6 +22,8 @@ namespace UserInterface.ViewModel
         private string disc1Id { get; set; }
         private string disc2Id { get; set; }
         private string breakerId { get; set; }
+
+        private Substation currentSubstation;
         #endregion
 
         #region Line_colors
@@ -423,6 +426,21 @@ namespace UserInterface.ViewModel
                 disconector1State = newValue == 1 ? true : false;
                 DisconectorOperation("1");
             });
+
+            currentSubstation = new Substation();
+        }
+
+        public void setSubstation(Substation sub)
+        {
+            currentSubstation = sub;
+
+            if(sub.AsynchronousMachines.Count == 1)
+            {
+                Two_AM_Visible = "Hidden";
+            } else
+            {
+                Two_AM_Visible = "Visible";
+            }
         }
 
         public void setUpInitState()
@@ -555,14 +573,6 @@ namespace UserInterface.ViewModel
 
         public void TapChangerOperation()
         {
-            if (Two_AM_Visible == "Visible")
-            {
-                Two_AM_Visible = "Hidden";
-            }
-            else
-            {
-                Two_AM_Visible = "Visible";
-            }
         }
 
         #region Coloring lines
