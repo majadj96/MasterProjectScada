@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:UserInterface.View"
              mc:Ignorable="d" 
-             d:DesignHeight="350" d:DesignWidth="350" Background="#FF474747">
+             d:DesignHeight="370" d:DesignWidth="370" Background="#FF474747">
     <UserControl.Resources>
         <Style x:Key="MyButtonStyle" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -30,17 +30,170 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="SwitchTypeToggleButton"
+       TargetType="{x:Type ToggleButton}">
+
+            <Style.Resources>
+                <Color x:Key="Color.Additional.Lime">#FF00FF00</Color>
+                <Color x:Key="Color.Additional.LimeGreen">#FF32CD32</Color>
+                <Color x:Key="Color.MedtronicBranding.Crimson">#FFDC143C</Color>
+                <Color x:Key="Color.MedtronicBranding.Red">#FFFF634D</Color>
+
+                <Style x:Key="ToggleButtonContentTextbox"
+               TargetType="TextBlock">
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="VerticalAlignment" Value="Stretch" />
+                </Style>
+                <SolidColorBrush x:Key="ToggleButtonFalseBackground"
+                         Color="{StaticResource Color.Additional.Lime}" />
+                <SolidColorBrush x:Key="ToggleButtonTrueBackground"
+                         Color="{StaticResource Color.MedtronicBranding.Red}" />
+                <SolidColorBrush x:Key="ToggleButtonFalseForeground"
+                         Color="{StaticResource Color.Additional.LimeGreen}" />
+                <SolidColorBrush x:Key="ToggleButtonTrueForeground"
+                         Color="{StaticResource Color.MedtronicBranding.Crimson}" />
+                <TextBlock x:Key="OffContent"
+                   Style="{StaticResource ToggleButtonContentTextbox}"
+                   Text="Off" />
+                <Style x:Key="OnContentControl"
+               TargetType="ContentControl">
+                    <Setter Property="HorizontalAlignment" Value="Center" />
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <TextBlock FontFamily="Consolas"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Foreground="Black"
+                                   Style="{StaticResource ToggleButtonContentTextbox}"
+                                   Text="ON" />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                </Style>
+                <Style x:Key="OffContentControl"
+               TargetType="ContentControl">
+                    <Setter Property="HorizontalAlignment" Value="Center" />
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <TextBlock FontSize="18" FontFamily="Consolas"
+                                           FontWeight="Bold"
+                                   Foreground="Black"
+                                   Style="{StaticResource ToggleButtonContentTextbox}"
+                                   Text="OFF" />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                </Style>
+
+            </Style.Resources>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Grid x:Name="MainRow">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{Binding ElementName=TopRow,
+                        Path=ActualHeight}" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="{Binding ElementName=TopRow,
+                        Path=ActualHeight}" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition x:Name="TopRow" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+
+                                <Ellipse x:Name="BackgroundEllipse1"
+                                 Grid.RowSpan="2"
+                                 Grid.Column="0"
+                                 Grid.ColumnSpan="3"
+                                 Width="{Binding ElementName=MainRow,
+                                                 Path=ActualHeight}"
+                                 Height="{Binding ElementName=MainRow,
+                                                  Path=ActualHeight}"
+                                 HorizontalAlignment="Left"
+                                 Fill="{StaticResource ToggleButtonTrueBackground}" />
+                                <Ellipse x:Name="BackgroundEllipse2"
+                                 Grid.Row="0"
+                                 Grid.RowSpan="2"
+                                 Grid.Column="0"
+                                 Grid.ColumnSpan="3"
+                                 Width="{Binding ElementName=MainRow,
+                                                 Path=ActualHeight}"
+                                 Height="{Binding ElementName=MainRow,
+                                                  Path=ActualHeight}"
+                                 HorizontalAlignment="Right"
+                                 Fill="{StaticResource ToggleButtonFalseBackground}" />
+                                <Border x:Name="BackgroundBorder"
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="1"
+                                Background="{StaticResource ToggleButtonTrueBackground}" />
+                            </Grid>
+                            <Grid HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition x:Name="AnimationWidth" />
+                                    <ColumnDefinition Width="{Binding ElementName=MainRow,
+                        Path=ActualHeight}" />
+                                </Grid.ColumnDefinitions>
+                                <Border x:Name="AnimationSizeBorder"
+                                Grid.Column="0" />
+                                <ContentControl Grid.Column="0"
+                                        Style="{StaticResource OnContentControl}" />
+                            </Grid>
+                            <Grid HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{Binding ElementName=MainRow,
+                Path=ActualHeight}" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+
+                                <ContentControl Grid.Column="1"
+                                        Style="{StaticResource OffContentControl}" />
+                            </Grid>
+                            <Grid Background="Transparent">
+                                <StackPanel HorizontalAlignment="Left"
+                                    Orientation="Horizontal">
+                                    <Border Width="{Binding ElementName=AnimationSizeBorder,
+                Path=ActualWidth}" />
+                                    <Ellipse x:Name="ForegroundEllipse"
+                                     Width="{Binding ElementName=MainRow,
+                                                     Path=ActualHeight}"
+                                     Height="{Binding ElementName=MainRow,
+                                                      Path=ActualHeight}"
+                                     HorizontalAlignment="Right"
+                                     Fill="{StaticResource ToggleButtonTrueForeground}" />
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="BackgroundBorder" Property="Background"
+                Value="{StaticResource ToggleButtonFalseBackground}" />
+                                <Setter TargetName="ForegroundEllipse" Property="Fill"
+                Value="{StaticResource ToggleButtonFalseForeground}" />
+                                <Setter TargetName="AnimationSizeBorder" Property="Width" Value="0" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     <Grid>
-        <Label Content="{Binding DisconnectorName}" HorizontalContentAlignment="Center" Margin="10,34,10,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="18" Foreground="#FFB1E698"/>
-        <Label Content="{Binding DisconnectorDescription}" HorizontalContentAlignment="Center" Margin="11,70,9.4,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="16" Foreground="#FFB1E698"/>
-        <Label Content="Current value" HorizontalContentAlignment="Center" Margin="10,116,10.4,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="14" Foreground="#FFE69898"/>
-        <TextBox VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="23" Margin="10,142,9.4,0" TextWrapping="Wrap" Text="{Binding CurrentValue}" VerticalAlignment="Top" IsEnabled="False"/>
-        <Label Content="New value" HorizontalContentAlignment="Center" Margin="10,188,10,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="14" Foreground="#FFE69898"/>
-        <TextBox VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="23" Margin="10,214,10,0" TextWrapping="Wrap" Text="{Binding NewValue}" VerticalAlignment="Top"/>
-        <TextBlock Text="{Binding Disconnector.ValidationErrors[NewValue]}" TextAlignment="Center" Foreground="Crimson" HorizontalAlignment="Left" Height="23" Margin="11,242,0,0" VerticalAlignment="Top" Width="329" FontFamily="Consolas" FontSize="14"/>
-        <Button Style="{StaticResource MyButtonStyle}" Content="Command" Margin="133,280,134,10" Background="#FF94E264" Foreground="#FF252525" Command="{Binding Command}" FontFamily="Consolas" FontSize="14"/>
-
+        <Label Content="{Binding DisconectorCurrent.Name}" HorizontalContentAlignment="Center" Margin="10,52,10,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="20" Foreground="#FFB1E698"/>
+        <Label Content="{Binding DisconectorCurrent.Description}" HorizontalContentAlignment="Center" Margin="11,104,9,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="18" Foreground="#FFB1E698"/>
+        <Label Content="New state" HorizontalContentAlignment="Center" Margin="4,165,16,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="16" Foreground="#FFE69898"/>
+        <ToggleButton Height="35" Width="70" Margin="144,217,155.6,117.6" Visibility="Visible" Style="{StaticResource SwitchTypeToggleButton}" IsChecked="{Binding NewState, Mode=TwoWay}"/>
+        <Button Style="{StaticResource MyButtonStyle}" Height="30" Width="80" Content="Command" Margin="144,293,145.6,46.6" Background="#FF94E264" Foreground="#FF252525" Command="{Binding Command}" FontFamily="Consolas" FontSize="16"/>
     </Grid>
 </UserControl>

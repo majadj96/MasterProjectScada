@@ -148,7 +148,22 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Storyboard x:Key="NewAlarm">
+            <DoubleAnimation Storyboard.TargetName="AlarmBorder"
+                     Storyboard.TargetProperty="Opacity"
+                     From="0"
+                     To="1"
+                     RepeatBehavior="Forever"
+                     AutoReverse="True"
+                     Duration="0:0:0.5"/>
+        </Storyboard>
     </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard Storyboard="{StaticResource NewAlarm}"/>
+        </EventTrigger>
+    </Window.Triggers>
 
     <Grid Background="#FF474747">
         <Grid.ColumnDefinitions>
@@ -186,12 +201,13 @@
             </StatusBarItem>
         </StatusBar>
 
-        <Button  Content="Summary Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="827,29,0,0" VerticalAlignment="Top" Width="145" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#258565" Foreground="White" BorderBrush="#FFC5C5C5"/>
-        <Button  Content="Alarm Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Alarm" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="1012,29,0,0" VerticalAlignment="Top" Width="116" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#FFFF6D6D" Foreground="White" BorderBrush="#FFC5C5C5"/>
-        <Button  Content="Event Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Event" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="1166,29,0,0" VerticalAlignment="Top" Width="118" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#326492" Foreground="White" BorderBrush="#FFC5C5C5"/>
-        
+        <Button Content="Summary Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="827,29,0,0" VerticalAlignment="Top" Width="145" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#258565" Foreground="White" BorderBrush="#FFC5C5C5"/>
+        <Button Content="Alarm Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Alarm" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="1012,29,0,0" VerticalAlignment="Top" Width="116" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#FFFF6D6D" Foreground="White" BorderBrush="#FFC5C5C5"/>
+        <Button Content="Event Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Event" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="1166,29,0,0" VerticalAlignment="Top" Width="118" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#326492" Foreground="White" BorderBrush="#FFC5C5C5"/>
+
         <ComboBox ItemsSource="{Binding ComboSubstations}"  SelectedItem="{Binding SelectedSubstation}" HorizontalAlignment="Left" Margin="224,48,0,0" VerticalAlignment="Top" Width="192" Height="22" Grid.RowSpan="2" FontFamily="Consolas" Foreground="White" Background="#FF5D5D5D" BorderBrush="#FF4D4D4D"/>
         <Label Content="Select Substation" HorizontalAlignment="Left" Margin="226,11,0,0" HorizontalContentAlignment="Center" VerticalAlignment="Top" Height="38" Width="184" RenderTransformOrigin="0.5,0.5" Foreground="#FFF5D856" FontFamily="Consolas" FontSize="18"/>
 
+        <!--<Border x:Name="AlarmBorder" Visibility="Visible" BorderBrush="Crimson" BorderThickness="10" HorizontalAlignment="Left" Height="820" Margin="0,0,0,0" VerticalAlignment="Top" Width="1512" Grid.RowSpan="3"></Border>-->
     </Grid>
 </Window>

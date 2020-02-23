@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:UserInterface.View"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="400" Background="#FF474747">
+             d:DesignHeight="370" d:DesignWidth="370" Background="#FF474747">
     <UserControl.Resources>
         <Style x:Key="MyButtonStyle" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -34,10 +34,10 @@
        TargetType="{x:Type ToggleButton}">
 
             <Style.Resources>
-                <Color x:Key="Color.Additional.LightGrey">#989EA8</Color>
-                <Color x:Key="Color.Additional.MediumGrey">#61656B</Color>
-                <Color x:Key="Color.MedtronicBranding.MedtronicBlue">#004B87</Color>
-                <Color x:Key="Color.MedtronicBranding.CobaltBlue">#0085CA</Color>
+                <Color x:Key="Color.Additional.Lime">#FF00FF00</Color>
+                <Color x:Key="Color.Additional.LimeGreen">#FF32CD32</Color>
+                <Color x:Key="Color.MedtronicBranding.Crimson">#FFDC143C</Color>
+                <Color x:Key="Color.MedtronicBranding.Red">#FFFF634D</Color>
 
                 <Style x:Key="ToggleButtonContentTextbox"
                TargetType="TextBlock">
@@ -45,13 +45,13 @@
                     <Setter Property="VerticalAlignment" Value="Stretch" />
                 </Style>
                 <SolidColorBrush x:Key="ToggleButtonFalseBackground"
-                         Color="{StaticResource Color.Additional.LightGrey}" />
+                         Color="{StaticResource Color.Additional.Lime}" />
                 <SolidColorBrush x:Key="ToggleButtonTrueBackground"
-                         Color="{StaticResource Color.MedtronicBranding.CobaltBlue}" />
+                         Color="{StaticResource Color.MedtronicBranding.Red}" />
                 <SolidColorBrush x:Key="ToggleButtonFalseForeground"
-                         Color="{StaticResource Color.Additional.MediumGrey}" />
+                         Color="{StaticResource Color.Additional.LimeGreen}" />
                 <SolidColorBrush x:Key="ToggleButtonTrueForeground"
-                         Color="{StaticResource Color.MedtronicBranding.MedtronicBlue}" />
+                         Color="{StaticResource Color.MedtronicBranding.Crimson}" />
                 <TextBlock x:Key="OffContent"
                    Style="{StaticResource ToggleButtonContentTextbox}"
                    Text="Off" />
@@ -65,7 +65,7 @@
                                 <TextBlock FontFamily="Consolas"
                                    FontSize="20"
                                    FontWeight="Bold"
-                                   Foreground="White"
+                                   Foreground="Black"
                                    Style="{StaticResource ToggleButtonContentTextbox}"
                                    Text="ON" />
                             </ControlTemplate>
@@ -82,7 +82,8 @@
                         <Setter.Value>
                             <ControlTemplate>
                                 <TextBlock FontSize="18" FontFamily="Consolas"
-                                   Foreground="White"
+                                           FontWeight="Bold"
+                                   Foreground="Black"
                                    Style="{StaticResource ToggleButtonContentTextbox}"
                                    Text="OFF" />
                             </ControlTemplate>
@@ -179,27 +180,6 @@
                 Value="{StaticResource ToggleButtonFalseBackground}" />
                                 <Setter TargetName="ForegroundEllipse" Property="Fill"
                 Value="{StaticResource ToggleButtonFalseForeground}" />
-                                <!--<Trigger.EnterActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName
-                        ="AnimationSizeBorder"
-                        Storyboard.TargetProperty="(Border.Width)"
-                        To="0" Duration="0:0:3"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.EnterActions>
-                                <Trigger.ExitActions>
-
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName=
-                        "AnimationSizeBorder"
-                        Storyboard.TargetProperty="(Border.Width)"
-                        From="0" Duration="0:0:3"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.ExitActions>-->
                                 <Setter TargetName="AnimationSizeBorder" Property="Width" Value="0" />
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -210,15 +190,10 @@
     </UserControl.Resources>
 
     <Grid>
-        <Label Content="{Binding BreakerCurrent.Name}" HorizontalContentAlignment="Center" Margin="10,34,10,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="18" Foreground="#FFB1E698"/>
-        <Label Content="{Binding BreakerCurrent.Description}" HorizontalContentAlignment="Center" Margin="11,70,9.4,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="16" Foreground="#FFB1E698"/>
-        <Label Content="Current value" HorizontalContentAlignment="Center" Margin="10,116,10.4,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="14" Foreground="#FFE69898"/>
-        <TextBox VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="23" Margin="10,142,9.4,0" TextWrapping="Wrap" Text="{Binding BreakerCurrent.State}" VerticalAlignment="Top" IsEnabled="False"/>
-        <Label Content="New value" HorizontalContentAlignment="Center" Margin="10,188,10,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="14" Foreground="#FFE69898"/>
-        <!--<TextBox VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="23" Margin="10,214,10,0" TextWrapping="Wrap" Text="{Binding BreakerCurrent.NewState}" VerticalAlignment="Top"/>
-        <TextBlock Text="{Binding BreakerCurrent.ValidationErrors[NewState]}" TextAlignment="Center" Foreground="Crimson" HorizontalAlignment="Left" Height="23" Margin="11,242,0,0" VerticalAlignment="Top" Width="329" FontFamily="Consolas" FontSize="14"/>-->
-        <Button Style="{StaticResource MyButtonStyle}" Height="30" Width="80" Content="Command" Margin="133,280,134,10" Background="#FF94E264" Foreground="#FF252525" Command="{Binding Command}" FontFamily="Consolas" FontSize="14"/>
-
-        <ToggleButton Height="35" Width="70" Margin="135,219,135.4,96.4" Visibility="Visible" Style="{StaticResource SwitchTypeToggleButton}" IsChecked="{Binding NewState}"/>
+        <Label Content="{Binding BreakerCurrent.Name}" HorizontalContentAlignment="Center" Margin="10,52,10,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="20" Foreground="#FFB1E698"/>
+        <Label Content="{Binding BreakerCurrent.Description}" HorizontalContentAlignment="Center" Margin="11,104,9,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="18" Foreground="#FFB1E698"/>
+        <Label Content="New state" HorizontalContentAlignment="Center" Margin="4,165,16,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="16" Foreground="#FFE69898"/>
+        <ToggleButton Height="35" Width="70" Margin="147,215,152.6,119.6" Visibility="Visible" Style="{StaticResource SwitchTypeToggleButton}" IsChecked="{Binding NewState}"/>
+        <Button Style="{StaticResource MyButtonStyle}" Height="30" Width="80" Content="Command" Margin="137,298,152.6,41.6" Background="#FF94E264" Foreground="#FF252525" Command="{Binding Command}" FontFamily="Consolas" FontSize="16"/>
     </Grid>
 </UserControl>

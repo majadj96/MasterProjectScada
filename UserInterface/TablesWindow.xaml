@@ -16,6 +16,9 @@
         <DataTemplate DataType="{x:Type viewModel:AlarmViewModel}">
             <views:AlarmView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:EventTableViewModel}">
+            <views:EventTableView/>
+        </DataTemplate>
     </Window.Resources>
 
     <Grid Background="#FF474747">

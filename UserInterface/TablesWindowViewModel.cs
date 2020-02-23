@@ -19,6 +19,7 @@ namespace UserInterface
     {
         private TableViewModel tableViewModel;
         private AlarmViewModel alarmViewModel;
+        private EventTableViewModel eventViewModel;
 
         #region Variables
         private BindableBase currentTableViewModel;
@@ -36,6 +37,7 @@ namespace UserInterface
         {
             tableViewModel = new TableViewModel(model);
             alarmViewModel = new AlarmViewModel();
+            eventViewModel = new EventTableViewModel();
 
             CurrentTableViewModel = tableViewModel;
         }
@@ -52,7 +54,7 @@ namespace UserInterface
             }
             else if (string.Compare(window, "Event") == 0)
             {
-                //CurrentTableViewModel = eventViewModel;
+                CurrentTableViewModel = eventViewModel;
             }
         }
     }

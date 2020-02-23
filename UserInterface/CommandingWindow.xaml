@@ -6,7 +6,7 @@
         xmlns:views="clr-namespace:UserInterface.View"
         xmlns:viewModel="clr-namespace:UserInterface.ViewModel"
         mc:Ignorable="d"
-        Title="Commanding window" Height="400" Width="400" Background="#FF474747" WindowStartupLocation="CenterScreen">
+        Title="Commanding window" Height="420" Width="420" Background="#FF474747" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewModel:CommandDisconnectorViewModel}">
             <views:CommandDisconnectorView/>
@@ -14,30 +14,6 @@
         <DataTemplate DataType="{x:Type viewModel:CommandBreakerViewModel}">
             <views:CommandBreakerView/>
         </DataTemplate>
-        
-        <Style x:Key="MyButtonStyle" TargetType="Button">
-            <Setter Property="OverridesDefaultStyle" Value="True"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Name="border" 
-                            BorderThickness="0"
-                            Padding="4,2" 
-                            BorderBrush="DarkGray" 
-                            CornerRadius="3" 
-                            Background="{TemplateBinding Background}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="BorderBrush" Value="#FFF7CE12" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </Window.Resources>
     
     <Grid Background="#FF474747">

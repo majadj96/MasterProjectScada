@@ -10,49 +10,39 @@ namespace UserInterface.ViewModel
         public MyICommand Command { get; private set; }
 
         #region Variables
-        private string disconnectorName;
-        private string disconnectorDescription;
-        private int currentValue;
-        private int newValue;
+        private Disconector disconector;
+        private string type;
+        private bool newState;
         #endregion
 
         #region Props
-        public string DisconnectorName
+        public Disconector DisconectorCurrent
         {
-            get { return disconnectorName; }
-            set { SetProperty(ref disconnectorName, value); }
+            get { return disconector; }
+            set { disconector = value; OnPropertyChanged("DisconectorCurrent"); }
         }
-        public string DisconnectorDescription
+        public bool NewState
         {
-            get { return disconnectorDescription; }
-            set { SetProperty(ref disconnectorDescription, value); }
-        }
-        public int CurrentValue
-        {
-            get { return currentValue; }
-            set { SetProperty(ref currentValue, value); }
-        }
-        public int NewValue
-        {
-            get { return newValue; }
-            set { SetProperty(ref newValue, value); }
+            get { return newState; }
+            set { newState = value; OnPropertyChanged("NewState"); }
         }
         #endregion
 
-        public CommandDisconnectorViewModel(Disconector disconector)
+        public CommandDisconnectorViewModel(Disconector disconector, string type)
         {
-            Command = new MyICommand(CommandDisconnector);
-        }
+            DisconectorCurrent = new Disconector(disconector.MRID, disconector.GID, disconector.Name, disconector.Description, disconector.Time, disconector.State);
+            NewState = !Converter.ConvertToBool(DisconectorCurrent.State);
 
-        public void SetName(string name)
-        {
-            DisconnectorName = name;
-            DisconnectorDescription = "Description";
+            this.type = type;
+
+            Command = new MyICommand(CommandDisconnector);
         }
 
         public void CommandDisconnector()
         {
-            Messenger.Default.Send(NewValue);
+            DisconectorCurrent.NewState = Converter.ConvertToDiscreteState(NewState);
+
+            Messenger.Default.Send(new NotificationMessage("command", DisconectorCurrent, "Disconector" + type));
         }
     }
 }

@@ -3,7 +3,7 @@ using UserInterface.BaseError;
 
 namespace UserInterface.Model
 {
-    public class Breaker : ValidationBase, IEquipment
+    public class Breaker : IEquipment
     {
         private string mrid;
         private string gid;
@@ -34,26 +34,7 @@ namespace UserInterface.Model
         public DiscreteState NewState
         {
             get { return newState; }
-            set
-            {
-                newState = value;
-                OnPropertyChanged("NewState");
-            }
-        }
-
-        protected override void ValidateSelf()
-        {
-            /*if (NewState > 1 || NewState < 0)
-            {
-                this.ValidationErrors["NewState"] = "NewState cannot be less then 0 or more then 1...";
-            }*/
-        }
-
-        public void AddErrorNewState(string message)
-        {
-            this.ValidationErrors["NewState"] = message;
-            this.OnPropertyChanged("IsValid");
-            this.OnPropertyChanged("ValidationErrors");
+            set  { newState = value;  }
         }
     }
 }

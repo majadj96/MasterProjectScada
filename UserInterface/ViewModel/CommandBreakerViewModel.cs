@@ -30,7 +30,7 @@ namespace UserInterface.ViewModel
         public CommandBreakerViewModel(Breaker breaker)
         {
             BreakerCurrent = new Breaker(breaker.MRID, breaker.GID, breaker.Name, breaker.Description, breaker.Time, breaker.State);
-            NewState = Converter.ConvertToBool(BreakerCurrent.State);
+            NewState = !Converter.ConvertToBool(BreakerCurrent.State);
 
             Command = new MyICommand(CommandBreaker);
         }

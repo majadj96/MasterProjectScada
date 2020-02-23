@@ -30,6 +30,12 @@
 		<cim:IdentifiedObject.mRID>Disc_1</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>Disc_1</ftn:IdentifiedObject.name>
 	</cim:Disconnector>
+	<cim:Disconnector rdf:ID="Disc_3">
+		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
+		<cim:IdentifiedObject.description>Disconnector</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>Disc_3</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>Disc_3</ftn:IdentifiedObject.name>
+	</cim:Disconnector>
 	<cim:Disconnector rdf:ID="Disc_2">
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_2"/>
 		<cim:IdentifiedObject.description>Disconnector</cim:IdentifiedObject.description>

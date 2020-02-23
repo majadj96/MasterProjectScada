@@ -36,12 +36,12 @@ namespace UserInterface
         {
             if (string.Compare(window, "Disconnector1") == 0)
             {
-                commandDisconnectorViewModel = new CommandDisconnectorViewModel(SubstationCurrent.Disconectors[0]);
+                commandDisconnectorViewModel = new CommandDisconnectorViewModel(SubstationCurrent.Disconectors[0], "1");
                 CurrentCommandViewModel = commandDisconnectorViewModel;
             }
             else if (string.Compare(window, "Disconnector2") == 0)
             {
-                commandDisconnectorViewModel = new CommandDisconnectorViewModel(SubstationCurrent.Disconectors[1]);
+                commandDisconnectorViewModel = new CommandDisconnectorViewModel(SubstationCurrent.Disconectors[1], "2");
                 CurrentCommandViewModel = commandDisconnectorViewModel;
             }
             else if (string.Compare(window, "Breaker") == 0)

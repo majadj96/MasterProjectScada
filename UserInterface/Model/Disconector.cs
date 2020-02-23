@@ -14,6 +14,7 @@ namespace UserInterface.Model
         private string description;
         private string time;
         private DiscreteState state;
+        private DiscreteState newState;
 
         public Disconector(string mRID, string gID, string name, string description, string time, DiscreteState state)
         {
@@ -32,5 +33,10 @@ namespace UserInterface.Model
         public string Description { get => description; set => description = value; }
         public string Time { get => time; set => time = value; }
         public DiscreteState State { get => state; set => state = value; }
+        public DiscreteState NewState
+        {
+            get { return newState; }
+            set { newState = value; }
+        }
     }
 }

@@ -84,6 +84,7 @@
     <Compile Include="Model\Breaker.cs" />
     <Compile Include="Model\Disconector.cs" />
     <Compile Include="Model\Enums.cs" />
+    <Compile Include="Model\Event.cs" />
     <Compile Include="Model\IEquipment.cs" />
     <Compile Include="Model\Substation.cs" />
     <Compile Include="Model\TapChanger.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="ViewModel\AlarmViewModel.cs" />
     <Compile Include="ViewModel\CommandBreakerViewModel.cs" />
     <Compile Include="ViewModel\CommandDisconnectorViewModel.cs" />
+    <Compile Include="ViewModel\EventTableViewModel.cs" />
     <Compile Include="ViewModel\MeshViewModel.cs" />
     <Compile Include="ViewModel\TableViewModel.cs" />
     <Compile Include="View\AlarmView.xaml.cs">
@@ -107,6 +109,9 @@
     </Compile>
     <Compile Include="View\CommandDisconnectorView.xaml.cs">
       <DependentUpon>CommandDisconnectorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\EventTableView.xaml.cs">
+      <DependentUpon>EventTableView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MeshView.xaml.cs">
       <DependentUpon>MeshView.xaml</DependentUpon>
@@ -143,6 +148,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\CommandDisconnectorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EventTableView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
