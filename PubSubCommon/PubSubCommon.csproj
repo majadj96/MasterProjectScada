@@ -43,8 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IPubNMS.cs" />
-    <Compile Include="ISubNMS.cs" />
+    <Compile Include="IPub.cs" />
+    <Compile Include="ISub.cs" />
     <Compile Include="NMSModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

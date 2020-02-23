@@ -8,22 +8,22 @@ using System.Threading.Tasks;
 
 namespace NetworkModelService
 {
-    public class PubNMS
+    public class Pub
     {
-        IPubNMS _proxy;
+        IPub _proxy;
         int _eventCounter;
 
-        public PubNMS()
+        public Pub()
         {
             CreateProxy();
             _eventCounter = 0;
         }
         private void CreateProxy()
         {
-            string endpointAddressInString = "net.tcp://localhost:7001/PubNMS";
+            string endpointAddressInString = "net.tcp://localhost:7001/Pub";
             EndpointAddress endpointAddress = new EndpointAddress(endpointAddressInString);
             NetTcpBinding netTcpBinding = new NetTcpBinding();
-            _proxy = ChannelFactory<IPubNMS>.CreateChannel(netTcpBinding, endpointAddress);
+            _proxy = ChannelFactory<IPub>.CreateChannel(netTcpBinding, endpointAddress);
         }
 
         public void SendEvent(NMSModel model, EventArgs e)

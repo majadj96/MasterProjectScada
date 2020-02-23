@@ -4,16 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9BACAF37-6E01-4703-BB17-7B5262B4B686}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NetworkModelService</RootNamespace>
-    <AssemblyName>NetworkModelService</AssemblyName>
+    <ProjectGuid>{143D1674-7047-4B0D-BD8B-86170AFBACFC}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>TestScada1</RootNamespace>
+    <AssemblyName>TestScada1</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,7 +33,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
@@ -43,38 +43,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config.cs" />
-    <Compile Include="Container.cs" />
-    <Compile Include="GDA\GenericDataAccess.cs" />
-    <Compile Include="GDA\ResourceIterator.cs" />
-    <Compile Include="NetworkModel.cs" />
-    <Compile Include="NetworkModelService.cs" />
-    <Compile Include="NotifyNMSService.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Pub.cs" />
+    <Compile Include="PubSCADA.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{6C234280-508A-47A4-B9CA-2677082EF85F}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DataModel\DataModel.csproj">
-      <Project>{47B89925-DDA4-477B-B9B0-33C069BCC5EA}</Project>
-      <Name>DataModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NetworkModelGDAContract\NetworkModelGDAContract.csproj">
-      <Project>{60EEDD71-25C6-488A-870A-A16ACFC91D88}</Project>
-      <Name>NetworkModelGDAContract</Name>
-    </ProjectReference>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\PubSubCommon\PubSubCommon.csproj">
       <Project>{6109286A-0DC9-469C-A271-0605C18ED32C}</Project>
       <Name>PubSubCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TransactionManagerContracts\TransactionManagerContracts.csproj">
-      <Project>{0A8F68EC-31CB-4FD1-B54A-DCF2FC97BBEC}</Project>
-      <Name>TransactionManagerContracts</Name>
-    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

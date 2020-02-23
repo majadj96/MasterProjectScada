@@ -10,7 +10,7 @@ namespace NetworkModelService
     public class NotifyNMSService : INotifyNMS
     {
         protected static NetworkModel _nm;
-        private PubNMS _pub;
+        private Pub _pub;
 
         public static NetworkModel NetworkModel
         {
@@ -22,7 +22,7 @@ namespace NetworkModelService
 
         public NotifyNMSService()
         {
-            _pub = new PubNMS();
+            _pub = new Pub();
         }
 
         public void UpdateUIModel(bool commitSucceed = true)

@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 
 namespace UserInterface.Subscription
 {
-    public class SubNMS : IPubNMS
+    public class Sub : IPub
     {
-        ISubNMS _proxy;
+        ISub _proxy;
         static int _eventCount;
         string _endpoint = string.Empty;
 
-        public SubNMS()
+        public Sub()
         {
-            _endpoint = "net.tcp://localhost:7002/SubNMS";
+            _endpoint = "net.tcp://localhost:7002/Sub";
             MakeProxy(_endpoint, this);
             _eventCount = 0;
         }
@@ -27,7 +27,7 @@ namespace UserInterface.Subscription
             NetTcpBinding netTcpbinding = new NetTcpBinding(SecurityMode.None);
             EndpointAddress endpointAddress = new EndpointAddress(EndpoindAddress);
             InstanceContext context = new InstanceContext(callbackinstance);
-            DuplexChannelFactory<ISubNMS> channelFactory = new DuplexChannelFactory<ISubNMS>(new InstanceContext(this), netTcpbinding, endpointAddress);
+            DuplexChannelFactory<ISub> channelFactory = new DuplexChannelFactory<ISub>(new InstanceContext(this), netTcpbinding, endpointAddress);
             _proxy = channelFactory.CreateChannel();
         }
 
@@ -36,16 +36,16 @@ namespace UserInterface.Subscription
             if (model != null)
             {
                 _eventCount += 1;
-                NotificationMessage n = new NotificationMessage(null, model, "send");
+                NotificationMessage n = new NotificationMessage(null, model, topicName);
                 Messenger.Default.Send<NotificationMessage>(n);
             }
         }
 
-        public void OnSubscribe()
+        public void OnSubscribe(string topic)
         {
             try
             {
-                _proxy.Subscribe("nms");
+                _proxy.Subscribe(topic);
             }
             catch
             {
@@ -53,10 +53,16 @@ namespace UserInterface.Subscription
             }
         }
 
-        void OnUnSubscribe(object sender, EventArgs e)
+        void OnUnSubscribe(object sender, EventArgs e, string topic)
         {
-            _proxy.UnSubscribe("nms");
+            _proxy.UnSubscribe(topic);
         }
 
+        public void PublishMeasure(string test, string topicName)
+        {
+            _eventCount += 1;
+            NotificationMessage n = new NotificationMessage(null, test, topicName);
+            Messenger.Default.Send<NotificationMessage>(n);
+        }
     }
 }

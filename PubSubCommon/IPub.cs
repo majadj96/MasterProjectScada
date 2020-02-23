@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 namespace PubSubCommon
 {
     [ServiceContract]
-    public interface IPubNMS
+    public interface IPub
     {
         [OperationContract(IsOneWay = true)]
         void Publish(NMSModel model, string topicName);
+        [OperationContract(IsOneWay = true)]
+        void PublishMeasure(string test, string topicName);
     }
 }

@@ -250,8 +250,9 @@ namespace UserInterface
             LoadSubstationCommand = new MyICommand<string>(changeGrid);
             SearchSubsCommand = new MyICommand<string>(searchSubstation);
             DissmisSubsCommand = new MyICommand<string>(dissmisSubstation);
-            SubNMS subNMS = new SubNMS();
-            subNMS.OnSubscribe();
+            Sub subNMS = new Sub();
+            subNMS.OnSubscribe("nms");
+            subNMS.OnSubscribe("scada");
             setUpInitState();
 
             substations = new Dictionary<long, Substation>();
@@ -259,7 +260,7 @@ namespace UserInterface
             timer.Tick += new EventHandler(Test);
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Start();
-            Messenger.Default.Register<NotificationMessage>(this, (message) => { PopulateModel(message.Target); });
+            Messenger.Default.Register<NotificationMessage>(this, (message) => { PopulateModel(message.Target, message.Notification); });
         }
 
         private void changeGrid(string a)
@@ -317,11 +318,18 @@ namespace UserInterface
             timeStampStatusBar = DateTime.Now.ToLongDateString();  //SCADA konekcija
         }
         
-        public void PopulateModel(object resources)
+        public void PopulateModel(object resources, string topic)
         {
-            NMSModel nMSModel = (NMSModel)resources;
-            SubstationItems = toUIModelList(nMSModel.ResourceDescs);
-            setModel(nMSModel.ResourceDescs);
+            if (topic == "nms")
+            {
+                NMSModel nMSModel = (NMSModel)resources;
+                SubstationItems = toUIModelList(nMSModel.ResourceDescs);
+                setModel(nMSModel.ResourceDescs);
+            } else if(topic == "scada")
+            {
+                //ovde dolaze scada podaci
+                Console.WriteLine("Ovde ide scada");
+            }
         }
 
 

@@ -9,8 +9,8 @@ namespace PubSub.PubSubEngine
 {
     class Filter
     {
-        static Dictionary<string, List<IPubNMS>> _subscribersList = new Dictionary<string, List<IPubNMS>>();
-        static public Dictionary<string, List<IPubNMS>> SubscribersList
+        static Dictionary<string, List<IPub>> _subscribersList = new Dictionary<string, List<IPub>>();
+        static public Dictionary<string, List<IPub>> SubscribersList
         {
             get
             {
@@ -22,7 +22,7 @@ namespace PubSub.PubSubEngine
 
         }
 
-        static public List<IPubNMS> GetSubscribers(String topicName)
+        static public List<IPub> GetSubscribers(String topicName)
         {
             lock (typeof(Filter))
             {
@@ -35,7 +35,7 @@ namespace PubSub.PubSubEngine
             }
         }
 
-        static public void AddSubscriber(String topicName, IPubNMS subscriberCallbackReference)
+        static public void AddSubscriber(String topicName, IPub subscriberCallbackReference)
         {
             lock (typeof(Filter))
             {
@@ -48,7 +48,7 @@ namespace PubSub.PubSubEngine
                 }
                 else
                 {
-                    List<IPubNMS> newSubscribersList = new List<IPubNMS>();
+                    List<IPub> newSubscribersList = new List<IPub>();
                     newSubscribersList.Add(subscriberCallbackReference);
                     SubscribersList.Add(topicName, newSubscribersList);
                 }
@@ -56,7 +56,7 @@ namespace PubSub.PubSubEngine
 
         }
 
-        static public void RemoveSubscriber(String topicName, IPubNMS subscriberCallbackReference)
+        static public void RemoveSubscriber(String topicName, IPub subscriberCallbackReference)
         {
             lock (typeof(Filter))
             {

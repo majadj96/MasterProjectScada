@@ -11,19 +11,19 @@ namespace PubSub.PubSubEngine
 {
 
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    class SubNMS : ISubNMS
+    class Sub : ISub
     {
         #region ISubscription Members
 
         public void Subscribe(string topicName)
         {
             Console.WriteLine("Sab se lepo");
-            IPubNMS subscriber = OperationContext.Current.GetCallbackChannel<IPubNMS>();
+            IPub subscriber = OperationContext.Current.GetCallbackChannel<IPub>();
             Filter.AddSubscriber(topicName, subscriber);
 
             //Notify NMS to send current model to UI
             INotifyNMS proxy = CreateNMSProxy();
-            proxy.UpdateUIModel();
+           // proxy.UpdateUIModel();
         }
 
         private INotifyNMS CreateNMSProxy()
@@ -38,7 +38,7 @@ namespace PubSub.PubSubEngine
 
         public void UnSubscribe(string topicName)
         {
-            IPubNMS subscriber = OperationContext.Current.GetCallbackChannel<IPubNMS>();
+            IPub subscriber = OperationContext.Current.GetCallbackChannel<IPub>();
             Filter.RemoveSubscriber(topicName, subscriber);
         }
 

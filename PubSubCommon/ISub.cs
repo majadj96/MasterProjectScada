@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace PubSubCommon
 {
-    [ServiceContract(CallbackContract = typeof(IPubNMS))]
-    public interface ISubNMS
+    [ServiceContract(CallbackContract = typeof(IPub))]
+    public interface ISub
     {
         [OperationContract]
         void Subscribe(string topicName);

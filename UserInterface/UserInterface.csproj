@@ -95,7 +95,7 @@
     <Compile Include="Model\TapChanger.cs" />
     <Compile Include="Model\Transformator.cs" />
     <Compile Include="Model\UIModel.cs" />
-    <Compile Include="Subscription\SubNMS.cs" />
+    <Compile Include="Subscription\Sub.cs" />
     <Compile Include="TablesWindow.xaml.cs">
       <DependentUpon>TablesWindow.xaml</DependentUpon>
     </Compile>
