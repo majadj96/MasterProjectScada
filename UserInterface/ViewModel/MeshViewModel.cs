@@ -460,12 +460,12 @@ namespace UserInterface.ViewModel
                 }
             });
 
-            currentSubstation = new Substation();
+            SubstationCurrent = new Substation();
         }
 
         public void setSubstation(Substation sub)
         {
-            currentSubstation = sub;
+            SubstationCurrent = sub;
 
             if(sub.AsynchronousMachines.Count == 1)
             {

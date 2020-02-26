@@ -31,7 +31,7 @@ namespace UserInterface
         private ObservableCollection<RadioButton> radioButtons = new ObservableCollection<RadioButton>();
         private ObservableCollection<Substation> substationsList = new ObservableCollection<Substation>();
         private ObservableCollection<Substation> substationsListCopy = new ObservableCollection<Substation>();
-        private ObservableCollection<string> searchType = new ObservableCollection<string> {"Name", "GID" };
+        private ObservableCollection<string> searchType = new ObservableCollection<string> { "Name", "GID" };
         List<Substation> searchedSubs = new List<Substation>();
 
 
@@ -43,12 +43,9 @@ namespace UserInterface
         private ObservableCollection<UIModel> substationItems = new ObservableCollection<UIModel>();
 
         private Substation substationCurrent;
-        
+
         private Substation selectedSubstation;
 
-        public Dictionary<long, Substation> substations;
-        public ObservableCollection<UIModel> substationItems = new ObservableCollection<UIModel>();
-        
         public string statistics { get; set; }
         public string pubSub { get; set; }
         public string connectedStatusBar { get; set; }
@@ -256,7 +253,7 @@ namespace UserInterface
         public MainWindowViewModel()
         {
             CurrentMeshViewModel = meshViewModel;
-            
+
             ButtonTablesCommand = new MyICommand<string>(OnNavigation);
             LoadSubstationCommand = new MyICommand<string>(changeGrid);
             SearchSubsCommand = new MyICommand<string>(searchSubstation);
@@ -283,16 +280,17 @@ namespace UserInterface
             Console.WriteLine(SearchTerm);
             Console.WriteLine(SearchTypeSelected);
 
-            if(SearchTypeSelected == "Name")
+            if (SearchTypeSelected == "Name")
             {
                 searchedSubs = substationsListCopy.Where(x => x.Name.Contains(SearchTerm)).ToList();
                 SubstationsList = new ObservableCollection<Substation>(searchedSubs);
-            }else
+            }
+            else
             {
                 searchedSubs = substationsListCopy.Where(x => x.Gid.Contains(SearchTerm)).ToList();
                 SubstationsList = new ObservableCollection<Substation>(searchedSubs);
             }
-           
+
         }
         private void dissmisSubstation(string a)
         {
@@ -301,7 +299,7 @@ namespace UserInterface
         }
 
 
-    private void Test(object sender, EventArgs e)
+        private void Test(object sender, EventArgs e)
         {
             GaugeValue = rand.Next(0, 100).ToString();
 
@@ -315,7 +313,7 @@ namespace UserInterface
             TablesWindow tablesWindow = new TablesWindow();
 
             TablesWindowViewModel tablesWindowViewModel = new TablesWindowViewModel(SubstationItems);
-            
+
             tablesWindow.DataContext = tablesWindowViewModel;
 
             tablesWindowViewModel.SetView(destination);
@@ -328,7 +326,7 @@ namespace UserInterface
             connectedStatusBar = "Dissconnected"; //SCADA konekcija
             timeStampStatusBar = DateTime.Now.ToLongDateString();  //SCADA konekcija
         }
-        
+
         //comboSubstations lista u comboBoxu
         //SelectedSubstation izabrani u comboBoxu
         //substationItems lista
@@ -336,11 +334,11 @@ namespace UserInterface
 
         public void SetCurrentSubstation()
         {
-            if(Substations.Count > 0)
+            if (Substations.Count > 0)
                 SubstationCurrent = Substations.First().Value;
         }
-        
-        public void PopulateModel(object resources)
+
+        public void PopulateModel(object resources, string topic)
         {
             if (topic == "nms")
             {
@@ -351,13 +349,13 @@ namespace UserInterface
                 if (SubstationCurrent != null)
                     meshViewModel.UpdateSubstationModel(SubstationCurrent);
             }
-            else if(topic == "scada")
+            else if (topic == "scada")
             {
                 //ovde dolaze scada podaci
                 Console.WriteLine("Ovde ide scada");
             }
         }
-        }
+
 
 
         public void populateEquipment(IEquipment equipment, List<Property> properties)
@@ -432,15 +430,15 @@ namespace UserInterface
         {
             ObservableCollection<RadioButton> test = new ObservableCollection<RadioButton>();
             int i = 0;
-            foreach(KeyValuePair<long, Substation> sub in substations)
+            foreach (KeyValuePair<long, Substation> sub in substations)
             {
-                RadioButton rb = new RadioButton() { Content = (i+1) + ". " + sub.Value.Name + "(" + sub.Key + ")", IsChecked = i == 0 };
+                RadioButton rb = new RadioButton() { Content = (i + 1) + ". " + sub.Value.Name + "(" + sub.Key + ")", IsChecked = i == 0 };
                 rb.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFE8D856"));
                 rb.Checked += (sender, args) =>
                 {
                     foreach (RadioButton radioBut in test)
                     {
-                        if(radioBut.Tag != (sender as RadioButton).Tag)
+                        if (radioBut.Tag != (sender as RadioButton).Tag)
                         {
                             radioBut.IsChecked = false;
                         }
@@ -478,7 +476,7 @@ namespace UserInterface
             ObservableCollection<Substation> subs = new ObservableCollection<Substation>(substations.Values);
             SubstationsList = subs;
             substationsListCopy = subs;
-           // setRadioButtons();
+            // setRadioButtons();
             foreach (ResourceDescription resource in resources.Where(x => (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.DISCONNECTOR) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.BREAKER) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.RATIOTAPCHANGER) ||
@@ -486,7 +484,8 @@ namespace UserInterface
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ASYNCHRONOUSMACHINE)))
             {
 
-                switch (ModelCodeHelper.ExtractTypeFromGlobalId(resource.Id)) {
+                switch (ModelCodeHelper.ExtractTypeFromGlobalId(resource.Id))
+                {
                     case (short)DMSType.DISCONNECTOR:
                         Disconector disconector = new Disconector();
                         populateEquipment(disconector, resource.Properties);
@@ -528,7 +527,7 @@ namespace UserInterface
             foreach (ResourceDescription resource in resources.Where(x => (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.DISCONNECTOR) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.BREAKER) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.RATIOTAPCHANGER) ||
-                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ASYNCHRONOUSMACHINE))) 
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ASYNCHRONOUSMACHINE)))
             {
                 UIModel model = new UIModel();
 
@@ -539,20 +538,22 @@ namespace UserInterface
                         case Common.ModelCode.IDOBJ_GID:
                             if (ModelCodeHelper.ExtractTypeFromGlobalId(resource.Id) == (short)DMSType.DISCONNECTOR)
                             {
-                                if(disconectors == 1)
+                                if (disconectors == 1)
                                 {
                                     //Disc1Id = property.GetValue().ToString();
                                     disconectors++;
-                                } else if (disconectors == 2)
+                                }
+                                else if (disconectors == 2)
                                 {
                                     //Disc2Id = property.GetValue().ToString();
                                     disconectors = 0;
                                 }
-                            } else if (ModelCodeHelper.ExtractTypeFromGlobalId(resource.Id) == (short)DMSType.BREAKER)
+                            }
+                            else if (ModelCodeHelper.ExtractTypeFromGlobalId(resource.Id) == (short)DMSType.BREAKER)
                             {
                                 //BreakerId = property.GetValue().ToString();
                             }
-                                model.GID = property.GetValue().ToString();
+                            model.GID = property.GetValue().ToString();
                             break;
                         case Common.ModelCode.IDOBJ_DESC:
                             model.Description = property.GetValue().ToString();
@@ -563,7 +564,7 @@ namespace UserInterface
                         case Common.ModelCode.IDOBJ_NAME:
                             model.Name = property.GetValue().ToString();
                             break;
-                        
+
                         case Common.ModelCode.ASYNCMACHINE_COSPHI:
                             model.Value = property.GetValue().ToString();
                             break;
@@ -602,5 +603,6 @@ namespace UserInterface
             }
             return response;
         }
-    } 
+
+    }
 }

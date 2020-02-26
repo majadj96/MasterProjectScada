@@ -40,9 +40,6 @@ namespace UserInterface
             eventViewModel = new EventTableViewModel();
 
             CurrentTableViewModel = tableViewModel;
-
-            Messenger.Default.Register<NotificationMessage>(tableViewModel, (message) => { tableViewModel.PopulateModel(message.Target); });
-
         }
 
         public void SetView(string window)
