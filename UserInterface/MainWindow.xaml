@@ -149,7 +149,7 @@
             </Setter>
         </Style>
 
-        <Storyboard x:Key="NewAlarm">
+        <!--<Storyboard x:Key="NewAlarm">
             <DoubleAnimation Storyboard.TargetName="AlarmBorder"
                      Storyboard.TargetProperty="Opacity"
                      From="0"
@@ -157,13 +157,13 @@
                      RepeatBehavior="Forever"
                      AutoReverse="True"
                      Duration="0:0:0.5"/>
-        </Storyboard>
+        </Storyboard>-->
     </Window.Resources>
-    <Window.Triggers>
+    <!--<Window.Triggers>
         <EventTrigger RoutedEvent="Loaded">
             <BeginStoryboard Storyboard="{StaticResource NewAlarm}"/>
         </EventTrigger>
-    </Window.Triggers>
+    </Window.Triggers>-->
 
     <Grid Background="#FF474747">
         <Grid.ColumnDefinitions>
