@@ -5,14 +5,14 @@ using System.ServiceModel;
 
 namespace ScadaCommon.ServiceProxies
 {
-    public class NetworkDynamicServiceProxy : ClientBase<IBackEndProessingData>, IBackEndProessingData
+    public class NetworkDynamicServiceProxy : ClientBase<IProcessingServiceContract>, IProcessingServiceContract
     {
         public NetworkDynamicServiceProxy(string endpointName) : base(endpointName)
         {
 
         }
 
-        public void Process(IInputObject inputObj)
+        public void Process(ProcessingObject[] inputObj)
         {
             Channel.Process(inputObj);
         }

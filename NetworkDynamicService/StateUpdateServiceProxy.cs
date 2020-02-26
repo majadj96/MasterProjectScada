@@ -13,11 +13,6 @@ namespace NetworkDynamicService
 
         }
 
-        public void UpdateDateAndTime(DateTime dateTime)
-        {
-            Channel.UpdateDateAndTime(dateTime);
-        }
-
         public void UpdateState(ConnectionState connectionState)
         {
             Channel.UpdateState(connectionState);

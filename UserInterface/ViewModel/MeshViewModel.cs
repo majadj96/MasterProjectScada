@@ -459,6 +459,21 @@ namespace UserInterface.ViewModel
                     DisconectorOperation("2");
                 }
             });
+
+            currentSubstation = new Substation();
+        }
+
+        public void setSubstation(Substation sub)
+        {
+            currentSubstation = sub;
+
+            if(sub.AsynchronousMachines.Count == 1)
+            {
+                Two_AM_Visible = "Hidden";
+            } else
+            {
+                Two_AM_Visible = "Visible";
+            }
         }
 
         public void setUpInitState()
@@ -602,14 +617,6 @@ namespace UserInterface.ViewModel
 
         public void TapChangerOperation()
         {
-            if (Two_AM_Visible == "Visible")
-            {
-                Two_AM_Visible = "Hidden";
-            }
-            else
-            {
-                Two_AM_Visible = "Visible";
-            }
         }
 
         #region Coloring lines

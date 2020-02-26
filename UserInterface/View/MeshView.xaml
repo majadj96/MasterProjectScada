@@ -34,140 +34,140 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid Margin="0,0,0,0" Background="#FF5E5E5E">
-        <Canvas Margin="300,0,0,0" Background="#FF5E5E5E">
+    <Grid Margin="0,0,0,-202" Background="#FF5E5E5E">
+        <Canvas Margin="288,20,0,0" Background="#FF5E5E5E">
 
             <Line
-            X1="0" Y1="10"
-            X2="190" Y2="10"
+            X1="0" Y1="0"
+            X2="190" Y2="0"
             Stroke="{Binding LineStart}"
             StrokeThickness="2" Grid.Row="1" Canvas.Left="15" Canvas.Top="1"/>
             <Line
             X1="0" Y1="0"
             X2="0" Y2="20"
             Stroke="{Binding LineFirst}"
-            StrokeThickness="2" Grid.Row="1" Canvas.Left="110" Canvas.Top="11" />
+            StrokeThickness="2" Grid.Row="1" Canvas.Left="110" Canvas.Top="4" />
 
             <Line
             X1="0" Y1="0"
             X2="0" Y2="20"
             Stroke="{Binding LineSecond}"
-            StrokeThickness="2" Grid.Row="1" Canvas.Left="110" Canvas.Top="81" />
+            StrokeThickness="2" Grid.Row="1" Canvas.Left="110" Canvas.Top="99" />
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="99"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="119"/>
             <Line
             X1="0" Y1="0"
-            X2="0" Y2="20"
+            X2="0" Y2="25"
             Name="line_2"
             Stroke="{Binding LineThird}"
-            StrokeThickness="2" Grid.Row="1" Canvas.Left="110" Canvas.Top="163" />
+            StrokeThickness="2" Grid.Row="1" Height="25" Canvas.Left="110" Canvas.Top="191" />
             <Line
             X1="0" Y1="0"
             X2="0" Y2="25"
                 Stroke="{Binding LineFourth}"
             Name="line_3"
-            StrokeThickness="2" Grid.Row="1" Canvas.Left="110" Canvas.Top="313" />
+            StrokeThickness="2" Grid.Row="1" Canvas.Left="110" Canvas.Top="420" Height="25" />
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="181"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="216"/>
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="29"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="22"/>
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="307"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="416"/>
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="338"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="445"/>
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="76"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="93"/>
             <Line
                 Stroke="{Binding LineUpDis1}"
                 Name="Up_Disconector"
                 X1="0" Y1="0"
-                X2="0" Y2="10"
-                StrokeThickness="2" Canvas.Left="110" Canvas.Top="35" Height="10" />
+                X2="0" Y2="17"
+                StrokeThickness="2" Canvas.Left="110" Canvas.Top="28" Height="17" />
             <Line
                 x:Name="Down_Disconector_Copy"
                 X1="0" Y1="0"
-                X2="0" Y2="10"
+                X2="0" Y2="17"
                 Stroke="{Binding LineDownDis1}"
-                StrokeThickness="2" Canvas.Left="110" Canvas.Top="66" Height="10" />
+                StrokeThickness="2" Canvas.Left="110" Canvas.Top="76" Height="17" />
             <Line
                 x:Name="Up_Breaker"
                 X1="0" Y1="0"
-                X2="0" Y2="10"
+                X2="0" Y2="17"
                 Stroke="{Binding LineUpBreaker}"
-                StrokeThickness="2" Canvas.Left="110" Canvas.Top="106" Height="10" />
+                StrokeThickness="2" Canvas.Left="110" Canvas.Top="125" Height="17" />
             <Line
                 x:Name="Down_Breaker"
                 X1="0" Y1="0"
-                X2="0" Y2="10"
+                X2="0" Y2="17"
                 Stroke="{Binding LineDownBreaker}"
-                StrokeThickness="2" Canvas.Left="110" Canvas.Top="147" Height="10" />
+                StrokeThickness="2" Canvas.Left="110" Canvas.Top="169" Height="17" />
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="157"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="186"/>
             <Line
                 x:Name="Up_Disconector_2"
                 X1="0" Y1="0"
-                X2="0" Y2="10"
+                X2="0" Y2="17"
                 Stroke="{Binding LineUpDis2}"
-                StrokeThickness="2" Canvas.Left="110" Canvas.Top="187" Height="10" />
+                StrokeThickness="2" Canvas.Left="110" Canvas.Top="222" Height="17" />
             <Line
                 x:Name="Down_Disconector_2"
                 X1="0" Y1="0"
-                X2="0" Y2="10"
+                X2="0" Y2="17"
                 Stroke="{Binding LineDownDis2}"
-                StrokeThickness="2" Canvas.Left="110" Canvas.Top="219" Height="10" />
+                StrokeThickness="2" Canvas.Left="110" Canvas.Top="275" Height="17" />
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="228"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="292"/>
             <Line
                 x:Name="Up_PT"
                 X1="0" Y1="0"
-                X2="0" Y2="10"
+                X2="0" Y2="17"
                 Stroke="{Binding LineUpPT}"
-                StrokeThickness="2" Canvas.Left="110" Canvas.Top="234" Height="10" />
+                StrokeThickness="2" Canvas.Left="110" Canvas.Top="298" Height="17" />
             <Line
                 x:Name="Down_PT"
                 X1="0" Y1="0"
-                X2="0" Y2="10"
+                X2="0" Y2="17"
                 Stroke="{Binding LineDownPT}"
-                StrokeThickness="2" Canvas.Left="110" Canvas.Top="297" Height="10" />
+                StrokeThickness="2" Canvas.Left="110" Canvas.Top="399" Height="17" />
             <Line
                 x:Name="Up_AM"
                 X1="0" Y1="0"
-                X2="0" Y2="10"
+                X2="0" Y2="25"
                 Stroke="{Binding LineUpPump}"
-                StrokeThickness="2" Canvas.Left="110" Canvas.Top="344" Height="10" />
-            <Button Name="Disc_1" Content="" Canvas.Left="97" Margin="0" Canvas.Top="43" Width="25" Height="25" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
+                StrokeThickness="2" Canvas.Left="110" Canvas.Top="451" Height="25" Fill="Red" />
+            <Button Name="Disc_1" Content="" Canvas.Left="91" Margin="0" Canvas.Top="44" Width="37" Height="37" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
                 <Button.Background>
                     <ImageBrush ImageSource="{Binding Disconector1Image}"/>
                 </Button.Background>
@@ -176,40 +176,43 @@
                     <MouseBinding Gesture="LeftClick" Command="{Binding CommandDis1}" CommandParameter="1"/>
                 </Button.InputBindings>
             </Button>
-            <Button Name="Disc_2" Content="" Canvas.Left="97" Margin="0" Canvas.Top="194" Width="25" Height="25" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
+            <Button Name="Disc_2" Content="" Canvas.Left="91" Margin="0" Canvas.Top="239" Width="37" Height="37" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
                 <Button.Background>
                     <ImageBrush ImageSource="{Binding Disconector2Image}"/>
                 </Button.Background>
+
                 <Button.InputBindings>
                     <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Disconnector2"/>
                     <MouseBinding Gesture="LeftClick" Command="{Binding CommandDis2}" CommandParameter="2"/>
                 </Button.InputBindings>
             </Button>
-            <Button x:Name="Breaker" Content="" Canvas.Left="93" Margin="0" Canvas.Top="113" Width="35" Height="35" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
+            <Button x:Name="Breaker" Content="" Canvas.Left="97" Margin="0" Canvas.Top="142" Width="27" Height="27" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
                 <Button.Background>
                     <ImageBrush ImageSource="{Binding BreakerImage}"/>
                 </Button.Background>
+
                 <Button.InputBindings>
                     <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Breaker"/>
                     <MouseBinding Gesture="LeftClick" Command="{Binding CommandBreaker}"/>
                 </Button.InputBindings>
             </Button>
-            <Button x:Name="PT" Canvas.Left="74" Margin="0" Canvas.Top="239" Width="71" Height="61" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen" FontFamily="Segoe UI Semibold" Foreground="#00000000">
+            <Button x:Name="PT" Canvas.Left="58" Margin="0" Canvas.Top="316" Width="103" Height="84" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen" FontFamily="Segoe UI Semibold" Foreground="#00000000">
                 <Button.Background>
                     <ImageBrush ImageSource="{Binding PTImage}"/>
                 </Button.Background>
+
                 <Button.InputBindings>
                     <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="PowerTransformer"/>
                     <MouseBinding Gesture="LeftClick" Command="{Binding CommandPT}"/>
                 </Button.InputBindings>
             </Button>
-            <Button x:Name="AM_1" Content="" Canvas.Left="96" Margin="0" Canvas.Top="354" Width="67" Height="87" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}">
+            <Button x:Name="AM_1" Content="" Canvas.Left="91" Margin="0" Canvas.Top="475" Width="88" Height="116" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}">
                 <Button.Background>
                     <ImageBrush ImageSource="{Binding PumpImage, Mode=TwoWay}"/>
                 </Button.Background>
             </Button>
-            <Canvas Visibility="{Binding Two_AM_Visible}" Height="111" Canvas.Left="1" Canvas.Top="349" Width="247" Background="#FF5E5E5E">
-                <Button x:Name="AM_2_Multi" Content="" Canvas.Left="157" Margin="0" Width="67" Height="87" BorderBrush="{x:Null}" Canvas.Top="24" Style="{StaticResource MyButtonStyle}">
+            <Canvas Visibility="{Binding Two_AM_Visible}" Height="150" Canvas.Top="476" Width="253" Background="#FF5E5E5E">
+                <Button x:Name="AM_2_Multi" Content="" Canvas.Left="165" Margin="0" Width="88" Height="116" BorderBrush="{x:Null}" Canvas.Top="24" Style="{StaticResource MyButtonStyle}">
                     <Button.Background>
                         <ImageBrush ImageSource="{Binding Pump2Image, Mode=TwoWay}"/>
                     </Button.Background>
@@ -217,7 +220,7 @@
                         <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="AsynchronousMachine2"/>
                     </Button.InputBindings>
                 </Button>
-                <Button x:Name="AM_1_Multi" Content="" Canvas.Left="38" Margin="0" Width="67" Height="89" BorderBrush="{x:Null}" Canvas.Top="24" Style="{StaticResource MyButtonStyle}">
+                <Button x:Name="AM_1_Multi" Content="" Canvas.Left="35" Margin="0" Width="86" Height="116" BorderBrush="{x:Null}" Canvas.Top="24" Style="{StaticResource MyButtonStyle}">
                     <Button.Background>
                         <ImageBrush ImageSource="{Binding Pump1Image, Mode=TwoWay}"/>
                     </Button.Background>
@@ -226,8 +229,8 @@
                     </Button.InputBindings>
                 </Button>
                 <Rectangle Height="20" Canvas.Left="51" Stroke="{Binding LineUpFirstPump}" StrokeThickness="2" Canvas.Top="4" Width="2"/>
-                <Rectangle Height="20" Canvas.Left="169" Stroke="{Binding LineUpSecondPump}" StrokeThickness="2" Canvas.Top="4" Width="2"/>
-                <Rectangle Height="2" Canvas.Left="51" Stroke="{Binding LineUpMultiPump}" StrokeThickness="2" Width="120" Canvas.Top="-1"/>
+                <Rectangle Height="20" Canvas.Left="183" Stroke="{Binding LineUpSecondPump}" StrokeThickness="2" Canvas.Top="4" Width="2"/>
+                <Rectangle Height="2" Canvas.Left="51" Stroke="{Binding LineUpMultiPump}" StrokeThickness="2" Width="134" Canvas.Top="-1"/>
                 <Ellipse
                 Fill="Black"
                 Height="6"
@@ -239,14 +242,14 @@
                     Height="6"
                     Width="6"
                     StrokeThickness="2"
-                    Stroke="Black" Canvas.Left="167" Canvas.Top="-2"/>
+                    Stroke="Black" Canvas.Left="181" Canvas.Top="-2"/>
             </Canvas>
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="8"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="-1"/>
         </Canvas>
     </Grid>
 </UserControl>

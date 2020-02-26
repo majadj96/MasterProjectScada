@@ -1,10 +1,8 @@
 STA 1
 TCP 4001
-CLASS0 5
+CLASS0 20
+CLASS1 20
+CLASS2 20
+CLASS3 20
 
 
-BO_REG		25 0  0  0      1     0  BO  @DigOut	#
-BI_REG		30 0  0  0      1     0  BI  @DigIn		#
-AI_INT16	20 0  0  0   4095  2000  AI  @AnaIn		#
-AO_INT16	 4 0  0  0   4095  1200  AO  @AnaOut	#
-CI_REG16	 8 0  0  0   4095  1200  CI  @Cnt		#

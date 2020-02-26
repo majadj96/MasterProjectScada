@@ -12,11 +12,6 @@ namespace ScadaCommon.ServiceProxies
         {
 
         }
-        
-        public void UpdateDateAndTime(DateTime dateTime)
-        {
-            Channel.UpdateDateAndTime(dateTime);
-        }
 
         public void UpdateState(ConnectionState connectionState)
         {

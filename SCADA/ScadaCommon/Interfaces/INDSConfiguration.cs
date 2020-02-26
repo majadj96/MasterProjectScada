@@ -11,9 +11,6 @@ namespace ScadaCommon.Interfaces
         List<INDSConfigItem> GetConfigurationItems();
         uint GetScalingFactor(PointType pointType);
         uint GetDeviation(PointType pointType);
-        uint GetNormalValue(PointType pointType);
-        uint GetLowLimit(PointType pointType);
-        uint GetHighLimit(PointType pointType);
         uint GetEguMin(PointType pointType);
         uint GetEguMax(PointType pointType);
     }

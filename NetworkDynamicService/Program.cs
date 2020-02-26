@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScadaCommon.Database;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,11 +11,11 @@ namespace NetworkDynamicService
     {
         static void Main(string[] args)
         {
-            NetworkDynamicService nds = new NetworkDynamicService(); 
+            NetworkDynamicServiceHost nds = new NetworkDynamicServiceHost();
+            
             try
             {
                 nds.Start();
-                Console.WriteLine("Kao krenulo!");
             }
             catch(Exception e)
             {
