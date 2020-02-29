@@ -1,7 +1,10 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
+using ScadaCommon.ComandingModel;
+using System;
 using UserInterface.BaseError;
 using UserInterface.Command;
 using UserInterface.Model;
+using UserInterface.ProxyPool;
 
 namespace UserInterface.ViewModel
 {
@@ -30,7 +33,7 @@ namespace UserInterface.ViewModel
 
         public CommandDisconnectorViewModel(Disconector disconector, string type)
         {
-            DisconectorCurrent = new Disconector(disconector.MRID, disconector.GID, disconector.Name, disconector.Description, disconector.Time, disconector.State);
+            DisconectorCurrent = disconector;
             NewState = !Converter.ConvertToBool(DisconectorCurrent.State);
 
             this.type = type;
@@ -42,7 +45,10 @@ namespace UserInterface.ViewModel
         {
             DisconectorCurrent.NewState = Converter.ConvertToDiscreteState(NewState);
 
-            Messenger.Default.Send(new NotificationMessage("command", DisconectorCurrent, "Disconector" + type));
+            CommandObject commandObject = new CommandObject() { CommandingTime = DateTime.Now, CommandOwner = "UI", EguValue = (float)DisconectorCurrent.NewState, SignalGid = DisconectorCurrent.DiscreteGID };
+            var v = ProxyServices.CommandingServiceProxy.WriteDigitalOutput(commandObject);
+            if (v == ScadaCommon.CommandResult.Success)
+                Messenger.Default.Send(new NotificationMessage("command", DisconectorCurrent, "Disconector" + type));
         }
     }
 }

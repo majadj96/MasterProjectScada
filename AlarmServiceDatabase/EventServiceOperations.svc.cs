@@ -10,7 +10,7 @@ namespace AlarmEventServiceDatabase
     [ServiceKnownType(typeof(Event))]
     public class EventServiceOperations : IEventServiceOperations
     {
-        public bool AddEvent(Event newEvent)
+        public void AddEvent(Event newEvent)
         {
             using (AccessDB db = new AccessDB())
             {
@@ -27,12 +27,11 @@ namespace AlarmEventServiceDatabase
                     });
                     //log
                     db.SaveChanges();
-                    return true;
                 }
                 catch (Exception ex)
                 {
                     //log
-                    return false;
+                    return;
                 }
                 finally
                 {

@@ -4,15 +4,13 @@
   <xs:element name="AddEvent">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="newEvent" nillable="true" type="xs:anyType" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/ScadaCommon.Database" minOccurs="0" name="newEvent" nillable="true" type="q1:Event" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="AddEventResponse">
     <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="AddEventResult" type="xs:boolean" />
-      </xs:sequence>
+      <xs:sequence />
     </xs:complexType>
   </xs:element>
   <xs:element name="GetAllEvents">
@@ -23,7 +21,7 @@
   <xs:element name="GetAllEventsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/ScadaCommon.Database" minOccurs="0" name="GetAllEventsResult" nillable="true" type="q1:ArrayOfEvent" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/ScadaCommon.Database" minOccurs="0" name="GetAllEventsResult" nillable="true" type="q2:ArrayOfEvent" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

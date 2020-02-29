@@ -16,13 +16,10 @@ namespace AlarmEventService.EventServiceRef {
     public interface IEventServiceOperations {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEventServiceOperations/AddEvent", ReplyAction="http://tempuri.org/IEventServiceOperations/AddEventResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ScadaCommon.Database.Event))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ScadaCommon.Database.Event[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ScadaCommon.AlarmEventType))]
-        bool AddEvent(object newEvent);
+        void AddEvent(ScadaCommon.Database.Event newEvent);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEventServiceOperations/AddEvent", ReplyAction="http://tempuri.org/IEventServiceOperations/AddEventResponse")]
-        System.Threading.Tasks.Task<bool> AddEventAsync(object newEvent);
+        System.Threading.Tasks.Task AddEventAsync(ScadaCommon.Database.Event newEvent);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEventServiceOperations/GetAllEvents", ReplyAction="http://tempuri.org/IEventServiceOperations/GetAllEventsResponse")]
         ScadaCommon.Database.Event[] GetAllEvents();
@@ -58,11 +55,11 @@ namespace AlarmEventService.EventServiceRef {
                 base(binding, remoteAddress) {
         }
         
-        public bool AddEvent(object newEvent) {
-            return base.Channel.AddEvent(newEvent);
+        public void AddEvent(ScadaCommon.Database.Event newEvent) {
+            base.Channel.AddEvent(newEvent);
         }
         
-        public System.Threading.Tasks.Task<bool> AddEventAsync(object newEvent) {
+        public System.Threading.Tasks.Task AddEventAsync(ScadaCommon.Database.Event newEvent) {
             return base.Channel.AddEventAsync(newEvent);
         }
         

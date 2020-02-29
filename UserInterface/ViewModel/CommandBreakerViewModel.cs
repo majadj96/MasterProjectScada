@@ -1,7 +1,10 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
+using ScadaCommon.ComandingModel;
+using System;
 using UserInterface.BaseError;
 using UserInterface.Command;
 using UserInterface.Model;
+using UserInterface.ProxyPool;
 
 namespace UserInterface.ViewModel
 {
@@ -29,7 +32,7 @@ namespace UserInterface.ViewModel
 
         public CommandBreakerViewModel(Breaker breaker)
         {
-            BreakerCurrent = new Breaker(breaker.MRID, breaker.GID, breaker.Name, breaker.Description, breaker.Time, breaker.State);
+            BreakerCurrent = breaker;
             NewState = !Converter.ConvertToBool(BreakerCurrent.State);
 
             Command = new MyICommand(CommandBreaker);
@@ -39,7 +42,10 @@ namespace UserInterface.ViewModel
         {
             BreakerCurrent.NewState = Converter.ConvertToDiscreteState(NewState);
 
-            Messenger.Default.Send(new NotificationMessage("command", BreakerCurrent, "Breaker"));
+            CommandObject commandObject = new CommandObject() { CommandingTime = DateTime.Now, CommandOwner = "UI", EguValue = (float)BreakerCurrent.NewState, SignalGid = BreakerCurrent.DiscreteGID };
+            var v = ProxyServices.CommandingServiceProxy.WriteDigitalOutput(commandObject);
+            if(v == ScadaCommon.CommandResult.Success)
+                Messenger.Default.Send(new NotificationMessage("command", BreakerCurrent, "Breaker"));
         }
     }
 }

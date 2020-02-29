@@ -17,5 +17,6 @@ namespace UserInterface.Model
         string Description { get; set; }
 
         string Time { get; set; }
+
     }
 }

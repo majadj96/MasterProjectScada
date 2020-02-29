@@ -41,8 +41,11 @@ namespace UserInterface
             }
             else if (string.Compare(window, "Disconnector2") == 0)
             {
-                commandDisconnectorViewModel = new CommandDisconnectorViewModel(SubstationCurrent.Disconectors[1], "2");
-                CurrentCommandViewModel = commandDisconnectorViewModel;
+                if (SubstationCurrent.Disconectors.Count > 1)
+                {
+                    commandDisconnectorViewModel = new CommandDisconnectorViewModel(SubstationCurrent.Disconectors[1], "2");
+                    CurrentCommandViewModel = commandDisconnectorViewModel;
+                }
             }
             else if (string.Compare(window, "Breaker") == 0)
             {
