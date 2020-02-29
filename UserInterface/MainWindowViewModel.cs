@@ -305,7 +305,7 @@ namespace UserInterface
 
             AnguarValue = rand.Next(-7, 7).ToString();
 
-            GaugeClasic = rand.Next(300, 1000).ToString();
+           // GaugeClasic = rand.Next(300, 1000).ToString();
         }
 
         private void OnNavigation(string destination)
@@ -351,8 +351,18 @@ namespace UserInterface
             }
             else if (topic == "scada")
             {
-                //ovde dolaze scada podaci
-                Console.WriteLine("Ovde ide scada");
+                ScadaUIExchangeModel[] models = (ScadaUIExchangeModel[])resources;
+                List<ScadaUIExchangeModel> measurements = ((ScadaUIExchangeModel[])resources).ToList();
+                foreach (var measure in measurements)
+                {
+                    Substation s = Substations.Values.Where(x => x.AsynchronousMachines.Where(y => y.SignalGid == measure.Gid).FirstOrDefault().SignalGid == measure.Gid).First();
+
+                    s.AsynchronousMachines.Where(x => x.SignalGid == measure.Gid).First().CosPhi = measure.Value;
+                    GaugeClasic = measure.Value.ToString();
+
+                }
+
+                Console.WriteLine(resources);
             }
         }
 
@@ -481,7 +491,8 @@ namespace UserInterface
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.BREAKER) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.RATIOTAPCHANGER) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.POWERTRANSFORMER) ||
-                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ASYNCHRONOUSMACHINE)))
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ASYNCHRONOUSMACHINE) ||
+                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ANALOG)))
             {
 
                 switch (ModelCodeHelper.ExtractTypeFromGlobalId(resource.Id))
@@ -512,6 +523,21 @@ namespace UserInterface
                         Transformator transformator = new Transformator();
                         populateEquipment(transformator, resource.Properties);
                         getMySubstation(resource.Properties).Transformator = transformator;
+                        break;
+
+                    case (short)DMSType.ANALOG:
+                        foreach(var analog in resource.Properties.Where(x=>x.Id == ModelCode.MEASUREMENT_PSR))
+                        {
+                            long gid = analog.PropertyValue.LongValue;
+                            ResourceDescription resource1 = resources.Where(x => x.Id == gid).ToList().First();
+
+                            if(ModelCodeHelper.ExtractTypeFromGlobalId(resource1.Id) == (short)DMSType.ASYNCHRONOUSMACHINE)
+                            {
+                                Substation s = Substations.Values.Where(x => x.AsynchronousMachines.Where(y => y.GID == gid.ToString()).FirstOrDefault().GID == gid.ToString()).First();
+                                s.AsynchronousMachines.Where(x => x.GID == gid.ToString()).First().SignalGid = resource.Id;
+                            }
+
+                        }
                         break;
                 }
 

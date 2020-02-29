@@ -61,9 +61,9 @@ namespace UserInterface.Subscription
         public void PublishMeasure(ScadaUIExchangeModel []measurement, string topicName)
         {
             Console.WriteLine("Stigao model....");
-            //_eventCount += 1;
-            //NotificationMessage n = new NotificationMessage(null, test, topicName);
-            //Messenger.Default.Send<NotificationMessage>(n);
+            _eventCount += 1;
+            NotificationMessage n = new NotificationMessage(null, measurement, topicName);
+            Messenger.Default.Send<NotificationMessage>(n);
 
             //Ovde stizu merenje sa skade, izmenjen je contract odnosno interfejs kod ove metode....
         }

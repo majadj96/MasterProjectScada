@@ -14,14 +14,15 @@ namespace UserInterface.Model
         private string description;
         private string time;
         private double cosPhi;
+        private long signalGid;
         public AsynchronousMachine() { }
-        //Should be addded more properties
         public string MRID { get => mrid; set => mrid = value; }
         public string GID { get => gid; set => gid = value; }
         public string Name { get => name; set => name = value; }
         public string Description { get => description; set => description = value; }
         public string Time { get => time; set => time = value; }
         public double CosPhi { get => cosPhi; set => cosPhi = value; }
+        public long SignalGid { get => signalGid; set => signalGid = value; }
     }
 }
 

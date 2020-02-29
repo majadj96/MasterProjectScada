@@ -45,7 +45,7 @@ namespace BackEndProcessorService
                 }
             }
 
-            this.pointUpdateProxy.UpdatePoint(inputObj);
+           // this.pointUpdateProxy.UpdatePoint(inputObj);
             publisherProxy.PublishMeasure(measurement.ToArray(), "scada");
         }
 

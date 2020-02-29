@@ -17,7 +17,7 @@ namespace NetworkDynamicService.PointUpdater
 
         public void UpdateState(ConnectionState connectionState)
         {
-            stateUpdateProxy.UpdateState(connectionState);
+          //  stateUpdateProxy.UpdateState(connectionState);
             Console.WriteLine(connectionState.ToString());
         }
     }
