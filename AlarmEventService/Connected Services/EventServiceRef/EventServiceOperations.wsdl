@@ -4,8 +4,8 @@
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="http://localhost:55517/EventServiceOperations.svc?xsd=xsd3" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://localhost:55517/EventServiceOperations.svc?xsd=xsd0" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://localhost:55517/EventServiceOperations.svc?xsd=xsd1" namespace="http://schemas.datacontract.org/2004/07/ScadaCommon.Database" />
-      <xsd:import schemaLocation="http://localhost:55517/EventServiceOperations.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/ScadaCommon" />
+      <xsd:import schemaLocation="http://localhost:55517/EventServiceOperations.svc?xsd=xsd1" namespace="http://schemas.datacontract.org/2004/07/Common.AlarmEvent" />
+      <xsd:import schemaLocation="http://localhost:55517/EventServiceOperations.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Common" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IEventServiceOperations_AddEvent_InputMessage">

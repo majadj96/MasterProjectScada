@@ -1,6 +1,6 @@
 ﻿using ScadaCommon;
 using ScadaCommon.ComandingModel;
-using ScadaCommon.Database;
+using Common.AlarmEvent;
 using ScadaCommon.ServiceContract;
 using System.Collections.Generic;
 using System.ServiceModel;

@@ -101,6 +101,8 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\Common.AlarmEvent.Alarm.datasource" />
+    <None Include="Properties\DataSources\Common.AlarmEvent.Event.datasource" />
     <None Include="Properties\DataSources\ScadaCommon.Database.Alarm.datasource" />
     <None Include="Properties\DataSources\ScadaCommon.Database.Event.datasource" />
   </ItemGroup>
@@ -142,6 +144,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{6c234280-508a-47a4-b9ca-2677082ef85f}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SCADA\ScadaCommon\ScadaCommon.csproj">
       <Project>{823d1355-efd0-481c-a0d9-fda0c4ea37df}</Project>
       <Name>ScadaCommon</Name>

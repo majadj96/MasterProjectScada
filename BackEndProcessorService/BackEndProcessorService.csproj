@@ -53,6 +53,10 @@
     <Compile Include="RawConverterModule.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{6c234280-508a-47a4-b9ca-2677082ef85f}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PubSubCommon\PubSubCommon.csproj">
       <Project>{6109286A-0DC9-469C-A271-0605C18ED32C}</Project>
       <Name>PubSubCommon</Name>

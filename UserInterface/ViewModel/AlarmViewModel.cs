@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using UserInterface.BaseError;
 using UserInterface.Command;
-using UserInterface.Model;
+using Common.AlarmEvent;
 
 namespace UserInterface.ViewModel
 {

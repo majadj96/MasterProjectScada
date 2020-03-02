@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace Common
 {
+    public enum AlarmEventType : short
+    {
+        SCADA = 0x01,
+        CE = 0x02,
+        UI = 0x03
+    }
+
     public enum SignalDirection : short
     {
 

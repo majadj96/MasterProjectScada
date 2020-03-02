@@ -1,48 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
+using System;
 
-namespace UserInterface.Model
+namespace Common.AlarmEvent
 {
+    [DataContract]
     public class Event
     {
         #region Variables
         private int iD;
         private long giD;
         private DateTime eventReported;
-        private string eventReportedBy;
+        private AlarmEventType eventReportedBy;
         private string message;
         private string pointName;
         #endregion
 
         #region Props
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DataMember]
         public int ID
         {
             get { return iD; }
             set { iD = value; }
         }
+        [DataMember]
         public long GiD
         {
             get { return giD; }
             set { giD = value; }
         }
-        public DateTime AlarmReported
+        [DataMember]
+        public DateTime EventReported
         {
             get { return eventReported; }
             set { eventReported = value; }
         }
-        public string AlarmReportedBy
+        [DataMember]
+        public AlarmEventType EventReportedBy
         {
             get { return eventReportedBy; }
             set { eventReportedBy = value; }
         }
+        [DataMember]
         public string Message
         {
             get { return message; }
             set { message = value; }
         }
+        [DataMember]
         public string PointName
         {
             get { return pointName; }
@@ -50,6 +58,9 @@ namespace UserInterface.Model
         }
         #endregion
 
-        public Event() { }
+        public Event()
+        {
+            EventReported = DateTime.Now;
+        }
     }
 }
