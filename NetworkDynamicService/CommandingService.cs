@@ -99,9 +99,9 @@ namespace NetworkDynamicService
                 case PointType.ANALOG_OUTPUT_16:
                     return new AnalogPoint() { Gid = command.SignalGid, PointType = pointType, EguValue = command.EguValue, InAlarm = false, Adress = ((AnalogPointCacheItem)basePointCacheItem).Address, MaxValue = ((AnalogPointCacheItem)basePointCacheItem).MaxValue, MinValue = ((AnalogPointCacheItem)basePointCacheItem).MinValue, NormalValue = ((AnalogPointCacheItem)basePointCacheItem).NormalValue };
                 case PointType.BINARY_INPUT:
-                    return new DigitalPoint() { Gid = command.SignalGid, PointType = pointType, InAlarm = false, RawValue = command.EguValue, Adress = ((DigitalPointCacheItem)basePointCacheItem).Address, NormalValue = (int)((DigitalPointCacheItem)basePointCacheItem).NormalValue };
+                    return new DigitalPoint() { Gid = command.SignalGid, PointType = pointType, InAlarm = false, State =  (DState)command.EguValue, Adress = ((DigitalPointCacheItem)basePointCacheItem).Address, NormalValue = (int)((DigitalPointCacheItem)basePointCacheItem).NormalValue };
                 case PointType.BINARY_OUTPUT:
-                    return new DigitalPoint() { Gid = command.SignalGid, PointType = pointType, InAlarm = false, RawValue = command.EguValue, Adress = ((DigitalPointCacheItem)basePointCacheItem).Address, NormalValue = (int)((DigitalPointCacheItem)basePointCacheItem).NormalValue };
+                    return new DigitalPoint() { Gid = command.SignalGid, PointType = pointType, InAlarm = false, State = (DState)command.EguValue, Adress = ((DigitalPointCacheItem)basePointCacheItem).Address, NormalValue = (int)((DigitalPointCacheItem)basePointCacheItem).NormalValue };
                 default:
                     return null;
             }
