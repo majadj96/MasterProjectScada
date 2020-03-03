@@ -59,7 +59,7 @@ namespace NetworkDynamicService
         private void OpenProxies()
         {
            // pointUpdateProxy.Open();
-            //alarmEventServiceProxy.Open();
+            alarmEventServiceProxy.Open();
             //ndSConfigurationProxy.Open();
            // stateUpdateProxy.Open();
             fepCmdProxy.Open();
