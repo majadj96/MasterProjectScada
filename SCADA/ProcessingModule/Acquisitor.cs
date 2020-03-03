@@ -1,4 +1,5 @@
-﻿using ScadaCommon.Interfaces;
+﻿using ScadaCommon;
+using ScadaCommon.Interfaces;
 using System;
 using System.Threading;
 
@@ -69,7 +70,7 @@ namespace ProcessingModule
 
                     if (cnt == configuration.Class0Acquisition)
                     {
-                        processingManager.ExecuteReadCommand(configuration.GetConfigurationItems()[configuration.GetConfigurationItems().Count - 1], 0x00, 0, 0x00, 0x00);
+                        processingManager.ExecuteReadCommand(PointType.NONE, 0x00, 0, 0x00, 0x00);
 
                         cnt = 0;
                     }

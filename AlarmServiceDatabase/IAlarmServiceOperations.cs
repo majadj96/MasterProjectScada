@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 
-namespace AlarmEventService
+namespace AlarmEventServiceDatabase
 {
     [ServiceKnownType(typeof(Alarm))]
     [ServiceContract]
     public interface IAlarmServiceOperations
     {
         [OperationContract]
-        bool AddAlarm(IAlarm alarm);
+        void AddAlarm(Alarm alarm);
 
         [OperationContract]
         bool DeleteAlarm(int id);
 
         [OperationContract]
-        bool AcknowledgeAlarm(IAlarm alarm);
+        bool AcknowledgeAlarm(Alarm alarm);
 
         [OperationContract]
         List<Alarm> GetAllAlarms();

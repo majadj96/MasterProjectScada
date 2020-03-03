@@ -41,6 +41,11 @@ namespace ProcessingModule
             this.processConnection = new AutoResetEvent(true);
             connectionProcessorThread = new Thread(new ThreadStart(ConnectionProcessorThread));
             connectionProcessorThread.Name = "Communication thread";
+
+        }
+
+        public void StartExecution()
+        {
             connectionProcessorThread.Start();
         }
 
@@ -198,6 +203,7 @@ namespace ProcessingModule
                     currentCommand = null;
                     connection.ConnectionState = ConnectionState.DISCONNECTED;
                     string message = $"{se.TargetSite.ReflectedType.Name}.{se.TargetSite.Name}: {se.Message}";
+                    Console.WriteLine(message);
                 }
                 catch (Exception ex)
                 {

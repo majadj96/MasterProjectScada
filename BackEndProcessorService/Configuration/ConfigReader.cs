@@ -73,36 +73,6 @@ namespace BackEndProcessorService.Configuration
             throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointType)));
         }
 
-        public uint GetHighLimit(PointType pointType)
-        {
-            INDSConfigItem item;
-            if (itemToConfiguration.TryGetValue(pointType, out item))
-            {
-                return item.HighLimit;
-            }
-            throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointType)));
-        }
-
-        public uint GetLowLimit(PointType pointType)
-        {
-            INDSConfigItem item;
-            if (itemToConfiguration.TryGetValue(pointType, out item))
-            {
-                return item.LowLimit;
-            }
-            throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointType)));
-        }
-
-        public uint GetNormalValue(PointType pointType)
-        {
-            INDSConfigItem item;
-            if (itemToConfiguration.TryGetValue(pointType, out item))
-            {
-                return item.NormalValue;
-            }
-            throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointType)));
-        }
-
         public uint GetScalingFactor(PointType pointType)
         {
             INDSConfigItem item;

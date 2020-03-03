@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
-using AlarmEventService.Server;
+using AlarmEventServiceDatabase.Server;
 using ScadaCommon.Database;
 
-namespace AlarmEventService
+namespace AlarmEventServiceDatabase
 {
     [ServiceKnownType(typeof(Alarm))]
     public class AlarmServiceOperations : IAlarmServiceOperations
     {
-        public bool AcknowledgeAlarm(IAlarm alarm)
+        public bool AcknowledgeAlarm(Alarm alarm)
         {
             using (AccessDB db = new AccessDB())
             {
@@ -43,13 +43,12 @@ namespace AlarmEventService
             }
         }
 
-        public bool AddAlarm(IAlarm alarm)
+        public void AddAlarm(Alarm alarm)
         {
             using (AccessDB db = new AccessDB())
             {
                 try
                 {
-
                     db.Alarms.Add(new Alarm()
                     {
                         GiD = alarm.GiD,
@@ -61,12 +60,11 @@ namespace AlarmEventService
                     });
                     //log
                     db.SaveChanges();
-                    return true;
                 }
                 catch (Exception ex)
                 {
                     //log
-                    return false;
+                    return;
                 }
                 finally
                 {

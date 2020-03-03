@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScadaCommon.NDSDataModel;
+using System;
 using System.Collections.Generic;
 
 namespace ScadaCommon.Interfaces
@@ -28,6 +29,6 @@ namespace ScadaCommon.Interfaces
         /// </summary>
         /// <param name="pointIds">The identifiers of the points that are requested.</param>
         /// <returns>The list of poitns read from the storage.</returns>
-		List<IPoint> GetPoints(List<PointIdentifier> pointIds);
+		List<BasePointCacheItem> GetPoints(List<PointIdentifier> pointIds);
 	}
 }

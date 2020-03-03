@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 
-namespace AlarmEventService
+namespace AlarmEventServiceDatabase
 {
     [ServiceKnownType(typeof(Event))]
     [ServiceContract]
     public interface IEventServiceOperations
     {
         [OperationContract]
-        bool AddEvent(IEvent newEvent);
+        void AddEvent(Event newEvent);
 
         [OperationContract]
         List<Event> GetAllEvents();

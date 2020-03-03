@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="AlarmEventService.AlarmServiceOperations" CodeBehind="AlarmServiceOperations.svc.cs" %>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="AlarmEventServiceDatabase.AlarmServiceOperations" CodeBehind="AlarmServiceOperations.svc.cs" %>

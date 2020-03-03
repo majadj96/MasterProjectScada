@@ -8,8 +8,5 @@ namespace ScadaCommon.ServiceContract
     {
         [OperationContract]
         void UpdateState(ConnectionState connectionState);
-
-        [OperationContract]
-        void UpdateDateAndTime(DateTime dateTime);
     }
 }

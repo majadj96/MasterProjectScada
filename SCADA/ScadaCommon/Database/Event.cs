@@ -5,7 +5,9 @@ using System;
 
 namespace ScadaCommon.Database
 {
-    public class Event : IEvent
+    [DataContract]
+    [KnownTypeAttribute(typeof(AlarmEventType))]
+    public class Event
     {
         #region Variables
         private int iD;

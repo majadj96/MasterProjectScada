@@ -10,7 +10,7 @@ namespace NMS
 {
     public class PubNMS
     {
-        IPubNMS _proxy;
+        IPub _proxy;
         int _eventCounter;
 
         public PubNMS()
@@ -23,7 +23,7 @@ namespace NMS
             string endpointAddressInString = "net.tcp://localhost:7001/PubNMS";
             EndpointAddress endpointAddress = new EndpointAddress(endpointAddressInString);
             NetTcpBinding netTcpBinding = new NetTcpBinding();
-            _proxy = ChannelFactory<IPubNMS>.CreateChannel(netTcpBinding, endpointAddress);
+            _proxy = ChannelFactory<IPub>.CreateChannel(netTcpBinding, endpointAddress);
         }
 
         public void SendEvent(String message, EventArgs e)

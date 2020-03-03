@@ -1,10 +1,16 @@
 ﻿using BackEndProcessorService;
+using BackEndProcessorService.Proxy;
+using NetworkDynamicService.Cache;
 using NetworkDynamicService.PointUpdater;
 using NetworkDynamicService.ProxyPool;
 using NetworkDynamicService.Transaction;
+using ScadaCommon.BackEnd_FrontEnd;
+using ScadaCommon.ServiceContract;
+using PubSubCommon;
 using System;
 using System.Collections.Generic;
 using System.ServiceModel;
+using TransactionManagerContracts;
 
 namespace NetworkDynamicService
 {
@@ -12,19 +18,52 @@ namespace NetworkDynamicService
     {
         private List<ServiceHost> hosts = null;
         private PointUpdateProxy pointUpdateProxy;
+        private NDSConfigurationProxy ndSConfigurationProxy;
+        private AlarmEventServiceProxy alarmEventServiceProxy;
         private BackEndPocessingModule backEndPocessingModule;
+        private ICommandingServiceContract commandingService;
+        private INDSRealTimePointCache nDSRealTimePointCache;
+        private ModelUpdateContract modelUpdateContract;
+        private ITransactionSteps transactionService;
+        private IStateUpdateService stateUpdateService;
+        private StateUpdateServiceProxy stateUpdateProxy;
+        private FepCommandingServiceProxy fepCmdProxy;
+        private IProcessingServiceContract processingService;
+        private PublisherProxy publisherProxy;
 
         public NetworkDynamicServiceHost()
         {
-            //pointUpdateProxy = new PointUpdateProxy("UpdatePointEndPoint");
-            //pointUpdateProxy.Open();
-            backEndPocessingModule = new BackEndPocessingModule(pointUpdateProxy);
+            pointUpdateProxy = new PointUpdateProxy("UpdatePointEndPoint");
+            alarmEventServiceProxy = new AlarmEventServiceProxy("AlarmEventServiceEndPoint");
+            ndSConfigurationProxy = new NDSConfigurationProxy("IFEPConfigService");
+            stateUpdateProxy = new StateUpdateServiceProxy("StateUpdateServiceEndPoint");
+            fepCmdProxy = new FepCommandingServiceProxy("FEPCommandingServiceContract");
+            publisherProxy = new PublisherProxy("PublisherEndPoint");
+
+            nDSRealTimePointCache = new NDSRealTimePointCache();
+            backEndPocessingModule = new BackEndPocessingModule(pointUpdateProxy, this.alarmEventServiceProxy, this.publisherProxy);
+
+            transactionService =  new TransactionService(nDSRealTimePointCache, OpenProxies);
+            modelUpdateContract = new ModelUpdateContract(nDSRealTimePointCache, ndSConfigurationProxy, transactionService);
+            stateUpdateService = new StateUpdateService(stateUpdateProxy);
+            commandingService = new CommandingService(fepCmdProxy, backEndPocessingModule, nDSRealTimePointCache);
+            processingService = new ProcessingService(backEndPocessingModule);
             InitializeHosts();
         }
 
         public void Start()
         {
             StartHosts();
+        }
+
+        private void OpenProxies()
+        {
+           // pointUpdateProxy.Open();
+            alarmEventServiceProxy.Open();
+            //ndSConfigurationProxy.Open();
+           // stateUpdateProxy.Open();
+            fepCmdProxy.Open();
+            publisherProxy.Open();
         }
 
         private void StartHosts()
@@ -46,10 +85,10 @@ namespace NetworkDynamicService
         private void InitializeHosts()
         {
             hosts = new List<ServiceHost>();
-            hosts.Add(new ServiceHost(backEndPocessingModule));
-            hosts.Add(new ServiceHost(typeof(StateUpdateService)));
-            hosts.Add(new ServiceHost(typeof(PointOperateService)));
-            hosts.Add(new ServiceHost(typeof(ModelUpdateContract))); //transaction
+            hosts.Add(new ServiceHost(stateUpdateService));
+            hosts.Add(new ServiceHost(commandingService));
+            hosts.Add(new ServiceHost(modelUpdateContract));
+            hosts.Add(new ServiceHost(processingService));
         }
 
         public void Dispose()

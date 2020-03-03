@@ -4,87 +4,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UserInterface"
+        xmlns:views="clr-namespace:UserInterface.View"
+        xmlns:viewModel="clr-namespace:UserInterface.ViewModel"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="SCADA SISTEM" Height="628" Width="1522"  WindowState="Maximized" Background="LightGray" >
+        Title="SCADA SISTEM" Height="890" Width="1622"  WindowState="Maximized" Background="LightGray" >
+    <Window.DataContext>
+        <local:MainWindowViewModel/>
+    </Window.DataContext>
+
     <Window.Resources>
-        <Style x:Key="ControlStyle" TargetType="{x:Type Control}">
-            <Setter Property="OverridesDefaultStyle" Value="True"/>
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="Background" Value="#FF6DB4EF"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <Ellipse Fill="{TemplateBinding Background}"/>
-                            <Ellipse>
-                                <Ellipse.Fill>
-                                    <RadialGradientBrush>
-                                        <GradientStop Offset="0" Color="#00000000"/>
-                                        <GradientStop Offset="0.88" Color="#00000000"/>
-                                        <GradientStop Offset="1" Color="#80000000"/>
-                                    </RadialGradientBrush>
-                                </Ellipse.Fill>
-                            </Ellipse>
-                            <Ellipse Margin="10" x:Name="highlightCircle" >
-                                <Ellipse.Fill >
-                                    <LinearGradientBrush >
-                                        <GradientStop Offset="0" Color="#50FFFFFF"/>
-                                        <GradientStop Offset="0.5" Color="#00FFFFFF"/>
-                                        <GradientStop Offset="1" Color="#50FFFFFF"/>
-                                    </LinearGradientBrush>
-                                </Ellipse.Fill>
-                            </Ellipse>
-                            <ContentPresenter x:Name="content" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="highlightCircle" Property="Fill">
-                                    <Setter.Value>
-                                        <LinearGradientBrush StartPoint="0.3,0" EndPoint="0.7,1">
-                                            <GradientStop Offset="0" Color="#50FFFFFF"/>
-                                            <GradientStop Offset="0.5" Color="#00FFFFFF"/>
-                                            <GradientStop Offset="1" Color="#50FFFFFF"/>
-                                        </LinearGradientBrush>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter TargetName="content" Property="RenderTransform">
-                                    <Setter.Value>
-                                        <TranslateTransform Y="0.5" X="0.5"/>
-                                    </Setter.Value>
-                                </Setter>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ControlStyle}"/>
-        <Style TargetType="TabItem">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="TabItem">
-                        <Border Name="Border" BorderThickness="1,1,1,0" BorderBrush="Gainsboro" CornerRadius="4,4,0,0" Margin="2,0">
-                            <ContentPresenter x:Name="ContentSite"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Center"
-                                        ContentSource="Header"
-                                        Margin="10,2"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="LightSkyBlue" />
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="False">
-                                <Setter TargetName="Border" Property="Background" Value="LightGray" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <DataTemplate DataType="{x:Type viewModel:MeshViewModel}">
+            <views:MeshView/>
+        </DataTemplate>
         <Style TargetType="DataGrid">
-            <!-- Make the border and grid lines a little less imposing -->
-            <Setter Property="BorderBrush" Value="LightBlue" />
+            <!-- On mouse hover -->
+            <Setter Property="BorderBrush" Value="#FF999999" />
             <Setter Property="HorizontalGridLinesBrush" Value="#DDDDDD" />
             <Setter Property="VerticalGridLinesBrush" Value="#DDDDDD" />
 
@@ -94,7 +29,7 @@
                         <Style.Triggers>
                             <!-- Highlight a grid row as the mouse passes over -->
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="LightBlue" />
+                                <Setter Property="Background" Value="#FF999999" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -104,16 +39,10 @@
                 <Setter.Value>
                     <Style TargetType="DataGridCell">
                         <Style.Triggers>
-                            <!-- Highlight selected rows -->
+                            <!-- On row select -->
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="#ff66ccff" />
+                                <Setter Property="Background" Value="#FFDBC352" />
                                 <Setter Property="BorderBrush" Value="Transparent" />
-                                <Setter Property="Foreground" Value="Black" />
-                            </Trigger>
-                            <Trigger Property="IsFocused" Value="True">
-                                <Setter Property="Background" Value="#ff66ccff" />
-                                <Setter Property="BorderBrush" Value="Black" />
-                                <Setter Property="BorderThickness" Value="1"/>
                                 <Setter Property="Foreground" Value="Black" />
                             </Trigger>
                         </Style.Triggers>
@@ -141,6 +70,52 @@
                             </Setter.Value>
                         </Setter>
                     </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="TabItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border Name="Border" BorderThickness="1,1,1,0" BorderBrush="Gainsboro" CornerRadius="4,4,0,0" Margin="2,0">
+                            <ContentPresenter x:Name="ContentSite"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        ContentSource="Header"
+                                        Margin="10,2"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#FF6DEA3E" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter TargetName="Border" Property="Background" Value="LightGray" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="MyButtonStyle" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" 
+                            BorderThickness="0"
+                            Padding="4,2" 
+                            BorderBrush="DarkGray" 
+                            CornerRadius="3" 
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#FFF7CE12" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
@@ -187,7 +162,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <Style x:Key="{x:Static StatusBar.SeparatorStyleKey}"
        TargetType="{x:Type Separator}">
             <Setter Property="OverridesDefaultStyle"
@@ -207,7 +181,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <Style x:Key="{x:Type StatusBarItem}"
        TargetType="{x:Type StatusBarItem}">
             <Setter Property="OverridesDefaultStyle"
@@ -222,7 +195,7 @@
                    Value="false">
                                 <Setter Property="Foreground">
                                     <Setter.Value>
-                                        <SolidColorBrush Color="LightBlue" />
+                                        <SolidColorBrush Color="#FF6AF735" />
                                     </Setter.Value>
                                 </Setter>
                             </Trigger>
@@ -232,136 +205,39 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Grid>
+
+    <Grid Background="#FF474747">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="751*"/>
-            <ColumnDefinition Width="643*"/>
-            <ColumnDefinition Width="120*"/>
+            <ColumnDefinition Width="121*"/>
+            <ColumnDefinition Width="686*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="37*"/>
-            <RowDefinition Height="525*"/>
-            <RowDefinition Height="35*"/>
+            <RowDefinition Height="53*"/>
+            <RowDefinition Height="566*"/>
+            <RowDefinition Height="189*"/>
+            <RowDefinition Height="51*"/>
         </Grid.RowDefinitions>
-        <DataGrid x:Name="SubstationItems"
-                  ItemsSource="{Binding SubstationItems, UpdateSourceTrigger=PropertyChanged}"
-                  IsReadOnly="True"
-                  SelectedItem="{Binding SubstationItem, UpdateSourceTrigger=PropertyChanged}"
-                  Height="563"
-                  Margin="10,10,10,0"
-                  VerticalAlignment="Top"
-                  AutoGenerateColumns="False"
-                  CanUserAddRows="False" Grid.Column="1" Grid.RowSpan="3" Background="Transparent">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Width="*"  Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Description" Width="*" Binding="{Binding Description}"/>
-                <DataGridTextColumn Header="Value" Width="*" Binding="{Binding Value}"/>
-                <DataGridTextColumn Header="Time" Width="*" Binding="{Binding Time}"/>
-                <DataGridTextColumn Header="Alarm" Width="*" Binding="{Binding Alarm}"/>
-            </DataGrid.Columns>
-        </DataGrid>
 
-        <Canvas Margin="10,10,16,24" Background="LightBlue" Grid.Row="1" Grid.RowSpan="2">
+        <!--<DockPanel Margin="15,50,0,0" Grid.Row="1" Grid.Column="1" Background="#FF474747">
+            <Menu DockPanel.Dock="Top" Name="MenuTab" HorizontalContentAlignment="Center"  Background="#FF474747" Height="716" Margin="31,0,503.8,0">
+                <MenuItem Header="Point table" Command="{Binding NavigationCommand}" Height="25" CommandParameter="Points" Cursor="Hand" FontFamily="Consolas" FontSize="16" Background="#68CADE" Foreground="White" BorderBrush="#FFC5C5C5"/>
+                <MenuItem Header="Alarm table" Command="{Binding NavigationCommand}" Height="25" CommandParameter="Alarm" Cursor="Hand" FontFamily="Consolas" FontSize="16" Background="#FFFF6D6D" Foreground="White" BorderBrush="#FFC5C5C5"/>
+            </Menu>
+        </DockPanel>-->
 
-            <Line
-            X1="0" Y1="0"
-            X2="0" Y2="40"
-            Stroke="Yellow"
-            StrokeThickness="3" Grid.Row="1" Canvas.Left="110" Canvas.Top="11" />
+        <Grid Grid.Row="1" Grid.Column="0" Margin="20,66,20,10" Background="#FF5E5E5E" Grid.ColumnSpan="2" Grid.RowSpan="2">
+            <ContentControl Content="{Binding CurrentMeshViewModel}"/>
+            <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,880,287" HorizontalAlignment="Right" Width="231" Height="27" VerticalAlignment="Bottom">Mesh Eletricity</Label>
+            <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,920,588" HorizontalAlignment="Right" Width="237" Height="27" VerticalAlignment="Bottom">Mesh Power</Label>
+            <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,432,584" HorizontalAlignment="Right" Width="141" Height="27" VerticalAlignment="Bottom">Fluid Level</Label>
+            <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,408,314" HorizontalAlignment="Right" Width="176" Height="27" VerticalAlignment="Bottom">Tap Changer Position</Label>
+            <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,85,586" HorizontalAlignment="Right" Width="233" Height="27" VerticalAlignment="Bottom">Water Presure</Label>
+        </Grid>
 
+        <Canvas Background="#FF474747" Margin="10,152,20,35" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
 
-            <Line
-            X1="0" Y1="0"
-            X2="0" Y2="40"
-            Stroke="{Binding Line_1_color}"
-            StrokeThickness="3" Grid.Row="1" Canvas.Left="110" Canvas.Top="90" />
-            <Ellipse
-        Fill="#99F0FFF0"
-        Height="35"
-        Width="35"
-        StrokeThickness="2"
-        Stroke="Black" Canvas.Left="93" Canvas.Top="210"/>
-            <Ellipse
-                Fill="#99F0FFF0"
-                Height="35"
-                Width="35"
-                StrokeThickness="2"
-                Stroke="Black" Canvas.Left="93" Canvas.Top="233"/>
-            <Ellipse
-                Fill="Black"
-                Height="6"
-                Width="6"
-                StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="125"/>
-            <Line
-            X1="0" Y1="0"
-            X2="0" Y2="40"
-            Stroke="{Binding Line_2_color}"
-            Name="line_2"
-            StrokeThickness="3" Grid.Row="1" Canvas.Left="110" Canvas.Top="170" />
-            <Line
-            X1="0" Y1="0"
-            X2="0" Y2="40"
-            Stroke="{Binding Line_3_color}"
-            Name="line_3"
-            StrokeThickness="3" Grid.Row="1" Canvas.Left="110" Canvas.Top="267" />
-            <Ellipse
-                Fill="Black"
-                Height="6"
-                Width="6"
-                StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="205"/>
-            <Ellipse
-                Fill="Black"
-                Height="6"
-                Width="6"
-                StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="45"/>
-            <Ellipse
-                Fill="Black"
-                Height="6"
-                Width="6"
-                StrokeThickness="2"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="266"/>
-            <Button Content="{Binding Disconector_state}" Canvas.Left="10" Canvas.Top="60" Width="53" FontSize="8" Background="#FF73B470" Command="{Binding DisconectorCommand}"/>
-            <Button Content="{Binding Breaker_state}" Canvas.Left="10" Canvas.Top="138" Width="53" FontSize="8" Background="#FF73B470" Command="{Binding BreakerCommand}"/>
-            <TextBox Name="statistics" Height="82" Canvas.Left="590" TextWrapping="Wrap" Text="{Binding Statistics}" Width="135" Background="#33FFFFFF"/>
-        </Canvas>
-
-        <Line
-        X1="0" Y1="10"
-        X2="150" Y2="10"
-        Stroke="Black"
-        StrokeThickness="3" Margin="51,10,153,185" Grid.Row="1"/>
-
-        <Line
-         X1="{Binding Disconector, UpdateSourceTrigger=PropertyChanged}" Y1= "0"
-         X2="0" Y2="40"
-        Stroke="{Binding Dis_color, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-        Name="disconector"
-        StrokeThickness="3" Margin="120,59,529,242" Grid.Row="1" />
-
-        <Line
-            X1="{Binding Breaker, UpdateSourceTrigger=PropertyChanged}" Y1="0"
-            X2="0" Y2="40"
-            Stroke="{Binding Breaker_color}"
-            Name="breaker"
-            StrokeThickness="3" Margin="120,138,530,162" Grid.Row="1" />
-
-
-
-        <Polygon
-        Points="0,0 60,0 60,50 0,50"
-        Stroke="Black" 
-        StrokeThickness="3" Margin="90,314,192,1" Grid.Row="1">
-            <Polygon.Fill>
-                <SolidColorBrush Color="Gray" Opacity="0.2"/>
-            </Polygon.Fill>
-        </Polygon>
-        <Label Content="AM" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="90,318,0,0" Grid.Row="1" VerticalAlignment="Top" Height="40" Width="58" FontFamily="Vijaya" FontSize="16"/>
-        <Label Content="{Binding PubSub}" Grid.Column="2" Margin="10,111,10,0" Grid.Row="1" VerticalAlignment="Top" Height="10"/>
-        <StatusBar Margin="10,11,10,0" Grid.Row="2" Grid.ColumnSpan="3">
-
+        <Label Content="{Binding PubSub}" Margin="10,111,10,0" Grid.Row="1" VerticalAlignment="Top" Height="10" Grid.ColumnSpan="2"/>
+        <StatusBar Margin="10,11,10,0" Grid.Row="3" Grid.ColumnSpan="2">
             <StatusBarItem>
                 <Label Content="{Binding TimeStampStatusBar}"   />
             </StatusBarItem>
@@ -372,14 +248,96 @@
             <Separator Grid.Column="1" />
             <StatusBarItem>
                 <Label  Content="SCADA SISTEM"  />
-
             </StatusBarItem>
         </StatusBar>
 
-        <Button  Content="Alarm states"  Grid.Column="2" HorizontalAlignment="Left" Height="24" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100"/>
+        <Button  Content="Summary Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="585,29,0,0" VerticalAlignment="Top" Width="145" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#258565" Foreground="White" BorderBrush="#FFC5C5C5" Grid.Column="1"/>
+        <Button  Content="Alarm Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Alarm" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="770,29,0,0" VerticalAlignment="Top" Width="116" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#FFFF6D6D" Foreground="White" BorderBrush="#FFC5C5C5" Grid.Column="1"/>
+        <Button  Content="Event Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Event" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="924,29,0,0" VerticalAlignment="Top" Width="118" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#326492" Foreground="White" BorderBrush="#FFC5C5C5" Grid.Column="1"/>
+        <Label Content="Select Substation" HorizontalAlignment="Left" Margin="37,37,0,0" HorizontalContentAlignment="Center" VerticalAlignment="Top" Height="38" Width="292" RenderTransformOrigin="0.5,0.5" Foreground="#FFF5D856" FontFamily="Consolas" FontSize="18" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
 
-        <ComboBox ItemsSource="{Binding ComboSubstations}"  SelectedItem="{Binding SelectedSubstation}" HorizontalAlignment="Left" Margin="120,5,0,0" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Select Substation" HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top"/>
+        <lvc:Gauge Grid.Row="1" Grid.Column="1" Margin="728,158,413,280"
+                   Uses360Mode="True"
+                   From="0" To="100" Value="{Binding GaugeValue}"
+                   HighFontSize="20" Foreground="White"
+                   InnerRadius="0" GaugeBackground="#7F549EE9"/>
 
+        <lvc:AngularGauge Grid.Row="1" Value="{Binding AnguarValue}" FromValue="-7" ToValue="7" 
+                          LabelsStep="1" TicksStep="1" Wedge="300"
+                          TicksForeground="White" Foreground="White" 
+                          FontWeight="Bold" FontSize="10"
+                          SectionsInnerRadius="0.5" Margin="726,434,415,8" Grid.Column="1">
+            <lvc:AngularGauge.Sections>
+                <lvc:AngularSection FromValue="-7" ToValue="7" Fill="#FFFF8C4A"/>
+            </lvc:AngularGauge.Sections>
+        </lvc:AngularGauge>
+
+        <lvc:Gauge Grid.Row="1"
+                   From="0" To="1000" Value="{Binding GaugeClasic}" Margin="974,139,63,280" Grid.Column="1">
+            <lvc:Gauge.GaugeActiveFill>
+                <LinearGradientBrush>
+                    <GradientStop Color="#FF00FFE8" Offset="0.0" />
+                    <GradientStop Color="#FF00A2FF" Offset="0.496" />
+                    <GradientStop Color="Blue" Offset="1.0" />
+                </LinearGradientBrush>
+            </lvc:Gauge.GaugeActiveFill>
+        </lvc:Gauge>
+        <lvc:Gauge Grid.Row="1"
+            From="0" To="1000" Value="{Binding GaugeClasic}" Margin="131,447,906,162" Grid.Column="1" Grid.RowSpan="2">
+            <lvc:Gauge.GaugeActiveFill>
+                <LinearGradientBrush>
+                    <GradientStop Color="#FFFFE800" Offset="0.0" />
+                    <GradientStop Color="#FFFFAE00" Offset="0.623" />
+                    <GradientStop Color="#FFFF5D00" Offset="1.0" />
+                </LinearGradientBrush>
+            </lvc:Gauge.GaugeActiveFill>
+        </lvc:Gauge>
+        <lvc:Gauge Grid.Row="1"
+            From="0" To="1000" Value="{Binding GaugeClasic}" Margin="131,139,906,280" Grid.Column="1">
+            <lvc:Gauge.GaugeActiveFill>
+                <LinearGradientBrush>
+                    <GradientStop Color="#FF72FF53" Offset="0.0" />
+                    <GradientStop Color="#FF44C537" Offset="0.539" />
+                    <GradientStop Color="#FF35994C" Offset="1.0" />
+                </LinearGradientBrush>
+            </lvc:Gauge.GaugeActiveFill>
+        </lvc:Gauge>
+        <Canvas Background="#FF474747" Margin="20,58,1222,10" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2">
+            <DataGrid x:Name="dataGridSub"
+            ItemsSource="{Binding SubstationsList , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding SelectedSubstation}" HorizontalAlignment="Left" CanUserResizeRows="False" HorizontalScrollBarVisibility="Disabled" VerticalAlignment="Bottom" Height="551" Width="296" AutoGenerateColumns="False" IsReadOnly="True" FontFamily="Consolas" FontSize="14" Background="#66F0F0F0" Canvas.Left="9" Canvas.Top="6">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Width="150" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="GID" Width="150" Binding="{Binding Gid}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <StackPanel x:Name="SubstationsPanel" Height="683" Canvas.Top="10" Width="272">
+                <ItemsControl FontFamily="Consolas" ItemsSource="{Binding RadioButtons}" FontSize="16">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </StackPanel>
+            <Button Content="Load substation" Command="{Binding LoadSubstationCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41"  VerticalAlignment="Top" Width="148" FontFamily="Consolas" FontSize="16" Background="#FFE8D856" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0" HorizontalAlignment="Right" Canvas.Left="87" Canvas.Top="-41"/>
+            <TextBox Height="26" Canvas.Left="9" TextWrapping="Wrap" Text="{Binding SearchTerm}" Canvas.Top="567" Width="178" FontFamily="Consolas" FontSize="16" Background="#FFEBEBEB"/>
+            <ComboBox Canvas.Left="192" FontFamily="Consolas" SelectedIndex="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Canvas.Top="567" Width="113" Height="26" ItemsSource="{Binding Path=SearchType}" SelectedValue="{Binding Path=SearchTypeSelected}" />
+            <Button Content="" Command="{Binding SearchSubsCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="59"  VerticalAlignment="Top" Width="59" FontFamily="Consolas" FontSize="16" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0" HorizontalAlignment="Right" Canvas.Left="9" Canvas.Top="598">
+                <Button.Background>
+                    <ImageBrush ImageSource="Assets/search.png"/>
+                </Button.Background>
+            </Button>
+            <Button Content="" Command="{Binding DissmisSubsCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="44"  VerticalAlignment="Top" Width="47" FontFamily="Consolas" FontSize="16" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0" HorizontalAlignment="Right" Canvas.Left="73" Canvas.Top="606">
+                <Button.Background>
+                    <ImageBrush ImageSource="Assets/dismiss.png"/>
+                </Button.Background>
+            </Button>
+            <Label Content="(search by)" FontFamily="Consolas" FontSize="11" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Canvas.Left="192" Canvas.Top="593" Height="26" Width="98" Foreground="#FF1B1B1B"/>
+
+        </Canvas>
+
+        <!--<Border x:Name="AlarmBorder" Visibility="Visible" BorderBrush="Crimson" BorderThickness="10" HorizontalAlignment="Left" Height="820" Margin="0,0,0,0" VerticalAlignment="Top" Width="1512" Grid.RowSpan="3"></Border>-->
     </Grid>
 </Window>

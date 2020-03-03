@@ -1,75 +1,139 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using Common;
+using Common.GDA;
+using GalaSoft.MvvmLight.Messaging;
+using PubSubCommon;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
+using System.Threading;
+using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
+using System.Windows.Threading;
+using UserInterface.BaseError;
 using UserInterface.Command;
+using UserInterface.Model;
 using UserInterface.Subscription;
+using UserInterface.ViewModel;
 
 namespace UserInterface
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : BindableBase
     {
+        public MyICommand<string> ButtonTablesCommand { get; private set; }
+        public MyICommand<string> SearchSubsCommand { get; private set; }
+        public MyICommand<string> DissmisSubsCommand { get; private set; }
+        public MyICommand<string> LoadSubstationCommand { get; private set; }
 
-        public MainViewModel(Window window)
-        {
-            SubNMS subNMS = new SubNMS();
-            subNMS.OnSubscribe();
-            setUpLayout();
-            setUpInitState();
-            Messenger.Default.Register<NotificationMessage>(this, (message) => {PopulateModel(message.Notification); });
-            DisconectorCommand = new DisconectorCommand(this);
-            BreakerCommand = new BreakerCommand(this);
-        }
+        private MeshViewModel meshViewModel = new MeshViewModel();
 
-        public void setUpLayout()
-        {
-            // window.WindowState = WindowState.Maximized;
-            //  window.WindowStyle = WindowStyle.None;
-        }
+        private ObservableCollection<RadioButton> radioButtons = new ObservableCollection<RadioButton>();
+        private ObservableCollection<Substation> substationsList = new ObservableCollection<Substation>();
+        private ObservableCollection<string> searchType = new ObservableCollection<string> { "Name", "GID" };
+        List<Substation> searchedSubs = new List<Substation>();
 
-        public void setUpInitState()
-        {
-            disconector = breaker = 20;
-            breaker_state = disconector_state = "ON";
-            dis_color = breaker_color = line_1_color = line_2_color = line_3_color = "Black";
-            statistics = "";
-            pubSub = "pocetna vrednost";
+        #region Variables
+        private BindableBase currentMeshViewModel;
+        private BindableBase currentTableViewModel;
 
-            connectedStatusBar = "Dissconnected"; //SCADA konekcija
-            timeStampStatusBar = DateTime.Now.ToLongDateString();  //SCADA konekcija
+        private Dictionary<long, Substation> substations;
+        private ObservableCollection<UIModel> substationItems = new ObservableCollection<UIModel>();
 
-        }
+        private Substation substationCurrent;
 
+        private Substation selectedSubstation;
 
-        #region Properties
-        public Window Window { get; set; }
-        public int breaker { get; set; }
-        public int disconector { get; set; }
-        public string disconector_state { get; set; }
-        public string breaker_state { get; set; }
-
-        public string dis_color { get; set; }
-        public string breaker_color { get; set; }
-        public string line_1_color { get; set; }
-        public string line_2_color { get; set; }
-        public string line_3_color { get; set; }
         public string statistics { get; set; }
         public string pubSub { get; set; }
-
         public string connectedStatusBar { get; set; }
         public string timeStampStatusBar { get; set; }
+        public string gaugeValue { get; set; }
+        public string anguarValue { get; set; }
+        public string gaugeClasic { get; set; }
+        public string searchTerm { get; set; }
+        public string searchTypeSelected { get; set; }
 
-        //comboSubstations lista u comboBoxu
-        //SelectedSubstation izabrani u comboBoxu
-        //substationItems lista
-        //substationItem oznacen u listi 
+        #endregion
+
+        #region Props
+        public BindableBase CurrentMeshViewModel
+        {
+            get { return currentMeshViewModel; }
+            set { SetProperty(ref currentMeshViewModel, value); }
+        }
+        public BindableBase CurrentTableViewModel
+        {
+            get { return currentTableViewModel; }
+            set { SetProperty(ref currentTableViewModel, value); }
+        }
+
+        public Substation SubstationCurrent
+        {
+            get { return substationCurrent; }
+            set { substationCurrent = value; OnPropertyChanged("SubstationCurrent"); }
+        }
+
+        public Dictionary<long, Substation> Substations
+        {
+            get
+            {
+                return substations;
+            }
+            set
+            {
+                substations = value;
+                OnPropertyChanged("Substations");
+            }
+        }
+        public ObservableCollection<UIModel> SubstationItems
+        {
+            get
+            {
+                return substationItems;
+            }
+            set
+            {
+                substationItems = value;
+                OnPropertyChanged("SubstationItems");
+            }
+        }
+        public ObservableCollection<Substation> SubstationsList
+        {
+            get
+            {
+                return substationsList;
+            }
+            set
+            {
+                substationsList = value;
+                OnPropertyChanged("SubstationsList");
+            }
+        }
+        public ObservableCollection<string> SearchType
+        {
+            get
+            {
+                return searchType;
+            }
+            set
+            {
+                searchType = value;
+                OnPropertyChanged("SearchType");
+            }
+        }
+        public ObservableCollection<RadioButton> RadioButtons
+        {
+            get
+            {
+                return radioButtons;
+            }
+            set
+            {
+                radioButtons = value;
+                OnPropertyChanged("RadioButtons");
+            }
+        }
 
         public string ConnectedStatusBar
         {
@@ -81,6 +145,54 @@ namespace UserInterface
             {
                 connectedStatusBar = value;
                 OnPropertyChanged("ConnectedStatusBar");
+            }
+        }
+        public Substation SelectedSubstation
+        {
+            get
+            {
+                return selectedSubstation;
+            }
+            set
+            {
+                selectedSubstation = value;
+                OnPropertyChanged("SelectedSubstation");
+            }
+        }
+        public string GaugeClasic
+        {
+            get
+            {
+                return gaugeClasic;
+            }
+            set
+            {
+                gaugeClasic = value;
+                OnPropertyChanged("GaugeClasic");
+            }
+        }
+        public string SearchTypeSelected
+        {
+            get
+            {
+                return searchTypeSelected;
+            }
+            set
+            {
+                searchTypeSelected = value;
+                OnPropertyChanged("SearchTypeSelected");
+            }
+        }
+        public string SearchTerm
+        {
+            get
+            {
+                return searchTerm;
+            }
+            set
+            {
+                searchTerm = value;
+                OnPropertyChanged("SearchTerm");
             }
         }
         public string TimeStampStatusBar
@@ -95,7 +207,30 @@ namespace UserInterface
                 OnPropertyChanged("TimeStampStatusBar");
             }
         }
-
+        public string GaugeValue
+        {
+            get
+            {
+                return gaugeValue;
+            }
+            set
+            {
+                gaugeValue = value;
+                OnPropertyChanged("GaugeValue");
+            }
+        }
+        public string AnguarValue
+        {
+            get
+            {
+                return anguarValue;
+            }
+            set
+            {
+                anguarValue = value;
+                OnPropertyChanged("AnguarValue");
+            }
+        }
         public string PubSub
         {
             get
@@ -108,219 +243,410 @@ namespace UserInterface
                 OnPropertyChanged("PubSub");
             }
         }
-
-
-        public ICommand DisconectorCommand
-        {
-            get;
-            private set;
-        }
-         public ICommand BreakerCommand
-        {
-            get;
-            private set;
-        }
-
-        public string Dis_color
-        {
-            get
-            {
-                return dis_color;
-            }
-            set
-            {
-                dis_color = value;
-                OnPropertyChanged("Dis_color");
-            }
-        }
-        public string Statistics
-        {
-            get
-            {
-                return statistics;
-            }
-            set
-            {
-                statistics = value;
-                OnPropertyChanged("Statistics");
-            }
-        }
-        public string Line_1_color
-        {
-            get
-            {
-                return line_1_color;
-            }
-            set
-            {
-                line_1_color = value;
-                OnPropertyChanged("Line_1_color");
-            }
-        }
-        public string Line_2_color
-        {
-            get
-            {
-                return line_2_color;
-            }
-            set
-            {
-                line_2_color = value;
-                OnPropertyChanged("Line_2_color");
-            }
-        }
-        public string Line_3_color
-        {
-            get
-            {
-                return line_3_color;
-            }
-            set
-            {
-                line_3_color = value;
-                OnPropertyChanged("Line_3_color");
-            }
-        }
-          public string Breaker_color
-        {
-            get
-            {
-                return breaker_color;
-            }
-            set
-            {
-                breaker_color = value;
-                OnPropertyChanged("Breaker_color");
-            }
-        }
-
-
-        public string Disconector_state
-        {
-            get
-            {
-                return disconector_state;
-            }
-            set
-            {
-                disconector_state = value;
-                OnPropertyChanged("Disconector_state");
-            }
-        }
-
-        public string Breaker_state
-        {
-            get
-            {
-                return breaker_state;
-            }
-            set
-            {
-                breaker_state = value;
-                OnPropertyChanged("Breaker_state");
-            }
-        }
-
-        public int Disconector
-        {
-            get
-            {
-                return disconector;
-            }
-            set
-            {
-                disconector = value;
-                OnPropertyChanged("Disconector");
-            }
-        }
-        
-        public int Breaker
-        {
-            get
-            {
-                return breaker;
-            }
-            set
-            {
-                breaker = value;
-                OnPropertyChanged("Breaker");
-            }
-        }
-
         #endregion
+        DispatcherTimer timer = new DispatcherTimer();
+        Random rand = new Random();
 
-        #region INotifyPropertyChanged Members
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(string propertyName)
+        public MainWindowViewModel()
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
+            CurrentMeshViewModel = meshViewModel;
 
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            ButtonTablesCommand = new MyICommand<string>(OnNavigation);
+            LoadSubstationCommand = new MyICommand<string>(changeGrid);
+            SearchSubsCommand = new MyICommand<string>(searchSubstation);
+            DissmisSubsCommand = new MyICommand<string>(dissmisSubstation);
+
+            Sub subNMS = new Sub();
+            subNMS.OnSubscribe("nms");
+            subNMS.OnSubscribe("scada");
+            setUpInitState();
+
+            substations = new Dictionary<long, Substation>();
+
+            timer.Tick += new EventHandler(Test);
+            timer.Interval = new TimeSpan(0, 0, 1);
+            timer.Start();
+            Messenger.Default.Register<NotificationMessage>(this, (message) => { PopulateModel(message.Target, message.Notification); });
         }
-        #endregion
 
-  
-        public void DisconectorOperation()
+        private void changeGrid(string a)
         {
-            if (Disconector == 0)
-            {
-                Disconector = 20;
-                Disconector_state = "ON";
-                Dis_color = Line_1_color = Breaker_color = Line_2_color = Line_3_color = "Black";
-                Statistics = "Disconector status: OFF";
-            }
-            else if (Disconector == 20)
-            {
-                Disconector = 0;
-                Disconector_state = "OFF";
-                Dis_color = Line_1_color = "Yellow";
-                Statistics = "Disconector status: ON";
+            SetCurrentSubstation();
+            meshViewModel.UpdateSubstationModel(SubstationCurrent);
+        }
+        private void searchSubstation(string a)
+        {
+            Console.WriteLine(SearchTerm);
+            Console.WriteLine(SearchTypeSelected);
 
-                if (Breaker == 0)
+            if (SearchTypeSelected == "Name")
+            {
+                searchedSubs = substations.Values.Where(x => x.Name.Contains(SearchTerm)).ToList();
+                SubstationsList = new ObservableCollection<Substation>(searchedSubs);
+            }
+            else
+            {
+                searchedSubs = substations.Values.Where(x => x.Gid.Contains(SearchTerm)).ToList();
+                SubstationsList = new ObservableCollection<Substation>(searchedSubs);
+            }
+
+        }
+        private void dissmisSubstation(string a)
+        {
+            SubstationsList = new ObservableCollection<Substation>( substations.Values.ToList());
+            SearchTerm = "";
+        }
+
+
+        private void Test(object sender, EventArgs e)
+        {
+            GaugeValue = rand.Next(0, 100).ToString();
+
+            AnguarValue = rand.Next(-7, 7).ToString();
+
+           // GaugeClasic = rand.Next(300, 1000).ToString();
+        }
+
+        private void OnNavigation(string destination)
+        {
+            TablesWindow tablesWindow = new TablesWindow();
+
+            TablesWindowViewModel tablesWindowViewModel = new TablesWindowViewModel(SubstationItems);
+
+            tablesWindow.DataContext = tablesWindowViewModel;
+
+            tablesWindowViewModel.SetView(destination);
+
+            tablesWindow.Show();
+        }
+
+        public void setUpInitState()
+        {
+            connectedStatusBar = "Dissconnected"; //SCADA konekcija
+            timeStampStatusBar = DateTime.Now.ToLongDateString();  //SCADA konekcija
+        }
+
+        //comboSubstations lista u comboBoxu
+        //SelectedSubstation izabrani u comboBoxu
+        //substationItems lista
+        //substationItem oznacen u listi 
+
+        public void SetCurrentSubstation()
+        {
+            if (Substations.Count > 0)
+                if (SelectedSubstation != null)
+                    SubstationCurrent = SelectedSubstation;
+                else
+                    SubstationCurrent = Substations.Values.First();
+        }
+
+        public void PopulateModel(object resources, string topic)
+        {
+            if (topic == "nms")
+            {
+                NMSModel nMSModel = (NMSModel)resources;
+                SubstationItems = toUIModelList(nMSModel.ResourceDescs);
+                setModel(nMSModel.ResourceDescs);
+                SetCurrentSubstation();
+                if (SubstationCurrent != null)
+                    meshViewModel.UpdateSubstationModel(SubstationCurrent);
+            }
+            else if (topic == "scada")
+            {
+                ScadaUIExchangeModel[] models = (ScadaUIExchangeModel[])resources;
+                List<ScadaUIExchangeModel> measurements = ((ScadaUIExchangeModel[])resources).ToList();
+                foreach (var measure in measurements)
                 {
-                    Breaker_color = Line_2_color = Line_3_color = "Yellow";
+                    Substation s = Substations.Values.Where(x => x.AsynchronousMachines.Where(y => y.SignalGid == measure.Gid).FirstOrDefault().SignalGid == measure.Gid).First();
+
+                    s.AsynchronousMachines.Where(x => x.SignalGid == measure.Gid).First().CosPhi = measure.Value;
+                    GaugeClasic = measure.Value.ToString();
+
+                }
+
+                Console.WriteLine(resources);
+            }
+        }
+
+
+
+        public void populateEquipment(IEquipment equipment, List<Property> properties)
+        {
+            foreach (Property prop in properties)
+            {
+                switch (prop.Id)
+                {
+                    case Common.ModelCode.IDOBJ_GID:
+                        equipment.GID = prop.GetValue().ToString();
+                        break;
+                    case Common.ModelCode.IDOBJ_DESC:
+                        equipment.Description = prop.GetValue().ToString();
+                        break;
+                    case Common.ModelCode.IDOBJ_MRID:
+                        equipment.MRID = prop.GetValue().ToString();
+                        break;
+                    case Common.ModelCode.IDOBJ_NAME:
+                        equipment.Name = prop.GetValue().ToString();
+                        break;
                 }
             }
         }
 
-    
-        public void BreakerOperation()
+        public void populateMachine(AsynchronousMachine asynchronousMachine, List<Property> properties)
         {
-            if (Breaker == 0)
+            foreach (Property prop in properties)
             {
-                Breaker = 20;
-                Breaker_state = "ON";
-                Statistics = "Breaker status: OFF";
-                Breaker_color = Line_2_color = Line_3_color = "Black";
-
-
+                switch (prop.Id)
+                {
+                    case Common.ModelCode.ASYNCMACHINE_COSPHI:
+                        asynchronousMachine.CosPhi = Double.Parse(prop.GetValue().ToString());
+                        break;
+                }
             }
-            else if (Breaker == 20)
+        }
+        public void populatTapChanger(TapChanger tapChanger, List<Property> properties)
+        {
+            foreach (Property prop in properties)
             {
-                Breaker = 0;
-                Breaker_state = "OFF";
-                Statistics = "Breaker status: ON";
-
-                if(Disconector == 0)
+                switch (prop.Id)
                 {
-                    Breaker_color = Line_2_color = Line_3_color = "Yellow";
+                    case Common.ModelCode.TAPCHANGER_HIGHSTEP:
+                        tapChanger.HighStep = Int32.Parse(prop.GetValue().ToString());
+                        break;
+                    case Common.ModelCode.TAPCHANGER_LOWSTEP:
+                        tapChanger.LowStep = Int32.Parse(prop.GetValue().ToString());
+                        break;
+                    case Common.ModelCode.TAPCHANGER_NORMALSTEP:
+                        tapChanger.NormalStep = Int32.Parse(prop.GetValue().ToString());
+                        break;
+                }
+            }
+        }
 
-                } else if(Disconector == 20)
+        public Substation getMySubstation(List<Property> properties)
+        {
+            Property subGid = properties.Where(x => x.Id == ModelCode.EQUIPMENT_EQUIPCONTAINER).FirstOrDefault();
+            return Substations[long.Parse(subGid.PropertyValue.LongValue.ToString())];
+        }
+
+        public Substation getSubstationForTapChaner(List<Property> properties, List<ResourceDescription> resources)
+        {
+            Property twGid = properties.Where(x => x.Id == ModelCode.RATIOTAPCHANGER_TRWINDING).FirstOrDefault();
+            ResourceDescription tw = resources.Where(x => x.Properties.Where(y => y.Id == ModelCode.IDOBJ_GID).FirstOrDefault().PropertyValue == twGid.PropertyValue).FirstOrDefault();
+            Property ptGid = tw.Properties.Where(x => x.Id == ModelCode.TRANSFORMERWINDING_POWERTR).FirstOrDefault();
+            ResourceDescription pt = resources.Where(x => x.Properties.Where(y => y.Id == ModelCode.IDOBJ_GID).FirstOrDefault().PropertyValue == ptGid.PropertyValue).FirstOrDefault();
+            return getMySubstation(pt.Properties);
+        }
+
+        public void setRadioButtons()
+        {
+            ObservableCollection<RadioButton> test = new ObservableCollection<RadioButton>();
+            int i = 0;
+            foreach (KeyValuePair<long, Substation> sub in substations)
+            {
+                RadioButton rb = new RadioButton() { Content = (i + 1) + ". " + sub.Value.Name + "(" + sub.Key + ")", IsChecked = i == 0 };
+                rb.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFE8D856"));
+                rb.Checked += (sender, args) =>
                 {
-                    Breaker_color = Line_2_color = Line_3_color = "Black";
+                    foreach (RadioButton radioBut in test)
+                    {
+                        if (radioBut.Tag != (sender as RadioButton).Tag)
+                        {
+                            radioBut.IsChecked = false;
+                        }
+                    }
 
+                    String[] gidList = (sender as RadioButton).Content.ToString().Split('(');
+                    String[] gidL = gidList[1].Split(')');
+                    String gid = gidL[0];
+                    setSelectedSubstation(gid);
+
+
+                    RadioButtons = test;
+                };
+                rb.Tag = i;
+                i++;
+                test.Add(rb);
+            }
+            RadioButtons = test;
+        }
+
+        public void setSelectedSubstation(String gid) { }
+
+        public void setModel(List<ResourceDescription> resources)
+        {
+            int numberOfSubstations = resources.Where(x => (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.SUBSTATION)).Count();
+
+            foreach (ResourceDescription sub in resources.Where(x => ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.SUBSTATION))
+            {
+                Property name = sub.Properties.Where(x => x.Id == ModelCode.IDOBJ_NAME).FirstOrDefault();
+                Property description = sub.Properties.Where(x => x.Id == ModelCode.IDOBJ_DESC).FirstOrDefault();
+                Property gid = sub.Properties.Where(x => x.Id == ModelCode.IDOBJ_GID).FirstOrDefault();
+                Substation substation = new Substation(name.GetValue().ToString(), description.GetValue().ToString(), gid.GetValue().ToString());
+                substations.Add((long)gid.GetValue(), substation);
+            }
+            SubstationsList = new ObservableCollection<Substation>(substations.Values);
+            // setRadioButtons();
+            foreach (ResourceDescription resource in resources.Where(x => (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.DISCONNECTOR) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.BREAKER) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.RATIOTAPCHANGER) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.POWERTRANSFORMER) ||
+                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ANALOG) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ASYNCHRONOUSMACHINE) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.DISCRETE)))
+            {
+
+                switch (ModelCodeHelper.ExtractTypeFromGlobalId(resource.Id))
+                {
+                    case (short)DMSType.DISCONNECTOR:
+                        Disconector disconector = new Disconector();
+                        populateEquipment(disconector, resource.Properties);
+                        getMySubstation(resource.Properties).Disconectors.Add(disconector);
+                        break;
+                    case (short)DMSType.BREAKER:
+                        Breaker breaker = new Breaker();
+                        populateEquipment(breaker, resource.Properties);
+                        getMySubstation(resource.Properties).Breaker = breaker;
+                        break;
+                    case (short)DMSType.RATIOTAPCHANGER:
+                        TapChanger tapChanger = new TapChanger();
+                        populateEquipment(tapChanger, resource.Properties);
+                        populatTapChanger(tapChanger, resource.Properties);
+                        getSubstationForTapChaner(resource.Properties, resources).TapChanger = tapChanger;
+                        break;
+                    case (short)DMSType.ASYNCHRONOUSMACHINE:
+                        AsynchronousMachine asynchronousMachine = new AsynchronousMachine();
+                        populateEquipment(asynchronousMachine, resource.Properties);
+                        populateMachine(asynchronousMachine, resource.Properties);
+                        getMySubstation(resource.Properties).AsynchronousMachines.Add(asynchronousMachine);
+                        break;
+                    case (short)DMSType.POWERTRANSFORMER:
+                        Transformator transformator = new Transformator();
+                        populateEquipment(transformator, resource.Properties);
+                        getMySubstation(resource.Properties).Transformator = transformator;
+                        break;
+                    case (short)DMSType.DISCRETE:
+                        foreach(var v in resource.Properties.Where(x => x.Id == ModelCode.MEASUREMENT_PSR))
+                        {
+                            long gid = v.PropertyValue.LongValue;
+                            ResourceDescription res = resources.Where(x => x.Id == gid).ToList<ResourceDescription>()[0];
+                            if ((ModelCodeHelper.ExtractTypeFromGlobalId(res.Id) == (short)DMSType.BREAKER))
+                            {
+                                substations.Values.Where(x => x.Breaker.GID == gid.ToString()).First().Breaker.DiscreteGID = resource.Id; 
+                            }
+                            else if ((ModelCodeHelper.ExtractTypeFromGlobalId(res.Id) == (short)DMSType.DISCONNECTOR))
+                            {
+                                Substation s = Substations.Values.Where(x => x.Disconectors.Where(c => c.GID == gid.ToString()).FirstOrDefault().GID == gid.ToString()).First();
+                                s.Disconectors.Where(c => c.GID == gid.ToString()).First().DiscreteGID = resource.Id;
+                            }
+                        }
+                        break;
+
+                    case (short)DMSType.ANALOG:
+                        foreach(var analog in resource.Properties.Where(x=>x.Id == ModelCode.MEASUREMENT_PSR))
+                        {
+                            long gid = analog.PropertyValue.LongValue;
+                            ResourceDescription resource1 = resources.Where(x => x.Id == gid).ToList().First();
+
+                            if(ModelCodeHelper.ExtractTypeFromGlobalId(resource1.Id) == (short)DMSType.ASYNCHRONOUSMACHINE)
+                            {
+                                Substation s = Substations.Values.Where(x => x.AsynchronousMachines.Where(y => y.GID == gid.ToString()).FirstOrDefault().GID == gid.ToString()).First();
+                                s.AsynchronousMachines.Where(x => x.GID == gid.ToString()).First().SignalGid = resource.Id;
+                            }
+
+                        }
+                        break;
                 }
 
             }
+            Console.Write(substations);
         }
-        public void PopulateModel(string newValue)
+
+        public ObservableCollection<UIModel> toUIModelList(List<ResourceDescription> resources)
         {
-            PubSub = newValue;
+            ObservableCollection<UIModel> response = new ObservableCollection<UIModel>();
+            int disconectors = 1;
+
+            foreach (ResourceDescription resource in resources.Where(x => (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.DISCONNECTOR) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.BREAKER) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.RATIOTAPCHANGER) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ASYNCHRONOUSMACHINE)))
+            {
+                UIModel model = new UIModel();
+                
+                foreach (Property property in resource.Properties)
+                {
+                    switch (property.Id)
+                    {
+                        case Common.ModelCode.IDOBJ_GID:
+                            if (ModelCodeHelper.ExtractTypeFromGlobalId(resource.Id) == (short)DMSType.DISCONNECTOR)
+                            {
+                                if (disconectors == 1)
+                                {
+                                    //Disc1Id = property.GetValue().ToString();
+                                    disconectors++;
+                                }
+                                else if (disconectors == 2)
+                                {
+                                    //Disc2Id = property.GetValue().ToString();
+                                    disconectors = 0;
+                                }
+                            }
+                            else if (ModelCodeHelper.ExtractTypeFromGlobalId(resource.Id) == (short)DMSType.BREAKER)
+                            {
+                                //BreakerId = property.GetValue().ToString();
+                            }
+                            model.GID = property.GetValue().ToString();
+                            break;
+                        case Common.ModelCode.IDOBJ_DESC:
+                            model.Description = property.GetValue().ToString();
+                            break;
+                        case Common.ModelCode.IDOBJ_MRID:
+                            model.MRID = property.GetValue().ToString();
+                            break;
+                        case Common.ModelCode.IDOBJ_NAME:
+                            model.Name = property.GetValue().ToString();
+                            break;
+
+                        case Common.ModelCode.ASYNCMACHINE_COSPHI:
+                            model.Value = property.GetValue().ToString();
+                            break;
+                        case Common.ModelCode.ASYNCMACHINE_RATEDP:
+                            break;
+                        case Common.ModelCode.TAPCHANGER_HIGHSTEP:
+                            break;
+                        case Common.ModelCode.TAPCHANGER_LOWSTEP:
+                            break;
+                        case Common.ModelCode.TAPCHANGER_NORMALSTEP:
+                            model.Value = property.GetValue().ToString();
+                            break;
+                        case Common.ModelCode.MEASUREMENT_DIRECTION:
+                            break;
+                        case Common.ModelCode.MEASUREMENT_MEASTYPE:
+                            break;
+                        case Common.ModelCode.ANALOG_MAXVALUE:
+                            break;
+                        case Common.ModelCode.ANALOG_MINVALUE:
+                            break;
+                        case Common.ModelCode.ANALOG_NORMALVALUE:
+                            model.Value = property.GetValue().ToString();
+                            break;
+                        case Common.ModelCode.DISCRETE_MAXVALUE:
+                            break;
+                        case Common.ModelCode.DISCRETE_MINVALUE:
+                            break;
+                        case Common.ModelCode.DISCRETE_NORMALVALUE:
+                            model.Value = property.GetValue().ToString();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                response.Add(model);
+            }
+            return response;
         }
+
     }
 }
