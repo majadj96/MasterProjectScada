@@ -41,15 +41,110 @@ namespace UserInterface.ViewModel
         public string lineUpFirstPump { get; set; }
         public string lineUpSecondPump { get; set; }
         public string lineUpMultiPump { get; set; }
+        public string lineDownPumpOne { get; set; }
+        public string lineUpBreakerFirstPump { get; set; }
+        public string lineUpBreakerSecondPump  { get; set; }
+        public string lineBreakerPumpOne { get; set; }
+        public string lineUpBreakerFirstPumpCN { get; set; }
+        public string lineUpBreakerSecondPumpCN { get; set; }
+
+
         #endregion
 
         #region Props
+
+        public string LineUpBreakerSecondPumpCN
+        {
+            get
+            {
+                return lineUpBreakerSecondPumpCN;
+            }
+            set
+            {
+                lineUpBreakerSecondPumpCN = value;
+                OnPropertyChanged("LineUpBreakerSecondPumpCN");
+            }
+        }
+        public string LineUpBreakerFirstPumpCN
+        {
+            get
+            {
+                return lineUpBreakerFirstPumpCN;
+            }
+            set
+            {
+                lineUpBreakerFirstPumpCN = value;
+                OnPropertyChanged("LineUpBreakerFirstPumpCN");
+            }
+        }
+        public string LineUpBreakerSecondPump 
+        {
+            get
+            {
+                return lineUpBreakerSecondPump;
+            }
+            set
+            {
+                lineUpBreakerSecondPump = value;
+                OnPropertyChanged("LineUpBreakerSecondPump");
+            }
+        }
+        public string LineBreakerPumpOne
+        {
+            get
+            {
+                return lineBreakerPumpOne;
+            }
+            set
+            {
+                lineBreakerPumpOne = value;
+                OnPropertyChanged("LineBreakerPumpOne");
+            }
+        }
+        public string LineDownPumpOne
+        {
+            get
+            {
+                return lineDownPumpOne;
+            }
+            set
+            {
+                lineDownPumpOne = value;
+                OnPropertyChanged("LineDownPumpOne");
+            }
+        }
+        public string LineUpBreakerFirstPump
+        {
+            get
+            {
+                return lineUpBreakerFirstPump;
+            }
+            set
+            {
+                lineUpBreakerFirstPump = value;
+                OnPropertyChanged("LineUpBreakerFirstPump  ");
+            }
+        }
+
         public Substation SubstationCurrent
         {
             get { return substationCurrent; }
             set { substationCurrent = value; OnPropertyChanged("SubstationCurrent"); }
         }
 
+        public string singlePumpCN { get; set; }
+        public string SinglePumpCN
+        {
+            get
+            {
+                return singlePumpCN;
+            }
+            set
+            {
+                singlePumpCN = value;
+                OnPropertyChanged("SinglePumpCN");
+            }
+        }
         public string two_AM_Visible { get; set; }
         public string Two_AM_Visible
         {
@@ -102,6 +197,47 @@ namespace UserInterface.ViewModel
         #endregion
 
         #region Elements_Of_Mesh
+        private string breakerPumpOneImage;
+        public string BreakerPumpOneImage
+        {
+            get
+            {
+                return breakerPumpOneImage;
+            }
+            set
+            {
+                breakerPumpOneImage = value;
+                OnPropertyChanged("BreakerPumpOneImage");
+            }
+        }
+
+        private string breaker_PM1Image;
+        public string Breaker_PM1Image
+        {
+            get
+            {
+                return breaker_PM1Image;
+            }
+            set
+            {
+                breaker_PM1Image = value;
+                OnPropertyChanged("Breaker_PM1Image");
+            }
+        }
+        private string breaker_PM2Image;
+        public string Breaker_PM2Image
+        {
+            get
+            {
+                return breaker_PM2Image;
+            }
+            set
+            {
+                breaker_PM2Image = value;
+                OnPropertyChanged("Breaker_PM2Image");
+            }
+        }
+
         private string disconector1Image;
         public string Disconector1Image
         {
@@ -438,10 +574,12 @@ namespace UserInterface.ViewModel
             if (SubstationCurrent.AsynchronousMachines.Count == 1)
             {
                 Two_AM_Visible = "Hidden";
+                SinglePumpCN = "Visible";
             }
             else
             {
                 Two_AM_Visible = "Visible";
+                SinglePumpCN = "Hidden";
             }
         }
 
@@ -492,9 +630,10 @@ namespace UserInterface.ViewModel
             //Red color: #FFFF634D
             lineFirst = lineSecond = lineThird = lineUpDis1 = lineDownDis1 = lineUpBreaker = lineDownBreaker = lineUpDis2 =
             lineDownDis2 = lineUpPT = lineDownPT = lineUpPump = lineFourth = lineStart = lineUpFirstPump = lineUpMultiPump =
-            lineUpSecondPump = "#FF7DFB4E";
-            Two_AM_Visible = "Visible";
-            breakerImage = "Assets/breaker-on.png";
+            lineUpSecondPump = lineDownPumpOne = lineUpBreakerFirstPump = lineUpBreakerSecondPump = lineBreakerPumpOne =
+            lineUpBreakerSecondPumpCN = lineUpBreakerFirstPumpCN = "#FF7DFB4E";
+            Two_AM_Visible = "Hidden";
+            breakerImage = breakerPumpOneImage = breaker_PM1Image = breaker_PM2Image = "Assets/breaker-on.png";
             disconector1Image = disconector2Image = "Assets/recloser-on.png";
             ptImage = "Assets/transformator-on.png";
             PumpImage = "Assets/pump-on-rotate.png";
