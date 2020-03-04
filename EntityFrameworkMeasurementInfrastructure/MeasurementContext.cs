@@ -11,9 +11,10 @@ namespace EntityFrameworkMeasurementInfrastructure
 {
     public class MeasurementContext : DbContext
     {
+        private MeasurementInitializeDB measurementsDB = new MeasurementInitializeDB();
         public MeasurementContext() : base("name=connectionString")
         {
-
+            Database.SetInitializer(measurementsDB);
         }
 
         public DbSet<Measurement> Measurements { get; set; }

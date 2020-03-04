@@ -42,6 +42,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -99,6 +100,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\EntityFrameworkMeasurementInfrastructure\EntityFrameworkMeasurementInfrastructure.csproj">
+      <Project>{B4FB1C6B-6F44-4F1E-B6C2-07E025A2ACBA}</Project>
+      <Name>EntityFrameworkMeasurementInfrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ProcessingModule\ProcessingModule.csproj">
       <Project>{a61facb3-147e-4fd9-88c1-a3f226157c23}</Project>
       <Name>ProcessingModule</Name>
