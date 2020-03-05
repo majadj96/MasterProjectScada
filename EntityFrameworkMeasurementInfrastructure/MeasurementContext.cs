@@ -12,7 +12,7 @@ namespace EntityFrameworkMeasurementInfrastructure
     public class MeasurementContext : DbContext
     {
         private MeasurementInitializeDB measurementsDB = new MeasurementInitializeDB();
-        public MeasurementContext() : base("name=connectionString")
+        public MeasurementContext() : base("MeasurementsHistoryDB")
         {
             Database.SetInitializer(measurementsDB);
         }

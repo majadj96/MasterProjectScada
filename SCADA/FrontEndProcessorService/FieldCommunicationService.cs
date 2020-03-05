@@ -60,6 +60,8 @@ namespace FrontEndProcessorService
 		public FieldCommunicationService()
 		{
 			Thread.CurrentThread.Name = "Field Communication Service";
+
+            measurementsRepository.Add(new RepositoryCore.Measurement() { Gid = 0, ChangedTime = DateTime.Now, Value = 2 });
             
             ndsStateProxy = new NetworkDynamicStateServiceProxy("NetworkDynamicStateServiceEndPoint");
             ndsProxy = new NetworkDynamicServiceProxy("NetworkDynamicServiceEndPoint");
