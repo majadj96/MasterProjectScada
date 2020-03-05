@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using Common.AlarmEvent;
+using GalaSoft.MvvmLight.Messaging;
 using ScadaCommon.ComandingModel;
 using System;
 using UserInterface.BaseError;
@@ -48,7 +49,12 @@ namespace UserInterface.ViewModel
             CommandObject commandObject = new CommandObject() { CommandingTime = DateTime.Now, CommandOwner = "UI", EguValue = (float)DisconectorCurrent.NewState, SignalGid = DisconectorCurrent.DiscreteGID };
             var v = ProxyServices.CommandingServiceProxy.WriteDigitalOutput(commandObject);
             if (v == ScadaCommon.CommandResult.Success)
+            {
                 Messenger.Default.Send(new NotificationMessage("command", DisconectorCurrent, "Disconector" + type));
+
+                Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.UI, GiD = long.Parse(DisconectorCurrent.GID), Message = "Commanding disconnector.", PointName = DisconectorCurrent.Name };
+                ProxyServices.AlarmEventServiceProxy.AddEvent(e);
+            }
         }
     }
 }

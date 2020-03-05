@@ -56,8 +56,6 @@
     <Compile Include="Connection\IConnection.cs" />
     <Compile Include="Connection\TCPConnection.cs" />
     <Compile Include="CRCCalculator\CRCCalculator.cs" />
-    <Compile Include="Database\Alarm.cs" />
-    <Compile Include="Database\Event.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
     <Compile Include="Interfaces\IDNP3Functions.cs" />

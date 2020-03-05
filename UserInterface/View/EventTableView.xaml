@@ -81,6 +81,7 @@
                 <DataGridTextColumn Header="Event reported by" Width="*"  Binding="{Binding EventReportedBy}"/>
                 <DataGridTextColumn Header="Message" Width="*" Binding="{Binding Message}"/>
                 <DataGridTextColumn Header="Point name" Width="*" Binding="{Binding PointName}"/>
+                <DataGridTextColumn Header="GID" Width="*" Binding="{Binding GiD}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

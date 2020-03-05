@@ -16,10 +16,10 @@ namespace AlarmEventService.AlarmServiceRef {
     public interface IAlarmServiceOperations {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlarmServiceOperations/AddAlarm", ReplyAction="http://tempuri.org/IAlarmServiceOperations/AddAlarmResponse")]
-        void AddAlarm(ScadaCommon.Database.Alarm alarm);
+        void AddAlarm(Common.AlarmEvent.Alarm alarm);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlarmServiceOperations/AddAlarm", ReplyAction="http://tempuri.org/IAlarmServiceOperations/AddAlarmResponse")]
-        System.Threading.Tasks.Task AddAlarmAsync(ScadaCommon.Database.Alarm alarm);
+        System.Threading.Tasks.Task AddAlarmAsync(Common.AlarmEvent.Alarm alarm);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlarmServiceOperations/DeleteAlarm", ReplyAction="http://tempuri.org/IAlarmServiceOperations/DeleteAlarmResponse")]
         bool DeleteAlarm(int id);
@@ -28,16 +28,16 @@ namespace AlarmEventService.AlarmServiceRef {
         System.Threading.Tasks.Task<bool> DeleteAlarmAsync(int id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlarmServiceOperations/AcknowledgeAlarm", ReplyAction="http://tempuri.org/IAlarmServiceOperations/AcknowledgeAlarmResponse")]
-        bool AcknowledgeAlarm(ScadaCommon.Database.Alarm alarm);
+        bool AcknowledgeAlarm(Common.AlarmEvent.Alarm alarm);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlarmServiceOperations/AcknowledgeAlarm", ReplyAction="http://tempuri.org/IAlarmServiceOperations/AcknowledgeAlarmResponse")]
-        System.Threading.Tasks.Task<bool> AcknowledgeAlarmAsync(ScadaCommon.Database.Alarm alarm);
+        System.Threading.Tasks.Task<bool> AcknowledgeAlarmAsync(Common.AlarmEvent.Alarm alarm);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlarmServiceOperations/GetAllAlarms", ReplyAction="http://tempuri.org/IAlarmServiceOperations/GetAllAlarmsResponse")]
-        ScadaCommon.Database.Alarm[] GetAllAlarms();
+        Common.AlarmEvent.Alarm[] GetAllAlarms();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlarmServiceOperations/GetAllAlarms", ReplyAction="http://tempuri.org/IAlarmServiceOperations/GetAllAlarmsResponse")]
-        System.Threading.Tasks.Task<ScadaCommon.Database.Alarm[]> GetAllAlarmsAsync();
+        System.Threading.Tasks.Task<Common.AlarmEvent.Alarm[]> GetAllAlarmsAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -67,11 +67,11 @@ namespace AlarmEventService.AlarmServiceRef {
                 base(binding, remoteAddress) {
         }
         
-        public void AddAlarm(ScadaCommon.Database.Alarm alarm) {
+        public void AddAlarm(Common.AlarmEvent.Alarm alarm) {
             base.Channel.AddAlarm(alarm);
         }
         
-        public System.Threading.Tasks.Task AddAlarmAsync(ScadaCommon.Database.Alarm alarm) {
+        public System.Threading.Tasks.Task AddAlarmAsync(Common.AlarmEvent.Alarm alarm) {
             return base.Channel.AddAlarmAsync(alarm);
         }
         
@@ -83,19 +83,19 @@ namespace AlarmEventService.AlarmServiceRef {
             return base.Channel.DeleteAlarmAsync(id);
         }
         
-        public bool AcknowledgeAlarm(ScadaCommon.Database.Alarm alarm) {
+        public bool AcknowledgeAlarm(Common.AlarmEvent.Alarm alarm) {
             return base.Channel.AcknowledgeAlarm(alarm);
         }
         
-        public System.Threading.Tasks.Task<bool> AcknowledgeAlarmAsync(ScadaCommon.Database.Alarm alarm) {
+        public System.Threading.Tasks.Task<bool> AcknowledgeAlarmAsync(Common.AlarmEvent.Alarm alarm) {
             return base.Channel.AcknowledgeAlarmAsync(alarm);
         }
         
-        public ScadaCommon.Database.Alarm[] GetAllAlarms() {
+        public Common.AlarmEvent.Alarm[] GetAllAlarms() {
             return base.Channel.GetAllAlarms();
         }
         
-        public System.Threading.Tasks.Task<ScadaCommon.Database.Alarm[]> GetAllAlarmsAsync() {
+        public System.Threading.Tasks.Task<Common.AlarmEvent.Alarm[]> GetAllAlarmsAsync() {
             return base.Channel.GetAllAlarmsAsync();
         }
     }

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/ScadaCommon.Database" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/ScadaCommon.Database" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:55517/EventServiceOperations.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/ScadaCommon" />
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Common.AlarmEvent" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Common.AlarmEvent" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:55517/EventServiceOperations.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Common" />
   <xs:complexType name="Event">
     <xs:sequence>
       <xs:element minOccurs="0" name="EventReported" type="xs:dateTime" />
-      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/ScadaCommon" minOccurs="0" name="EventReportedBy" type="q1:AlarmEventType" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Common" minOccurs="0" name="EventReportedBy" type="q1:AlarmEventType" />
       <xs:element minOccurs="0" name="GiD" type="xs:long" />
       <xs:element minOccurs="0" name="ID" type="xs:int" />
       <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />

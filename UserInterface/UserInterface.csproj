@@ -85,12 +85,10 @@
     </Compile>
     <Compile Include="CommandingWindowViewModel.cs" />
     <Compile Include="Command\MyICommand.cs" />
-    <Compile Include="Model\Alarm.cs" />
     <Compile Include="Model\AsynchronousMachine.cs" />
     <Compile Include="Model\Breaker.cs" />
     <Compile Include="Model\Disconector.cs" />
     <Compile Include="Model\Enums.cs" />
-    <Compile Include="Model\Event.cs" />
     <Compile Include="Model\IEquipment.cs" />
     <Compile Include="Model\Substation.cs" />
     <Compile Include="Model\TapChanger.cs" />

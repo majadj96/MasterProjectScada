@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.AlarmEvent;
 using Common.GDA;
 using GalaSoft.MvvmLight.Messaging;
 using PubSubCommon;
@@ -14,6 +15,7 @@ using System.Windows.Threading;
 using UserInterface.BaseError;
 using UserInterface.Command;
 using UserInterface.Model;
+using UserInterface.ProxyPool;
 using UserInterface.Subscription;
 using UserInterface.ViewModel;
 
@@ -339,6 +341,9 @@ namespace UserInterface
                     SubstationCurrent = SelectedSubstation;
                 else
                     SubstationCurrent = Substations.Values.First();
+
+            Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = long.Parse(substationCurrent.Gid), Message = "Substation selected.", PointName = SubstationCurrent.Name };
+            ProxyServices.AlarmEventServiceProxy.AddEvent(e);
         }
 
         public void PopulateModel(object resources, string topic)
@@ -351,6 +356,10 @@ namespace UserInterface
                 SetCurrentSubstation();
                 if (SubstationCurrent != null)
                     meshViewModel.UpdateSubstationModel(SubstationCurrent);
+
+                Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
+                    Message = "Model arrived and loaded from NMS.", PointName = "" };
+                ProxyPool.ProxyServices.AlarmEventServiceProxy.AddEvent(e);
             }
             else if (topic == "scada")
             {
@@ -388,6 +397,11 @@ namespace UserInterface
                         }
                     }
                 }
+
+                Event e = new Event() {  EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
+                    Message = "Acquisition arrived from SCADA.", PointName = "" };
+                ProxyPool.ProxyServices.AlarmEventServiceProxy.AddEvent(e);
+
                 Console.WriteLine(resources);
             }
         }

@@ -3,19 +3,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 using System;
 
-namespace ScadaCommon.Database
+namespace Common.AlarmEvent
 {
     [DataContract]
-    [KnownTypeAttribute(typeof(AlarmEventType))]
-    public class Event
+    public class Alarm
     {
         #region Variables
         private int iD;
         private long giD;
-        private DateTime eventReported;
-        private AlarmEventType eventReportedBy;
+        private DateTime alarmReported;
+        private AlarmEventType alarmReportedBy;
         private string message;
         private string pointName;
+        private DateTime? alarmAcknowledged;
+        private string username;
         #endregion
 
         #region Props
@@ -34,16 +35,16 @@ namespace ScadaCommon.Database
             set { giD = value; }
         }
         [DataMember]
-        public DateTime EventReported
+        public DateTime AlarmReported
         {
-            get { return eventReported; }
-            set { eventReported = value; }
+            get { return alarmReported; }
+            set { alarmReported = value; }
         }
         [DataMember]
-        public AlarmEventType EventReportedBy
+        public AlarmEventType AlarmReportedBy
         {
-            get { return eventReportedBy; }
-            set { eventReportedBy = value; }
+            get { return alarmReportedBy; }
+            set { alarmReportedBy = value; }
         }
         [DataMember]
         public string Message
@@ -57,11 +58,23 @@ namespace ScadaCommon.Database
             get { return pointName; }
             set { pointName = value; }
         }
+        [DataMember]
+        public DateTime? AlarmAcknowledged
+        {
+            get { return alarmAcknowledged; }
+            set { alarmAcknowledged = value; }
+        }
+        [DataMember]
+        public string Username
+        {
+            get { return username; }
+            set { username = value; }
+        }
         #endregion
 
-        public Event()
+        public Alarm()
         {
-            EventReported = DateTime.Now;
+            AlarmReported = DateTime.Now;
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using AlarmEventServiceDatabase.Server;
-using ScadaCommon.Database;
+using Common.AlarmEvent;
 
 namespace AlarmEventServiceDatabase
 {

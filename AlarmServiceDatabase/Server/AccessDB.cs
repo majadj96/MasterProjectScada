@@ -1,4 +1,4 @@
-﻿using ScadaCommon.Database;
+﻿using Common.AlarmEvent;
 using System.Data.Entity;
 
 namespace AlarmEventServiceDatabase.Server

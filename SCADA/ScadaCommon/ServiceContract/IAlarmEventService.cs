@@ -1,4 +1,4 @@
-﻿using ScadaCommon.Database;
+﻿using Common.AlarmEvent;
 using System.Collections.Generic;
 using System.ServiceModel;
 

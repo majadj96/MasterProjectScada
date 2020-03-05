@@ -16,16 +16,16 @@ namespace AlarmEventService.EventServiceRef {
     public interface IEventServiceOperations {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEventServiceOperations/AddEvent", ReplyAction="http://tempuri.org/IEventServiceOperations/AddEventResponse")]
-        void AddEvent(ScadaCommon.Database.Event newEvent);
+        void AddEvent(Common.AlarmEvent.Event newEvent);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEventServiceOperations/AddEvent", ReplyAction="http://tempuri.org/IEventServiceOperations/AddEventResponse")]
-        System.Threading.Tasks.Task AddEventAsync(ScadaCommon.Database.Event newEvent);
+        System.Threading.Tasks.Task AddEventAsync(Common.AlarmEvent.Event newEvent);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEventServiceOperations/GetAllEvents", ReplyAction="http://tempuri.org/IEventServiceOperations/GetAllEventsResponse")]
-        ScadaCommon.Database.Event[] GetAllEvents();
+        Common.AlarmEvent.Event[] GetAllEvents();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEventServiceOperations/GetAllEvents", ReplyAction="http://tempuri.org/IEventServiceOperations/GetAllEventsResponse")]
-        System.Threading.Tasks.Task<ScadaCommon.Database.Event[]> GetAllEventsAsync();
+        System.Threading.Tasks.Task<Common.AlarmEvent.Event[]> GetAllEventsAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -55,19 +55,19 @@ namespace AlarmEventService.EventServiceRef {
                 base(binding, remoteAddress) {
         }
         
-        public void AddEvent(ScadaCommon.Database.Event newEvent) {
+        public void AddEvent(Common.AlarmEvent.Event newEvent) {
             base.Channel.AddEvent(newEvent);
         }
         
-        public System.Threading.Tasks.Task AddEventAsync(ScadaCommon.Database.Event newEvent) {
+        public System.Threading.Tasks.Task AddEventAsync(Common.AlarmEvent.Event newEvent) {
             return base.Channel.AddEventAsync(newEvent);
         }
         
-        public ScadaCommon.Database.Event[] GetAllEvents() {
+        public Common.AlarmEvent.Event[] GetAllEvents() {
             return base.Channel.GetAllEvents();
         }
         
-        public System.Threading.Tasks.Task<ScadaCommon.Database.Event[]> GetAllEventsAsync() {
+        public System.Threading.Tasks.Task<Common.AlarmEvent.Event[]> GetAllEventsAsync() {
             return base.Channel.GetAllEventsAsync();
         }
     }

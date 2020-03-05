@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using Common.AlarmEvent;
+using GalaSoft.MvvmLight.Messaging;
 using ScadaCommon.ComandingModel;
 using System;
 using UserInterface.BaseError;
@@ -44,8 +45,13 @@ namespace UserInterface.ViewModel
 
             CommandObject commandObject = new CommandObject() { CommandingTime = DateTime.Now, CommandOwner = "UI", EguValue = (float)BreakerCurrent.NewState, SignalGid = BreakerCurrent.DiscreteGID };
             var v = ProxyServices.CommandingServiceProxy.WriteDigitalOutput(commandObject);
-            if(v == ScadaCommon.CommandResult.Success)
+            if (v == ScadaCommon.CommandResult.Success)
+            {
                 Messenger.Default.Send(new NotificationMessage("command", BreakerCurrent, "Breaker"));
+
+                Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.UI, GiD = long.Parse(BreakerCurrent.GID), Message = "Commanding breaker.", PointName = BreakerCurrent.Name  };
+                ProxyServices.AlarmEventServiceProxy.AddEvent(e);
+            }
         }
     }
 }
