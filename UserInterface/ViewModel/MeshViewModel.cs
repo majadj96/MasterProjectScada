@@ -424,7 +424,9 @@ namespace UserInterface.ViewModel
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Start();
 
-            DataSharingWithCommandingViewModels();
+            Messenger.Default.Register<NotificationMessage>(this, (message) => { ChangeStatesOfElements(message.Notification, message.Target); });
+
+            SubstationCurrent = new Substation();
         }
 
         public void UpdateSubstationModel(Substation substation)
@@ -444,32 +446,28 @@ namespace UserInterface.ViewModel
                 Two_AM_Visible = "Visible";
             }
         }
-
-        public void DataSharingWithCommandingViewModels()
+        
+        public void ChangeStatesOfElements(string element, object target)
         {
-            Messenger.Default.Register<NotificationMessage>(this, (message) =>
+            if (string.Compare(element, "Breaker") == 0)
             {
-                if (string.Compare(message.Notification, "Breaker") == 0)
-                {
-                    SubstationCurrent.Breaker.State = ((Breaker)message.Target).NewState;
-                    SubstationCurrent.Breaker.NewState = SubstationCurrent.Breaker.State;
-                    BreakerOperation();
-                }
-                else if (string.Compare(message.Notification, "Disconector1") == 0)
-                {
-                    SubstationCurrent.Disconectors[0].State = ((Disconector)message.Target).NewState;
-                    SubstationCurrent.Disconectors[0].NewState = SubstationCurrent.Disconectors[0].State;
-                    DisconectorOperation("1");
-                }
-                else if (string.Compare(message.Notification, "Disconector2") == 0)
-                {
-                    SubstationCurrent.Disconectors[1].State = ((Disconector)message.Target).NewState;
-                    SubstationCurrent.Disconectors[1].NewState = SubstationCurrent.Disconectors[1].State;
-                    DisconectorOperation("2");
-                }
-            });
-
-            SubstationCurrent = new Substation();
+                SubstationCurrent.Breaker.State = ((Breaker)target).NewState;
+                SubstationCurrent.Breaker.NewState = SubstationCurrent.Breaker.State;
+                BreakerOperation();
+            }
+            else if (string.Compare(element, "Disconector1") == 0)
+            {
+                SubstationCurrent.Disconectors[0].State = ((Disconector)target).NewState;
+                SubstationCurrent.Disconectors[0].NewState = SubstationCurrent.Disconectors[0].State;
+                DisconectorOperation("1");
+            }
+            else if (string.Compare(element, "Disconector2") == 0)
+            {
+                SubstationCurrent.Disconectors[1].State = ((Disconector)target).NewState;
+                SubstationCurrent.Disconectors[1].NewState = SubstationCurrent.Disconectors[1].State;
+                DisconectorOperation("2");
+            }
+            //TODO add elements
         }
 
         public void setUpInitState()
