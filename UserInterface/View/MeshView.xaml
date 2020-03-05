@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:UserInterface.View"
              xmlns:viewModel="clr-namespace:UserInterface.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="450" Width="800">
+             d:DesignHeight="450" Width="750">
 
     <UserControl.Resources>
         <Style x:Key="MyButtonStyle" TargetType="Button">

@@ -1,10 +1,4 @@
-﻿using Common;
-using Common.GDA;
-using GalaSoft.MvvmLight.Messaging;
-using PubSubCommon;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Collections.ObjectModel;
 using UserInterface.BaseError;
 using UserInterface.Model;
 

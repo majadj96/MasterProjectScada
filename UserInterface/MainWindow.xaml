@@ -8,7 +8,7 @@
         xmlns:viewModel="clr-namespace:UserInterface.ViewModel"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="SCADA SISTEM" Height="890" Width="1622"  WindowState="Maximized" Background="LightGray" >
+        Title="SCADA SISTEM" Height="{x:Static SystemParameters.PrimaryScreenHeight}" Width="{x:Static SystemParameters.PrimaryScreenWidth}" Background="LightGray" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
@@ -254,7 +254,7 @@
         <Button  Content="Summary Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="585,29,0,0" VerticalAlignment="Top" Width="145" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#258565" Foreground="White" BorderBrush="#FFC5C5C5" Grid.Column="1"/>
         <Button  Content="Alarm Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Alarm" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="770,29,0,0" VerticalAlignment="Top" Width="116" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#FFFF6D6D" Foreground="White" BorderBrush="#FFC5C5C5" Grid.Column="1"/>
         <Button  Content="Event Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Event" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="924,29,0,0" VerticalAlignment="Top" Width="118" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#326492" Foreground="White" BorderBrush="#FFC5C5C5" Grid.Column="1"/>
-        <Label Content="Select Substation" HorizontalAlignment="Left" Margin="37,37,0,0" HorizontalContentAlignment="Center" VerticalAlignment="Top" Height="38" Width="292" RenderTransformOrigin="0.5,0.5" Foreground="#FFF5D856" FontFamily="Consolas" FontSize="18" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+        <Label Content="Select Substation" HorizontalAlignment="Left" Margin="20,10,0,0" HorizontalContentAlignment="Center" VerticalAlignment="Top" Height="38" Width="292" RenderTransformOrigin="0.5,0.5" Foreground="#FFF5D856" FontFamily="Consolas" FontSize="18" Grid.ColumnSpan="2"/>
 
         <lvc:Gauge Grid.Row="1" Grid.Column="1" Margin="728,158,413,280"
                    Uses360Mode="True"
@@ -302,17 +302,17 @@
                 </LinearGradientBrush>
             </lvc:Gauge.GaugeActiveFill>
         </lvc:Gauge>
-        <Canvas Background="#FF474747" Margin="20,58,1222,10" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2">
+        <Canvas Background="#FF474747" Margin="20,57.8,1231.6,9.8" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2">
             <DataGrid x:Name="dataGridSub"
             ItemsSource="{Binding SubstationsList , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            SelectedItem="{Binding SelectedSubstation}" HorizontalAlignment="Left" CanUserResizeRows="False" HorizontalScrollBarVisibility="Disabled" VerticalAlignment="Bottom" Height="551" Width="296" AutoGenerateColumns="False" IsReadOnly="True" FontFamily="Consolas" FontSize="14" Background="#66F0F0F0" Canvas.Left="9" Canvas.Top="6">
+            SelectedItem="{Binding SelectedSubstation}" HorizontalAlignment="Left" CanUserResizeRows="False" HorizontalScrollBarVisibility="Disabled" VerticalAlignment="Bottom" Height="551" Width="272" AutoGenerateColumns="False" IsReadOnly="True" FontFamily="Consolas" FontSize="14" Background="#66F0F0F0" Canvas.Left="-4" Canvas.Top="10">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Width="150" Binding="{Binding Name}"/>
                     <DataGridTextColumn Header="GID" Width="150" Binding="{Binding Gid}"/>
                 </DataGrid.Columns>
             </DataGrid>
 
-            <StackPanel x:Name="SubstationsPanel" Height="683" Canvas.Top="10" Width="272">
+            <StackPanel x:Name="SubstationsPanel" Height="693" Width="265" Canvas.Left="3">
                 <ItemsControl FontFamily="Consolas" ItemsSource="{Binding RadioButtons}" FontSize="16">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -321,9 +321,9 @@
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </StackPanel>
-            <Button Content="Load substation" Command="{Binding LoadSubstationCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41"  VerticalAlignment="Top" Width="148" FontFamily="Consolas" FontSize="16" Background="#FFE8D856" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0" HorizontalAlignment="Right" Canvas.Left="87" Canvas.Top="-41"/>
-            <TextBox Height="26" Canvas.Left="9" TextWrapping="Wrap" Text="{Binding SearchTerm}" Canvas.Top="567" Width="178" FontFamily="Consolas" FontSize="16" Background="#FFEBEBEB"/>
-            <ComboBox Canvas.Left="192" FontFamily="Consolas" SelectedIndex="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Canvas.Top="567" Width="113" Height="26" ItemsSource="{Binding Path=SearchType}" SelectedValue="{Binding Path=SearchTypeSelected}" />
+            <Button Content="Load substation" Command="{Binding LoadSubstationCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41"  VerticalAlignment="Top" Width="148" FontFamily="Consolas" FontSize="16" Background="#FFE8D856" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0" HorizontalAlignment="Right" Canvas.Left="73" Canvas.Top="-59"/>
+            <TextBox Height="26" Canvas.Left="-4" TextWrapping="Wrap" Text="{Binding SearchTerm}" Canvas.Top="567" Width="156" FontFamily="Consolas" FontSize="16" Background="#FFEBEBEB"/>
+            <ComboBox Canvas.Left="157" FontFamily="Consolas" SelectedIndex="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Canvas.Top="567" Width="113" Height="26" ItemsSource="{Binding Path=SearchType}" SelectedValue="{Binding Path=SearchTypeSelected}" />
             <Button Content="" Command="{Binding SearchSubsCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="59"  VerticalAlignment="Top" Width="59" FontFamily="Consolas" FontSize="16" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0" HorizontalAlignment="Right" Canvas.Left="9" Canvas.Top="598">
                 <Button.Background>
                     <ImageBrush ImageSource="Assets/search.png"/>
@@ -334,7 +334,7 @@
                     <ImageBrush ImageSource="Assets/dismiss.png"/>
                 </Button.Background>
             </Button>
-            <Label Content="(search by)" FontFamily="Consolas" FontSize="11" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Canvas.Left="192" Canvas.Top="593" Height="26" Width="98" Foreground="#FF1B1B1B"/>
+            <Label Content="(search by)" FontFamily="Consolas" FontSize="11" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Canvas.Left="165" Canvas.Top="591" Height="26" Width="98" Foreground="#FF1B1B1B"/>
 
         </Canvas>
 

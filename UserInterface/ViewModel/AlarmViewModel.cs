@@ -19,6 +19,8 @@ namespace UserInterface.ViewModel
 
         public AlarmViewModel()
         {
+            AlarmItems = new ObservableCollection<Alarm>(ProxyPool.ProxyServices.AlarmEventServiceProxy.GetAllAlarms());
+
             AcknowledgeAlarmCommand = new MyICommand<int>(AcknowledgeAlarm);
         }
 
