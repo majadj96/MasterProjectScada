@@ -15,7 +15,10 @@ namespace UserInterface.Model
         private string time;
         private double cosPhi;
         private long signalGid;
+        private bool state;
+
         public AsynchronousMachine() { }
+
         public string MRID { get => mrid; set => mrid = value; }
         public string GID { get => gid; set => gid = value; }
         public string Name { get => name; set => name = value; }
@@ -23,6 +26,7 @@ namespace UserInterface.Model
         public string Time { get => time; set => time = value; }
         public double CosPhi { get => cosPhi; set => cosPhi = value; }
         public long SignalGid { get => signalGid; set => signalGid = value; }
+        public bool State { get { return state; } set { state = value; } }
     }
 }
 

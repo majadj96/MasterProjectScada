@@ -16,6 +16,7 @@ namespace UserInterface.ViewModel
         #region Variables
         private Breaker breaker;
         private bool newState;
+        private string type;
         #endregion
 
         #region Props
@@ -31,10 +32,12 @@ namespace UserInterface.ViewModel
         }
         #endregion
 
-        public CommandBreakerViewModel(Breaker breaker)
+        public CommandBreakerViewModel(Breaker breaker, string type)
         {
             BreakerCurrent = breaker;
             NewState = !Converter.ConvertToBool(BreakerCurrent.State);
+
+            this.type = type;
 
             Command = new MyICommand(CommandBreaker);
         }
@@ -47,7 +50,7 @@ namespace UserInterface.ViewModel
             var v = ProxyServices.CommandingServiceProxy.WriteDigitalOutput(commandObject);
             if (v == ScadaCommon.CommandResult.Success)
             {
-                Messenger.Default.Send(new NotificationMessage("command", BreakerCurrent, "Breaker"));
+                Messenger.Default.Send(new NotificationMessage("command", BreakerCurrent, "Breaker" + type));
 
                 Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.UI, GiD = long.Parse(BreakerCurrent.GID), Message = "Commanding breaker.", PointName = BreakerCurrent.Name  };
                 ProxyServices.AlarmEventServiceProxy.AddEvent(e);

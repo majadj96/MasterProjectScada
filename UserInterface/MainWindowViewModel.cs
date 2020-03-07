@@ -372,8 +372,15 @@ namespace UserInterface
 
                     foreach(Substation sub in Substations.Values)
                     {
-                        if(sub.Breaker.DiscreteGID == measure.Gid) {
-                            //komanduj nad brejkerom
+                        if (sub.Breakers.Count > 0)
+                        {
+                            foreach (Breaker br in sub.Breakers)
+                            {
+                                if (br.DiscreteGID == measure.Gid)
+                                {
+                                    //komanduj nad brejkerom
+                                }
+                            }
                         }
                         if (sub.Disconectors.Count > 0)
                         {
@@ -549,7 +556,7 @@ namespace UserInterface
                     case (short)DMSType.BREAKER:
                         Breaker breaker = new Breaker();
                         populateEquipment(breaker, resource.Properties);
-                        getMySubstation(resource.Properties).Breaker = breaker;
+                        getMySubstation(resource.Properties).Breakers.Add(breaker);
                         break;
                     case (short)DMSType.RATIOTAPCHANGER:
                         TapChanger tapChanger = new TapChanger();
@@ -575,12 +582,31 @@ namespace UserInterface
                             ResourceDescription res = resources.Where(x => x.Id == gid).ToList<ResourceDescription>()[0];
                             if ((ModelCodeHelper.ExtractTypeFromGlobalId(res.Id) == (short)DMSType.BREAKER))
                             {
-                                substations.Values.Where(x => x.Breaker.GID == gid.ToString()).First().Breaker.DiscreteGID = resource.Id; 
+                                foreach (Substation s in Substations.Values)
+                                {
+                                    foreach (Breaker b in s.Breakers)
+                                    {
+                                        if (b.GID == gid.ToString())
+                                        {
+                                            b.DiscreteGID = resource.Id;
+                                            break;
+                                        }
+                                    }
+                                }
                             }
                             else if ((ModelCodeHelper.ExtractTypeFromGlobalId(res.Id) == (short)DMSType.DISCONNECTOR))
                             {
-                                Substation s = Substations.Values.Where(x => x.Disconectors.Where(c => c.GID == gid.ToString()).FirstOrDefault().GID == gid.ToString()).First();
-                                s.Disconectors.Where(c => c.GID == gid.ToString()).First().DiscreteGID = resource.Id;
+                                foreach (Substation s in Substations.Values)
+                                {
+                                    foreach(Disconector d in s.Disconectors)
+                                    {
+                                        if (d.GID == gid.ToString())
+                                        {
+                                            d.DiscreteGID = resource.Id;
+                                            break;
+                                        }
+                                    }
+                                }
                             }
                         }
                         break;
