@@ -5,7 +5,7 @@ using System.ServiceModel;
 
 namespace ScadaCommon.ServiceProxies
 {
-    public class NetworkDynamicServiceProxy : ClientBase<IBackEndProessingData>, IBackEndProessingData
+    public class NetworkDynamicServiceProxy : ClientBase<IProcessingServiceContract>, IProcessingServiceContract
     {
         public NetworkDynamicServiceProxy(string endpointName) : base(endpointName)
         {

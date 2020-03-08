@@ -24,21 +24,21 @@ namespace PubSub
 
         public void HostSubscriptionService()
         {
-            _subscribeServiceHost = new ServiceHost(typeof(SubNMS));
+            _subscribeServiceHost = new ServiceHost(typeof(Sub));
             NetTcpBinding tcpBinding = new NetTcpBinding(SecurityMode.None);
 
-            _subscribeServiceHost.AddServiceEndpoint(typeof(ISubNMS), tcpBinding,
-                                "net.tcp://localhost:7002/SubNMS");
+            _subscribeServiceHost.AddServiceEndpoint(typeof(ISub), tcpBinding,
+                                "net.tcp://localhost:7002/Sub");
             _subscribeServiceHost.Open();
         }
 
         private void HostPublishService()
         {
-            _publishServiceHost = new ServiceHost(typeof(PubNMS));
+            _publishServiceHost = new ServiceHost(typeof(Pub));
             NetTcpBinding tcpBindingpublish = new NetTcpBinding();
 
-            _publishServiceHost.AddServiceEndpoint(typeof(IPubNMS), tcpBindingpublish,
-                                    "net.tcp://localhost:7001/PubNMS");
+            _publishServiceHost.AddServiceEndpoint(typeof(IPub), tcpBindingpublish,
+                                    "net.tcp://localhost:7001/Pub");
             _publishServiceHost.Open();
         }
         #endregion

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CalculationEngine.SCADAStuff;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -29,6 +30,7 @@ namespace CalculationEngine
         {
             hosts = new List<ServiceHost>();
             hosts.Add(new ServiceHost(typeof(ModelUpdateContract)));
+            hosts.Add(new ServiceHost(typeof(ScadaService)));
         }
 
         private void StartHosts()

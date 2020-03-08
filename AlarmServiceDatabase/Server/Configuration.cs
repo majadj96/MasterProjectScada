@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity.Migrations;
 
-namespace AlarmEventService.Server
+namespace AlarmEventServiceDatabase.Server
 {
     public class Configuration : DbMigrationsConfiguration<AccessDB>
     {

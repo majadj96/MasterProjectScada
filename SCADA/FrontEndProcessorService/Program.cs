@@ -6,7 +6,7 @@ namespace FrontEndProcessorService
     {
         static void Main(string[] args)
         {
-            FrontEndProcessorService fcs = new FrontEndProcessorService();
+            FieldCommunicationService fcs = new FieldCommunicationService();
 
             try
             {
@@ -17,7 +17,7 @@ namespace FrontEndProcessorService
                 Console.WriteLine(e.Message);
             }
 
-            //Console.ReadKey();
+            Console.ReadKey();
         }
     }
 }

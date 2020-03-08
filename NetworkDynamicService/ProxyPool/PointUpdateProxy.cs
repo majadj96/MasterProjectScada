@@ -17,7 +17,7 @@ namespace NetworkDynamicService.ProxyPool
 
         public void UpdatePoint(ProcessingObject[] processingObject)
         {
-            Channel.UpdatePoint(processingObject);
+            //Channel.UpdatePoint(processingObject);
         }
     }
 }
