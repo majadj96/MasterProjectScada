@@ -40,7 +40,16 @@ namespace CalculationEngine
                         CalcEngine.ConcreteModel_Copy.Add(discrete.GID, discrete);
                     }
                 }
-            }
+				else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ASYNCHRONOUSMACHINE)
+				{
+					if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+					{
+						AsyncMachine asyncMachine = PopulateAsyncMachineProperties(rd);
+
+						CalcEngine.ConcreteModel_Copy.Add(asyncMachine.GID, asyncMachine);
+					}
+				}
+			}
 
             foreach (ResourceDescription rd in delta.UpdateOperations)
             {
@@ -62,7 +71,16 @@ namespace CalculationEngine
                         CalcEngine.ConcreteModel_Copy[discrete.GID] = discrete;
                     }
                 }
-            }
+				else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ASYNCHRONOUSMACHINE)
+				{
+					if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+					{
+						AsyncMachine asyncMachine = PopulateAsyncMachineProperties(rd);
+
+						CalcEngine.ConcreteModel_Copy[asyncMachine.GID] = asyncMachine;
+					}
+				}
+			}
 
             foreach (ResourceDescription rd in delta.DeleteOperations)
             {
@@ -86,7 +104,21 @@ namespace CalculationEngine
             return new UpdateResult() { Result = ResultType.Succeeded };
         }
 
-        private Discrete PopulateDiscreteProperties(ResourceDescription rd)
+		private AsyncMachine PopulateAsyncMachineProperties(ResourceDescription rd)
+		{
+			AsyncMachine asyncMachine = new AsyncMachine(rd.Id)
+			{
+				MRID = rd.GetProperty(ModelCode.IDOBJ_MRID).AsString(),
+				Name = rd.GetProperty(ModelCode.IDOBJ_NAME).AsString(),
+				Description = rd.GetProperty(ModelCode.IDOBJ_DESC).AsString(),
+				RatedP = rd.GetProperty(ModelCode.ASYNCMACHINE_RATEDP).AsFloat(),
+				CosPhi = rd.GetProperty(ModelCode.ASYNCMACHINE_COSPHI).AsFloat()
+			};
+
+			return asyncMachine;
+		}
+
+		private Discrete PopulateDiscreteProperties(ResourceDescription rd)
         {
             Discrete discrete = new Discrete(rd.Id)
             {

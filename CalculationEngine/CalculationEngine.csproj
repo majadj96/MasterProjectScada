@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="CalcEngine.cs" />
     <Compile Include="Model\Analog.cs" />
+    <Compile Include="Model\AsyncMachine.cs" />
     <Compile Include="Model\Discrete.cs" />
     <Compile Include="Model\IdObject.cs" />
     <Compile Include="TransactionStuff\ModelUpdateContract.cs" />
