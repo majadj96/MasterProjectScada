@@ -64,6 +64,10 @@
       <Project>{6C234280-508A-47A4-B9CA-2677082EF85F}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PubSubCommon\PubSubCommon.csproj">
+      <Project>{6109286A-0DC9-469C-A271-0605C18ED32C}</Project>
+      <Name>PubSubCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ScadaContracts\ScadaContracts.csproj">
       <Project>{5B9135BD-40C9-4DFB-AE6C-054A8CDBE18F}</Project>
       <Name>ScadaContracts</Name>

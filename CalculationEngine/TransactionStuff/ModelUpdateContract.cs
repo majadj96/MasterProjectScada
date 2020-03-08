@@ -49,6 +49,15 @@ namespace CalculationEngine
 						CalcEngine.ConcreteModel_Copy.Add(asyncMachine.GID, asyncMachine);
 					}
 				}
+				else
+				{
+					if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+					{
+						IdObject idObject = PopulateIdObjectProperties(rd);
+
+						CalcEngine.ConcreteModel_Copy.Add(idObject.GID, idObject);
+					}
+				}
 			}
 
             foreach (ResourceDescription rd in delta.UpdateOperations)
@@ -80,6 +89,15 @@ namespace CalculationEngine
 						CalcEngine.ConcreteModel_Copy[asyncMachine.GID] = asyncMachine;
 					}
 				}
+				else
+				{
+					if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+					{
+						IdObject idObject = PopulateIdObjectProperties(rd);
+
+						CalcEngine.ConcreteModel_Copy[idObject.GID] = idObject;
+					}
+				}
 			}
 
             foreach (ResourceDescription rd in delta.DeleteOperations)
@@ -103,6 +121,18 @@ namespace CalculationEngine
 
             return new UpdateResult() { Result = ResultType.Succeeded };
         }
+
+		private IdObject PopulateIdObjectProperties(ResourceDescription rd)
+		{
+			IdObject idObject = new IdObject(rd.Id)
+			{
+				MRID = rd.GetProperty(ModelCode.IDOBJ_MRID).AsString(),
+				Name = rd.GetProperty(ModelCode.IDOBJ_NAME).AsString(),
+				Description = rd.GetProperty(ModelCode.IDOBJ_DESC).AsString()
+			};
+
+			return idObject;
+		}
 
 		private AsyncMachine PopulateAsyncMachineProperties(ResourceDescription rd)
 		{
@@ -128,8 +158,9 @@ namespace CalculationEngine
                 MeasurementType = (MeasurementType)rd.GetProperty(ModelCode.MEASUREMENT_MEASTYPE).AsEnum(),
                 MaxValue = rd.GetProperty(ModelCode.DISCRETE_MAXVALUE).AsInt(),
                 MinValue = rd.GetProperty(ModelCode.DISCRETE_MINVALUE).AsInt(),
-                NormalValue = rd.GetProperty(ModelCode.DISCRETE_NORMALVALUE).AsInt()
-            };
+                NormalValue = rd.GetProperty(ModelCode.DISCRETE_NORMALVALUE).AsInt(),
+				EquipmentGid = rd.GetProperty(ModelCode.MEASUREMENT_PSR).AsReference()
+			};
 
             return discrete;
         }
@@ -144,7 +175,8 @@ namespace CalculationEngine
                 MeasurementType = (MeasurementType)rd.GetProperty(ModelCode.MEASUREMENT_MEASTYPE).AsEnum(),
                 MaxValue = rd.GetProperty(ModelCode.ANALOG_MAXVALUE).AsFloat(),
                 MinValue = rd.GetProperty(ModelCode.ANALOG_MINVALUE).AsFloat(),
-                NormalValue = rd.GetProperty(ModelCode.ANALOG_NORMALVALUE).AsFloat()
+                NormalValue = rd.GetProperty(ModelCode.ANALOG_NORMALVALUE).AsFloat(),
+				EquipmentGid = rd.GetProperty(ModelCode.MEASUREMENT_PSR).AsReference()
             };
 
             return analog;

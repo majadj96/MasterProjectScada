@@ -13,6 +13,7 @@ namespace CalculationEngine.Model
         private float maxValue;
         private float minValue;
         private float normalValue;
+		private long equipmentGid;
 
         public Analog(long gid) : base(gid)
         {
@@ -23,5 +24,6 @@ namespace CalculationEngine.Model
         public float MinValue { get => minValue; set => minValue = value; }
         public float NormalValue { get => normalValue; set => normalValue = value; }
         public MeasurementType MeasurementType { get => measurementType; set => measurementType = value; }
-    }
+		public long EquipmentGid { get => equipmentGid; set => equipmentGid = value; }
+	}
 }
