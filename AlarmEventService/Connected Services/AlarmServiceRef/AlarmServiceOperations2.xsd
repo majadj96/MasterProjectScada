@@ -3,6 +3,7 @@
   <xs:import schemaLocation="http://localhost:55517/AlarmServiceOperations.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Common" />
   <xs:complexType name="Alarm">
     <xs:sequence>
+      <xs:element minOccurs="0" name="AlarmAck" type="xs:boolean" />
       <xs:element minOccurs="0" name="AlarmAcknowledged" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="AlarmReported" type="xs:dateTime" />
       <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Common" minOccurs="0" name="AlarmReportedBy" type="q1:AlarmEventType" />

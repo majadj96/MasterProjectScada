@@ -73,7 +73,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations.wsdl" />
     <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations.xsd">
       <SubType>Designer</SubType>
@@ -103,8 +105,6 @@
     <None Include="packages.config" />
     <None Include="Properties\DataSources\Common.AlarmEvent.Alarm.datasource" />
     <None Include="Properties\DataSources\Common.AlarmEvent.Event.datasource" />
-    <None Include="Properties\DataSources\ScadaCommon.Database.Alarm.datasource" />
-    <None Include="Properties\DataSources\ScadaCommon.Database.Event.datasource" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
@@ -112,21 +112,6 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\AlarmServiceRef\" />
     <WCFMetadataStorage Include="Connected Services\EventServiceRef\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\AlarmServiceRef\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\AlarmServiceRef\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\AlarmServiceRef\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\EventServiceRef\EventServiceOperations.disco" />
@@ -152,6 +137,21 @@
       <Project>{823d1355-efd0-481c-a0d9-fda0c4ea37df}</Project>
       <Name>ScadaCommon</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AlarmServiceRef\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AlarmServiceRef\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AlarmServiceRef\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

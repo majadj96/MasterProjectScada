@@ -21,6 +21,8 @@ namespace AlarmEventServiceDatabase
                     {
                         aa.AlarmAcknowledged = (DateTime)alarm.AlarmAcknowledged;
                         aa.Username = alarm.Username;
+                        aa.AlarmAck = true;
+
                         db.SaveChanges();
                         //log
                         return true;
@@ -56,7 +58,8 @@ namespace AlarmEventServiceDatabase
                         AlarmReportedBy = alarm.AlarmReportedBy,
                         Message = alarm.Message,
                         PointName = alarm.PointName,
-                        Username = alarm.Username
+                        Username = alarm.Username,
+                         AlarmAck = false
                     });
                     //log
                     db.SaveChanges();

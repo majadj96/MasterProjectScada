@@ -7,7 +7,7 @@
         xmlns:views="clr-namespace:UserInterface.View"
         xmlns:viewModel="clr-namespace:UserInterface.ViewModel"
         mc:Ignorable="d"
-        Title="Table Window" Height="700" Width="800" Background="LightGray" WindowStartupLocation="CenterScreen">
+        Title="Table Window" Height="800" Width="900" Background="LightGray" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewModel:TableViewModel}">
@@ -23,12 +23,16 @@
 
     <Grid Background="#FF474747">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="600"/>
+            <RowDefinition Height="740"/>
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="15"/>
+            <ColumnDefinition Width="860"/>
+            <ColumnDefinition Width="15"/>
+        </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="0" Grid.Column="1">
             <ContentControl Content="{Binding CurrentTableViewModel}"/>
         </Grid>
     </Grid>

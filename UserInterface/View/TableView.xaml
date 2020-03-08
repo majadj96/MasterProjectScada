@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:UserInterface.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="700" d:DesignWidth="900">
 
     <UserControl.Resources>
         <Style TargetType="DataGrid">
@@ -74,8 +74,6 @@
                   VerticalAlignment="Top"
                   AutoGenerateColumns="False"
                   CanUserResizeRows="False"
-                  Height="600"
-                  Width="700"
                   CanUserAddRows="False" Grid.Column="1" Background="#FF5E5E5E" Grid.Row="1" BorderBrush="#FF3C3C3C" FontFamily="Consolas" FontSize="14">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Width="*"  Binding="{Binding Name}"/>

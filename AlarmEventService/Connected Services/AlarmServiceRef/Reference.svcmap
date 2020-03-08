@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="77cb4edc-063e-4296-9827-18578cd8f872" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="35ea7917-30a1-4b7b-838d-1c875232b8d6" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -22,12 +22,12 @@
     <MetadataSource Address="http://localhost:55517/AlarmServiceOperations.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="AlarmServiceOperations.xsd" MetadataType="Schema" ID="9a3e6f4e-7121-4a99-b11d-037105756798" SourceId="1" SourceUrl="http://localhost:55517/AlarmServiceOperations.svc?xsd=xsd2" />
-    <MetadataFile FileName="AlarmServiceOperations.disco" MetadataType="Disco" ID="f66e58a5-59bb-4dfe-ad8c-52945c6b9642" SourceId="1" SourceUrl="http://localhost:55517/AlarmServiceOperations.svc?disco" />
-    <MetadataFile FileName="AlarmServiceOperations1.xsd" MetadataType="Schema" ID="6b28336a-1697-4de5-b9eb-699fff45c6ed" SourceId="1" SourceUrl="http://localhost:55517/AlarmServiceOperations.svc?xsd=xsd0" />
-    <MetadataFile FileName="AlarmServiceOperations2.xsd" MetadataType="Schema" ID="e03c4e94-9701-45fa-862b-9cfa49db4036" SourceId="1" SourceUrl="http://localhost:55517/AlarmServiceOperations.svc?xsd=xsd1" />
-    <MetadataFile FileName="AlarmServiceOperations3.xsd" MetadataType="Schema" ID="a17f0b1f-f88b-4c6a-af07-1fed6f50994d" SourceId="1" SourceUrl="http://localhost:55517/AlarmServiceOperations.svc?xsd=xsd3" />
-    <MetadataFile FileName="AlarmServiceOperations.wsdl" MetadataType="Wsdl" ID="a4e5c7f2-5efa-496b-953d-37313d60103d" SourceId="1" SourceUrl="http://localhost:55517/AlarmServiceOperations.svc?wsdl" />
+    <MetadataFile FileName="AlarmServiceOperations.xsd" MetadataType="Schema" ID="1a2b2f97-73d6-4389-a0b6-8b83b286b993" SourceId="1" SourceUrl="http://localhost:55517/AlarmServiceOperations.svc?xsd=xsd2" />
+    <MetadataFile FileName="AlarmServiceOperations.disco" MetadataType="Disco" ID="20847c52-c89a-4f2c-83e9-46808dfbeacc" SourceId="1" SourceUrl="http://localhost:55517/AlarmServiceOperations.svc?disco" />
+    <MetadataFile FileName="AlarmServiceOperations1.xsd" MetadataType="Schema" ID="53e5d577-eba1-4d66-a163-bbb8830a31be" SourceId="1" SourceUrl="http://localhost:55517/AlarmServiceOperations.svc?xsd=xsd0" />
+    <MetadataFile FileName="AlarmServiceOperations2.xsd" MetadataType="Schema" ID="6c465aa5-3b41-4be5-81c7-f7748e1b4ae9" SourceId="1" SourceUrl="http://localhost:55517/AlarmServiceOperations.svc?xsd=xsd1" />
+    <MetadataFile FileName="AlarmServiceOperations3.xsd" MetadataType="Schema" ID="240f85d2-febd-4888-9dd7-a368d93a9d04" SourceId="1" SourceUrl="http://localhost:55517/AlarmServiceOperations.svc?xsd=xsd3" />
+    <MetadataFile FileName="AlarmServiceOperations.wsdl" MetadataType="Wsdl" ID="4e80b5f9-ad95-419d-823e-412b0e119da5" SourceId="1" SourceUrl="http://localhost:55517/AlarmServiceOperations.svc?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
