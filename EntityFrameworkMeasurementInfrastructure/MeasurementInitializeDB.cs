@@ -7,7 +7,7 @@ using System.Data.Entity;
 
 namespace EntityFrameworkMeasurementInfrastructure
 {
-    public class MeasurementInitializeDB : DropCreateDatabaseAlways<MeasurementContext>
+    public class MeasurementInitializeDB : DropCreateDatabaseIfModelChanges<MeasurementContext>
     {
         protected override void Seed(MeasurementContext context)
         {
