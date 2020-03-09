@@ -7,6 +7,7 @@
         xmlns:views="clr-namespace:UserInterface.View"
         xmlns:viewModel="clr-namespace:UserInterface.ViewModel"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:converters="clr-namespace:UserInterface.Converters"
         mc:Ignorable="d"
         Title="SCADA SISTEM" Height="{x:Static SystemParameters.PrimaryScreenHeight}" Width="{x:Static SystemParameters.PrimaryScreenWidth}" Background="LightGray" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
@@ -204,6 +205,8 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" True="Collapsed" False="Visible" />
     </Window.Resources>
 
     <Grid Background="#FF474747">
@@ -225,7 +228,7 @@
             </Menu>
         </DockPanel>-->
 
-        <Grid Grid.Row="1" Grid.Column="0" Margin="20,66,20,10" Background="#FF5E5E5E" Grid.ColumnSpan="2" Grid.RowSpan="2">
+        <Grid Visibility="{Binding MeshVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Row="1" Grid.Column="0" Margin="20,66,20,10" Background="#FF5E5E5E" Grid.ColumnSpan="2" Grid.RowSpan="2">
             <ContentControl Content="{Binding CurrentMeshViewModel}"/>
             <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,880,287" HorizontalAlignment="Right" Width="231" Height="27" VerticalAlignment="Bottom">Mesh Eletricity</Label>
             <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,920,588" HorizontalAlignment="Right" Width="237" Height="27" VerticalAlignment="Bottom">Mesh Power</Label>
@@ -252,7 +255,7 @@
         </StatusBar>
 
         <Button  Content="Summary Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="585,29,0,0" VerticalAlignment="Top" Width="145" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#258565" Foreground="White" BorderBrush="#FFC5C5C5" Grid.Column="1"/>
-        <Button  Content="Alarm Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Alarm" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="770,29,0,0" VerticalAlignment="Top" Width="116" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#FFFF6D6D" Foreground="White" BorderBrush="#FFC5C5C5" Grid.Column="1"/>
+        <Button Name="AlarmButton"  Content="Alarm Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Alarm" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="770,29,0,0" VerticalAlignment="Top" Width="116" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="{Binding ButtonAlarmBrush}" Foreground="White" BorderBrush="#FFC5C5C5" Grid.Column="1"/>
         <Button  Content="Event Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Event" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="924,29,0,0" VerticalAlignment="Top" Width="118" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#326492" Foreground="White" BorderBrush="#FFC5C5C5" Grid.Column="1"/>
         <Label Content="Select Substation" HorizontalAlignment="Left" Margin="20,10,0,0" HorizontalContentAlignment="Center" VerticalAlignment="Top" Height="38" Width="292" RenderTransformOrigin="0.5,0.5" Foreground="#FFF5D856" FontFamily="Consolas" FontSize="18" Grid.ColumnSpan="2"/>
 
@@ -337,7 +340,6 @@
             <Label Content="(search by)" FontFamily="Consolas" FontSize="11" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Canvas.Left="165" Canvas.Top="591" Height="26" Width="98" Foreground="#FF1B1B1B"/>
 
         </Canvas>
-
-        <!--<Border x:Name="AlarmBorder" Visibility="Visible" BorderBrush="Crimson" BorderThickness="10" HorizontalAlignment="Left" Height="820" Margin="0,0,0,0" VerticalAlignment="Top" Width="1512" Grid.RowSpan="3"></Border>-->
+        
     </Grid>
 </Window>

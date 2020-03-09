@@ -4,11 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModel="clr-namespace:UserInterface.ViewModel"
+             xmlns:converters="clr-namespace:UserInterface.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="900">
 
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" True="Collapsed" False="Visible" />
 
         <Style TargetType="DataGrid">
             <!-- On mouse hover -->
@@ -116,7 +117,7 @@
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Width="150" Command="{Binding DataContext.AcknowledgeAlarmCommand, ElementName=AlarmItems}" CommandParameter="{Binding Path=ID}" Content="Acknowledge alarm" Style="{StaticResource MyButtonStyle}" FontFamily="Consolas" Background="#fca503" Foreground="#FF252525"></Button>
+                            <Button Width="150" Visibility="{Binding AlarmAck, Converter={StaticResource BooleanToVisibilityConverter}}" Command="{Binding DataContext.AcknowledgeAlarmCommand, ElementName=AlarmItems}" CommandParameter="{Binding Path=ID}" Content="Acknowledge alarm" Style="{StaticResource MyButtonStyle}" FontFamily="Consolas" Background="#fca503" Foreground="#FF252525"></Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

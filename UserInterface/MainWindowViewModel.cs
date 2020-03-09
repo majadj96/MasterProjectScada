@@ -35,6 +35,9 @@ namespace UserInterface
         private ObservableCollection<string> searchType = new ObservableCollection<string> { "Name", "GID" };
         List<Substation> searchedSubs = new List<Substation>();
 
+        private DispatcherTimer AlarmButtonTimer = new DispatcherTimer();
+        private Thread threadAlarms;
+
         #region Variables
         private BindableBase currentMeshViewModel;
         private BindableBase currentTableViewModel;
@@ -56,6 +59,9 @@ namespace UserInterface
         public string searchTerm { get; set; }
         public string searchTypeSelected { get; set; }
 
+        private bool BlinkOnFlag = false, FlagToStartBlinking = false;
+        private bool meshVisible = true;
+        private SolidColorBrush buttonAlarmBrush = Brushes.Crimson;
         #endregion
 
         #region Props
@@ -245,10 +251,35 @@ namespace UserInterface
                 OnPropertyChanged("PubSub");
             }
         }
+
+        public SolidColorBrush ButtonAlarmBrush
+        {
+            get
+            {
+                return buttonAlarmBrush;
+            }
+            set
+            {
+                buttonAlarmBrush = value;
+                OnPropertyChanged("ButtonAlarmBrush");
+            }
+        }
+        public bool MeshVisible
+        {
+            get
+            {
+                return meshVisible;
+            }
+            set
+            {
+                meshVisible = value;
+                OnPropertyChanged("MeshVisible");
+            }
+        }
         #endregion
+
         DispatcherTimer timer = new DispatcherTimer();
         Random rand = new Random();
-
 
         public MainWindowViewModel()
         {
@@ -269,6 +300,11 @@ namespace UserInterface
             timer.Tick += new EventHandler(Test);
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Start();
+
+            AlarmButtonTimer.Tick += ButtonBlinks;
+            AlarmButtonTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
+            AlarmButtonTimer.Start();
+
             Messenger.Default.Register<NotificationMessage>(this, (message) => { PopulateModel(message.Target, message.Notification); });
         }
 
@@ -301,6 +337,22 @@ namespace UserInterface
         }
 
 
+        private void CheckForAlarms(object stateInfo)
+        {
+            while (true)
+            {
+                int numberOfAlarms = ProxyServices.AlarmEventServiceProxy.GetAllAlarms().Where(x => x.AlarmAck == false).Count();
+                if (numberOfAlarms > 0)
+                    FlagToStartBlinking = true;
+                else
+                {
+                    FlagToStartBlinking = false;
+                    ButtonAlarmBrush = Brushes.Crimson;
+                    Thread.Sleep(1000);
+                }
+            }
+        }
+
         private void Test(object sender, EventArgs e)
         {
             GaugeValue = rand.Next(0, 100).ToString();
@@ -308,6 +360,19 @@ namespace UserInterface
             AnguarValue = rand.Next(-7, 7).ToString();
 
            // GaugeClasic = rand.Next(300, 1000).ToString();
+        }
+
+        private void ButtonBlinks(object sender, EventArgs e)
+        {
+            if (FlagToStartBlinking)
+            {
+                if (BlinkOnFlag)
+                    ButtonAlarmBrush = Brushes.Black;
+                else
+                    ButtonAlarmBrush = Brushes.Crimson;
+
+                BlinkOnFlag = !BlinkOnFlag;
+            }
         }
 
         private void OnNavigation(string destination)
@@ -407,10 +472,15 @@ namespace UserInterface
 
                 Event e = new Event() {  EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
                     Message = "Acquisition arrived from SCADA.", PointName = "" };
-                ProxyPool.ProxyServices.AlarmEventServiceProxy.AddEvent(e);
+                ProxyServices.AlarmEventServiceProxy.AddEvent(e);
 
                 Console.WriteLine(resources);
             }
+
+            MeshVisible = false;
+
+            threadAlarms = new Thread(CheckForAlarms);
+            threadAlarms.Start();
         }
 
         public void CommandToAM(double value)
