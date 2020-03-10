@@ -17,6 +17,7 @@ namespace CalculationEngine
         {
             InitializeHosts();
             StartHosts();
+			calcEngine = new CalcEngine();
         }
 
         public void Dispose()

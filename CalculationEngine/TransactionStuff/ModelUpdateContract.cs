@@ -12,174 +12,246 @@ using TransactionManagerContracts;
 
 namespace CalculationEngine
 {
-    public class ModelUpdateContract : IModelUpdateContract
-    {
-        public UpdateResult UpdateModel(Delta delta)
-        {
-            Console.WriteLine("Update model invoked");
+	public class ModelUpdateContract : IModelUpdateContract
+	{
+		public UpdateResult UpdateModel(Delta delta)
+		{
+			Console.WriteLine("Update model invoked");
 
-            CalcEngine.ConcreteModel_Copy = new Dictionary<long, IdObject>(CalcEngine.ConcreteModel);
+			CalcEngine.ConcreteModel_Copy = new Dictionary<long, IdObject>(CalcEngine.ConcreteModel);
 
-            foreach (ResourceDescription rd in delta.InsertOperations)
-            {
-                if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ANALOG)
-                {
-                    if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
-                    {
-                        Analog analog = PopulateAnalogProperties(rd);
-
-                        CalcEngine.ConcreteModel_Copy.Add(analog.GID, analog);
-                    }
-                }
-                else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.DISCRETE)
-                {
-                    if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
-                    {
-                        Discrete discrete = PopulateDiscreteProperties(rd);
-
-                        CalcEngine.ConcreteModel_Copy.Add(discrete.GID, discrete);
-                    }
-                }
-				else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ASYNCHRONOUSMACHINE)
-				{
-					if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
-					{
-						AsyncMachine asyncMachine = PopulateAsyncMachineProperties(rd);
-
-						CalcEngine.ConcreteModel_Copy.Add(asyncMachine.GID, asyncMachine);
-					}
-				}
-				else
-				{
-					if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
-					{
-						IdObject idObject = PopulateIdObjectProperties(rd);
-
-						CalcEngine.ConcreteModel_Copy.Add(idObject.GID, idObject);
-					}
-				}
+			foreach (ResourceDescription rd in delta.InsertOperations)
+			{
+				InsertEntity(rd);
 			}
 
-            foreach (ResourceDescription rd in delta.UpdateOperations)
-            {
-                if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ANALOG)
-                {
-                    if (CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
-                    {
-                        Analog analog = PopulateAnalogProperties(rd);
-
-                        CalcEngine.ConcreteModel_Copy[analog.GID] = analog;
-                    }
-                }
-                else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.DISCRETE)
-                {
-                    if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
-                    {
-                        Discrete discrete = PopulateDiscreteProperties(rd);
-
-                        CalcEngine.ConcreteModel_Copy[discrete.GID] = discrete;
-                    }
-                }
-				else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ASYNCHRONOUSMACHINE)
-				{
-					if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
-					{
-						AsyncMachine asyncMachine = PopulateAsyncMachineProperties(rd);
-
-						CalcEngine.ConcreteModel_Copy[asyncMachine.GID] = asyncMachine;
-					}
-				}
-				else
-				{
-					if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
-					{
-						IdObject idObject = PopulateIdObjectProperties(rd);
-
-						CalcEngine.ConcreteModel_Copy[idObject.GID] = idObject;
-					}
-				}
+			foreach (ResourceDescription rd in delta.UpdateOperations)
+			{
+				UpdateEntity(rd);
 			}
 
-            foreach (ResourceDescription rd in delta.DeleteOperations)
-            {
-                if (CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
-                {
-                    CalcEngine.ConcreteModel_Copy.Remove(rd.Id);
-                }
-            }
+			foreach (ResourceDescription rd in delta.DeleteOperations)
+			{
+				RemoveEntity(rd);
+			}
 
-            try
-            {
-                TMProxy _proxy = new TMProxy(new TransactionService());
-                _proxy.Enlist();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("CE Enlist failed. " + e.Message);
-                return new UpdateResult() { Result = ResultType.Failed, Message = e.Message };
-            }
+			try
+			{
+				TMProxy _proxy = new TMProxy(new TransactionService());
+				_proxy.Enlist();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("CE Enlist failed. " + e.Message);
+				return new UpdateResult() { Result = ResultType.Failed, Message = e.Message };
+			}
 
-            return new UpdateResult() { Result = ResultType.Succeeded };
-        }
+			return new UpdateResult() { Result = ResultType.Succeeded };
+		}
+
+		#region Populate Entities
+
+		private void RemoveEntity(ResourceDescription rd)
+		{
+			if (CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+			{
+				CalcEngine.ConcreteModel_Copy.Remove(rd.Id);
+			}
+		}
+
+		private void InsertEntity(ResourceDescription rd)
+		{
+			if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ANALOG)
+			{
+				if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+				{
+					Analog analog = PopulateAnalogProperties(rd);
+
+					CalcEngine.ConcreteModel_Copy.Add(analog.GID, analog);
+				}
+			}
+			else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.DISCRETE)
+			{
+				if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+				{
+					Discrete discrete = PopulateDiscreteProperties(rd);
+
+					CalcEngine.ConcreteModel_Copy.Add(discrete.GID, discrete);
+				}
+			}
+			else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ASYNCHRONOUSMACHINE)
+			{
+				if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+				{
+					AsyncMachine asyncMachine = PopulateAsyncMachineProperties(rd);
+
+					CalcEngine.ConcreteModel_Copy.Add(asyncMachine.GID, asyncMachine);
+				}
+			}
+			else
+			{
+				if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+				{
+					IdObject idObject = PopulateIdObjectProperties(rd);
+
+					CalcEngine.ConcreteModel_Copy.Add(idObject.GID, idObject);
+				}
+			}
+		}
+
+		private void UpdateEntity(ResourceDescription rd)
+		{
+			if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ANALOG)
+			{
+				if (CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+				{
+					Analog analog = PopulateAnalogProperties(rd);
+
+					CalcEngine.ConcreteModel_Copy[analog.GID] = analog;
+				}
+			}
+			else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.DISCRETE)
+			{
+				if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+				{
+					Discrete discrete = PopulateDiscreteProperties(rd);
+
+					CalcEngine.ConcreteModel_Copy[discrete.GID] = discrete;
+				}
+			}
+			else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ASYNCHRONOUSMACHINE)
+			{
+				if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+				{
+					AsyncMachine asyncMachine = PopulateAsyncMachineProperties(rd);
+
+					CalcEngine.ConcreteModel_Copy[asyncMachine.GID] = asyncMachine;
+				}
+			}
+			else
+			{
+				if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+				{
+					IdObject idObject = PopulateIdObjectProperties(rd);
+
+					CalcEngine.ConcreteModel_Copy[idObject.GID] = idObject;
+				}
+			}
+		}
 
 		private IdObject PopulateIdObjectProperties(ResourceDescription rd)
 		{
-			IdObject idObject = new IdObject(rd.Id)
+			IdObject idObject = new IdObject(rd.Id);
+
+			Property p;
+
+			if ((p = rd.GetProperty(ModelCode.IDOBJ_MRID)) != null)
 			{
-				MRID = rd.GetProperty(ModelCode.IDOBJ_MRID).AsString(),
-				Name = rd.GetProperty(ModelCode.IDOBJ_NAME).AsString(),
-				Description = rd.GetProperty(ModelCode.IDOBJ_DESC).AsString()
-			};
+				idObject.MRID = p.AsString();
+			}
+			if ((p = rd.GetProperty(ModelCode.IDOBJ_NAME)) != null)
+			{
+				idObject.Name = p.AsString();
+			}
+			if ((p = rd.GetProperty(ModelCode.IDOBJ_DESC)) != null)
+			{
+				idObject.Description = p.AsString();
+			}
 
 			return idObject;
 		}
 
 		private AsyncMachine PopulateAsyncMachineProperties(ResourceDescription rd)
 		{
-			AsyncMachine asyncMachine = new AsyncMachine(rd.Id)
+			IdObject idObject = PopulateIdObjectProperties(rd);
+
+			AsyncMachine machine = new AsyncMachine(idObject.GID)
 			{
-				MRID = rd.GetProperty(ModelCode.IDOBJ_MRID).AsString(),
-				Name = rd.GetProperty(ModelCode.IDOBJ_NAME).AsString(),
-				Description = rd.GetProperty(ModelCode.IDOBJ_DESC).AsString(),
-				RatedP = rd.GetProperty(ModelCode.ASYNCMACHINE_RATEDP).AsFloat(),
-				CosPhi = rd.GetProperty(ModelCode.ASYNCMACHINE_COSPHI).AsFloat()
+				MRID = idObject.MRID,
+				Name = idObject.Name,
+				Description = idObject.Description
 			};
 
-			return asyncMachine;
+			Property p;
+
+			if ((p = rd.GetProperty(ModelCode.ASYNCMACHINE_COSPHI)) != null)
+			{
+				machine.CosPhi = p.AsFloat();
+			}
+			if ((p = rd.GetProperty(ModelCode.ASYNCMACHINE_RATEDP)) != null)
+			{
+				machine.RatedP = p.AsFloat();
+			}
+
+			return machine;
 		}
 
 		private Discrete PopulateDiscreteProperties(ResourceDescription rd)
-        {
-            Discrete discrete = new Discrete(rd.Id)
-            {
-                MRID = rd.GetProperty(ModelCode.IDOBJ_MRID).AsString(),
-                Name = rd.GetProperty(ModelCode.IDOBJ_NAME).AsString(),
-                Description = rd.GetProperty(ModelCode.IDOBJ_DESC).AsString(),
-                MeasurementType = (MeasurementType)rd.GetProperty(ModelCode.MEASUREMENT_MEASTYPE).AsEnum(),
-                MaxValue = rd.GetProperty(ModelCode.DISCRETE_MAXVALUE).AsInt(),
-                MinValue = rd.GetProperty(ModelCode.DISCRETE_MINVALUE).AsInt(),
-                NormalValue = rd.GetProperty(ModelCode.DISCRETE_NORMALVALUE).AsInt(),
-				EquipmentGid = rd.GetProperty(ModelCode.MEASUREMENT_PSR).AsReference()
+		{
+			IdObject idObject = PopulateIdObjectProperties(rd);
+
+			Discrete discrete = new Discrete(idObject.GID)
+			{
+				MRID = idObject.MRID,
+				Name = idObject.Name,
+				Description = idObject.Description
 			};
 
-            return discrete;
-        }
+			Property p;
 
-        private Analog PopulateAnalogProperties(ResourceDescription rd)
-        {
-            Analog analog = new Analog(rd.Id)
-            {
-                MRID = rd.GetProperty(ModelCode.IDOBJ_MRID).AsString(),
-                Name = rd.GetProperty(ModelCode.IDOBJ_NAME).AsString(),
-                Description = rd.GetProperty(ModelCode.IDOBJ_DESC).AsString(),
-                MeasurementType = (MeasurementType)rd.GetProperty(ModelCode.MEASUREMENT_MEASTYPE).AsEnum(),
-                MaxValue = rd.GetProperty(ModelCode.ANALOG_MAXVALUE).AsFloat(),
-                MinValue = rd.GetProperty(ModelCode.ANALOG_MINVALUE).AsFloat(),
-                NormalValue = rd.GetProperty(ModelCode.ANALOG_NORMALVALUE).AsFloat(),
-				EquipmentGid = rd.GetProperty(ModelCode.MEASUREMENT_PSR).AsReference()
-            };
+			if ((p = rd.GetProperty(ModelCode.MEASUREMENT_MEASTYPE)) != null)
+			{
+				discrete.MeasurementType = (MeasurementType)p.AsEnum();
+			}
+			if ((p = rd.GetProperty(ModelCode.DISCRETE_MAXVALUE)) != null)
+			{
+				discrete.MaxValue = p.AsInt();
+			}
+			if ((p = rd.GetProperty(ModelCode.DISCRETE_MINVALUE)) != null)
+			{
+				discrete.MinValue = p.AsInt();
+			}
+			if ((p = rd.GetProperty(ModelCode.DISCRETE_NORMALVALUE)) != null)
+			{
+				discrete.NormalValue = p.AsInt();
+			}
 
-            return analog;
-        }
-    }
+			return discrete;
+		}
+
+		private Analog PopulateAnalogProperties(ResourceDescription rd)
+		{
+			IdObject idObject = PopulateIdObjectProperties(rd);
+
+			Analog analog = new Analog(idObject.GID)
+			{
+				MRID = idObject.MRID,
+				Name = idObject.Name,
+				Description = idObject.Description
+			};
+
+			Property p;
+
+			if ((p = rd.GetProperty(ModelCode.MEASUREMENT_MEASTYPE)) != null)
+			{
+				analog.MeasurementType = (MeasurementType)p.AsEnum();
+			}
+			if ((p = rd.GetProperty(ModelCode.ANALOG_MAXVALUE)) != null)
+			{
+				analog.MaxValue = p.AsFloat();
+			}
+			if ((p = rd.GetProperty(ModelCode.ANALOG_MINVALUE)) != null)
+			{
+				analog.MinValue = p.AsFloat();
+			}
+			if ((p = rd.GetProperty(ModelCode.ANALOG_NORMALVALUE)) != null)
+			{
+				analog.NormalValue = p.AsFloat();
+			}
+
+			return analog;
+		}
+
+		#endregion
+	}
 }

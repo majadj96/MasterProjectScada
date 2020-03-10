@@ -8,31 +8,31 @@ using TransactionManagerContracts;
 
 namespace CalculationEngine
 {
-    public class TransactionService : ITransactionSteps
-    {
-        public bool Prepare()
-        {
-            Console.WriteLine("Prepare pozvan");
-            return true;
-        }
+	public class TransactionService : ITransactionSteps
+	{
+		public bool Prepare()
+		{
+			Console.WriteLine("CE Prepare");
+			return true;
+		}
 
-        public bool Commit()
-        {
-            Console.WriteLine("Commit pozvan");
+		public bool Commit()
+		{
+			Console.WriteLine("CE Commit");
 
-            CalcEngine.ConcreteModel_Old = new Dictionary<long, IdObject>(CalcEngine.ConcreteModel);
-            CalcEngine.ConcreteModel = new Dictionary<long, IdObject>(CalcEngine.ConcreteModel_Copy);
-            CalcEngine.ConcreteModel_Copy.Clear();
+			CalcEngine.ConcreteModel_Old = new Dictionary<long, IdObject>(CalcEngine.ConcreteModel);
+			CalcEngine.ConcreteModel = new Dictionary<long, IdObject>(CalcEngine.ConcreteModel_Copy);
+			CalcEngine.ConcreteModel_Copy.Clear();
 
-            return true;
-        }
+			return true;
+		}
 
-        public void Rollback()
-        {
-            Console.WriteLine("Rollback pozvan");
+		public void Rollback()
+		{
+			Console.WriteLine("CE Rollback");
 
-            CalcEngine.ConcreteModel = new Dictionary<long, IdObject>(CalcEngine.ConcreteModel_Old);
-            CalcEngine.ConcreteModel_Copy.Clear();
-        }
-    }
+			CalcEngine.ConcreteModel = new Dictionary<long, IdObject>(CalcEngine.ConcreteModel_Old);
+			CalcEngine.ConcreteModel_Copy.Clear();
+		}
+	}
 }

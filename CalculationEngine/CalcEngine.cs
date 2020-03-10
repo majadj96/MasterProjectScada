@@ -11,31 +11,36 @@ using System.Timers;
 
 namespace CalculationEngine
 {
-    public class CalcEngine:IPub
-    {
-        public static Dictionary<long, IdObject> ConcreteModel = new Dictionary<long, IdObject>();
-        public static Dictionary<long, IdObject> ConcreteModel_Copy = new Dictionary<long, IdObject>();
-        public static Dictionary<long, IdObject> ConcreteModel_Old = new Dictionary<long, IdObject>();
+	public class CalcEngine : IPub
+	{
+		public static Dictionary<long, IdObject> ConcreteModel = new Dictionary<long, IdObject>();
+		public static Dictionary<long, IdObject> ConcreteModel_Copy = new Dictionary<long, IdObject>();
+		public static Dictionary<long, IdObject> ConcreteModel_Old = new Dictionary<long, IdObject>();
 
-		private ISub _proxy;
-		private string _endpoint = string.Empty;
-
+		private SubscribeProxy _proxy;
 		private static Timer aTimer;
 
 		public CalcEngine()
 		{
-			_endpoint = "net.tcp://localhost:7002/Sub";
-			MakeProxy(_endpoint, this);
-
-			try
-			{
-				_proxy.Subscribe("scada");
-			}
-			catch
-			{
-				Console.WriteLine("Cannot subscribe on scada.");
-			}
+			_proxy = new SubscribeProxy(this);
+			_proxy.Subscribe("scada");
 		}
+
+		#region IPub implementation
+
+		public void Publish(NMSModel model, string topicName)
+		{
+			throw new ActionNotSupportedException("CE does not have implementation for this method.");
+		}
+
+		public void PublishMeasure(ScadaUIExchangeModel[] measurement, string topicName)
+		{
+			ProccessData(measurement);
+		}
+
+		#endregion
+
+		#region Timer
 
 		public static void SetTimer()
 		{
@@ -56,6 +61,10 @@ namespace CalculationEngine
 
 			Console.WriteLine("AsyncM_1 working hours: " + ((AsyncMachine)ConcreteModel[machineGid]).WorkingTime);
 		}
+
+		#endregion
+
+		#region Processing methods
 
 		private void ProccessData(object data)
 		{
@@ -88,14 +97,14 @@ namespace CalculationEngine
 
 				//DMSType objectType = (DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(objectGid));
 
-				if(idObject.GetType() == typeof(Analog))
+				if (idObject.GetType() == typeof(Analog))
 				{
 					Analog analog = (Analog)idObject;
 					long equipId = analog.EquipmentGid;
 
 					DMSType equipType = (DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(equipId));
 
-					
+
 				}
 				else if (idObject.GetType() == typeof(Discrete))
 				{
@@ -108,10 +117,10 @@ namespace CalculationEngine
 					{
 						IdObject breaker = ConcreteModel[equipId];
 
-						if(breaker.MRID == "Breaker_AsyncMachine1")
+						if (breaker.MRID == "Breaker_AsyncMachine1")
 						{
 							long asyncM = ConcreteModel.Values.First(x => x.MRID == "AsyncM_1").GID;
-							if(discrete.NormalValue == 1)
+							if (discrete.NormalValue == 1)
 							{
 								//ako je breaker otvoren masina ne radi
 								((AsyncMachine)ConcreteModel[asyncM]).IsRunning = false;
@@ -127,23 +136,6 @@ namespace CalculationEngine
 			}
 		}
 
-		public void Publish(NMSModel model, string topicName)
-		{
-			
-		}
-
-		public void PublishMeasure(ScadaUIExchangeModel[] measurement, string topicName)
-		{
-			ProccessData(measurement);
-		}
-
-		public void MakeProxy(string EndpoindAddress, object callbackinstance)
-		{
-			NetTcpBinding netTcpbinding = new NetTcpBinding(SecurityMode.None);
-			EndpointAddress endpointAddress = new EndpointAddress(EndpoindAddress);
-			InstanceContext context = new InstanceContext(callbackinstance);
-			DuplexChannelFactory<ISub> channelFactory = new DuplexChannelFactory<ISub>(new InstanceContext(this), netTcpbinding, endpointAddress);
-			_proxy = channelFactory.CreateChannel();
-		}
+		#endregion
 	}
 }
