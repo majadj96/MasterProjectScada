@@ -49,12 +49,12 @@
     <Compile Include="Model\AsyncMachine.cs" />
     <Compile Include="Model\Discrete.cs" />
     <Compile Include="Model\IdObject.cs" />
-    <Compile Include="SCADAStuff\ScadaService.cs" />
+    <Compile Include="SubscribeProxy.cs" />
     <Compile Include="TransactionStuff\ModelUpdateContract.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransactionStuff\TransactionService.cs" />
-    <Compile Include="TransactionStuff\CEServiceHost.cs" />
+    <Compile Include="CEServiceHost.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
