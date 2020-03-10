@@ -811,17 +811,27 @@ namespace UserInterface.ViewModel
                                 SubstationCurrent.Breakers[0].State = DiscreteState.ON;
                                 BreakerImage = "Assets/breaker-on.png";
                                 if (substationCurrent.Disconectors[0].State == DiscreteState.ON)
+                                {
                                     drawBreakerOn();
 
-                                if (SubstationCurrent.Breakers.Count > 2)
-                                {
-                                    if (SubstationCurrent.Disconectors[1].State == DiscreteState.ON)
+                                    if (substationCurrent.Disconectors[1].State == DiscreteState.ON)
                                     {
-                                        if (SubstationCurrent.Breakers[1].State == DiscreteState.ON)
-                                            DrawBreaker4On();
+                                        drawDis2On();
 
-                                        if (SubstationCurrent.Breakers[2].State == DiscreteState.ON)
-                                            DrawBreaker5On();
+                                        if (substationCurrent.Breakers[1].State == DiscreteState.ON)
+                                            DrawBreaker2On();
+
+                                        if (SubstationCurrent.Breakers.Count > 2)
+                                        {
+                                            if (SubstationCurrent.Disconectors[1].State == DiscreteState.ON)
+                                            {
+                                                if (SubstationCurrent.Breakers[1].State == DiscreteState.ON)
+                                                    DrawBreaker4On();
+
+                                                if (SubstationCurrent.Breakers[2].State == DiscreteState.ON)
+                                                    DrawBreaker5On();
+                                            }
+                                        }
                                     }
                                 }
                             }
