@@ -18,7 +18,7 @@ namespace CalculationEngine
 		public static Dictionary<long, IdObject> ConcreteModel_Old = new Dictionary<long, IdObject>();
 
 		private SubscribeProxy _proxy;
-		private static Timer aTimer;
+		public static Timer aTimer = null;
 
 		public CalcEngine()
 		{
@@ -44,7 +44,7 @@ namespace CalculationEngine
 
 		public static void SetTimer()
 		{
-			aTimer = new Timer(1000);
+			aTimer = new Timer(5000);
 			aTimer.Elapsed += OnTimedEvent;
 			aTimer.AutoReset = true;
 			aTimer.Enabled = true;
