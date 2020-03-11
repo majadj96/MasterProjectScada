@@ -52,15 +52,30 @@ namespace CalculationEngine
 
 		private static void OnTimedEvent(Object source, ElapsedEventArgs e)
 		{
-			long machineGid = ConcreteModel.Values.First(x => x.MRID == "AsyncM_1").GID;
-			AsyncMachine asyncMachine = (AsyncMachine)ConcreteModel[machineGid];
-			if (asyncMachine.IsRunning)
+			long machine1Gid = ConcreteModel.Values.First(x => x.MRID == "AsyncM_1").GID;
+            long machine2Gid = ConcreteModel.Values.First(x => x.MRID == "AsyncM_2").GID;
+            long machine3Gid = ConcreteModel.Values.First(x => x.MRID == "AsyncM_3").GID;
+            AsyncMachine asyncMachine1 = (AsyncMachine)ConcreteModel[machine1Gid];
+            AsyncMachine asyncMachine2 = (AsyncMachine)ConcreteModel[machine2Gid];
+            AsyncMachine asyncMachine3 = (AsyncMachine)ConcreteModel[machine3Gid];
+            if (asyncMachine1.IsRunning)
 			{
-				((AsyncMachine)ConcreteModel[machineGid]).WorkingTime += 1;
+				((AsyncMachine)ConcreteModel[machine1Gid]).WorkingTime += 1;
 			}
+            if (asyncMachine2.IsRunning)
+            {
+                ((AsyncMachine)ConcreteModel[machine2Gid]).WorkingTime += 1;
+            }
+            if (asyncMachine3.IsRunning)
+            {
+                ((AsyncMachine)ConcreteModel[machine3Gid]).WorkingTime += 1;
+            }
 
-			Console.WriteLine("AsyncM_1 working hours: " + ((AsyncMachine)ConcreteModel[machineGid]).WorkingTime);
-		}
+            Console.WriteLine("AsyncM_1 working hours: " + ((AsyncMachine)ConcreteModel[machine1Gid]).WorkingTime);
+            Console.WriteLine("AsyncM_2 working hours: " + ((AsyncMachine)ConcreteModel[machine2Gid]).WorkingTime);
+            Console.WriteLine("AsyncM_3 working hours: " + ((AsyncMachine)ConcreteModel[machine3Gid]).WorkingTime);
+            Console.WriteLine("--------------------------------");
+        }
 
 		#endregion
 
@@ -89,7 +104,7 @@ namespace CalculationEngine
 			CalculateData();
 		}
 
-		private void CalculateData()
+		public static void CalculateData()
 		{
 			foreach (IdObject idObject in ConcreteModel.Values)
 			{
@@ -120,18 +135,52 @@ namespace CalculationEngine
 						if (breaker.MRID == "Breaker_AsyncMachine1")
 						{
 							long asyncM = ConcreteModel.Values.First(x => x.MRID == "AsyncM_1").GID;
-							if (discrete.NormalValue == 1)
+                            Discrete breaker1 = (Discrete)ConcreteModel.Values.First(x => x.MRID == "Discrete_4");
+
+							if (discrete.NormalValue == 0 || breaker1.NormalValue == 0)
 							{
 								//ako je breaker otvoren masina ne radi
 								((AsyncMachine)ConcreteModel[asyncM]).IsRunning = false;
 							}
-							else if (discrete.NormalValue == 0)
+							else if (discrete.NormalValue == 1 && breaker1.NormalValue == 1)
 							{
 								//ako je breaker zatvoren masina radi
 								((AsyncMachine)ConcreteModel[asyncM]).IsRunning = true;
 							}
 						}
-					}
+                        else if (breaker.MRID == "Breaker_AsyncMachine2")
+                        {
+                            long asyncM = ConcreteModel.Values.First(x => x.MRID == "AsyncM_2").GID;
+                            Discrete breaker2 = (Discrete)ConcreteModel.Values.First(x => x.MRID == "Breaker_2SwitchStatus");
+
+                            if (discrete.NormalValue == 0 || breaker2.NormalValue == 0)
+                            {
+                                //ako je breaker otvoren masina ne radi
+                                ((AsyncMachine)ConcreteModel[asyncM]).IsRunning = false;
+                            }
+                            else if (discrete.NormalValue == 1 && breaker2.NormalValue == 1)
+                            {
+                                //ako je breaker zatvoren masina radi
+                                ((AsyncMachine)ConcreteModel[asyncM]).IsRunning = true;
+                            }
+                        }
+                        else if (breaker.MRID == "Breaker_AsyncMachine3")
+                        {
+                            long asyncM = ConcreteModel.Values.First(x => x.MRID == "AsyncM_3").GID;
+                            Discrete breaker2 = (Discrete)ConcreteModel.Values.First(x => x.MRID == "Breaker_2SwitchStatus");
+
+                            if (discrete.NormalValue == 0 || breaker2.NormalValue == 0)
+                            {
+                                //ako je breaker otvoren masina ne radi
+                                ((AsyncMachine)ConcreteModel[asyncM]).IsRunning = false;
+                            }
+                            else if (discrete.NormalValue == 1 && breaker2.NormalValue == 1)
+                            {
+                                //ako je breaker zatvoren masina radi
+                                ((AsyncMachine)ConcreteModel[asyncM]).IsRunning = true;
+                            }
+                        }
+                    }
 				}
 			}
 		}
