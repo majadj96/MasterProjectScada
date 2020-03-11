@@ -24,6 +24,8 @@ namespace CalculationEngine
 			CalcEngine.ConcreteModel = new Dictionary<long, IdObject>(CalcEngine.ConcreteModel_Copy);
 			CalcEngine.ConcreteModel_Copy.Clear();
 
+            CalcEngine.CalculateData();
+
             if(CalcEngine.aTimer == null)
             {
                 CalcEngine.SetTimer();
