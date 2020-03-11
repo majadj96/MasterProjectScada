@@ -87,6 +87,7 @@
     <Compile Include="Command\MyICommand.cs" />
     <Compile Include="Converters\BooleanConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\ConverterState.cs" />
     <Compile Include="Model\AsynchronousMachine.cs" />
     <Compile Include="Model\Breaker.cs" />
     <Compile Include="Model\Disconector.cs" />

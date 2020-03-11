@@ -4,6 +4,7 @@ using ScadaCommon.ComandingModel;
 using System;
 using UserInterface.BaseError;
 using UserInterface.Command;
+using UserInterface.Converters;
 using UserInterface.Model;
 using UserInterface.ProxyPool;
 
@@ -35,7 +36,7 @@ namespace UserInterface.ViewModel
         public CommandBreakerViewModel(Breaker breaker, string type)
         {
             BreakerCurrent = breaker;
-            NewState = !Converter.ConvertToBool(BreakerCurrent.State);
+            NewState = !ConverterState.ConvertToBool(BreakerCurrent.State);
 
             this.type = type;
 
@@ -44,7 +45,7 @@ namespace UserInterface.ViewModel
 
         public void CommandBreaker()
         {
-            BreakerCurrent.NewState = Converter.ConvertToDiscreteState(NewState);
+            BreakerCurrent.NewState = ConverterState.ConvertToDiscreteState(NewState);
 
             CommandObject commandObject = new CommandObject() { CommandingTime = DateTime.Now, CommandOwner = "UI", EguValue = (float)BreakerCurrent.NewState, SignalGid = BreakerCurrent.DiscreteGID };
             var v = ProxyServices.CommandingServiceProxy.WriteDigitalOutput(commandObject);

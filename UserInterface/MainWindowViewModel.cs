@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using UserInterface.BaseError;
 using UserInterface.Command;
+using UserInterface.Converters;
 using UserInterface.Model;
 using UserInterface.ProxyPool;
 using UserInterface.Subscription;
@@ -424,7 +425,7 @@ namespace UserInterface
 
                 Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
                     Message = "Model arrived and loaded from NMS.", PointName = "" };
-                ProxyPool.ProxyServices.AlarmEventServiceProxy.AddEvent(e);
+                ProxyServices.AlarmEventServiceProxy.AddEvent(e);
             }
             else if (topic == "scada")
             {
@@ -437,36 +438,11 @@ namespace UserInterface
 
                     foreach(Substation sub in Substations.Values)
                     {
-                        if (sub.Breakers.Count > 0)
+                        if (sub.Gid == SubstationCurrent.Gid)
                         {
-                            foreach (Breaker br in sub.Breakers)
-                            {
-                                if (br.DiscreteGID == measure.Gid)
-                                {
-                                    //komanduj nad brejkerom
-                                }
-                            }
+                            ChangesFromScadaCommand(SubstationCurrent, measure);
                         }
-                        if (sub.Disconectors.Count > 0)
-                        {
-                            foreach(Disconector dis in sub.Disconectors)
-                            {
-                                if(dis.DiscreteGID == measure.Gid)
-                                {
-                                    //komanduj nad diskonektorom
-                                }
-                            }
-                        }
-                        if (sub.AsynchronousMachines.Count > 0)
-                        {
-                            foreach (AsynchronousMachine am in sub.AsynchronousMachines)
-                            {
-                                if (am.SignalGid == measure.Gid)
-                                {
-                                    CommandToAM(measure.Value);
-                                }
-                            }
-                        }
+                        ChangesFromScadaCommand(sub, measure);
                     }
                 }
 
@@ -481,6 +457,51 @@ namespace UserInterface
 
             threadAlarms = new Thread(CheckForAlarms);
             threadAlarms.Start();
+        }
+
+        public void ChangesFromScadaCommand(Substation sub, ScadaUIExchangeModel newValue)
+        {
+            int i = 0;
+            if (sub.Breakers.Count > 0)
+            {
+                foreach (Breaker br in sub.Breakers)
+                {
+                    i++;
+                    if (br.DiscreteGID == newValue.Gid)
+                    {
+                        br.NewState = ConverterState.ConvertToDiscreteState(newValue.Value);
+                        br.State = br.NewState;
+                        if (sub.Breakers.Count > 2 && i != 1)
+                            i += 2;
+                        meshViewModel.ChangeStatesOfElements("Breaker" + i.ToString(), br);
+                    }
+                }
+                i = 0;
+            }
+            if (sub.Disconectors.Count > 0)
+            {
+                foreach (Disconector dis in sub.Disconectors)
+                {
+                    i++;
+                    if (dis.DiscreteGID == newValue.Gid)
+                    {
+                        dis.NewState = ConverterState.ConvertToDiscreteState(newValue.Value);
+                        dis.State = dis.NewState;
+                        meshViewModel.ChangeStatesOfElements("Disconector" + i.ToString(), dis);
+                    }
+                }
+                i = 0;
+            }
+            if (sub.AsynchronousMachines.Count > 0)
+            {
+                foreach (AsynchronousMachine am in sub.AsynchronousMachines)
+                {
+                    if (am.SignalGid == newValue.Gid)
+                    {
+                        CommandToAM(newValue.Value);
+                    }
+                }
+            }
         }
 
         public void CommandToAM(double value)

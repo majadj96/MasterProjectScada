@@ -4,6 +4,7 @@ using ScadaCommon.ComandingModel;
 using System;
 using UserInterface.BaseError;
 using UserInterface.Command;
+using UserInterface.Converters;
 using UserInterface.Model;
 using UserInterface.ProxyPool;
 
@@ -35,7 +36,7 @@ namespace UserInterface.ViewModel
         public CommandDisconnectorViewModel(Disconector disconector, string type)
         {
             DisconectorCurrent = disconector;
-            NewState = !Converter.ConvertToBool(DisconectorCurrent.State);
+            NewState = !ConverterState.ConvertToBool(DisconectorCurrent.State);
 
             this.type = type;
 
@@ -44,7 +45,7 @@ namespace UserInterface.ViewModel
 
         public void CommandDisconnector()
         {
-            DisconectorCurrent.NewState = Converter.ConvertToDiscreteState(NewState);
+            DisconectorCurrent.NewState = ConverterState.ConvertToDiscreteState(NewState);
 
             CommandObject commandObject = new CommandObject() { CommandingTime = DateTime.Now, CommandOwner = "UI", EguValue = (float)DisconectorCurrent.NewState, SignalGid = DisconectorCurrent.DiscreteGID };
             var v = ProxyServices.CommandingServiceProxy.WriteDigitalOutput(commandObject);

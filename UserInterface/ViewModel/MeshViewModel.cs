@@ -552,7 +552,11 @@ namespace UserInterface.ViewModel
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Start();
 
-            Messenger.Default.Register<NotificationMessage>(this, (message) => { ChangeStatesOfElements(message.Notification, message.Target); });
+            Messenger.Default.Register<NotificationMessage>(this, (message) => 
+            {
+                if(message.Notification != "scada" && message.Notification != "nms")
+                    ChangeStatesOfElements(message.Notification, message.Target);
+            });
 
             SubstationCurrent = new Substation();
         }
@@ -601,7 +605,7 @@ namespace UserInterface.ViewModel
             {
                 SubstationCurrent.Breakers[0].State = ((Breaker)target).NewState;
                 SubstationCurrent.Breakers[0].NewState = SubstationCurrent.Breakers[0].State;
-                BreakerOperation("3");
+                BreakerOperation("1");
             }
             else if (string.Compare(element, "Breaker4") == 0)
             {
