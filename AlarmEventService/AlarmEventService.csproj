@@ -5,14 +5,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3D179CC8-8CD4-4734-AE3B-B2DD45016664}</ProjectGuid>
+    <ProjectGuid>{D39D9848-BF96-4ABC-B0DE-340BE40949B8}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>AlarmEventService</RootNamespace>
     <AssemblyName>AlarmEventService</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -45,9 +44,6 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.Entity" />
-    <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -59,91 +55,24 @@
   <ItemGroup>
     <Compile Include="AlarmEventServiceHost.cs" />
     <Compile Include="AlarmEventServices.cs" />
-    <Compile Include="Connected Services\AlarmServiceRef\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
-    <Compile Include="Connected Services\EventServiceRef\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations.wsdl" />
-    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\EventServiceRef\EventServiceOperations.wsdl" />
-    <None Include="Connected Services\EventServiceRef\EventServiceOperations.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\EventServiceRef\EventServiceOperations1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\EventServiceRef\EventServiceOperations2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\EventServiceRef\EventServiceOperations3.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
-    <None Include="Properties\DataSources\ScadaCommon.Database.Alarm.datasource" />
-    <None Include="Properties\DataSources\ScadaCommon.Database.Event.datasource" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\AlarmServiceRef\" />
-    <WCFMetadataStorage Include="Connected Services\EventServiceRef\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\AlarmServiceRef\AlarmServiceOperations.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\AlarmServiceRef\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\AlarmServiceRef\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\AlarmServiceRef\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\EventServiceRef\EventServiceOperations.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\EventServiceRef\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\EventServiceRef\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\EventServiceRef\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\AlarmEventServiceInfrastructure\AlarmEventServiceInfrastructure.csproj">
+      <Project>{B9EC493F-D864-4479-86F4-E4EF6C500831}</Project>
+      <Name>AlarmEventServiceInfrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RepositoryCore\RepositoryCore.csproj">
+      <Project>{46f879cd-df1d-402a-9373-62153fde9ed4}</Project>
+      <Name>RepositoryCore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SCADA\ScadaCommon\ScadaCommon.csproj">
-      <Project>{823d1355-efd0-481c-a0d9-fda0c4ea37df}</Project>
+      <Project>{823D1355-EFD0-481C-A0D9-FDA0C4EA37DF}</Project>
       <Name>ScadaCommon</Name>
     </ProjectReference>
   </ItemGroup>

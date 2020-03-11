@@ -19,8 +19,6 @@ namespace ScadaCommon.Database
         #endregion
 
         #region Props
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [DataMember]
         public int ID
         {

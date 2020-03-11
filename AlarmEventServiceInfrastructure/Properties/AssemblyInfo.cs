@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AlarmEventService")]
+[assembly: AssemblyTitle("AlarmEventServiceInfrastructure")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AlarmEventService")]
+[assembly: AssemblyProduct("AlarmEventServiceInfrastructure")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("d39d9848-bf96-4abc-b0de-340be40949b8")]
+[assembly: Guid("b9ec493f-d864-4479-86f4-e4ef6c500831")]
 
 // Version information for an assembly consists of the following four values:
 //
