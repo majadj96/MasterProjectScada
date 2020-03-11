@@ -215,8 +215,12 @@ namespace CalculationEngine
 			{
 				discrete.NormalValue = p.AsInt();
 			}
+            if ((p = rd.GetProperty(ModelCode.MEASUREMENT_PSR)) != null)
+            {
+                discrete.EquipmentGid = p.AsReference();
+            }
 
-			return discrete;
+            return discrete;
 		}
 
 		private Analog PopulateAnalogProperties(ResourceDescription rd)
@@ -248,8 +252,12 @@ namespace CalculationEngine
 			{
 				analog.NormalValue = p.AsFloat();
 			}
+            if ((p = rd.GetProperty(ModelCode.MEASUREMENT_PSR)) != null)
+            {
+                analog.EquipmentGid = p.AsReference();
+            }
 
-			return analog;
+            return analog;
 		}
 
 		#endregion

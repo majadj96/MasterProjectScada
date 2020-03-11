@@ -377,7 +377,7 @@ namespace NetworkModelService
             {
                 if (applyingStarted)
                 {
-                    SaveDelta(delta);
+                    //SaveDelta(delta);
                 }
 
                 if (updateResult.Result == ResultType.Succeeded)
