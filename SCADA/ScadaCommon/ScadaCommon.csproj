@@ -46,6 +46,8 @@
   <ItemGroup>
     <Compile Include="ComandingModel\FEPCommandObject.cs" />
     <Compile Include="ComandingModel\CommandObject.cs" />
+    <Compile Include="Database\Alarm.cs" />
+    <Compile Include="Database\Event.cs" />
     <Compile Include="Interfaces\IConfigItem.cs" />
     <Compile Include="ProcesingModel\AnalogPoint.cs" />
     <Compile Include="ProcesingModel\DigitalPoint.cs" />

@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using TransactionManagerContracts;
+using EntityFrameworkMeasurementInfrastructure;
+using AlarmEventServiceInfrastructure;
 
 namespace NetworkDynamicService
 {
@@ -30,6 +32,7 @@ namespace NetworkDynamicService
         private FepCommandingServiceProxy fepCmdProxy;
         private IProcessingServiceContract processingService;
         private PublisherProxy publisherProxy;
+        private MeasurementRepository measurementsRepository = new MeasurementRepository();
 
         public NetworkDynamicServiceHost()
         {
@@ -39,6 +42,9 @@ namespace NetworkDynamicService
             stateUpdateProxy = new StateUpdateServiceProxy("StateUpdateServiceEndPoint");
             fepCmdProxy = new FepCommandingServiceProxy("FEPCommandingServiceContract");
             publisherProxy = new PublisherProxy("PublisherEndPoint");
+            
+            measurementsRepository.Add(new RepositoryCore.Measurement() { Gid = 0, ChangedTime = DateTime.Now, Value = 2 });
+           
 
             nDSRealTimePointCache = new NDSRealTimePointCache();
             backEndPocessingModule = new BackEndPocessingModule(pointUpdateProxy, this.alarmEventServiceProxy, this.publisherProxy);

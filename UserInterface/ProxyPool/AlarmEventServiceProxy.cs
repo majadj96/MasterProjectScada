@@ -1,4 +1,6 @@
-﻿using ScadaCommon;
+﻿using RepositoryCore;
+using RepositoryCore.Interfaces;
+using ScadaCommon;
 using ScadaCommon.ComandingModel;
 using Common.AlarmEvent;
 using ScadaCommon.ServiceContract;
@@ -7,7 +9,7 @@ using System.ServiceModel;
 
 namespace UserInterface.ProxyPool
 {
-    public class AlarmEventServiceProxy : ClientBase<IAlarmEventService>, IAlarmEventService
+    public class AlarmEventServiceProxy : ClientBase<IAlarmEventRepository>, IAlarmEventRepository
     {
         public AlarmEventServiceProxy(string endpointName) : base(endpointName)
         {

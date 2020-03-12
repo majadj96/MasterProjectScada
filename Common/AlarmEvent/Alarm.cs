@@ -21,8 +21,6 @@ namespace Common.AlarmEvent
         #endregion
 
         #region Props
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [DataMember]
         public int ID
         {

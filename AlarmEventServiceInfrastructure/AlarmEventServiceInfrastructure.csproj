@@ -5,14 +5,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9E9F3E50-1395-46B5-8D75-B16A08B45CDF}</ProjectGuid>
+    <ProjectGuid>{B9EC493F-D864-4479-86F4-E4EF6C500831}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BackEndProcessorService</RootNamespace>
-    <AssemblyName>BackEndProcessorService</AssemblyName>
+    <RootNamespace>AlarmEventServiceInfrastructure</RootNamespace>
+    <AssemblyName>AlarmEventServiceInfrastructure</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -43,7 +42,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,25 +51,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlarmingModule.cs" />
-    <Compile Include="BackEndPocessingModule.cs" />
-    <Compile Include="Configuration\ConfigItem.cs" />
-    <Compile Include="Configuration\ConfigReader.cs" />
-    <Compile Include="EGUConverterModule.cs" />
-    <Compile Include="IProcessingData.cs" />
+    <Compile Include="AlarmEventContext.cs" />
+    <Compile Include="AlarmEventInitializeDB.cs" />
+    <Compile Include="AlarmEventRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Proxy\AlarmEventServiceProxy.cs" />
-    <Compile Include="RawConverterModule.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{6c234280-508a-47a4-b9ca-2677082ef85f}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PubSubCommon\PubSubCommon.csproj">
-      <Project>{6109286A-0DC9-469C-A271-0605C18ED32C}</Project>
-      <Name>PubSubCommon</Name>
-    </ProjectReference>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\RepositoryCore\RepositoryCore.csproj">
       <Project>{46F879CD-DF1D-402A-9373-62153FDE9ED4}</Project>
       <Name>RepositoryCore</Name>
@@ -80,14 +70,6 @@
       <Name>ScadaCommon</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="NDSConfig.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

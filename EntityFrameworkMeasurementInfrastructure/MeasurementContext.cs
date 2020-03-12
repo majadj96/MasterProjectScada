@@ -14,7 +14,7 @@ namespace EntityFrameworkMeasurementInfrastructure
         private MeasurementInitializeDB measurementsDB = new MeasurementInitializeDB();
         public MeasurementContext() : base("MeasurementsHistoryDB")
         {
-            Database.SetInitializer(measurementsDB);
+            Database.SetInitializer<MeasurementContext>(measurementsDB);
         }
 
         public DbSet<Measurement> Measurements { get; set; }
