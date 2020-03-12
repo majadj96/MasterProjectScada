@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
 using RepositoryCore.Interfaces;
-using ScadaCommon.Database;
+using Common.AlarmEvent;
 using ScadaCommon.ServiceContract;
 
 namespace BackEndProcessorService.Proxy

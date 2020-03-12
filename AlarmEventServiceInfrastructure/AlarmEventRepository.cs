@@ -1,6 +1,6 @@
 ﻿using RepositoryCore;
 using RepositoryCore.Interfaces;
-using ScadaCommon.Database;
+using Common.AlarmEvent;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,12 +46,18 @@ namespace AlarmEventServiceInfrastructure
 
         public List<Alarm> GetAllAlarms()
         {
-            return context.Alarms.ToList();
+            if (context.Alarms.Count() > 0)
+                return context.Alarms.ToList();
+            else
+                return new List<Alarm>();
         }
 
         public List<Event> GetAllEvents()
         {
-            return context.Events.ToList();
+            if (context.Events.Count() > 0)
+                return context.Events.ToList();
+            else
+                return new List<Event>();
         }
 
         private bool AckAlarm(Alarm alarm)
@@ -63,6 +69,7 @@ namespace AlarmEventServiceInfrastructure
                 {
                     aa.AlarmAcknowledged = (DateTime)alarm.AlarmAcknowledged;
                     aa.Username = alarm.Username;
+                    aa.AlarmAck = true;
                     context.SaveChanges();
                     //log
                     return true;

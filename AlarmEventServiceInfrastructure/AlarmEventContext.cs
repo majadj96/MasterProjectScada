@@ -1,5 +1,5 @@
 ﻿using RepositoryCore;
-using ScadaCommon.Database;
+using Common.AlarmEvent;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;

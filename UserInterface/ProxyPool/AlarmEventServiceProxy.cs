@@ -9,7 +9,7 @@ using System.ServiceModel;
 
 namespace UserInterface.ProxyPool
 {
-    public class AlarmEventServiceProxy : ClientBase<IAlarmEventRepository>, IAlarmEventRepository
+    public class AlarmEventServiceProxy : ClientBase<IAlarmEventService>, IAlarmEventService
     {
         public AlarmEventServiceProxy(string endpointName) : base(endpointName)
         {

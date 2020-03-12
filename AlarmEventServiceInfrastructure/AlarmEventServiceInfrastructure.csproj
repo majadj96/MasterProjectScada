@@ -61,6 +61,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{6c234280-508a-47a4-b9ca-2677082ef85f}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RepositoryCore\RepositoryCore.csproj">
       <Project>{46F879CD-DF1D-402A-9373-62153FDE9ED4}</Project>
       <Name>RepositoryCore</Name>
