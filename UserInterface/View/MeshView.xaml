@@ -174,7 +174,6 @@
                 </Button.Background>
                 <Button.InputBindings>
                     <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Disconnector1"/>
-                    <MouseBinding Gesture="LeftClick" Command="{Binding CommandDisconnector}" CommandParameter="1"/>
                 </Button.InputBindings>
             </Button>
             <Button Name="Disc_2" Content="" Canvas.Left="91" Margin="0" Canvas.Top="239" Width="37" Height="37" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
@@ -184,7 +183,6 @@
 
                 <Button.InputBindings>
                     <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Disconnector2"/>
-                    <MouseBinding Gesture="LeftClick" Command="{Binding CommandDisconnector}" CommandParameter="2"/>
                 </Button.InputBindings>
             </Button>
             <Button x:Name="Breaker" Content="" Canvas.Left="97" Margin="0" Canvas.Top="142" Width="27" Height="27" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
@@ -194,7 +192,6 @@
 
                 <Button.InputBindings>
                     <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Breaker1"/>
-                    <MouseBinding Gesture="LeftClick" Command="{Binding CommandBreaker}" CommandParameter="1"/>
                 </Button.InputBindings>
             </Button>
             <Button x:Name="PT" Canvas.Left="71" Margin="0" Canvas.Top="310" Width="79" Height="60" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen" FontFamily="Segoe UI Semibold" Foreground="#00000000">
@@ -204,7 +201,6 @@
 
                 <Button.InputBindings>
                     <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="PowerTransformer"/>
-                    <MouseBinding Gesture="LeftClick" Command="{Binding CommandPT}"/>
                 </Button.InputBindings>
             </Button>
             <Button x:Name="AM_1" Content="" Canvas.Left="97" Margin="0" Canvas.Top="502" Width="60" Height="78" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}">
@@ -219,7 +215,6 @@
                 </Button.Background>
                 <Button.InputBindings>
                     <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Breaker2"/>
-                    <MouseBinding Gesture="LeftClick" Command="{Binding CommandBreaker}" CommandParameter="2"/>
                 </Button.InputBindings>
             </Button>
             <Line
@@ -262,7 +257,6 @@
                     </Button.Background>
                     <Button.InputBindings>
                         <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Breaker4"/>
-                        <MouseBinding Gesture="LeftClick" Command="{Binding CommandBreaker}" CommandParameter="4"/>
                     </Button.InputBindings>
                 </Button>
                 <Button x:Name="Breaker_Pump_M2" Content="" Canvas.Left="173" Margin="0" Width="21" Height="19" BorderBrush="{x:Null}" Canvas.Top="15" Style="{StaticResource MyButtonStyle}" Cursor="Pen" FontFamily="Segoe UI Semibold" Foreground="#00000000">
@@ -271,7 +265,6 @@
                     </Button.Background>
                     <Button.InputBindings>
                         <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Breaker5"/>
-                        <MouseBinding Gesture="LeftClick" Command="{Binding CommandBreaker}" CommandParameter="5"/>
                     </Button.InputBindings>
                 </Button>
                 <Rectangle Height="12" Canvas.Left="51" Stroke="{Binding LineUpFirstPump}" StrokeThickness="2" Canvas.Top="4" Width="2"/>
