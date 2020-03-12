@@ -13,6 +13,8 @@ using System.ServiceModel;
 using ScadaCommon.ServiceProxies;
 using ScadaCommon.NDSDataModel;
 using ScadaCommon.BackEnd_FrontEnd;
+using EntityFrameworkMeasurementInfrastructure;
+
 
 namespace FrontEndProcessorService
 {
@@ -36,6 +38,7 @@ namespace FrontEndProcessorService
         private List<ServiceHost> hosts = null;
         private FEPCommandingService fEPCommandingService;
         private IFEPConfigService nDSConfigurationService;
+        private MeasurementRepository measurementsRepository = new MeasurementRepository();
         #endregion Fields
 
         #region Properties
@@ -57,6 +60,8 @@ namespace FrontEndProcessorService
 		public FieldCommunicationService()
 		{
 			Thread.CurrentThread.Name = "Field Communication Service";
+
+            measurementsRepository.Add(new RepositoryCore.Measurement() { Gid = 0, ChangedTime = DateTime.Now, Value = 2 });
             
             ndsStateProxy = new NetworkDynamicStateServiceProxy("NetworkDynamicStateServiceEndPoint");
             ndsProxy = new NetworkDynamicServiceProxy("NetworkDynamicServiceEndPoint");
