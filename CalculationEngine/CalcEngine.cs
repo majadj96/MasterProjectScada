@@ -1,6 +1,8 @@
 ﻿using CalculationEngine.Model;
 using Common;
 using PubSubCommon;
+using ScadaCommon;
+using ScadaCommon.ComandingModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,64 +13,149 @@ using System.Timers;
 
 namespace CalculationEngine
 {
-	public class CalcEngine : IPub
-	{
-		public static Dictionary<long, IdObject> ConcreteModel = new Dictionary<long, IdObject>();
-		public static Dictionary<long, IdObject> ConcreteModel_Copy = new Dictionary<long, IdObject>();
-		public static Dictionary<long, IdObject> ConcreteModel_Old = new Dictionary<long, IdObject>();
+    public class CalcEngine : IPub
+    {
+        public static Dictionary<long, IdObject> ConcreteModel = new Dictionary<long, IdObject>();
+        public static Dictionary<long, IdObject> ConcreteModel_Copy = new Dictionary<long, IdObject>();
+        public static Dictionary<long, IdObject> ConcreteModel_Old = new Dictionary<long, IdObject>();
 
-		private SubscribeProxy _proxy;
-		public static Timer aTimer = null;
+        private SubscribeProxy _proxy;
+        private static CommandingProxy _commandingProxy;
+        public static Timer aTimer = null;
+        const int workingDifference = 10;
 
-		public CalcEngine()
-		{
-			_proxy = new SubscribeProxy(this);
-			_proxy.Subscribe("scada");
-		}
+        public CalcEngine()
+        {
+            _proxy = new SubscribeProxy(this);
+            _proxy.Subscribe("scada");
 
-		#region IPub implementation
+            _commandingProxy = new CommandingProxy("CECommandingProxy");
+        }
 
-		public void Publish(NMSModel model, string topicName)
-		{
-			throw new ActionNotSupportedException("CE does not have implementation for this method.");
-		}
+        #region IPub implementation
 
-		public void PublishMeasure(ScadaUIExchangeModel[] measurement, string topicName)
-		{
-			ProccessData(measurement);
-		}
+        public void Publish(NMSModel model, string topicName)
+        {
+            throw new ActionNotSupportedException("CE does not have implementation for this method.");
+        }
 
-		#endregion
+        public void PublishMeasure(ScadaUIExchangeModel[] measurement, string topicName)
+        {
+            ProccessData(measurement);
+        }
 
-		#region Timer
+        #endregion
 
-		public static void SetTimer()
-		{
-			aTimer = new Timer(5000);
-			aTimer.Elapsed += OnTimedEvent;
-			aTimer.AutoReset = true;
-			aTimer.Enabled = true;
-		}
+        #region Timer
 
-		private static void OnTimedEvent(Object source, ElapsedEventArgs e)
-		{
-			long machine1Gid = ConcreteModel.Values.First(x => x.MRID == "AsyncM_1").GID;
+        public static void SetTimer()
+        {
+            aTimer = new Timer(5000);
+            aTimer.Elapsed += OnTimedEvent;
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
+        }
+
+        private static void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            long machine1Gid = ConcreteModel.Values.First(x => x.MRID == "AsyncM_1").GID;
             long machine2Gid = ConcreteModel.Values.First(x => x.MRID == "AsyncM_2").GID;
             long machine3Gid = ConcreteModel.Values.First(x => x.MRID == "AsyncM_3").GID;
             AsyncMachine asyncMachine1 = (AsyncMachine)ConcreteModel[machine1Gid];
             AsyncMachine asyncMachine2 = (AsyncMachine)ConcreteModel[machine2Gid];
             AsyncMachine asyncMachine3 = (AsyncMachine)ConcreteModel[machine3Gid];
             if (asyncMachine1.IsRunning)
-			{
-				((AsyncMachine)ConcreteModel[machine1Gid]).WorkingTime += 1;
-			}
-            if (asyncMachine2.IsRunning)
+            {
+                ((AsyncMachine)ConcreteModel[machine1Gid]).WorkingTime += 1;
+            }
+            if (asyncMachine2.IsRunning && asyncMachine3.IsRunning)
             {
                 ((AsyncMachine)ConcreteModel[machine2Gid]).WorkingTime += 1;
-            }
-            if (asyncMachine3.IsRunning)
-            {
                 ((AsyncMachine)ConcreteModel[machine3Gid]).WorkingTime += 1;
+            }
+            else if (asyncMachine2.IsRunning && !asyncMachine3.IsRunning)
+            {
+                if (asyncMachine2.WorkingTime - asyncMachine3.WorkingTime > workingDifference - 1)
+                {
+                    Discrete breaker2 = GetMeasurementForEquipment("Breaker_AsyncMachine2");
+
+                    CommandObject command = new CommandObject
+                    {
+                        CommandingTime = DateTime.Now,
+                        SignalGid = breaker2.GID,
+                        EguValue = 0,
+                        CommandOwner = "CalculationEngine"
+                    };
+
+                    CommandResult commandResult = _commandingProxy.WriteDigitalOutput(command);
+                    Console.WriteLine(commandResult.ToString());
+
+                    if (commandResult == CommandResult.Success)
+                    {
+                        Discrete breaker3 = GetMeasurementForEquipment("Breaker_AsyncMachine3");
+
+                        CommandObject command1 = new CommandObject
+                        {
+                            CommandingTime = DateTime.Now,
+                            SignalGid = breaker3.GID,
+                            EguValue = 1,
+                            CommandOwner = "CalculationEngine"
+                        };
+
+                        CommandResult commandResult1 = _commandingProxy.WriteDigitalOutput(command1);
+                        Console.WriteLine(commandResult1.ToString());
+                    }
+                    else
+                    {
+                        ((AsyncMachine)ConcreteModel[machine2Gid]).WorkingTime += 1;
+                    }
+                }
+                else
+                {
+                    ((AsyncMachine)ConcreteModel[machine2Gid]).WorkingTime += 1;
+                }
+            }
+            else if (!asyncMachine2.IsRunning && asyncMachine3.IsRunning)
+            {
+                if (asyncMachine3.WorkingTime - asyncMachine2.WorkingTime > workingDifference - 1)
+                {
+                    Discrete breaker3 = GetMeasurementForEquipment("Breaker_AsyncMachine3");
+
+                    CommandObject command = new CommandObject
+                    {
+                        CommandingTime = DateTime.Now,
+                        SignalGid = breaker3.GID,
+                        EguValue = 0,
+                        CommandOwner = "CalculationEngine"
+                    };
+
+                    CommandResult commandResult = _commandingProxy.WriteDigitalOutput(command);
+                    Console.WriteLine(commandResult.ToString());
+
+                    if (commandResult == CommandResult.Success)
+                    {
+                        Discrete breaker2 = GetMeasurementForEquipment("Breaker_AsyncMachine2");
+
+                        CommandObject command1 = new CommandObject
+                        {
+                            CommandingTime = DateTime.Now,
+                            SignalGid = breaker2.GID,
+                            EguValue = 1,
+                            CommandOwner = "CalculationEngine"
+                        };
+
+                        CommandResult commandResult1 = _commandingProxy.WriteDigitalOutput(command1);
+                        Console.WriteLine(commandResult1.ToString());
+                    }
+                    else
+                    {
+                        ((AsyncMachine)ConcreteModel[machine3Gid]).WorkingTime += 1;
+                    }
+                }
+                else
+                {
+                    ((AsyncMachine)ConcreteModel[machine3Gid]).WorkingTime += 1;
+                }
             }
 
             Console.WriteLine("AsyncM_1 working hours: " + ((AsyncMachine)ConcreteModel[machine1Gid]).WorkingTime);
@@ -77,114 +164,101 @@ namespace CalculationEngine
             Console.WriteLine("--------------------------------");
         }
 
-		#endregion
+        private static Discrete GetMeasurementForEquipment(string equipmentMrid)
+        {
+            IdObject equipment = ConcreteModel.Values.FirstOrDefault(x => x.MRID == equipmentMrid);
 
-		#region Processing methods
+            foreach (IdObject idObject in ConcreteModel.Values)
+            {
+                if(idObject.GetType() == typeof(Discrete))
+                {
+                    Discrete discrete = (Discrete)idObject;
+                    if(discrete.EquipmentGid == equipment.GID)
+                    {
+                        return discrete;
+                    }
+                }
+            }
 
-		private void ProccessData(object data)
-		{
-			ScadaUIExchangeModel[] measurements = (ScadaUIExchangeModel[])data;
+            return null;
+        }
 
-			foreach (ScadaUIExchangeModel meas in measurements)
-			{
-				if (ConcreteModel.ContainsKey(meas.Gid))
-				{
-					if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(meas.Gid)) == DMSType.ANALOG)
-					{
-						((Analog)ConcreteModel[meas.Gid]).NormalValue = (float)meas.Value;
-					}
-					else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(meas.Gid)) == DMSType.DISCRETE)
-					{
-						int.TryParse(meas.Value.ToString(), out int result);
-						((Discrete)ConcreteModel[meas.Gid]).NormalValue = result;
-					}
-				}
-			}
+        #endregion
 
-			CalculateData();
-		}
+        #region Processing methods
 
-		public static void CalculateData()
-		{
-			foreach (IdObject idObject in ConcreteModel.Values)
-			{
-				long objectGid = idObject.GID;
+        private void ProccessData(object data)
+        {
+            ScadaUIExchangeModel[] measurements = (ScadaUIExchangeModel[])data;
 
-				//DMSType objectType = (DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(objectGid));
+            foreach (ScadaUIExchangeModel meas in measurements)
+            {
+                if (ConcreteModel.ContainsKey(meas.Gid))
+                {
+                    if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(meas.Gid)) == DMSType.ANALOG)
+                    {
+                        ((Analog)ConcreteModel[meas.Gid]).NormalValue = (float)meas.Value;
+                    }
+                    else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(meas.Gid)) == DMSType.DISCRETE)
+                    {
+                        int.TryParse(meas.Value.ToString(), out int result);
+                        ((Discrete)ConcreteModel[meas.Gid]).NormalValue = result;
+                    }
+                }
+            }
 
-				if (idObject.GetType() == typeof(Analog))
-				{
-					Analog analog = (Analog)idObject;
-					long equipId = analog.EquipmentGid;
+            CalculateData();
+        }
 
-					DMSType equipType = (DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(equipId));
+        public static void CalculateData()
+        {
+            foreach (IdObject idObject in ConcreteModel.Values)
+            {
+                if (idObject.GetType() == typeof(Discrete))
+                {
+                    Discrete discrete = (Discrete)idObject;
+                    long equipId = discrete.EquipmentGid;
 
+                    DMSType equipType = (DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(equipId));
 
-				}
-				else if (idObject.GetType() == typeof(Discrete))
-				{
-					Discrete discrete = (Discrete)idObject;
-					long equipId = discrete.EquipmentGid;
+                    if (equipType == DMSType.BREAKER)
+                    {
+                        IdObject breaker = ConcreteModel[equipId];
 
-					DMSType equipType = (DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(equipId));
-
-					if (equipType == DMSType.BREAKER)
-					{
-						IdObject breaker = ConcreteModel[equipId];
-
-						if (breaker.MRID == "Breaker_AsyncMachine1")
-						{
-							long asyncM = ConcreteModel.Values.First(x => x.MRID == "AsyncM_1").GID;
-                            Discrete breaker1 = (Discrete)ConcreteModel.Values.First(x => x.MRID == "Discrete_4");
-
-							if (discrete.NormalValue == 0 || breaker1.NormalValue == 0)
-							{
-								//ako je breaker otvoren masina ne radi
-								((AsyncMachine)ConcreteModel[asyncM]).IsRunning = false;
-							}
-							else if (discrete.NormalValue == 1 && breaker1.NormalValue == 1)
-							{
-								//ako je breaker zatvoren masina radi
-								((AsyncMachine)ConcreteModel[asyncM]).IsRunning = true;
-							}
-						}
+                        if (breaker.MRID == "Breaker_AsyncMachine1")
+                        {
+                            SetAsyncMachineState("AsyncM_1", "Breaker_1SwitchStatus", discrete);
+                        }
                         else if (breaker.MRID == "Breaker_AsyncMachine2")
                         {
-                            long asyncM = ConcreteModel.Values.First(x => x.MRID == "AsyncM_2").GID;
-                            Discrete breaker2 = (Discrete)ConcreteModel.Values.First(x => x.MRID == "Breaker_2SwitchStatus");
-
-                            if (discrete.NormalValue == 0 || breaker2.NormalValue == 0)
-                            {
-                                //ako je breaker otvoren masina ne radi
-                                ((AsyncMachine)ConcreteModel[asyncM]).IsRunning = false;
-                            }
-                            else if (discrete.NormalValue == 1 && breaker2.NormalValue == 1)
-                            {
-                                //ako je breaker zatvoren masina radi
-                                ((AsyncMachine)ConcreteModel[asyncM]).IsRunning = true;
-                            }
+                            SetAsyncMachineState("AsyncM_2", "Breaker_2SwitchStatus", discrete);
                         }
                         else if (breaker.MRID == "Breaker_AsyncMachine3")
                         {
-                            long asyncM = ConcreteModel.Values.First(x => x.MRID == "AsyncM_3").GID;
-                            Discrete breaker2 = (Discrete)ConcreteModel.Values.First(x => x.MRID == "Breaker_2SwitchStatus");
-
-                            if (discrete.NormalValue == 0 || breaker2.NormalValue == 0)
-                            {
-                                //ako je breaker otvoren masina ne radi
-                                ((AsyncMachine)ConcreteModel[asyncM]).IsRunning = false;
-                            }
-                            else if (discrete.NormalValue == 1 && breaker2.NormalValue == 1)
-                            {
-                                //ako je breaker zatvoren masina radi
-                                ((AsyncMachine)ConcreteModel[asyncM]).IsRunning = true;
-                            }
+                            SetAsyncMachineState("AsyncM_3", "Breaker_2SwitchStatus", discrete);
                         }
                     }
-				}
-			}
-		}
+                }
+            }
+        }
 
-		#endregion
-	}
+        private static void SetAsyncMachineState(string asyncMachine, string mainBreaker, Discrete machineBreaker)
+        {
+            long asyncM = ConcreteModel.Values.First(x => x.MRID == asyncMachine).GID;
+            Discrete mainBreakerMeas = (Discrete)ConcreteModel.Values.First(x => x.MRID == mainBreaker);
+
+            if (machineBreaker.NormalValue == 0 || mainBreakerMeas.NormalValue == 0)
+            {
+                //ako je breaker otvoren masina ne radi
+                ((AsyncMachine)ConcreteModel[asyncM]).IsRunning = false;
+            }
+            else if (machineBreaker.NormalValue == 1 && mainBreakerMeas.NormalValue == 1)
+            {
+                //ako je breaker zatvoren masina radi
+                ((AsyncMachine)ConcreteModel[asyncM]).IsRunning = true;
+            }
+        }
+
+        #endregion
+    }
 }

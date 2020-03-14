@@ -380,7 +380,7 @@
 		<cim:IdentifiedObject.mRID>Discrete_5</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>Discrete_5</ftn:IdentifiedObject.name>
 	</cim:Discrete>
-	<cim:Discrete rdf:ID="Discrete_4">
+	<cim:Discrete rdf:ID="Breaker_1SwitchStatus">
 		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0</cim:Discrete.minValue>
 		<cim:Discrete.normalValue>0</cim:Discrete.normalValue>
@@ -388,8 +388,8 @@
 		<cim:Measurement.measurementType>SwitchStatus</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Breaker_1"/>
 		<cim:IdentifiedObject.description>Discrete measurement</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>Discrete_4</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>Discrete_4</ftn:IdentifiedObject.name>
+		<cim:IdentifiedObject.mRID>Breaker_1SwitchStatus</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>Breaker_1SwitchStatus</ftn:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Breaker_2SwitchStatus">
 		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
