@@ -3,6 +3,7 @@ using AlarmEventServiceInfrastructure;
 using ScadaCommon.ServiceContract;
 using System.Collections.Generic;
 using System.ServiceModel;
+using System;
 
 namespace AlarmEventService
 {
@@ -27,12 +28,26 @@ namespace AlarmEventService
 
         public List<Alarm> GetAllAlarms()
         {
-            return alarmEventDB.GetAllAlarms();
+            try
+            {
+                return alarmEventDB.GetAllAlarms();
+            }
+            catch (Exception ex)
+            {
+                return new List<Alarm>();
+            }
         }
 
         public List<Event> GetAllEvents()
         {
-            return alarmEventDB.GetAllEvents();
+            try
+            {
+                return alarmEventDB.GetAllEvents();
+            }
+            catch (Exception ex)
+            {
+                return new List<Event>();
+            }
         }
     }
 }

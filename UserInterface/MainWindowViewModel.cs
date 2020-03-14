@@ -344,7 +344,9 @@ namespace UserInterface
             {
                 int numberOfAlarms = ProxyServices.AlarmEventServiceProxy.GetAllAlarms().Where(x => x.AlarmAck == false).Count();
                 if (numberOfAlarms > 0)
+                {
                     FlagToStartBlinking = true;
+                }
                 else
                 {
                     FlagToStartBlinking = false;
