@@ -10,7 +10,7 @@ namespace CalculationEngine
 {
 	public class SubscribeProxy
 	{
-		private string _endpoint = "net.tcp://localhost:7002/Sub";
+		private readonly string _endpoint = "net.tcp://localhost:7002/Sub";
 		private ISub _proxy;
 
 		public SubscribeProxy(IPub callback)

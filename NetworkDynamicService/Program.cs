@@ -10,6 +10,8 @@ namespace NetworkDynamicService
     {
         static void Main(string[] args)
         {
+            Console.Title = "NDS";
+
             NetworkDynamicServiceHost nds = new NetworkDynamicServiceHost();
             
             try

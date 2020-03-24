@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
@@ -50,6 +51,8 @@
     <Compile Include="Model\AsyncMachine.cs" />
     <Compile Include="Model\Discrete.cs" />
     <Compile Include="Model\IdObject.cs" />
+    <Compile Include="ProcessingData.cs" />
+    <Compile Include="PublishMeasurements.cs" />
     <Compile Include="SubscribeProxy.cs" />
     <Compile Include="TransactionStuff\ModelUpdateContract.cs" />
     <Compile Include="Program.cs" />
