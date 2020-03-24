@@ -3,14 +3,14 @@
 	xmlns:cim="http://iec.ch/TC57/2010/CIM-schema-cim15#"
 	xmlns:ftn="http://www.ftnydro.com/CIM15/2010/extension#">
 	<cim:Substation rdf:ID="Substation_1">
-		<cim:IdentifiedObject.description>Substation</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.description>Liman 3</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>Substation_1</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>Substation_1</ftn:IdentifiedObject.name>
+		<ftn:IdentifiedObject.name>Liman 3</ftn:IdentifiedObject.name>
 	</cim:Substation>
 	<cim:Substation rdf:ID="Substation_2">
-		<cim:IdentifiedObject.description>Substation</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.description>Detelinara</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>Substation_2</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>Substation_2</ftn:IdentifiedObject.name>
+		<ftn:IdentifiedObject.name>Detelinara</ftn:IdentifiedObject.name>
 	</cim:Substation>
 	<cim:Breaker rdf:ID="Breaker_1">
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
@@ -216,6 +216,17 @@
 		<cim:IdentifiedObject.mRID>Discrete_2</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>Discrete_2</ftn:IdentifiedObject.name>
 	</cim:Discrete>
+	<cim:Discrete rdf:ID="Discrete_5">
+		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
+		<cim:Discrete.minValue>0</cim:Discrete.minValue>
+		<cim:Discrete.normalValue>0</cim:Discrete.normalValue>
+		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
+		<cim:Measurement.measurementType></cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#Breaker_2"/>
+		<cim:IdentifiedObject.description>Discrete measurement</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>Discrete_2</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>Discrete_2</ftn:IdentifiedObject.name>
+	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_3">
 		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0</cim:Discrete.minValue>
@@ -223,6 +234,17 @@
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType></cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Disc_2"/>
+		<cim:IdentifiedObject.description>Discrete measurement</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>Discrete_3</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>Discrete_3</ftn:IdentifiedObject.name>
+	</cim:Discrete>
+	<cim:Discrete rdf:ID="Discrete_4">
+		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
+		<cim:Discrete.minValue>0</cim:Discrete.minValue>
+		<cim:Discrete.normalValue>0</cim:Discrete.normalValue>
+		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
+		<cim:Measurement.measurementType></cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#Disc_3"/>
 		<cim:IdentifiedObject.description>Discrete measurement</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>Discrete_3</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>Discrete_3</ftn:IdentifiedObject.name>

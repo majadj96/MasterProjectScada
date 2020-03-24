@@ -337,6 +337,7 @@
             <Label Content="(search by)" FontFamily="Consolas" FontSize="11" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Canvas.Left="165" Canvas.Top="591" Height="26" Width="98" Foreground="#FF1B1B1B"/>
 
         </Canvas>
+        <Button  Content="Analytics" HorizontalAlignment="Left" Command="{Binding AnalyticsOpenCommand}" CommandParameter="Event" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="122,22,0,0" VerticalAlignment="Top" Width="118" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#FFBB558D" Foreground="White" BorderBrush="#FFC5C5C5" Grid.Column="1"/>
 
         <!--<Border x:Name="AlarmBorder" Visibility="Visible" BorderBrush="Crimson" BorderThickness="10" HorizontalAlignment="Left" Height="820" Margin="0,0,0,0" VerticalAlignment="Top" Width="1512" Grid.RowSpan="3"></Border>-->
     </Grid>

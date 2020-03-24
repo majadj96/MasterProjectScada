@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -77,6 +78,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AnalyticsWindow.xaml.cs">
+      <DependentUpon>AnalyticsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AnalyticsWindowViewModel.cs" />
     <Compile Include="BaseError\BindableBase.cs" />
     <Compile Include="BaseError\ValidationBase.cs" />
     <Compile Include="BaseError\ValidationErrors.cs" />
@@ -103,13 +108,18 @@
     </Compile>
     <Compile Include="TablesWindowViewModel.cs" />
     <Compile Include="ViewModel\AlarmViewModel.cs" />
+    <Compile Include="ViewModel\AnalyticsViewModel.cs" />
     <Compile Include="ViewModel\CommandBreakerViewModel.cs" />
     <Compile Include="ViewModel\CommandDisconnectorViewModel.cs" />
     <Compile Include="ViewModel\EventTableViewModel.cs" />
     <Compile Include="ViewModel\MeshViewModel.cs" />
+    <Compile Include="ViewModel\SignalListItemViewModel.cs" />
     <Compile Include="ViewModel\TableViewModel.cs" />
     <Compile Include="View\AlarmView.xaml.cs">
       <DependentUpon>AlarmView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AnalyticsViews\SignalListItem.xaml.cs">
+      <DependentUpon>SignalListItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\CommandBreakerView.xaml.cs">
       <DependentUpon>CommandBreakerView.xaml</DependentUpon>
@@ -126,6 +136,10 @@
     <Compile Include="View\TableView.xaml.cs">
       <DependentUpon>TableView.xaml</DependentUpon>
     </Compile>
+    <Page Include="AnalyticsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CommandingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -147,6 +161,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\AlarmView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AnalyticsViews\SignalListItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -26,6 +26,7 @@ namespace UserInterface
         public MyICommand<string> ButtonTablesCommand { get; private set; }
         public MyICommand<string> SearchSubsCommand { get; private set; }
         public MyICommand<string> DissmisSubsCommand { get; private set; }
+        public MyICommand<string> AnalyticsOpenCommand { get; private set; }
         public MyICommand<string> LoadSubstationCommand { get; private set; }
 
         private MeshViewModel meshViewModel = new MeshViewModel();
@@ -258,6 +259,7 @@ namespace UserInterface
             LoadSubstationCommand = new MyICommand<string>(changeGrid);
             SearchSubsCommand = new MyICommand<string>(searchSubstation);
             DissmisSubsCommand = new MyICommand<string>(dissmisSubstation);
+            AnalyticsOpenCommand = new MyICommand<string>(openAnalytics);
 
             Sub subNMS = new Sub();
             subNMS.OnSubscribe("nms");
@@ -293,6 +295,17 @@ namespace UserInterface
                 SubstationsList = new ObservableCollection<Substation>(searchedSubs);
             }
 
+        }
+
+        private void openAnalytics(string a)
+        {
+            AnalyticsWindow analyticsWindow = new AnalyticsWindow();
+
+            AnalyticsWindowViewModel analyticsWindowViewModel = new AnalyticsWindowViewModel(substations);
+
+            analyticsWindow.DataContext = analyticsWindowViewModel;
+
+            analyticsWindow.Show();
         }
         private void dissmisSubstation(string a)
         {
@@ -589,6 +602,7 @@ namespace UserInterface
                         foreach(var analog in resource.Properties.Where(x=>x.Id == ModelCode.MEASUREMENT_PSR))
                         {
                             long gid = analog.PropertyValue.LongValue;
+                            
                             ResourceDescription resource1 = resources.Where(x => x.Id == gid).ToList().First();
 
                             if(ModelCodeHelper.ExtractTypeFromGlobalId(resource1.Id) == (short)DMSType.ASYNCHRONOUSMACHINE)
