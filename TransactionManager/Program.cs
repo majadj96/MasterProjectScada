@@ -10,6 +10,8 @@ namespace TransactionManager
     {
        static void Main(string[] args)
         {
+            Console.Title = "TransactionManager";
+
             EnlistManagerServiceHost host = new EnlistManagerServiceHost();
             TMData.CreateNMSProxy();
 

@@ -46,5 +46,16 @@ namespace CalculationEngine
         {
             return Channel.WriteDigitalOutput(command);
         }
+
+        public CommandObject CreateCommand(DateTime dateTime, string commandOwner, float value, long gid)
+        {
+            return new CommandObject()
+            {
+                CommandingTime = dateTime,
+                CommandOwner = commandOwner,
+                EguValue = value,
+                SignalGid = gid
+            };
+        }
     }
 }
