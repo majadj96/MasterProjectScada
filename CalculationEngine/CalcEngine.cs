@@ -47,7 +47,7 @@ namespace CalculationEngine
 
         public static void SetTimer()
         {
-            aTimer = new Timer(5000);
+            aTimer = new Timer(10000);
             aTimer.Elapsed += OnTimedEvent;
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
@@ -56,6 +56,7 @@ namespace CalculationEngine
         private static void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             ProcessingData.UpdateWorkingTimes();
+			ProcessingData.UpdateFluidLevel();//
         }
     }
 }
