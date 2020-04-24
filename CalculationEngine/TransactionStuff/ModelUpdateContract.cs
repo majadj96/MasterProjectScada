@@ -18,7 +18,7 @@ namespace CalculationEngine
 		{
 			Console.WriteLine("Update model invoked");
 
-			CalcEngine.ConcreteModel_Copy = new Dictionary<long, IdObject>(CalcEngine.ConcreteModel);
+			ConcreteModel.CurrentModel_Copy = new Dictionary<long, IdObject>(ConcreteModel.CurrentModel);
 
 			foreach (ResourceDescription rd in delta.InsertOperations)
 			{
@@ -53,9 +53,9 @@ namespace CalculationEngine
 
 		private void RemoveEntity(ResourceDescription rd)
 		{
-			if (CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+			if (ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
 			{
-				CalcEngine.ConcreteModel_Copy.Remove(rd.Id);
+				ConcreteModel.CurrentModel_Copy.Remove(rd.Id);
 			}
 		}
 
@@ -63,38 +63,38 @@ namespace CalculationEngine
 		{
 			if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ANALOG)
 			{
-				if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+				if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
 					Analog analog = PopulateAnalogProperties(rd);
 
-					CalcEngine.ConcreteModel_Copy.Add(analog.GID, analog);
+					ConcreteModel.CurrentModel_Copy.Add(analog.GID, analog);
 				}
 			}
 			else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.DISCRETE)
 			{
-				if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+				if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
 					Discrete discrete = PopulateDiscreteProperties(rd);
 
-					CalcEngine.ConcreteModel_Copy.Add(discrete.GID, discrete);
+					ConcreteModel.CurrentModel_Copy.Add(discrete.GID, discrete);
 				}
 			}
 			else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ASYNCHRONOUSMACHINE)
 			{
-				if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+				if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
 					AsyncMachine asyncMachine = PopulateAsyncMachineProperties(rd);
 
-					CalcEngine.ConcreteModel_Copy.Add(asyncMachine.GID, asyncMachine);
+					ConcreteModel.CurrentModel_Copy.Add(asyncMachine.GID, asyncMachine);
 				}
 			}
 			else
 			{
-				if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+				if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
 					IdObject idObject = PopulateIdObjectProperties(rd);
 
-					CalcEngine.ConcreteModel_Copy.Add(idObject.GID, idObject);
+					ConcreteModel.CurrentModel_Copy.Add(idObject.GID, idObject);
 				}
 			}
 		}
@@ -103,38 +103,38 @@ namespace CalculationEngine
 		{
 			if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ANALOG)
 			{
-				if (CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+				if (ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
 					Analog analog = PopulateAnalogProperties(rd);
 
-					CalcEngine.ConcreteModel_Copy[analog.GID] = analog;
+					ConcreteModel.CurrentModel_Copy[analog.GID] = analog;
 				}
 			}
 			else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.DISCRETE)
 			{
-				if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+				if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
 					Discrete discrete = PopulateDiscreteProperties(rd);
 
-					CalcEngine.ConcreteModel_Copy[discrete.GID] = discrete;
+					ConcreteModel.CurrentModel_Copy[discrete.GID] = discrete;
 				}
 			}
 			else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ASYNCHRONOUSMACHINE)
 			{
-				if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+				if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
 					AsyncMachine asyncMachine = PopulateAsyncMachineProperties(rd);
 
-					CalcEngine.ConcreteModel_Copy[asyncMachine.GID] = asyncMachine;
+					ConcreteModel.CurrentModel_Copy[asyncMachine.GID] = asyncMachine;
 				}
 			}
 			else
 			{
-				if (!CalcEngine.ConcreteModel_Copy.ContainsKey(rd.Id))
+				if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
 					IdObject idObject = PopulateIdObjectProperties(rd);
 
-					CalcEngine.ConcreteModel_Copy[idObject.GID] = idObject;
+					ConcreteModel.CurrentModel_Copy[idObject.GID] = idObject;
 				}
 			}
 		}

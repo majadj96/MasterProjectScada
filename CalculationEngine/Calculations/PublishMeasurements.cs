@@ -10,10 +10,17 @@ namespace CalculationEngine
 {
     public class PublishMeasurements : IPub
     {
+        private static ProcessingData _processingData;
         private SubscribeProxy _proxy;
 
         public PublishMeasurements()
         {
+            
+        }
+
+        public PublishMeasurements(ProcessingData processingData)
+        {
+            _processingData = processingData;
             _proxy = new SubscribeProxy(this);
         }
 
@@ -34,8 +41,8 @@ namespace CalculationEngine
 
         public void PublishMeasure(ScadaUIExchangeModel[] measurement, string topicName)
         {
-            ProcessingData.ProccessData(measurement);
-            ProcessingData.CalculateData();
+            _processingData.ProccessData(measurement);
+            _processingData.CalculateData();
         }
     }
 }

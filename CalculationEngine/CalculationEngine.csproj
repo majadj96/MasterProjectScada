@@ -45,15 +45,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CalcEngine.cs" />
-    <Compile Include="CommandingProxy.cs" />
+    <Compile Include="Calculations\CalcEngine.cs" />
+    <Compile Include="Channels\CommandingProxy.cs" />
     <Compile Include="Model\Analog.cs" />
     <Compile Include="Model\AsyncMachine.cs" />
+    <Compile Include="Model\ConcreteModel.cs" />
     <Compile Include="Model\Discrete.cs" />
     <Compile Include="Model\IdObject.cs" />
-    <Compile Include="ProcessingData.cs" />
-    <Compile Include="PublishMeasurements.cs" />
-    <Compile Include="SubscribeProxy.cs" />
+    <Compile Include="Calculations\ProcessingData.cs" />
+    <Compile Include="Calculations\PublishMeasurements.cs" />
+    <Compile Include="Channels\SubscribeProxy.cs" />
     <Compile Include="TransactionStuff\ModelUpdateContract.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
