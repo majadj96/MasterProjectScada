@@ -26,7 +26,7 @@ namespace CalculationEngine
 			ConcreteModel.CurrentModel = new Dictionary<long, IdObject>(ConcreteModel.CurrentModel_Copy);
 			ConcreteModel.CurrentModel_Copy.Clear();
 
-            _processingData.CalculateData();
+            _processingData.UpdateAsyncMachines();
 
             if(!CalcEngine.aTimer.Enabled)
             {

@@ -42,7 +42,6 @@ namespace CalculationEngine
         public void PublishMeasure(ScadaUIExchangeModel[] measurement, string topicName)
         {
             _processingData.ProccessData(measurement);
-            _processingData.CalculateData();
         }
     }
 }

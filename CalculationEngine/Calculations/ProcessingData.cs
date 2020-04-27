@@ -5,8 +5,7 @@ using ScadaCommon;
 using ScadaCommon.ComandingModel;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CalculationEngine
@@ -28,27 +27,37 @@ namespace CalculationEngine
         public void ProccessData(object data)
         {
             ScadaUIExchangeModel[] measurements = (ScadaUIExchangeModel[])data;
+            List<IdObject> changeset = new List<IdObject>();
 
             foreach (ScadaUIExchangeModel meas in measurements)
             {
-                if (ConcreteModel.CurrentModel.ContainsKey(meas.Gid))
+                if (ConcreteModel.CurrentModel.TryGetValue(meas.Gid, out IdObject idObject))
                 {
-                    if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(meas.Gid)) == DMSType.ANALOG)
+                    if (idObject.GetType() == typeof(Analog))
                     {
-                        ((Analog)ConcreteModel.CurrentModel[meas.Gid]).NormalValue = (float)meas.Value;
+                        ((Analog)idObject).NormalValue = (float)meas.Value;
                     }
-                    else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(meas.Gid)) == DMSType.DISCRETE)
+                    else if (idObject.GetType() == typeof(Discrete))
                     {
-                        int.TryParse(meas.Value.ToString(), out int result);
-                        ((Discrete)ConcreteModel.CurrentModel[meas.Gid]).NormalValue = result;
+                        ((Discrete)idObject).NormalValue = (int)meas.Value;
                     }
+
+                    changeset.Add(idObject);
                 }
             }
+
+            UpdateAsyncMachines(changeset);
         }
 
-        public void CalculateData()
+        public void UpdateAsyncMachines(List<IdObject> changeset = null)
         {
-            foreach (IdObject idObject in ConcreteModel.CurrentModel.Values)
+            if(changeset == null || changeset.Count == 0)
+            {
+                // Ako je changeset prazan, provjeri sve
+                changeset = new List<IdObject>(ConcreteModel.CurrentModel.Values);
+            }
+
+            foreach (IdObject idObject in changeset)
             {
                 if (idObject.GetType() == typeof(Discrete))
                 {
@@ -78,20 +87,20 @@ namespace CalculationEngine
             }
         }
 
-        private void SetAsyncMachineState(string asyncMachine, string mainBreaker, Discrete machineBreaker)
+        private void SetAsyncMachineState(string asyncMachineMrid, string mainBreaker, Discrete machineBreaker)
         {
-            long asyncMachineGid = GetObjectByMrid(asyncMachine).GID;
+            AsyncMachine asyncMachine = (AsyncMachine)GetObjectByMrid(asyncMachineMrid);
             Discrete mainBreakerMeas = (Discrete)GetObjectByMrid(mainBreaker);
 
             if (machineBreaker.NormalValue == 0 || mainBreakerMeas.NormalValue == 0)
             {
-                //ako je breaker otvoren masina ne radi
-                ((AsyncMachine)ConcreteModel.CurrentModel[asyncMachineGid]).IsRunning = false;
+                //ako je neki breaker otvoren masina ne radi
+                asyncMachine.IsRunning = false;
             }
             else if (machineBreaker.NormalValue == 1 && mainBreakerMeas.NormalValue == 1)
             {
-                //ako je breaker zatvoren masina radi
-                ((AsyncMachine)ConcreteModel.CurrentModel[asyncMachineGid]).IsRunning = true;
+                //ako je svaki breaker zatvoren masina radi
+                asyncMachine.IsRunning = true;
             }
         }
 
@@ -104,88 +113,63 @@ namespace CalculationEngine
             if (asyncMachine1.IsRunning)
             {
                 asyncMachine1.WorkingTime += 1;
-				currentFluidLvlTank1 -= 3; //smanji za 3 litra
+                ReduceFluidLevelTank1(20); //smanji nivo fluida
 			}
             if (asyncMachine2.IsRunning && asyncMachine3.IsRunning)
             {
                 asyncMachine2.WorkingTime += 1;
-				currentFluidLvlTank2 -= 1; //smanji za 1 litar zbog prve masine 
+                ReduceFluidLevelTank2(8); //smanji za 8 litara zbog prve masine 
+
                 asyncMachine3.WorkingTime += 1;
-				currentFluidLvlTank2 -= 1; //smanji za 1 litar zbog druge masine
+                ReduceFluidLevelTank2(8); //smanji za 8 litara zbog druge masine
             }
             else if (asyncMachine2.IsRunning && !asyncMachine3.IsRunning)
             {
                 if (asyncMachine2.WorkingTime - asyncMachine3.WorkingTime > workingDifference - 1)
                 {
-                    Discrete breaker2 = GetMeasurementForEquipment("Breaker_AsyncMachine2");
+                    ExecuteCommandOnMachine("Breaker_AsyncMachine2", "Breaker_2SwitchStatus", 0); // Ugasi drugu
 
-					//System.Threading.Thread.Sleep(1000);
-                    CommandObject command = _commandingProxy.CreateCommand(DateTime.Now, "CalculationEngine", 0, breaker2.GID);
-
-                    CommandResult commandResult = _commandingProxy.WriteDigitalOutput(command);
-                    Console.WriteLine(commandResult.ToString());
-
-                    if (commandResult == CommandResult.Success)
-                    {
-                        Discrete breaker3 = GetMeasurementForEquipment("Breaker_AsyncMachine3");
-
-						System.Threading.Thread.Sleep(1000);
-						CommandObject command1 = _commandingProxy.CreateCommand(DateTime.Now, "CalculationEngine", 1, breaker3.GID);
-
-                        CommandResult commandResult1 = _commandingProxy.WriteDigitalOutput(command1);
-                        Console.WriteLine(commandResult1.ToString());
-                    }
-                    else
-                    {
-                        asyncMachine2.WorkingTime += 1;
-						currentFluidLvlTank2 -= 1; //smanji za 1 litar zbog prve masine 
-					}
+                    ExecuteCommandOnMachine("Breaker_AsyncMachine3", "Breaker_2SwitchStatus", 1); // Ukljuci trecu
                 }
                 else
                 {
                     asyncMachine2.WorkingTime += 1;
-					currentFluidLvlTank2 -= 1; //smanji za 1 litar zbog prve masine 
-				}
+                    ReduceFluidLevelTank2(8); //smanji za 8 litara zbog druge masine 
+                }
             }
             else if (!asyncMachine2.IsRunning && asyncMachine3.IsRunning)
             {
                 if (asyncMachine3.WorkingTime - asyncMachine2.WorkingTime > workingDifference - 1)
                 {
-                    Discrete breaker3 = GetMeasurementForEquipment("Breaker_AsyncMachine3");
+                    ExecuteCommandOnMachine("Breaker_AsyncMachine3", "Breaker_2SwitchStatus", 0); // Ugasi trecu
 
-					//System.Threading.Thread.Sleep(1000);
-					CommandObject command = _commandingProxy.CreateCommand(DateTime.Now, "CalculationEngine", 0, breaker3.GID);
-
-                    CommandResult commandResult = _commandingProxy.WriteDigitalOutput(command);
-                    Console.WriteLine(commandResult.ToString());
-
-                    if (commandResult == CommandResult.Success)
-                    {
-                        Discrete breaker2 = GetMeasurementForEquipment("Breaker_AsyncMachine2");
-
-						System.Threading.Thread.Sleep(1000);
-						CommandObject command1 = _commandingProxy.CreateCommand(DateTime.Now, "CalculationEngine", 1, breaker2.GID);
-
-                        CommandResult commandResult1 = _commandingProxy.WriteDigitalOutput(command1);
-                        Console.WriteLine(commandResult1.ToString());
-                    }
-					else
-					{
-                        asyncMachine3.WorkingTime += 1;
-						currentFluidLvlTank2 -= 1; //smanji za 1 litar zbog druge masine
-					}
+                    ExecuteCommandOnMachine("Breaker_AsyncMachine2", "Breaker_2SwitchStatus", 1); // Ukljuci drugu
                 }
                 else
                 {
                     asyncMachine3.WorkingTime += 1;
-					currentFluidLvlTank2 -= 1; //smanji za 1 litar zbog druge masine
-				}
+                    ReduceFluidLevelTank2(8); //smanji za 8 litara zbog trece masine
+                }
             }
             
             Console.WriteLine("AsyncM_1 working hours: " + ((AsyncMachine)ConcreteModel.CurrentModel[asyncMachine1.GID]).WorkingTime);
             Console.WriteLine("AsyncM_2 working hours: " + ((AsyncMachine)ConcreteModel.CurrentModel[asyncMachine2.GID]).WorkingTime);
             Console.WriteLine("AsyncM_3 working hours: " + ((AsyncMachine)ConcreteModel.CurrentModel[asyncMachine3.GID]).WorkingTime);
-            Console.WriteLine("--------------------------------");
+        }
+
+        private void ReduceFluidLevelTank1(float quantity)
+        {
+            if (currentFluidLvlTank1 < quantity)
+                currentFluidLvlTank1 = 0;
+            else
+                currentFluidLvlTank1 -= quantity;
+        }
+        private void ReduceFluidLevelTank2(float quantity)
+        {
+            if (currentFluidLvlTank2 < quantity)
+                currentFluidLvlTank2 = 0;
+            else
+                currentFluidLvlTank2 -= quantity;
         }
 
         private IdObject GetObjectByMrid(string mrid)
@@ -218,6 +202,41 @@ namespace CalculationEngine
             return null;
         }
 
+        private async void ExecuteCommandOnMachine(string machineBreakerMrid, string mainBreakerMrid, float commandValue)
+        {
+            Discrete machineBreakerStatus = GetMeasurementForEquipment(machineBreakerMrid);
+
+            if (commandValue == 1)
+            {
+                // Ako je komanda "ON" prvo ukljuci glavni breaker
+                Discrete mainBreakerStatus = (Discrete)GetObjectByMrid(mainBreakerMrid);
+                
+                if (mainBreakerStatus.NormalValue == 0)
+                {
+                    CommandObject commandObject = _commandingProxy.CreateCommand(DateTime.Now, "CalculationEngine", commandValue, mainBreakerStatus.GID);
+                    CommandResult commandResult = _commandingProxy.WriteDigitalOutput(commandObject);
+                    //CommandResult commandResult = await ExecuteCommand(commandObject);
+                    Console.WriteLine("[Thread: {0}] {1}", Thread.CurrentThread.ManagedThreadId, commandResult.ToString());
+                    System.Threading.Thread.Sleep(2000);
+                }
+            }
+
+            // Ukljuci breaker od masine
+            CommandObject command = _commandingProxy.CreateCommand(DateTime.Now, "CalculationEngine", commandValue, machineBreakerStatus.GID);
+            CommandResult commandResult1 = _commandingProxy.WriteDigitalOutput(command);
+            //CommandResult commandResult1 = await ExecuteCommand(command);
+            Console.WriteLine("[Thread: {0}] {1}", Thread.CurrentThread.ManagedThreadId, commandResult1.ToString());
+            System.Threading.Thread.Sleep(2000);
+        }
+
+        private async Task<CommandResult> ExecuteCommand(CommandObject comObj)
+        {
+            CommandResult result = _commandingProxy.WriteDigitalOutput(comObj);
+            Thread.Sleep(1000);
+
+            return result;
+        }
+
 		public void UpdateFluidLevel()
 		{
 			AsyncMachine asyncMachine1 = (AsyncMachine)GetObjectByMrid("AsyncM_1");
@@ -229,67 +248,47 @@ namespace CalculationEngine
 
 			Console.WriteLine("\n[Substation 1] Current fluid level: " + currentFluidLvlTank1 + " l.");
 			Console.WriteLine("[Substation 2] Current fluid level: " + currentFluidLvlTank2 + " l.\n");
+            Console.WriteLine("-----------------------------------------\n");
 
-			if(currentFluidLvlTank1 >= maxFluidLevel * 0.9)
-			{
-				if (!asyncMachine1.IsRunning)
-				{
-					Discrete mainBreaker = (Discrete)GetObjectByMrid("Breaker_1SwitchStatus");
-
-					Discrete breaker1 = GetMeasurementForEquipment("Breaker_AsyncMachine1");
-
-					if (mainBreaker.NormalValue == 0)
-					{
-						CommandObject command1 = _commandingProxy.CreateCommand(DateTime.Now, "CalculationEngine", 1, mainBreaker.GID);
-						//System.Threading.Thread.Sleep(1000);
-						CommandResult commandResult1 = _commandingProxy.WriteDigitalOutput(command1);
-						Console.WriteLine(commandResult1.ToString());						
-					}
-
-					CommandObject command = _commandingProxy.CreateCommand(DateTime.Now, "CalculationEngine", 1, breaker1.GID);
-					//System.Threading.Thread.Sleep(2000);
-					CommandResult commandResult = _commandingProxy.WriteDigitalOutput(command);
-					
-					Console.WriteLine(commandResult.ToString());
-				}
-			}
+            if (currentFluidLvlTank1 >= maxFluidLevel * 0.9) // gornji limit
+            {
+                if (!asyncMachine1.IsRunning)
+                {
+                    ExecuteCommandOnMachine("Breaker_AsyncMachine1", "Breaker_1SwitchStatus", 1);
+                }
+            }
+            else if (currentFluidLvlTank1 < maxFluidLevel * 0.1) // donji limit
+            {
+                if (asyncMachine1.IsRunning)
+                {
+                    ExecuteCommandOnMachine("Breaker_AsyncMachine1", "Breaker_1SwitchStatus", 0);
+                }
+            }
 
 			if (currentFluidLvlTank2 >= maxFluidLevel * 0.9) //pali obje, ako imamo dvije masine
 			{
-				if (!asyncMachine2.IsRunning || !asyncMachine3.IsRunning)//ako bilo koja od dvije masine nije ukljucena
-				{
-					Discrete mainBreaker = (Discrete)GetObjectByMrid("Breaker_2SwitchStatus");
+                if (!asyncMachine2.IsRunning)
+                {
+                    ExecuteCommandOnMachine("Breaker_AsyncMachine2", "Breaker_2SwitchStatus", 1);
+                }
 
-					if (mainBreaker.NormalValue == 0)//ukljuci glavni prekidac
-					{
-						CommandObject command1 = _commandingProxy.CreateCommand(DateTime.Now, "CalculationEngine", 1, mainBreaker.GID);
-						//System.Threading.Thread.Sleep(1000);
-						CommandResult commandResult1 = _commandingProxy.WriteDigitalOutput(command1);
-						Console.WriteLine(commandResult1.ToString());
-					}
+                if (!asyncMachine3.IsRunning)
+                {
+                    ExecuteCommandOnMachine("Breaker_AsyncMachine3", "Breaker_2SwitchStatus", 1);
+                }
+            }
+            else if (currentFluidLvlTank2 < maxFluidLevel * 0.1) // ugasi sve masine koje rade
+            {
+                if (asyncMachine2.IsRunning)
+                {
+                    ExecuteCommandOnMachine("Breaker_AsyncMachine2", "Breaker_2SwitchStatus", 0);
+                }
 
-					if (!asyncMachine2.IsRunning)
-					{
-						Discrete breaker2 = GetMeasurementForEquipment("Breaker_AsyncMachine2");
-
-						CommandObject command = _commandingProxy.CreateCommand(DateTime.Now, "CalculationEngine", 1, breaker2.GID);
-						System.Threading.Thread.Sleep(5000);
-						CommandResult commandResult = _commandingProxy.WriteDigitalOutput(command);
-						Console.WriteLine(commandResult.ToString());
-					}
-
-					if (!asyncMachine3.IsRunning)
-					{
-						Discrete breaker3 = GetMeasurementForEquipment("Breaker_AsyncMachine3");
-
-						CommandObject command1 = _commandingProxy.CreateCommand(DateTime.Now, "CalculationEngine", 1, breaker3.GID);
-						System.Threading.Thread.Sleep(5000);
-						CommandResult commandResult1 = _commandingProxy.WriteDigitalOutput(command1);
-						Console.WriteLine(commandResult1.ToString());
-					}
-				}
-			}
-
-		}
+                if (asyncMachine3.IsRunning)
+                {
+                    ExecuteCommandOnMachine("Breaker_AsyncMachine3", "Breaker_2SwitchStatus", 0);
+                }
+            }
+        }
     }
 }
