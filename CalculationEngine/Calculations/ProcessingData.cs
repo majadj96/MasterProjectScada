@@ -202,7 +202,7 @@ namespace CalculationEngine
             return null;
         }
 
-        private async void ExecuteCommandOnMachine(string machineBreakerMrid, string mainBreakerMrid, float commandValue)
+        private void ExecuteCommandOnMachine(string machineBreakerMrid, string mainBreakerMrid, float commandValue)
         {
             Discrete machineBreakerStatus = GetMeasurementForEquipment(machineBreakerMrid);
 
@@ -216,8 +216,8 @@ namespace CalculationEngine
                     CommandObject commandObject = _commandingProxy.CreateCommand(DateTime.Now, "CalculationEngine", commandValue, mainBreakerStatus.GID);
                     CommandResult commandResult = _commandingProxy.WriteDigitalOutput(commandObject);
                     //CommandResult commandResult = await ExecuteCommand(commandObject);
-                    Console.WriteLine("[Thread: {0}] {1}", Thread.CurrentThread.ManagedThreadId, commandResult.ToString());
-                    System.Threading.Thread.Sleep(2000);
+                    //Console.WriteLine("[Thread: {0}] {1}", Thread.CurrentThread.ManagedThreadId, commandResult.ToString());
+                    Thread.Sleep(5000);
                 }
             }
 
@@ -225,14 +225,14 @@ namespace CalculationEngine
             CommandObject command = _commandingProxy.CreateCommand(DateTime.Now, "CalculationEngine", commandValue, machineBreakerStatus.GID);
             CommandResult commandResult1 = _commandingProxy.WriteDigitalOutput(command);
             //CommandResult commandResult1 = await ExecuteCommand(command);
-            Console.WriteLine("[Thread: {0}] {1}", Thread.CurrentThread.ManagedThreadId, commandResult1.ToString());
-            System.Threading.Thread.Sleep(2000);
+            //Console.WriteLine("[Thread: {0}] {1}", Thread.CurrentThread.ManagedThreadId, commandResult1.ToString());
+            Thread.Sleep(5000);
         }
 
         private async Task<CommandResult> ExecuteCommand(CommandObject comObj)
         {
             CommandResult result = _commandingProxy.WriteDigitalOutput(comObj);
-            Thread.Sleep(1000);
+            Thread.Sleep(2000);
 
             return result;
         }
