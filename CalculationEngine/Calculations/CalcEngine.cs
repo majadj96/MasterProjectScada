@@ -54,7 +54,7 @@ namespace CalculationEngine
 
         private void SetTimer()
         {
-            aTimer = new Timer(6000);
+            aTimer = new Timer(20000);
             aTimer.Elapsed += OnTimedEvent;
             aTimer.AutoReset = true;
         }
