@@ -302,9 +302,9 @@ namespace UserInterface
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Start();
 
-            /*AlarmButtonTimer.Tick += ButtonBlinks;
+            AlarmButtonTimer.Tick += ButtonBlinks;
             AlarmButtonTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
-            AlarmButtonTimer.Start();*/
+            AlarmButtonTimer.Start();
 
             Messenger.Default.Register<NotificationMessage>(this, (message) => { PopulateModel(message.Target, message.Notification); });
         }
@@ -411,8 +411,8 @@ namespace UserInterface
                 else
                     SubstationCurrent = Substations.Values.First();
 
-                /*Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = long.Parse(substationCurrent.Gid), Message = "Substation selected.", PointName = SubstationCurrent.Name };
-                ProxyServices.AlarmEventServiceProxy.AddEvent(e);*/
+                Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = long.Parse(substationCurrent.Gid), Message = "Substation selected.", PointName = SubstationCurrent.Name };
+                ProxyServices.AlarmEventServiceProxy.AddEvent(e);
             }
         }
 
@@ -427,9 +427,9 @@ namespace UserInterface
                 if (SubstationCurrent != null)
                     meshViewModel.UpdateSubstationModel(SubstationCurrent);
 
-                /*Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
+                Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
                     Message = "Model arrived and loaded from NMS.", PointName = "" };
-                ProxyServices.AlarmEventServiceProxy.AddEvent(e);*/
+                ProxyServices.AlarmEventServiceProxy.AddEvent(e);
             }
             else if (topic == "scada")
             {
@@ -450,9 +450,9 @@ namespace UserInterface
                     }
                 }
 
-                /*Event e = new Event() {  EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
+                Event e = new Event() {  EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
                     Message = "Acquisition arrived from SCADA.", PointName = "" };
-                ProxyServices.AlarmEventServiceProxy.AddEvent(e);*/
+                ProxyServices.AlarmEventServiceProxy.AddEvent(e);
 
                 Console.WriteLine(resources);
             }
