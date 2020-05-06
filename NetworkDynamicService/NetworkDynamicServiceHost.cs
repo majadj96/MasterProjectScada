@@ -42,12 +42,10 @@ namespace NetworkDynamicService
             stateUpdateProxy = new StateUpdateServiceProxy("StateUpdateServiceEndPoint");
             fepCmdProxy = new FepCommandingServiceProxy("FEPCommandingServiceContract");
             publisherProxy = new PublisherProxy("PublisherEndPoint");
-            
-            measurementsRepository.Add(new RepositoryCore.Measurement() { Gid = 0, ChangedTime = DateTime.Now, Value = 2 });
            
 
             nDSRealTimePointCache = new NDSRealTimePointCache();
-            backEndPocessingModule = new BackEndPocessingModule(pointUpdateProxy, this.alarmEventServiceProxy, this.publisherProxy);
+            backEndPocessingModule = new BackEndPocessingModule(pointUpdateProxy, this.alarmEventServiceProxy, this.publisherProxy, this.measurementsRepository);
 
             transactionService =  new TransactionService(nDSRealTimePointCache, OpenProxies);
             modelUpdateContract = new ModelUpdateContract(nDSRealTimePointCache, ndSConfigurationProxy, transactionService);

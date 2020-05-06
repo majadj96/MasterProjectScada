@@ -53,8 +53,8 @@ namespace UserInterface.ViewModel
             {
                 Messenger.Default.Send(new NotificationMessage("command", BreakerCurrent, "Breaker" + type));
 
-                /*Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.UI, GiD = long.Parse(BreakerCurrent.GID), Message = "Commanding breaker.", PointName = BreakerCurrent.Name  };
-                ProxyServices.AlarmEventServiceProxy.AddEvent(e);*/
+                Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.UI, GiD = long.Parse(BreakerCurrent.GID), Message = "Commanding breaker.", PointName = BreakerCurrent.Name  };
+                ProxyServices.AlarmEventServiceProxy.AddEvent(e);
             }
         }
     }

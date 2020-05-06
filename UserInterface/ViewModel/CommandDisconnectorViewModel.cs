@@ -53,8 +53,8 @@ namespace UserInterface.ViewModel
             {
                 Messenger.Default.Send(new NotificationMessage("command", DisconectorCurrent, "Disconector" + type));
 
-                /*Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.UI, GiD = long.Parse(DisconectorCurrent.GID), Message = "Commanding disconnector.", PointName = DisconectorCurrent.Name };
-                ProxyServices.AlarmEventServiceProxy.AddEvent(e);*/
+                Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.UI, GiD = long.Parse(DisconectorCurrent.GID), Message = "Commanding disconnector.", PointName = DisconectorCurrent.Name };
+                ProxyServices.AlarmEventServiceProxy.AddEvent(e);
             }
         }
     }
