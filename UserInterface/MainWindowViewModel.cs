@@ -36,6 +36,7 @@ namespace UserInterface
         private ObservableCollection<Substation> substationsList = new ObservableCollection<Substation>();
         private ObservableCollection<string> searchType = new ObservableCollection<string> { "Name", "GID" };
         List<Substation> searchedSubs = new List<Substation>();
+        private AlarmHandler alarmHandler;
 
         private DispatcherTimer AlarmButtonTimer = new DispatcherTimer();
         //private Thread threadAlarms;
@@ -293,9 +294,12 @@ namespace UserInterface
             DissmisSubsCommand = new MyICommand<string>(dissmisSubstation);
             AnalyticsOpenCommand = new MyICommand<string>(openAnalytics);
 
+            alarmHandler = new AlarmHandler();
+
             Sub subNMS = new Sub();
             subNMS.OnSubscribe("nms");
             subNMS.OnSubscribe("scada");
+            subNMS.OnSubscribe("alarm");
             setUpInitState();
 
             substations = new Dictionary<long, Substation>();
@@ -395,7 +399,7 @@ namespace UserInterface
         {
             TablesWindow tablesWindow = new TablesWindow();
 
-            TablesWindowViewModel tablesWindowViewModel = new TablesWindowViewModel(SubstationItems);
+            TablesWindowViewModel tablesWindowViewModel = new TablesWindowViewModel(SubstationItems, this.alarmHandler);
 
             tablesWindow.DataContext = tablesWindowViewModel;
 
@@ -468,6 +472,11 @@ namespace UserInterface
                 ProxyServices.AlarmEventServiceProxy.AddEvent(e);
 
                 Console.WriteLine(resources);
+            }
+            else if(topic == "alarm")
+            {
+                AlarmDescription alarmDesc = (AlarmDescription)resources;
+                alarmHandler.ProcessAlarm(alarmDesc);
             }
 
             MeshVisible = false;

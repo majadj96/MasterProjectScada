@@ -7,11 +7,14 @@ using System.Linq;
 using UserInterface.ProxyPool;
 using System;
 using Common;
+using System.Collections.Generic;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace UserInterface.ViewModel
 {
     public class AlarmViewModel : BindableBase
     {
+        private AlarmHandler alarmHandler;
         public MyICommand<int> AcknowledgeAlarmCommand { get; private set; }
 
         private ObservableCollection<Alarm> alarmItems = new ObservableCollection<Alarm>();
@@ -28,11 +31,19 @@ namespace UserInterface.ViewModel
             set { visible = value; OnPropertyChanged("Visible"); }
         }
 
-        public AlarmViewModel()
+        public AlarmViewModel(AlarmHandler alarmHandler)
         {
-            AlarmItems = new ObservableCollection<Alarm>(ProxyServices.AlarmEventServiceProxy.GetAllAlarms());
+            this.alarmHandler = alarmHandler;
+            //AlarmItems = new ObservableCollection<Alarm>(ProxyServices.AlarmEventServiceProxy.GetAllAlarms());
+            AlarmItems = new ObservableCollection<Alarm>(this.alarmHandler.Alarms);
+            this.alarmHandler.UpdateAlarmsCollection += AlarmHandler_UpdateAlarmsCollection;
 
             AcknowledgeAlarmCommand = new MyICommand<int>(AcknowledgeAlarm);
+        }
+
+        private void AlarmHandler_UpdateAlarmsCollection(object sender, EventArgs e)
+        {
+            AlarmItems = new ObservableCollection<Alarm>(this.alarmHandler.Alarms);
         }
 
         public void AcknowledgeAlarm(int id)
@@ -46,7 +57,7 @@ namespace UserInterface.ViewModel
             a.AlarmAcknowledged = DateTime.Now;
             if (ProxyServices.AlarmEventServiceProxy.AcknowledgeAlarm(a))
             {
-                AlarmItems = new ObservableCollection<Alarm>(ProxyServices.AlarmEventServiceProxy.GetAllAlarms());
+                //AlarmItems = new ObservableCollection<Alarm>(ProxyServices.AlarmEventServiceProxy.GetAllAlarms());
 
                 Event e = new Event()
                 {

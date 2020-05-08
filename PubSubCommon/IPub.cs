@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.AlarmEvent;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -14,5 +15,7 @@ namespace PubSubCommon
         void Publish(NMSModel model, string topicName);
         [OperationContract(IsOneWay = true)]
         void PublishMeasure(ScadaUIExchangeModel []measurement, string topicName);
+        [OperationContract(IsOneWay = true)]
+        void PublishAlarm(AlarmDescription alarmDesc, string topicName);
     }
 }

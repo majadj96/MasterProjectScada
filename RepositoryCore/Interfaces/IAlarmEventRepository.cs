@@ -15,7 +15,7 @@ namespace RepositoryCore.Interfaces
         void AddAlarm(Alarm alarm);
 
         [OperationContract]
-        bool AcknowledgeAlarm(Alarm alarm);
+        Alarm AcknowledgeAlarm(Alarm alarm);
 
         [OperationContract]
         List<Alarm> GetAllAlarms();
