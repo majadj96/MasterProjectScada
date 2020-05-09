@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.AlarmEvent;
 using Common.GDA;
 using GalaSoft.MvvmLight.Messaging;
 using PubSubCommon;
@@ -33,10 +34,10 @@ namespace UserInterface
         }
         #endregion
 
-        public TablesWindowViewModel(ObservableCollection<UIModel> model)
+        public TablesWindowViewModel(ObservableCollection<UIModel> model, AlarmHandler alarmHandler)
         {
             tableViewModel = new TableViewModel(model);
-            alarmViewModel = new AlarmViewModel();
+            alarmViewModel = new AlarmViewModel(alarmHandler);
             eventViewModel = new EventTableViewModel();
 
             CurrentTableViewModel = tableViewModel;

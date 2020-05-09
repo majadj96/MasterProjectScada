@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlarmEvent\Alarm.cs" />
+    <Compile Include="AlarmEvent\AlarmDescription.cs" />
     <Compile Include="AlarmEvent\Event.cs" />
     <Compile Include="EnumDescs.cs" />
     <Compile Include="Enums.cs" />

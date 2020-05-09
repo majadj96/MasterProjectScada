@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using Common.AlarmEvent;
+using GalaSoft.MvvmLight.Messaging;
 using PubSubCommon;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace UserInterface.Subscription
             NetTcpBinding netTcpbinding = new NetTcpBinding(SecurityMode.None);
             EndpointAddress endpointAddress = new EndpointAddress(EndpoindAddress);
             InstanceContext context = new InstanceContext(callbackinstance);
-            DuplexChannelFactory<ISub> channelFactory = new DuplexChannelFactory<ISub>(new InstanceContext(this), netTcpbinding, endpointAddress);
+            DuplexChannelFactory<ISub> channelFactory = new DuplexChannelFactory<ISub>(context, netTcpbinding, endpointAddress);
             _proxy = channelFactory.CreateChannel();
         }
 
@@ -66,6 +67,16 @@ namespace UserInterface.Subscription
             Messenger.Default.Send<NotificationMessage>(n);
 
             //Ovde stizu merenje sa skade, izmenjen je contract odnosno interfejs kod ove metode....
+        }
+
+        public void PublishAlarm(AlarmDescription alarmDesc, string topicName)
+        {
+            if (alarmDesc != null)
+            {
+                _eventCount += 1;
+                NotificationMessage n = new NotificationMessage(null, alarmDesc, topicName);
+                Messenger.Default.Send<NotificationMessage>(n);
+            }
         }
     }
 }

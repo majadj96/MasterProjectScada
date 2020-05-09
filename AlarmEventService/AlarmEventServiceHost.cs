@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PubSubCommon;
+using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 
@@ -17,6 +18,15 @@ namespace AlarmEventService
         {
             hosts = new List<ServiceHost>();
             hosts.Add(new ServiceHost(typeof(AlarmEventServices)));
+            AlarmEventServices.publisherProxy = CreatePublisherProxy();
+        }
+
+        private IPub CreatePublisherProxy()
+        {
+            string endpointAddressString = "net.tcp://localhost:7001/Pub";
+            EndpointAddress endpointAddress = new EndpointAddress(endpointAddressString);
+            NetTcpBinding netTcpBinding = new NetTcpBinding();
+            return ChannelFactory<IPub>.CreateChannel(netTcpBinding, endpointAddress);
         }
 
         public void Start()

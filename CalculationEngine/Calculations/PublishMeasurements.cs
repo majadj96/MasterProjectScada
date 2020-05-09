@@ -1,4 +1,5 @@
-﻿using PubSubCommon;
+﻿using Common.AlarmEvent;
+using PubSubCommon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,11 @@ namespace CalculationEngine
         public void PublishMeasure(ScadaUIExchangeModel[] measurement, string topicName)
         {
             _processingData.ProccessData(measurement);
+        }
+
+        public void PublishAlarm(AlarmDescription alarmDesc, string topicName)
+        {
+            throw new ActionNotSupportedException("CE does not have implementation for this method.");
         }
     }
 }

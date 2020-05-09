@@ -12,18 +12,15 @@ namespace AlarmEventServiceInfrastructure
     public class AlarmEventRepository : IAlarmEventRepository
     {
         AlarmEventContext context = new AlarmEventContext();
-        public bool AcknowledgeAlarm(Alarm alarm)
+        public Alarm AcknowledgeAlarm(Alarm alarm)
         {
-            bool ret = true;
             if (alarm == null)
-                ret = false;
+                return null;
 
-            if (String.IsNullOrEmpty(alarm.ID.ToString()) || String.IsNullOrWhiteSpace(alarm.ID.ToString()))
-                ret = false;
+            if (string.IsNullOrWhiteSpace(alarm.ID.ToString()))
+                return null;
             
-            ret = AckAlarm(alarm);
-
-            return ret;
+            return AckAlarm(alarm);
         }
 
         public void AddAlarm(Alarm alarm)
@@ -60,7 +57,7 @@ namespace AlarmEventServiceInfrastructure
                 return new List<Event>();
         }
 
-        private bool AckAlarm(Alarm alarm)
+        private Alarm AckAlarm(Alarm alarm)
         {
             try
             {
@@ -72,18 +69,18 @@ namespace AlarmEventServiceInfrastructure
                     aa.AlarmAck = true;
                     context.SaveChanges();
                     //log
-                    return true;
+                    return aa;
                 }
                 else
                 {
                     //log
-                    return false;
+                    return null;
                 }
             }
             catch
             {
                 //log
-                return false;
+                return null;
             }
         }
     }

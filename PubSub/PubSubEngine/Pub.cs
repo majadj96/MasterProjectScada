@@ -1,4 +1,5 @@
-﻿using PubSubCommon;
+﻿using Common.AlarmEvent;
+using PubSubCommon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,11 +29,31 @@ namespace PubSub.PubSubEngine
                 {
                     publishMethodInfo.Invoke(subscriber, new object[] { e, topicName });
                 }
-                catch
+                catch (Exception ex)
                 {
-
+                    Console.WriteLine("Could not invoke Publish method. {0}", ex.Message);
                 }
+            }
+        }
 
+        public void PublishAlarm(AlarmDescription alarmDesc, string topicName)
+        {
+            List<IPub> subscribers = Filter.GetSubscribers(topicName);
+            if (subscribers == null) return;
+
+            Type type = typeof(IPub);
+            MethodInfo publishMethodInfo = type.GetMethod("PublishAlarm");
+
+            foreach (IPub subscriber in subscribers)
+            {
+                try
+                {
+                    publishMethodInfo.Invoke(subscriber, new object[] { alarmDesc, topicName });
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Could not invoke PublishAlarm method. {0}", ex.Message);
+                }
             }
         }
 
@@ -50,11 +71,10 @@ namespace PubSub.PubSubEngine
                 {
                     publishMethodInfo.Invoke(subscriber, new object[] { measurement, topicName });
                 }
-                catch
+                catch (Exception ex)
                 {
-
+                    Console.WriteLine("Could not invoke PublishMeasure method. {0}", ex.Message);
                 }
-
             }
         }
         #endregion

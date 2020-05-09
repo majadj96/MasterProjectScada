@@ -1,4 +1,5 @@
-﻿using PubSubCommon;
+﻿using Common.AlarmEvent;
+using PubSubCommon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,11 @@ namespace NetworkDynamicService
         }
 
         public void Publish(NMSModel model, string topicName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PublishAlarm(AlarmDescription alarmDesc, string topicName)
         {
             throw new NotImplementedException();
         }
