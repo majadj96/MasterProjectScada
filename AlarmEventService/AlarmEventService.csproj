@@ -55,8 +55,11 @@
   <ItemGroup>
     <Compile Include="AlarmEventServiceHost.cs" />
     <Compile Include="AlarmEventServices.cs" />
+    <Compile Include="AlarmProcessor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\AlarmCache.cs" />
+    <Compile Include="Repositories\EventCache.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -80,6 +83,7 @@
       <Name>ScadaCommon</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
