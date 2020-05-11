@@ -9,6 +9,7 @@ namespace UserInterface
         #region Variables
         private CommandDisconnectorViewModel commandDisconnectorViewModel;
         private CommandBreakerViewModel commandBreakerViewModel;
+        private CommandPowerTransformerViewModel commandPowerTransformerViewModel;
 
         private BindableBase currentCommandViewModel;
         private Substation substationCurrent;
@@ -34,6 +35,9 @@ namespace UserInterface
 
         public void SetView(string window)
         {
+            if (SubstationCurrent == null || SubstationCurrent.Gid == null)
+                return;
+
             if (string.Compare(window, "Disconnector1") == 0)
             {
                 commandDisconnectorViewModel = new CommandDisconnectorViewModel(SubstationCurrent.Disconectors[0], "1");
@@ -64,17 +68,24 @@ namespace UserInterface
             }
             else if (string.Compare(window, "Breaker4") == 0)
             {
-                commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breakers[1], "4");
-                CurrentCommandViewModel = commandBreakerViewModel;
+                if (SubstationCurrent.Breakers.Count > 2)
+                {
+                    commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breakers[1], "4");
+                    CurrentCommandViewModel = commandBreakerViewModel;
+                }
             }
             else if (string.Compare(window, "Breaker5") == 0)
             {
-                commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breakers[2], "5");
-                CurrentCommandViewModel = commandBreakerViewModel;
+                if (SubstationCurrent.Breakers.Count > 2)
+                {
+                    commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breakers[2], "5");
+                    CurrentCommandViewModel = commandBreakerViewModel;
+                }
             }
             else if (string.Compare(window, "PowerTransformer") == 0)
             {
-
+                commandPowerTransformerViewModel = new CommandPowerTransformerViewModel(SubstationCurrent.Transformator);
+                CurrentCommandViewModel = commandPowerTransformerViewModel;
             }
             else if (string.Compare(window, "AsynchronousMachine1") == 0)
             {

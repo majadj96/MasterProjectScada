@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Messaging;
 using ScadaCommon.ComandingModel;
 using System;
+using System.Windows;
 using UserInterface.BaseError;
 using UserInterface.Command;
 using UserInterface.Converters;
@@ -35,6 +36,8 @@ namespace UserInterface.ViewModel
 
         public CommandBreakerViewModel(Breaker breaker, string type)
         {
+            
+
             BreakerCurrent = breaker;
             NewState = !ConverterState.ConvertToBool(BreakerCurrent.State);
 
@@ -55,6 +58,18 @@ namespace UserInterface.ViewModel
 
                 Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.UI, GiD = long.Parse(BreakerCurrent.GID), Message = "Commanding breaker.", PointName = BreakerCurrent.Name  };
                 ProxyServices.AlarmEventServiceProxy.AddEvent(e);
+
+                foreach(Window item in Application.Current.Windows)
+                {
+                    if (item.DataContext != null)
+                    {
+                        if (item.DataContext.ToString() == "UserInterface.CommandingWindowViewModel")
+                        {
+                            item.Close();
+                            break;
+                        }
+                    }
+                }
             }
         }
     }

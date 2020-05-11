@@ -14,9 +14,23 @@
         <DataTemplate DataType="{x:Type viewModel:CommandBreakerViewModel}">
             <views:CommandBreakerView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:CommandPowerTransformerViewModel}">
+            <views:CommandPowerTransformerView/>
+        </DataTemplate>
     </Window.Resources>
     
     <Grid Background="#FF474747">
-        <ContentControl Content="{Binding CurrentCommandViewModel}"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="380*"/>
+            <ColumnDefinition Width="20*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="380*"/>
+            <RowDefinition Height="20*"/>
+        </Grid.RowDefinitions>
+        
+        <ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding CurrentCommandViewModel}"/>
     </Grid>
 </Window>

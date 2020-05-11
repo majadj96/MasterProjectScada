@@ -554,7 +554,7 @@ namespace UserInterface.ViewModel
 
             Messenger.Default.Register<NotificationMessage>(this, (message) => 
             {
-                if(message.Notification != "scada" && message.Notification != "nms")
+                if(message.Notification != "scada" && message.Notification != "nms" && message.Notification != "commandTransformer")
                     ChangeStatesOfElements(message.Notification, message.Target);
             });
 
@@ -564,16 +564,8 @@ namespace UserInterface.ViewModel
         public void UpdateSubstationModel(Substation substation)
         {
             SubstationCurrent = substation;
-
-            foreach (Breaker b in SubstationCurrent.Breakers)
-                b.State = DiscreteState.ON;
-
-            foreach (AsynchronousMachine a in SubstationCurrent.AsynchronousMachines)
-                a.State = true;
-
-            SubstationCurrent.Disconectors[0].State = DiscreteState.ON;
-            if (SubstationCurrent.Disconectors.Count > 1)
-                SubstationCurrent.Disconectors[1].State = DiscreteState.ON;
+            
+            LeaveStatesAfterChangingSubstations();
 
             if (SubstationCurrent.AsynchronousMachines.Count == 1)
             {
@@ -615,9 +607,12 @@ namespace UserInterface.ViewModel
             }
             else if (string.Compare(element, "Breaker5") == 0)
             {
-                SubstationCurrent.Breakers[2].State = ((Breaker)target).NewState;
-                SubstationCurrent.Breakers[2].NewState = SubstationCurrent.Breakers[2].State;
-                BreakerOperation("5");
+                if (SubstationCurrent.Breakers.Count > 2)
+                {
+                    SubstationCurrent.Breakers[2].State = ((Breaker)target).NewState;
+                    SubstationCurrent.Breakers[2].NewState = SubstationCurrent.Breakers[2].State;
+                    BreakerOperation("5");
+                }
             }
             else if (string.Compare(element, "Disconector1") == 0)
             {
@@ -726,74 +721,21 @@ namespace UserInterface.ViewModel
                     case "1":
                         if (SubstationCurrent.Disconectors[0].State == DiscreteState.ON)
                         {
-                            SubstationCurrent.Disconectors[0].State = DiscreteState.OFF;
-                            Disconector1Image = "Assets/resloser-off.png";
-                            LineUpDis1 = LineDownDis1 = LineSecond = "#FFFF634D";
-                            drawBreakerOff();
-
-                            if (SubstationCurrent.Breakers.Count > 2)
-                            {
-                                DrawBreaker4Off();
-                                DrawBreaker5Off();
-                            }
+                            SetFirstDisconectorOff();
                         }
                         else
                         {
-                            SubstationCurrent.Disconectors[0].State = DiscreteState.ON;
-                            Disconector1Image = "Assets/recloser-on.png";
-                            LineUpDis1 = LineDownDis1 = LineSecond = "#FF7DFB4E";
-
-                            if (SubstationCurrent.Breakers[0].State == DiscreteState.ON)
-                            {
-                                drawBreakerOn();
-                                if (SubstationCurrent.Disconectors[1].State == DiscreteState.ON)
-                                {
-                                    drawDis2On();
-
-                                    if (SubstationCurrent.Breakers[1].State == DiscreteState.ON)
-                                    {
-                                        DrawBreaker2On();
-                                        DrawBreaker4On();
-                                    }
-
-                                    if (SubstationCurrent.Breakers.Count == 3)
-                                        if (SubstationCurrent.Breakers[2].State == DiscreteState.ON)
-                                            DrawBreaker5On();
-                                }
-                            }
+                            SetFirstDisconectorOn();
                         }
                         break;
                     case "2":
                         if (SubstationCurrent.Disconectors[1].State == DiscreteState.ON)
                         {
-                            SubstationCurrent.Disconectors[1].State = DiscreteState.OFF;
-                            Disconector2Image = "Assets/resloser-off.png";
-                                drawDis2Off();
-                            if (SubstationCurrent.Breakers.Count > 2)
-                            {
-                                DrawBreaker4Off();
-                                DrawBreaker5Off();
-                            }
+                            SetSecondDisconectorOff();
                         }
                         else
                         {
-                            SubstationCurrent.Disconectors[1].State = DiscreteState.ON;
-                            Disconector2Image = "Assets/recloser-on.png";
-
-                            if (SubstationCurrent.Disconectors[0].State == DiscreteState.ON && 
-                                SubstationCurrent.Breakers[0].State == DiscreteState.ON)
-                            {
-                                drawDis2On();
-                                if (SubstationCurrent.Breakers[1].State == DiscreteState.ON)
-                                {
-                                    DrawBreaker2On();
-                                    DrawBreaker4On();
-                                }
-
-                                if (SubstationCurrent.Breakers.Count == 3)
-                                    if (SubstationCurrent.Breakers[2].State == DiscreteState.ON)
-                                        DrawBreaker5On();
-                            }
+                            SetSecondDisconectorOn();
                         }
                         break;
                     default:
@@ -801,6 +743,141 @@ namespace UserInterface.ViewModel
                 }
             }
         } 
+
+        public void SetFirstDisconectorOff()
+        {
+            SubstationCurrent.Disconectors[0].State = DiscreteState.OFF;
+            Disconector1Image = "Assets/resloser-off.png";
+            LineUpDis1 = LineDownDis1 = LineSecond = "#FFFF634D";
+            drawBreakerOff();
+
+            if (SubstationCurrent.Breakers.Count > 2)
+            {
+                DrawBreaker4Off();
+                DrawBreaker5Off();
+            }
+        }
+
+        public void SetFirstDisconectorOn()
+        {
+            SubstationCurrent.Disconectors[0].State = DiscreteState.ON;
+            Disconector1Image = "Assets/recloser-on.png";
+            LineUpDis1 = LineDownDis1 = LineSecond = "#FF7DFB4E";
+
+            if (SubstationCurrent.Breakers[0].State == DiscreteState.ON)
+            {
+                drawBreakerOn();
+                if (SubstationCurrent.Disconectors[1].State == DiscreteState.ON)
+                {
+                    drawDis2On();
+
+                    if (SubstationCurrent.Breakers[1].State == DiscreteState.ON)
+                    {
+                        DrawBreaker2On();
+                        DrawBreaker4On();
+                    }
+
+                    if (SubstationCurrent.Breakers.Count == 3)
+                        if (SubstationCurrent.Breakers[2].State == DiscreteState.ON)
+                            DrawBreaker5On();
+                }
+            }
+        }
+
+        public void SetSecondDisconectorOff()
+        {
+            SubstationCurrent.Disconectors[1].State = DiscreteState.OFF;
+            Disconector2Image = "Assets/resloser-off.png";
+            drawDis2Off();
+            if (SubstationCurrent.Breakers.Count > 2)
+            {
+                DrawBreaker4Off();
+                DrawBreaker5Off();
+            }
+        }
+
+        public void SetSecondDisconectorOn()
+        {
+            SubstationCurrent.Disconectors[1].State = DiscreteState.ON;
+            Disconector2Image = "Assets/recloser-on.png";
+
+            if (SubstationCurrent.Disconectors[0].State == DiscreteState.ON &&
+                SubstationCurrent.Breakers[0].State == DiscreteState.ON)
+            {
+                drawDis2On();
+                if (SubstationCurrent.Breakers[1].State == DiscreteState.ON)
+                {
+                    DrawBreaker2On();
+                    DrawBreaker4On();
+                }
+
+                if (SubstationCurrent.Breakers.Count == 3)
+                    if (SubstationCurrent.Breakers[2].State == DiscreteState.ON)
+                        DrawBreaker5On();
+            }
+        }
+
+        public void LeaveStatesAfterChangingSubstations()
+        {
+            if (SubstationCurrent != null && SubstationCurrent.Disconectors != null && SubstationCurrent.Breakers != null)
+            {
+                if (SubstationCurrent.Disconectors[0].State == DiscreteState.OFF)
+                {
+                    SetFirstDisconectorOff();
+                }
+                else
+                {
+                    SetFirstDisconectorOn();
+                }
+                if (SubstationCurrent.Disconectors[1].State == DiscreteState.OFF)
+                {
+                    SetSecondDisconectorOff();
+                }
+                else
+                {
+                    SetSecondDisconectorOn();
+                }
+
+                if (SubstationCurrent.Breakers[0].State == DiscreteState.OFF)
+                {
+                    SetFirstBreakerOff();
+                }
+                else
+                {
+                    SetFirstBreakerOn();
+                }
+                if (SubstationCurrent.Breakers.Count == 2)
+                {
+                    if (SubstationCurrent.Breakers[1].State == DiscreteState.OFF)
+                    {
+                        SetSecondBreakerOff();
+                    }
+                    else
+                    {
+                        SetSecondBreakerOn();
+                    }
+                }
+                else
+                {
+                    if (SubstationCurrent.Breakers[1].State == DiscreteState.OFF)
+                    {
+                        SetFourthBreakerOff();
+                    }
+                    else
+                    {
+                        SetFourthBreakerOn();
+                    }
+                    if (SubstationCurrent.Breakers[2].State == DiscreteState.OFF)
+                    {
+                        SetFifthBreakerOff();
+                    }
+                    else
+                    {
+                        SetFifthBreakerOn();
+                    }
+                }
+            }
+        }
 
         public void BreakerOperation(string type)
         {
@@ -812,44 +889,11 @@ namespace UserInterface.ViewModel
                         {
                             if (SubstationCurrent.Breakers[0].State == DiscreteState.OFF)
                             {
-                                SubstationCurrent.Breakers[0].State = DiscreteState.ON;
-                                BreakerImage = "Assets/breaker-on.png";
-                                if (substationCurrent.Disconectors[0].State == DiscreteState.ON)
-                                {
-                                    drawBreakerOn();
-
-                                    if (substationCurrent.Disconectors[1].State == DiscreteState.ON)
-                                    {
-                                        drawDis2On();
-
-                                        if (substationCurrent.Breakers[1].State == DiscreteState.ON)
-                                            DrawBreaker2On();
-
-                                        if (SubstationCurrent.Breakers.Count > 2)
-                                        {
-                                            if (SubstationCurrent.Disconectors[1].State == DiscreteState.ON)
-                                            {
-                                                if (SubstationCurrent.Breakers[1].State == DiscreteState.ON)
-                                                    DrawBreaker4On();
-
-                                                if (SubstationCurrent.Breakers[2].State == DiscreteState.ON)
-                                                    DrawBreaker5On();
-                                            }
-                                        }
-                                    }
-                                }
+                                SetFirstBreakerOn();
                             }
                             else
                             {
-                                SubstationCurrent.Breakers[0].State = DiscreteState.OFF;
-                                BreakerImage = "Assets/breaker-off.png";
-                                drawBreakerOff();
-
-                                if (SubstationCurrent.Breakers.Count > 2)
-                                {
-                                    DrawBreaker4Off();
-                                    DrawBreaker5Off();
-                                }
+                                SetFirstBreakerOff();
                             }
                             break;
                         }
@@ -857,18 +901,11 @@ namespace UserInterface.ViewModel
                         {
                             if (SubstationCurrent.Breakers[1].State == DiscreteState.OFF)
                             {
-                                SubstationCurrent.Breakers[1].State = DiscreteState.ON;
-                                BreakerPumpOneImage = "Assets/breaker-on.png";
-                                if (substationCurrent.Disconectors[0].State == DiscreteState.ON &&
-                                    substationCurrent.Breakers[0].State == DiscreteState.ON &&
-                                    substationCurrent.Disconectors[1].State == DiscreteState.ON)
-                                    DrawBreaker2On();
+                                SetSecondBreakerOn();
                             }
                             else
                             {
-                                SubstationCurrent.Breakers[1].State = DiscreteState.OFF;
-                                BreakerPumpOneImage = "Assets/breaker-off.png";
-                                DrawBreaker2Off();
+                                SetSecondBreakerOff();
                             }
                             break;
                         }
@@ -876,19 +913,11 @@ namespace UserInterface.ViewModel
                         {
                             if (SubstationCurrent.Breakers[1].State == DiscreteState.OFF)
                             {
-                                SubstationCurrent.Breakers[1].State = DiscreteState.ON;
-                                Breaker_PM1Image = "Assets/breaker-on.png";
-
-                                if (substationCurrent.Disconectors[0].State == DiscreteState.ON &&
-                                    substationCurrent.Breakers[0].State == DiscreteState.ON &&
-                                    substationCurrent.Disconectors[1].State == DiscreteState.ON)
-                                    DrawBreaker4On();
+                                SetFourthBreakerOn();
                             }
                             else
                             {
-                                SubstationCurrent.Breakers[1].State = DiscreteState.OFF;
-                                Breaker_PM1Image = "Assets/breaker-off.png";
-                                DrawBreaker4Off();
+                                SetFourthBreakerOff();
                             }
                             break;
                         }
@@ -896,19 +925,11 @@ namespace UserInterface.ViewModel
                         {
                             if (SubstationCurrent.Breakers[2].State == DiscreteState.OFF)
                             {
-                                SubstationCurrent.Breakers[2].State = DiscreteState.ON;
-                                Breaker_PM2Image = "Assets/breaker-on.png";
-
-                                if (substationCurrent.Disconectors[0].State == DiscreteState.ON &&
-                                    substationCurrent.Breakers[0].State == DiscreteState.ON &&
-                                    substationCurrent.Disconectors[1].State == DiscreteState.ON)
-                                    DrawBreaker5On();
+                                SetFifthBreakerOn();
                             }
                             else
                             {
-                                SubstationCurrent.Breakers[2].State = DiscreteState.OFF;
-                                Breaker_PM2Image = "Assets/breaker-off.png";
-                                DrawBreaker5Off();
+                                SetFifthBreakerOff();
                             }
                             break;
                         }
@@ -917,6 +938,102 @@ namespace UserInterface.ViewModel
 
                 }
             }
+        }
+
+        public void SetFirstBreakerOn()
+        {
+            SubstationCurrent.Breakers[0].State = DiscreteState.ON;
+            BreakerImage = "Assets/breaker-on.png";
+            if (substationCurrent.Disconectors[0].State == DiscreteState.ON)
+            {
+                drawBreakerOn();
+
+                if (substationCurrent.Disconectors[1].State == DiscreteState.ON)
+                {
+                    drawDis2On();
+
+                    if (substationCurrent.Breakers[1].State == DiscreteState.ON)
+                        DrawBreaker2On();
+
+                    if (SubstationCurrent.Breakers.Count > 2)
+                    {
+                        if (SubstationCurrent.Disconectors[1].State == DiscreteState.ON)
+                        {
+                            if (SubstationCurrent.Breakers[1].State == DiscreteState.ON)
+                                DrawBreaker4On();
+
+                            if (SubstationCurrent.Breakers[2].State == DiscreteState.ON)
+                                DrawBreaker5On();
+                        }
+                    }
+                }
+            }
+        }
+
+        public void SetFirstBreakerOff()
+        {
+            SubstationCurrent.Breakers[0].State = DiscreteState.OFF;
+            BreakerImage = "Assets/breaker-off.png";
+            drawBreakerOff();
+
+            if (SubstationCurrent.Breakers.Count > 2)
+            {
+                DrawBreaker4Off();
+                DrawBreaker5Off();
+            }
+        }
+
+        public void SetSecondBreakerOn()
+        {
+            SubstationCurrent.Breakers[1].State = DiscreteState.ON;
+            BreakerPumpOneImage = "Assets/breaker-on.png";
+            if (substationCurrent.Disconectors[0].State == DiscreteState.ON &&
+                substationCurrent.Breakers[0].State == DiscreteState.ON &&
+                substationCurrent.Disconectors[1].State == DiscreteState.ON)
+                DrawBreaker2On();
+        }
+
+        public void SetSecondBreakerOff()
+        {
+            SubstationCurrent.Breakers[1].State = DiscreteState.OFF;
+            BreakerPumpOneImage = "Assets/breaker-off.png";
+            DrawBreaker2Off();
+        }
+
+        public void SetFourthBreakerOn()
+        {
+            SubstationCurrent.Breakers[1].State = DiscreteState.ON;
+            Breaker_PM1Image = "Assets/breaker-on.png";
+
+            if (substationCurrent.Disconectors[0].State == DiscreteState.ON &&
+                substationCurrent.Breakers[0].State == DiscreteState.ON &&
+                substationCurrent.Disconectors[1].State == DiscreteState.ON)
+                DrawBreaker4On();
+        }
+
+        public void SetFourthBreakerOff()
+        {
+            SubstationCurrent.Breakers[1].State = DiscreteState.OFF;
+            Breaker_PM1Image = "Assets/breaker-off.png";
+            DrawBreaker4Off();
+        }
+
+        public void SetFifthBreakerOn()
+        {
+            SubstationCurrent.Breakers[2].State = DiscreteState.ON;
+            Breaker_PM2Image = "Assets/breaker-on.png";
+
+            if (substationCurrent.Disconectors[0].State == DiscreteState.ON &&
+                substationCurrent.Breakers[0].State == DiscreteState.ON &&
+                substationCurrent.Disconectors[1].State == DiscreteState.ON)
+                DrawBreaker5On();
+        }
+
+        public void SetFifthBreakerOff()
+        {
+            SubstationCurrent.Breakers[2].State = DiscreteState.OFF;
+            Breaker_PM2Image = "Assets/breaker-off.png";
+            DrawBreaker5Off();
         }
 
         public void TapChangerOperation()

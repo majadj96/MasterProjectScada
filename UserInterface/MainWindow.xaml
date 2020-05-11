@@ -229,12 +229,12 @@
             <ContentControl Content="{Binding CurrentMeshViewModel}"/>
             <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,880,287" HorizontalAlignment="Right" Width="231" Height="27" VerticalAlignment="Bottom">Mesh Eletricity</Label>
             <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,920,588" HorizontalAlignment="Right" Width="237" Height="27" VerticalAlignment="Bottom">Mesh Power</Label>
-            <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,432,584" HorizontalAlignment="Right" Width="141" Height="27" VerticalAlignment="Bottom">Fluid Level</Label>
-            <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,408,314" HorizontalAlignment="Right" Width="176" Height="27" VerticalAlignment="Bottom">Tap Changer Position</Label>
-            <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,85,586" HorizontalAlignment="Right" Width="233" Height="27" VerticalAlignment="Bottom">Water Presure</Label>
+            <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,84.6,403.6" HorizontalAlignment="Right" Width="141" Height="27" VerticalAlignment="Bottom">Fluid Level</Label>
+            <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,67.6,198.6" HorizontalAlignment="Right" Width="176" Height="27" VerticalAlignment="Bottom">Tap Changer Position</Label>
+            <Label HorizontalContentAlignment="Center" FontSize="14" FontFamily="Consolas" Margin="0,0,54.6,587.6" HorizontalAlignment="Right" Width="233" Height="27" VerticalAlignment="Bottom">Water Presure</Label>
         </Grid>
 
-        <Canvas Background="#FF474747" Margin="10,152,20,35" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
+        <!--<Canvas Background="#FF474747" Margin="10,152,20,35" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2"/>-->
 
         <Label Content="{Binding PubSub}" Margin="10,111,10,0" Grid.Row="1" VerticalAlignment="Top" Height="10" Grid.ColumnSpan="2"/>
         <StatusBar Margin="10,11,10,0" Grid.Row="3" Grid.ColumnSpan="2">
@@ -251,26 +251,31 @@
             </StatusBarItem>
         </StatusBar>
 
-        <Button  Content="Summary Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="585,29,0,0" VerticalAlignment="Top" Width="145" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#258565" Foreground="White" BorderBrush="#FFC5C5C5" Grid.Column="1"/>
+        <Button  Content="Telemetry Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="585,29,0,0" VerticalAlignment="Top" Width="145" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#258565" Foreground="White" BorderBrush="#FFC5C5C5" Grid.Column="1"/>
         <Button  Content="Alarm Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Alarm" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="770,29,0,0" VerticalAlignment="Top" Width="116" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#FFFF6D6D" Foreground="White" BorderBrush="#FFC5C5C5" Grid.Column="1"/>
         <Button  Content="Event Table" HorizontalAlignment="Left" Command="{Binding ButtonTablesCommand}" CommandParameter="Event" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="41" Margin="924,29,0,0" VerticalAlignment="Top" Width="118" Grid.RowSpan="2" FontFamily="Consolas" FontSize="16" Background="#326492" Foreground="White" BorderBrush="#FFC5C5C5" Grid.Column="1"/>
         <Label Content="Select Substation" HorizontalAlignment="Left" Margin="20,10,0,0" HorizontalContentAlignment="Center" VerticalAlignment="Top" Height="38" Width="292" RenderTransformOrigin="0.5,0.5" Foreground="#FFF5D856" FontFamily="Consolas" FontSize="18" Grid.ColumnSpan="2"/>
 
-        <lvc:Gauge Grid.Row="1" Grid.Column="1" Margin="728,158,413,280"
-                   Uses360Mode="True"
-                   From="0" To="100" Value="{Binding GaugeValue}"
-                   HighFontSize="20" Foreground="White"
-                   InnerRadius="0" GaugeBackground="#7F549EE9"/>
-
-        <lvc:AngularGauge Grid.Row="1" Value="{Binding AnguarValue}" FromValue="-7" ToValue="7" 
-                          LabelsStep="1" TicksStep="1" Wedge="300"
-                          TicksForeground="White" Foreground="White" 
-                          FontWeight="Bold" FontSize="10"
-                          SectionsInnerRadius="0.5" Margin="726,434,415,8" Grid.Column="1">
-            <lvc:AngularGauge.Sections>
-                <lvc:AngularSection FromValue="-7" ToValue="7" Fill="#FFFF8C4A"/>
-            </lvc:AngularGauge.Sections>
-        </lvc:AngularGauge>
+        <Label Content="Transformer Current" FontFamily="Consolas" Foreground="Yellow" FontSize="14" Margin="618.4,353.8,501.6,166.8" Grid.Column="1" Grid.Row="1"></Label>
+        <lvc:Gauge Grid.Row="1" From="0" To="100" Value="{Binding TransformerCurrent}" Margin="622.4,382.8,541.6,69.8" Grid.Column="1">
+            <lvc:Gauge.GaugeActiveFill>
+                <LinearGradientBrush>
+                    <GradientStop Color="#FFFAFDD2" Offset="0.0" />
+                    <GradientStop Color="#FFF4FF00" Offset="0.496" />
+                    <GradientStop Color="Yellow" Offset="1.0" />
+                </LinearGradientBrush>
+            </lvc:Gauge.GaugeActiveFill>
+        </lvc:Gauge>
+        <Label Content="Transformer Voltage" FontFamily="Consolas" Foreground="#FF7272FF" FontSize="14" Margin="798.4,353.8,333.6,166.8" Grid.Column="1" Grid.Row="1"></Label>
+        <lvc:Gauge Grid.Row="1" From="0" To="10000" Value="{Binding TransformerVoltage}" Margin="806.4,388.8,353.6,69.8" Grid.Column="1">
+            <lvc:Gauge.GaugeActiveFill>
+                <LinearGradientBrush>
+                    <GradientStop Color="#FF93CDFD" Offset="0.0" />
+                    <GradientStop Color="#FF0028FF" Offset="0.496" />
+                    <GradientStop Color="Blue" Offset="1.0" />
+                </LinearGradientBrush>
+            </lvc:Gauge.GaugeActiveFill>
+        </lvc:Gauge>
 
         <lvc:Gauge Grid.Row="1"
                    From="0" To="1000" Value="{Binding GaugeClasic}" Margin="974,139,63,280" Grid.Column="1">
@@ -282,6 +287,23 @@
                 </LinearGradientBrush>
             </lvc:Gauge.GaugeActiveFill>
         </lvc:Gauge>
+
+        <lvc:Gauge Grid.Row="1" Grid.Column="1" Margin="1043.4,334.8,97.6,102.8"
+                   Uses360Mode="True"
+                   From="0" To="100" Value="{Binding GaugeValue}"
+                   HighFontSize="20" Foreground="White"
+                   InnerRadius="0" GaugeBackground="#7F549EE9"/>
+
+        <lvc:AngularGauge Grid.Row="2" Value="{Binding AnguarValue}" FromValue="-7" ToValue="7" 
+                          LabelsStep="1" TicksStep="1" Wedge="300"
+                          TicksForeground="White" Foreground="White" 
+                          FontWeight="Bold" FontSize="10"
+                          SectionsInnerRadius="0.5" Margin="1043.4,0.2,97.6,76.8" Grid.Column="1">
+            <lvc:AngularGauge.Sections>
+                <lvc:AngularSection FromValue="-7" ToValue="7" Fill="#FFFF8C4A"/>
+            </lvc:AngularGauge.Sections>
+        </lvc:AngularGauge>
+
         <lvc:Gauge Grid.Row="1"
             From="0" To="1000" Value="{Binding GaugeClasic}" Margin="131,447,906,162" Grid.Column="1" Grid.RowSpan="2">
             <lvc:Gauge.GaugeActiveFill>

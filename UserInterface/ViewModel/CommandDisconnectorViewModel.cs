@@ -7,6 +7,7 @@ using UserInterface.Command;
 using UserInterface.Converters;
 using UserInterface.Model;
 using UserInterface.ProxyPool;
+using System.Windows;
 
 namespace UserInterface.ViewModel
 {
@@ -55,6 +56,18 @@ namespace UserInterface.ViewModel
 
                 Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.UI, GiD = long.Parse(DisconectorCurrent.GID), Message = "Commanding disconnector.", PointName = DisconectorCurrent.Name };
                 ProxyServices.AlarmEventServiceProxy.AddEvent(e);
+
+                foreach (Window item in Application.Current.Windows)
+                {
+                    if (item.DataContext != null)
+                    {
+                        if (item.DataContext.ToString() == "UserInterface.CommandingWindowViewModel")
+                        {
+                            item.Close();
+                            break;
+                        }
+                    }
+                }
             }
         }
     }

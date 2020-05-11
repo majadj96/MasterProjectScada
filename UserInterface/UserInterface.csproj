@@ -114,6 +114,7 @@
     <Compile Include="ViewModel\AnalyticsViewModel.cs" />
     <Compile Include="ViewModel\CommandBreakerViewModel.cs" />
     <Compile Include="ViewModel\CommandDisconnectorViewModel.cs" />
+    <Compile Include="ViewModel\CommandPowerTransformerViewModel.cs" />
     <Compile Include="ViewModel\EventTableViewModel.cs" />
     <Compile Include="ViewModel\MeshViewModel.cs" />
     <Compile Include="ViewModel\SignalListItemViewModel.cs" />
@@ -129,6 +130,9 @@
     </Compile>
     <Compile Include="View\CommandDisconnectorView.xaml.cs">
       <DependentUpon>CommandDisconnectorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CommandPowerTransformerView.xaml.cs">
+      <DependentUpon>CommandPowerTransformerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\EventTableView.xaml.cs">
       <DependentUpon>EventTableView.xaml</DependentUpon>
@@ -176,6 +180,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\CommandDisconnectorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CommandPowerTransformerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

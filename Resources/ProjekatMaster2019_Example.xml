@@ -336,6 +336,28 @@
 		<cim:IdentifiedObject.mRID>PTCurrent</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>PTCurrent</ftn:IdentifiedObject.name>
 	</cim:Analog>
+	<cim:Analog rdf:ID="Analog_10">
+		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.normalValue>0</cim:Analog.normalValue>
+		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
+		<cim:Measurement.measurementType>Voltage</cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#PTR_2"/>
+		<cim:IdentifiedObject.description>Power transformer voltage</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>PTVoltage</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>PTVoltage</ftn:IdentifiedObject.name>
+	</cim:Analog>
+	<cim:Analog rdf:ID="Analog_11">
+		<cim:Analog.maxValue>100</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.normalValue>0</cim:Analog.normalValue>
+		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
+		<cim:Measurement.measurementType>Current</cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#PTR_2"/>
+		<cim:IdentifiedObject.description>Power transformer current</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>PTCurrent</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>PTCurrent</ftn:IdentifiedObject.name>
+	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_8">
 		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
 		<cim:Analog.minValue>0</cim:Analog.minValue>

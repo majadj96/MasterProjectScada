@@ -60,6 +60,8 @@ namespace UserInterface
         public string gaugeClasic { get; set; }
         public string searchTerm { get; set; }
         public string searchTypeSelected { get; set; }
+        private string transformerCurrent;
+        private string transformerVoltage;
 
         private bool BlinkOnFlag = false, FlagToStartBlinking = false;
         private bool meshVisible = true;
@@ -253,6 +255,17 @@ namespace UserInterface
                 OnPropertyChanged("PubSub");
             }
         }
+        public string TransformerCurrent
+        {
+            get { return transformerCurrent; }
+            set { transformerCurrent = value; OnPropertyChanged("TransformerCurrent"); }
+        }
+        public string TransformerVoltage
+        {
+            get { return transformerVoltage; }
+            set { transformerVoltage = value; OnPropertyChanged("TransformerVoltage"); }
+        }
+
 
         public SolidColorBrush ButtonAlarmBrush
         {
@@ -308,7 +321,13 @@ namespace UserInterface
             AlarmButtonTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
             AlarmButtonTimer.Start();
 
-            Messenger.Default.Register<NotificationMessage>(this, (message) => { PopulateModel(message.Target, message.Notification); });
+            Messenger.Default.Register<NotificationMessage>(this, (message) =>
+            {
+                if ((string)message.Sender == "commandTransformer")
+                    CommandTransformerCurrentVoltage(message.Target, message.Notification);
+                else
+                    PopulateModel(message.Target, message.Notification);
+            });
         }
 
         private void changeGrid(string a)
@@ -404,16 +423,66 @@ namespace UserInterface
             tablesWindow.Show();
         }
 
+        public void FillSubstationItems()
+        {
+            int i = 0;
+            foreach (var v in Substations.Values)
+            {
+                foreach (var vv in v.Disconectors)
+                {
+                    foreach (var c in SubstationItems)
+                    {
+                        if (c.GID == vv.GID)
+                        {
+                            c.Value = vv.State.ToString();
+                            c.Time = vv.Time;
+                            i++;
+                        }
+                    }
+                }
+                foreach (var vv in v.Breakers)
+                {
+                    foreach (var c in SubstationItems)
+                    {
+                        if (c.GID == vv.GID)
+                        {
+                            c.Value = vv.State.ToString();
+                            c.Time = vv.Time;
+                            i++;
+                        }
+                    }
+                }
+                if (SubstationItems[i].GID == v.TapChanger.GID)
+                {
+                    SubstationItems[i].Value = v.TapChanger.NormalStep.ToString();
+                    SubstationItems[i].Time = v.TapChanger.Time;
+                    i++;
+                }
+                foreach (var vv in v.AsynchronousMachines)
+                {
+                    if (SubstationItems[i].GID == vv.GID)
+                    {
+                        SubstationItems[i].Value = ConverterState.ConvertToDiscreteState(vv.State).ToString();
+                        SubstationItems[i].Time = vv.Time;
+                        i++;
+                    }
+                }
+                if (SubstationItems[i].GID == v.Transformator.GID)
+                {
+                    SubstationItems[i].Value = ConverterState.ConvertToDiscreteState(v.Transformator.State).ToString();
+                    SubstationItems[i].Time = v.Transformator.Time;
+                    //SubstationItems[i].Value = v.Transformator.Current.ToString();
+
+                    i++;
+                }
+            }
+        }
+
         public void setUpInitState()
         {
             connectedStatusBar = "Dissconnected"; //SCADA konekcija
             timeStampStatusBar = DateTime.Now.ToLongDateString();  //SCADA konekcija
         }
-
-        //comboSubstations lista u comboBoxu
-        //SelectedSubstation izabrani u comboBoxu
-        //substationItems lista
-        //substationItem oznacen u listi 
 
         public void SetCurrentSubstation()
         {
@@ -423,6 +492,9 @@ namespace UserInterface
                     SubstationCurrent = SelectedSubstation;
                 else
                     SubstationCurrent = Substations.Values.First();
+
+                TransformerCurrent = SubstationCurrent.Transformator.Current.ToString();
+                TransformerVoltage = SubstationCurrent.Transformator.Voltage.ToString();
 
                 Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = long.Parse(substationCurrent.Gid), Message = "Substation selected.", PointName = SubstationCurrent.Name };
                 ProxyServices.AlarmEventServiceProxy.AddEvent(e);
@@ -437,8 +509,11 @@ namespace UserInterface
                 SubstationItems = toUIModelList(nMSModel.ResourceDescs);
                 setModel(nMSModel.ResourceDescs);
                 SetCurrentSubstation();
+                FillSubstationItems();
                 if (SubstationCurrent != null)
+                {
                     meshViewModel.UpdateSubstationModel(SubstationCurrent);
+                }
 
                 Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
                     Message = "Model arrived and loaded from NMS.", PointName = "" };
@@ -462,6 +537,15 @@ namespace UserInterface
                         ChangesFromScadaCommand(sub, measure);
                     }
                 }
+
+                foreach(Substation s in Substations.Values)
+                {
+                    if(s.Gid == SubstationCurrent.Gid)
+                    {
+                        meshViewModel.UpdateSubstationModel(SubstationCurrent);
+                    }
+                }
+                FillSubstationItems();
 
                 Event e = new Event() {  EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
                     Message = "Acquisition arrived from SCADA.", PointName = "" };
@@ -488,6 +572,7 @@ namespace UserInterface
                     {
                         br.NewState = ConverterState.ConvertToDiscreteState(newValue.Value);
                         br.State = br.NewState;
+                        br.Time = newValue.Time.ToLongDateString();
                         if (sub.Breakers.Count > 2 && i != 1)
                             i += 2;
                         meshViewModel.ChangeStatesOfElements("Breaker" + i.ToString(), br);
@@ -504,6 +589,7 @@ namespace UserInterface
                     {
                         dis.NewState = ConverterState.ConvertToDiscreteState(newValue.Value);
                         dis.State = dis.NewState;
+                        dis.Time = newValue.Time.ToLongDateString();
                         meshViewModel.ChangeStatesOfElements("Disconector" + i.ToString(), dis);
                     }
                 }
@@ -515,9 +601,22 @@ namespace UserInterface
                 {
                     if (am.SignalGid == newValue.Gid)
                     {
+                        am.Time = newValue.Time.ToLongDateString();
                         CommandToAM(newValue.Value);
                     }
                 }
+            }
+            if(sub.Transformator.AnalogCurrentGID == newValue.Gid)
+            {
+                sub.Transformator.Time = newValue.Time.ToLongDateString();
+                sub.Transformator.Current = (float)newValue.Value;
+                TransformerCurrent = newValue.Value.ToString();
+            }
+            if (sub.Transformator.AnalogVoltageGID == newValue.Gid)
+            {
+                sub.Transformator.Time = newValue.Time.ToLongDateString();
+                sub.Transformator.Voltage = (float)newValue.Value;
+                TransformerVoltage = newValue.Value.ToString();
             }
         }
 
@@ -526,7 +625,17 @@ namespace UserInterface
             GaugeClasic = value.ToString();
         }
 
-
+        public void CommandTransformerCurrentVoltage(object trasfomer, string type)
+        {
+            if(type.Contains("Current"))
+            {
+                TransformerCurrent = ((Transformator)trasfomer).Current.ToString();
+            }
+            if (type.Contains("Voltage"))
+            {
+                TransformerVoltage = ((Transformator)trasfomer).Voltage.ToString();
+            }
+        }
 
         public void populateEquipment(IEquipment equipment, List<Property> properties)
         {
@@ -641,7 +750,8 @@ namespace UserInterface
                 Property description = sub.Properties.Where(x => x.Id == ModelCode.IDOBJ_DESC).FirstOrDefault();
                 Property gid = sub.Properties.Where(x => x.Id == ModelCode.IDOBJ_GID).FirstOrDefault();
                 Substation substation = new Substation(name.GetValue().ToString(), description.GetValue().ToString(), gid.GetValue().ToString());
-                substations.Add((long)gid.GetValue(), substation);
+                if(!substations.ContainsKey((long)gid.GetValue()))
+                    substations.Add((long)gid.GetValue(), substation);
             }
             SubstationsList = new ObservableCollection<Substation>(substations.Values);
             // setRadioButtons();
@@ -686,6 +796,8 @@ namespace UserInterface
                     case (short)DMSType.DISCRETE:
                         foreach(var v in resource.Properties.Where(x => x.Id == ModelCode.MEASUREMENT_PSR))
                         {
+                            float value = (resource.Properties.Where(x => x.Id == ModelCode.DISCRETE_NORMALVALUE).First()).PropertyValue.FloatValue;
+
                             long gid = v.PropertyValue.LongValue;
                             ResourceDescription res = resources.Where(x => x.Id == gid).ToList<ResourceDescription>()[0];
                             if ((ModelCodeHelper.ExtractTypeFromGlobalId(res.Id) == (short)DMSType.BREAKER))
@@ -697,6 +809,8 @@ namespace UserInterface
                                         if (b.GID == gid.ToString())
                                         {
                                             b.DiscreteGID = resource.Id;
+                                            b.State = ConverterState.ConvertToDiscreteState(value);
+                                            b.NewState = ConverterState.ConvertToDiscreteState(value);
                                             break;
                                         }
                                     }
@@ -711,6 +825,8 @@ namespace UserInterface
                                         if (d.GID == gid.ToString())
                                         {
                                             d.DiscreteGID = resource.Id;
+                                            d.State = ConverterState.ConvertToDiscreteState(value);
+                                            d.NewState = ConverterState.ConvertToDiscreteState(value);
                                             break;
                                         }
                                     }
@@ -720,12 +836,16 @@ namespace UserInterface
                         break;
 
                     case (short)DMSType.ANALOG:
-                        foreach(var analog in resource.Properties.Where(x=>x.Id == ModelCode.MEASUREMENT_PSR))
+                        foreach (var analog in resource.Properties.Where(x=>x.Id == ModelCode.MEASUREMENT_PSR))
                         {
+                            float value = (resource.Properties.Where(x => x.Id == ModelCode.ANALOG_NORMALVALUE).First()).PropertyValue.FloatValue;
+                            double maxValue = (resource.Properties.Where(x => x.Id == ModelCode.ANALOG_MAXVALUE).First()).PropertyValue.FloatValue;
+                            double minValue = (resource.Properties.Where(x => x.Id == ModelCode.ANALOG_MINVALUE).First()).PropertyValue.FloatValue;
+
                             long gid = analog.PropertyValue.LongValue;
                             
                             ResourceDescription resource1 = resources.Where(x => x.Id == gid).ToList().First();
-
+                            
                             if(ModelCodeHelper.ExtractTypeFromGlobalId(resource1.Id) == (short)DMSType.ASYNCHRONOUSMACHINE)
                             {
                                 foreach(Substation s in Substations.Values)
@@ -737,14 +857,40 @@ namespace UserInterface
                                             if(am.GID == gid.ToString())
                                             {
                                                 am.SignalGid = resource.Id;
+                                                am.State = true;
                                             }
                                         }
                                     }
                                 }
-                                //Substation s = Substations.Values.Where(x => x.AsynchronousMachines.Where(y => y.GID == gid.ToString()).FirstOrDefault().GID == gid.ToString()).First();
-                               // s.AsynchronousMachines.Where(x => x.GID == gid.ToString()).First().SignalGid = resource.Id;
                             }
+                            else if(ModelCodeHelper.ExtractTypeFromGlobalId(resource1.Id) == (short)DMSType.POWERTRANSFORMER)
+                            {
+                                string type = resource.Properties.Where(x => x.Id == ModelCode.IDOBJ_MRID).First().PropertyValue.StringValue;
 
+                                foreach(Substation s in Substations.Values)
+                                {
+                                    if(s.Transformator != null)
+                                    {
+                                        if(s.Transformator.GID == gid.ToString())
+                                        {
+                                            if (type.Contains("Voltage"))
+                                            {
+                                                s.Transformator.AnalogVoltageGID = resource.Id;
+                                                s.Transformator.Current = value;
+                                                s.Transformator.MaxCurrent = 10000;
+                                                s.Transformator.MinCurrent = minValue;
+                                            }
+                                            else if (type.Contains("Current"))
+                                            {
+                                                s.Transformator.AnalogCurrentGID = resource.Id;
+                                                s.Transformator.Voltage = value;
+                                                s.Transformator.MaxVoltage = maxValue;
+                                                s.Transformator.MinVoltage = minValue;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                         break;
                 }
@@ -756,12 +902,12 @@ namespace UserInterface
         public ObservableCollection<UIModel> toUIModelList(List<ResourceDescription> resources)
         {
             ObservableCollection<UIModel> response = new ObservableCollection<UIModel>();
-            int disconectors = 1;
 
             foreach (ResourceDescription resource in resources.Where(x => (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.DISCONNECTOR) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.BREAKER) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.RATIOTAPCHANGER) ||
-                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ASYNCHRONOUSMACHINE)))
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ASYNCHRONOUSMACHINE) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.POWERTRANSFORMER)))
             {
                 UIModel model = new UIModel();
                 
@@ -770,23 +916,6 @@ namespace UserInterface
                     switch (property.Id)
                     {
                         case Common.ModelCode.IDOBJ_GID:
-                            if (ModelCodeHelper.ExtractTypeFromGlobalId(resource.Id) == (short)DMSType.DISCONNECTOR)
-                            {
-                                if (disconectors == 1)
-                                {
-                                    //Disc1Id = property.GetValue().ToString();
-                                    disconectors++;
-                                }
-                                else if (disconectors == 2)
-                                {
-                                    //Disc2Id = property.GetValue().ToString();
-                                    disconectors = 0;
-                                }
-                            }
-                            else if (ModelCodeHelper.ExtractTypeFromGlobalId(resource.Id) == (short)DMSType.BREAKER)
-                            {
-                                //BreakerId = property.GetValue().ToString();
-                            }
                             model.GID = property.GetValue().ToString();
                             break;
                         case Common.ModelCode.IDOBJ_DESC:
