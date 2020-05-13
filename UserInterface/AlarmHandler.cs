@@ -20,8 +20,8 @@ namespace UserInterface
                     Alarms.Add(alarmDesc.Alarm);
                     break;
                 case AlarmOperation.UPDATE:
-                    Alarm alarm = Alarms.Find(a => a.ID == alarmDesc.Alarm.ID);
-                    alarm = alarmDesc.Alarm;
+                    int i = Alarms.FindIndex(a => a.ID == alarmDesc.Alarm.ID);
+                    Alarms[i] = alarmDesc.Alarm;
                     break;
                 case AlarmOperation.DELETE:
                     int index = Alarms.FindIndex(a => a.ID == alarmDesc.Alarm.ID);

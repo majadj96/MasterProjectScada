@@ -8,5 +8,6 @@ namespace AlarmEventService.Repositories
 {
     public class EventCache
     {
+
     }
 }

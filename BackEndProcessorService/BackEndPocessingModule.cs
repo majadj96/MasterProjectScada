@@ -72,7 +72,6 @@ namespace BackEndProcessorService
             this.ProcessingPipeline.Add(new EGUConverterModule());
             this.ProcessingPipeline.Add(new AlarmingModule(this.alarmEventServiceProxy));
 
-            this.CommandingPipeline.Add(new AlarmingModule(this.alarmEventServiceProxy));
             this.CommandingPipeline.Add(new RawConverterModule());
         }
     }

@@ -11,14 +11,6 @@ namespace RepositoryCore.Interfaces
     [ServiceContract]
     public interface IAlarmEventRepository
     {
-        [OperationContract]
-        void AddAlarm(Alarm alarm);
-
-        [OperationContract]
-        Alarm AcknowledgeAlarm(Alarm alarm);
-
-        [OperationContract]
-        List<Alarm> GetAllAlarms();
 
         [OperationContract]
         void AddEvent(Event newEvent);

@@ -8,6 +8,7 @@ namespace AlarmEventService
     public class AlarmEventServiceHost : IDisposable
     {
         private List<ServiceHost> hosts = null;
+        private AlarmEventServices aes = new AlarmEventServices();
 
         public AlarmEventServiceHost()
         {
@@ -17,17 +18,10 @@ namespace AlarmEventService
         private void InitializeHosts()
         {
             hosts = new List<ServiceHost>();
-            hosts.Add(new ServiceHost(typeof(AlarmEventServices)));
-            AlarmEventServices.publisherProxy = CreatePublisherProxy();
+            hosts.Add(new ServiceHost(aes));
         }
 
-        private IPub CreatePublisherProxy()
-        {
-            string endpointAddressString = "net.tcp://localhost:7001/Pub";
-            EndpointAddress endpointAddress = new EndpointAddress(endpointAddressString);
-            NetTcpBinding netTcpBinding = new NetTcpBinding();
-            return ChannelFactory<IPub>.CreateChannel(netTcpBinding, endpointAddress);
-        }
+
 
         public void Start()
         {

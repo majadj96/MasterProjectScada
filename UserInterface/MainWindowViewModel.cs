@@ -295,6 +295,7 @@ namespace UserInterface
             AnalyticsOpenCommand = new MyICommand<string>(openAnalytics);
 
             alarmHandler = new AlarmHandler();
+            alarmHandler.Alarms = ProxyServices.AlarmEventServiceProxy.GetAllAlarms();
 
             Sub subNMS = new Sub();
             subNMS.OnSubscribe("nms");

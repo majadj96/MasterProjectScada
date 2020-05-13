@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Common.AlarmEvent
 {
-    public enum AlarmOperation { INSERT, UPDATE, DELETE }
+    public enum AlarmOperation { INSERT, UPDATE, DELETE, ACKNOWLEDGE }
     [DataContract]
     public class AlarmDescription
     {

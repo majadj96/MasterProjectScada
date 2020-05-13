@@ -8,9 +8,15 @@ namespace Common
 {
     public enum AlarmEventType : short
     {
-        SCADA = 0x01,
-        CE = 0x02,
-        UI = 0x03
+        SCADA = 0x0,
+        CE = 0x01,
+        UI = 0x02
+    }
+
+    public enum AlarmCategory : short
+    {
+        ChangeOfState = 0x0,
+        HihghLowAlarms = 0x01
     }
 
     public enum SignalDirection : short
