@@ -16,8 +16,6 @@ namespace AlarmEventServiceInfrastructure
         {
             Database.SetInitializer<AlarmEventContext>(alarmEventDB);
         }
-
-        public DbSet<Alarm> Alarms { get; set; }
         public DbSet<Event> Events { get; set; }
     }
 }

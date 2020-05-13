@@ -78,6 +78,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AlarmHandler.cs" />
     <Compile Include="AnalyticsWindow.xaml.cs">
       <DependentUpon>AnalyticsWindow.xaml</DependentUpon>
     </Compile>

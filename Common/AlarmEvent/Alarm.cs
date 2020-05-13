@@ -18,6 +18,8 @@ namespace Common.AlarmEvent
         private DateTime? alarmAcknowledged;
         private bool alarmAck = false;
         private string username;
+        private AlarmCategory category;
+        private bool abnormalIndicator;
         #endregion
 
         #region Props
@@ -74,6 +76,20 @@ namespace Common.AlarmEvent
         {
             get { return alarmAck; }
             set { alarmAck = value; }
+        }
+
+        [DataMember]
+        public AlarmCategory Category
+        {
+            get { return category; }
+            set { category = value; }
+        }
+
+        [DataMember]
+        public bool AbnormalIndicator
+        {
+            get { return abnormalIndicator; }
+            set { abnormalIndicator = value; }
         }
         #endregion
 

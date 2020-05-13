@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PubSubCommon;
+using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 
@@ -7,6 +8,7 @@ namespace AlarmEventService
     public class AlarmEventServiceHost : IDisposable
     {
         private List<ServiceHost> hosts = null;
+        private AlarmEventServices aes = new AlarmEventServices();
 
         public AlarmEventServiceHost()
         {
@@ -16,8 +18,10 @@ namespace AlarmEventService
         private void InitializeHosts()
         {
             hosts = new List<ServiceHost>();
-            hosts.Add(new ServiceHost(typeof(AlarmEventServices)));
+            hosts.Add(new ServiceHost(aes));
         }
+
+
 
         public void Start()
         {

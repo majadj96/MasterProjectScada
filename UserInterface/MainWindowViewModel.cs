@@ -36,6 +36,7 @@ namespace UserInterface
         private ObservableCollection<Substation> substationsList = new ObservableCollection<Substation>();
         private ObservableCollection<string> searchType = new ObservableCollection<string> { "Name", "GID" };
         List<Substation> searchedSubs = new List<Substation>();
+        private AlarmHandler alarmHandler;
 
         private DispatcherTimer AlarmButtonTimer = new DispatcherTimer();
         //private Thread threadAlarms;
@@ -306,9 +307,13 @@ namespace UserInterface
             DissmisSubsCommand = new MyICommand<string>(dissmisSubstation);
             AnalyticsOpenCommand = new MyICommand<string>(openAnalytics);
 
+            alarmHandler = new AlarmHandler();
+            alarmHandler.Alarms = ProxyServices.AlarmEventServiceProxy.GetAllAlarms();
+
             Sub subNMS = new Sub();
             subNMS.OnSubscribe("nms");
             subNMS.OnSubscribe("scada");
+            subNMS.OnSubscribe("alarm");
             setUpInitState();
 
             substations = new Dictionary<long, Substation>();
@@ -414,7 +419,7 @@ namespace UserInterface
         {
             TablesWindow tablesWindow = new TablesWindow();
 
-            TablesWindowViewModel tablesWindowViewModel = new TablesWindowViewModel(SubstationItems);
+            TablesWindowViewModel tablesWindowViewModel = new TablesWindowViewModel(SubstationItems, this.alarmHandler);
 
             tablesWindow.DataContext = tablesWindowViewModel;
 
@@ -496,11 +501,8 @@ namespace UserInterface
                 else
                     SubstationCurrent = Substations.Values.First();
 
-                TransformerCurrent = SubstationCurrent.Transformator.Current.ToString();
-                TransformerVoltage = SubstationCurrent.Transformator.Voltage.ToString();
-
-                Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = long.Parse(substationCurrent.Gid), Message = "Substation selected.", PointName = SubstationCurrent.Name };
-                ProxyServices.AlarmEventServiceProxy.AddEvent(e);
+                //Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = long.Parse(substationCurrent.Gid), Message = "Substation selected.", PointName = SubstationCurrent.Name };
+                //ProxyServices.AlarmEventServiceProxy.AddEvent(e);
             }
         }
 
@@ -518,9 +520,9 @@ namespace UserInterface
                     meshViewModel.UpdateSubstationModel(SubstationCurrent);
                 }
 
-                Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
-                    Message = "Model arrived and loaded from NMS.", PointName = "" };
-                ProxyServices.AlarmEventServiceProxy.AddEvent(e);
+                //Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
+                //    Message = "Model arrived and loaded from NMS.", PointName = "" };
+                //ProxyServices.AlarmEventServiceProxy.AddEvent(e);
             }
             else if (topic == "scada")
             {
@@ -550,11 +552,16 @@ namespace UserInterface
                 }
                 FillSubstationItems();
 
-                Event e = new Event() {  EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
-                    Message = "Acquisition arrived from SCADA.", PointName = "" };
-                ProxyServices.AlarmEventServiceProxy.AddEvent(e);
+                //Event e = new Event() {  EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
+                //    Message = "Acquisition arrived from SCADA.", PointName = "" };
+                //ProxyServices.AlarmEventServiceProxy.AddEvent(e);
 
                 Console.WriteLine(resources);
+            }
+            else if(topic == "alarm")
+            {
+                AlarmDescription alarmDesc = (AlarmDescription)resources;
+                alarmHandler.ProcessAlarm(alarmDesc);
             }
 
             MeshVisible = false;

@@ -28,8 +28,8 @@ namespace NetworkModelService
         }
         private void CreateProxy()
         {
-            string endpointAddressInString = "net.tcp://localhost:7001/Pub";
-            EndpointAddress endpointAddress = new EndpointAddress(endpointAddressInString);
+            string endpointAddressString = "net.tcp://localhost:7001/Pub";
+            EndpointAddress endpointAddress = new EndpointAddress(endpointAddressString);
             NetTcpBinding netTcpBinding = new NetTcpBinding();
             _proxy = ChannelFactory<IPub>.CreateChannel(netTcpBinding, endpointAddress);
         }
