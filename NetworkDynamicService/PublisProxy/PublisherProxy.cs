@@ -1,5 +1,6 @@
 ﻿using Common.AlarmEvent;
 using PubSubCommon;
+using ScadaCommon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,5 +31,10 @@ namespace NetworkDynamicService
         {
             Channel.PublishMeasure(measurement, topicName);
         }
-    }
+
+		public void PublishConnectionState(ConnectionState connectionState, string topicName)
+		{
+			Channel.PublishConnectionState(connectionState, topicName);
+		}
+	}
 }

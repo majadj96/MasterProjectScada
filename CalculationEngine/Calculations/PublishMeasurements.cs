@@ -1,5 +1,6 @@
 ﻿using Common.AlarmEvent;
 using PubSubCommon;
+using ScadaCommon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,5 +50,10 @@ namespace CalculationEngine
         {
             throw new ActionNotSupportedException("CE does not have implementation for this method.");
         }
-    }
+
+		public void PublishConnectionState(ConnectionState connectionState, string topicName)
+		{
+			throw new ActionNotSupportedException("CE does not have implementation for this method.");
+		}
+	}
 }

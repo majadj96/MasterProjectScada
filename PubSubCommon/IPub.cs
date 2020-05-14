@@ -1,4 +1,5 @@
 ﻿using Common.AlarmEvent;
+using ScadaCommon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,5 +18,7 @@ namespace PubSubCommon
         void PublishMeasure(ScadaUIExchangeModel []measurement, string topicName);
         [OperationContract(IsOneWay = true)]
         void PublishAlarm(AlarmDescription alarmDesc, string topicName);
+		[OperationContract(IsOneWay = true)]
+		void PublishConnectionState(ConnectionState connectionState, string topicName);
     }
 }

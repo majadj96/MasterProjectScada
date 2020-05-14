@@ -3,6 +3,7 @@ using Common.AlarmEvent;
 using Common.GDA;
 using GalaSoft.MvvmLight.Messaging;
 using PubSubCommon;
+using ScadaCommon;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -563,6 +564,10 @@ namespace UserInterface
                 AlarmDescription alarmDesc = (AlarmDescription)resources;
                 alarmHandler.ProcessAlarm(alarmDesc);
             }
+			else if(topic == "connectionState")
+			{
+				ConnectedStatusBar = ((ConnectionState)resources).ToString();
+			}
 
             MeshVisible = false;
 

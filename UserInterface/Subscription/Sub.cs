@@ -1,6 +1,7 @@
 ﻿using Common.AlarmEvent;
 using GalaSoft.MvvmLight.Messaging;
 using PubSubCommon;
+using ScadaCommon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,5 +79,11 @@ namespace UserInterface.Subscription
                 Messenger.Default.Send<NotificationMessage>(n);
             }
         }
-    }
+
+		public void PublishConnectionState(ConnectionState connectionState, string topicName)
+		{
+			NotificationMessage n = new NotificationMessage(null, connectionState, topicName);
+			Messenger.Default.Send<NotificationMessage>(n);
+		}
+	}
 }

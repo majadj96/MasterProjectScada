@@ -1,5 +1,6 @@
 ﻿using Common.AlarmEvent;
 using PubSubCommon;
+using ScadaCommon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,7 +78,28 @@ namespace PubSub.PubSubEngine
                 }
             }
         }
-        #endregion
-    }
+
+		public void PublishConnectionState(ConnectionState connectionState, string topicName)
+		{
+			List<IPub> subscribers = Filter.GetSubscribers(topicName);
+			if (subscribers == null) return;
+
+			Type type = typeof(IPub);
+			MethodInfo publishMethodInfo = type.GetMethod("Publish");
+
+			foreach (IPub subscriber in subscribers)
+			{
+				try
+				{
+					publishMethodInfo.Invoke(subscriber, new object[] { connectionState, topicName });
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine("Could not invoke Publish method. {0}", ex.Message);
+				}
+			}
+		}
+		#endregion
+	}
 }
 
