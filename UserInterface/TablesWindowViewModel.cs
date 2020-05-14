@@ -34,11 +34,11 @@ namespace UserInterface
         }
         #endregion
 
-        public TablesWindowViewModel(ObservableCollection<UIModel> model, AlarmHandler alarmHandler)
+        public TablesWindowViewModel(ObservableCollection<UIModel> model, AlarmHandler alarmHandler, CustomEventHandler customEventHandler)
         {
             tableViewModel = new TableViewModel(model);
             alarmViewModel = new AlarmViewModel(alarmHandler);
-            eventViewModel = new EventTableViewModel();
+            eventViewModel = new EventTableViewModel(customEventHandler);
 
             CurrentTableViewModel = tableViewModel;
         }

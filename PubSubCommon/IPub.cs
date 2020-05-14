@@ -18,7 +18,9 @@ namespace PubSubCommon
         void PublishMeasure(ScadaUIExchangeModel []measurement, string topicName);
         [OperationContract(IsOneWay = true)]
         void PublishAlarm(AlarmDescription alarmDesc, string topicName);
-		[OperationContract(IsOneWay = true)]
+        [OperationContract(IsOneWay = true)]
+        void PublishEvent(Event eventObject, string topicName);
+        [OperationContract(IsOneWay = true)]
 		void PublishConnectionState(ConnectionState connectionState, string topicName);
     }
 }

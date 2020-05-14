@@ -85,5 +85,15 @@ namespace UserInterface.Subscription
 			NotificationMessage n = new NotificationMessage(null, connectionState, topicName);
 			Messenger.Default.Send<NotificationMessage>(n);
 		}
-	}
+
+        public void PublishEvent(Event eventObject, string topicName)
+        {
+            if (eventObject != null)
+            {
+                _eventCount += 1;
+                NotificationMessage n = new NotificationMessage(null, eventObject, topicName);
+                Messenger.Default.Send<NotificationMessage>(n);
+            }
+        }
+    }
 }

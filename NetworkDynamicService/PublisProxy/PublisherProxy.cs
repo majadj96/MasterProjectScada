@@ -36,5 +36,10 @@ namespace NetworkDynamicService
 		{
 			Channel.PublishConnectionState(connectionState, topicName);
 		}
-	}
+
+        public void PublishEvent(Event eventObject, string topicName)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

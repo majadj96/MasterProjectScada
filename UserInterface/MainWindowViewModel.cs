@@ -38,6 +38,7 @@ namespace UserInterface
         private ObservableCollection<string> searchType = new ObservableCollection<string> { "Name", "GID" };
         List<Substation> searchedSubs = new List<Substation>();
         private AlarmHandler alarmHandler;
+        private CustomEventHandler customEventHandler;
 
         private DispatcherTimer AlarmButtonTimer = new DispatcherTimer();
         //private Thread threadAlarms;
@@ -308,13 +309,20 @@ namespace UserInterface
             DissmisSubsCommand = new MyICommand<string>(dissmisSubstation);
             AnalyticsOpenCommand = new MyICommand<string>(openAnalytics);
 
-            alarmHandler = new AlarmHandler();
-            alarmHandler.Alarms = ProxyServices.AlarmEventServiceProxy.GetAllAlarms();
+            alarmHandler = new AlarmHandler
+            {
+                Alarms = ProxyServices.AlarmEventServiceProxy.GetAllAlarms()
+            };
+
+            List<Event> events = ProxyServices.AlarmEventServiceProxy.GetAllEvents();
+            customEventHandler = new CustomEventHandler(events);
 
             Sub subNMS = new Sub();
             subNMS.OnSubscribe("nms");
             subNMS.OnSubscribe("scada");
             subNMS.OnSubscribe("alarm");
+            subNMS.OnSubscribe("connectionState");
+            subNMS.OnSubscribe("event");
             setUpInitState();
 
             substations = new Dictionary<long, Substation>();
@@ -420,7 +428,7 @@ namespace UserInterface
         {
             TablesWindow tablesWindow = new TablesWindow();
 
-            TablesWindowViewModel tablesWindowViewModel = new TablesWindowViewModel(SubstationItems, this.alarmHandler);
+            TablesWindowViewModel tablesWindowViewModel = new TablesWindowViewModel(SubstationItems, this.alarmHandler, this.customEventHandler);
 
             tablesWindow.DataContext = tablesWindowViewModel;
 
@@ -568,6 +576,10 @@ namespace UserInterface
 			{
 				ConnectedStatusBar = ((ConnectionState)resources).ToString();
 			}
+            else if (topic == "event")
+            {
+                customEventHandler.ProcessEvent((Event)resources);
+            }
 
             MeshVisible = false;
 

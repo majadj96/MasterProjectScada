@@ -85,7 +85,7 @@ namespace PubSub.PubSubEngine
 			if (subscribers == null) return;
 
 			Type type = typeof(IPub);
-			MethodInfo publishMethodInfo = type.GetMethod("Publish");
+			MethodInfo publishMethodInfo = type.GetMethod("PublishConnectionState");
 
 			foreach (IPub subscriber in subscribers)
 			{
@@ -95,11 +95,32 @@ namespace PubSub.PubSubEngine
 				}
 				catch (Exception ex)
 				{
-					Console.WriteLine("Could not invoke Publish method. {0}", ex.Message);
+					Console.WriteLine("Could not invoke PublishConnectionState method. {0}", ex.Message);
 				}
 			}
 		}
-		#endregion
-	}
+
+        public void PublishEvent(Event eventObject, string topicName)
+        {
+            List<IPub> subscribers = Filter.GetSubscribers(topicName);
+            if (subscribers == null) return;
+
+            Type type = typeof(IPub);
+            MethodInfo publishMethodInfo = type.GetMethod("PublishEvent");
+
+            foreach (IPub subscriber in subscribers)
+            {
+                try
+                {
+                    publishMethodInfo.Invoke(subscriber, new object[] { eventObject, topicName });
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Could not invoke PublishEvent method. {0}", ex.Message);
+                }
+            }
+        }
+        #endregion
+    }
 }
 

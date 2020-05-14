@@ -51,6 +51,7 @@ namespace AlarmEventService
         public void AddEvent(Event newEvent)
         {
             alarmEventDB.AddEvent(newEvent);
+            publisherProxy.PublishEvent(newEvent, "event");
         }
 
         public List<Alarm> GetAllAlarms()

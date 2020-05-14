@@ -55,5 +55,10 @@ namespace CalculationEngine
 		{
 			throw new ActionNotSupportedException("CE does not have implementation for this method.");
 		}
-	}
+
+        public void PublishEvent(Event eventObject, string topicName)
+        {
+            throw new ActionNotSupportedException("CE does not have implementation for this method.");
+        }
+    }
 }
