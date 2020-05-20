@@ -586,24 +586,35 @@ namespace UserInterface.ViewModel
                 SubstationCurrent.Breakers[0].NewState = ((Breaker)target).NewState;
                 SubstationCurrent.Breakers[0].State = SubstationCurrent.Breakers[0].NewState;
                 BreakerOperation("1");
+
+                Messenger.Default.Send(new NotificationMessage(element, target, "UpdateTelemetry"));
             }
             else if (string.Compare(element, "Breaker2") == 0)
             {
                 SubstationCurrent.Breakers[1].NewState = ((Breaker)target).NewState;
                 SubstationCurrent.Breakers[1].State = SubstationCurrent.Breakers[1].NewState;
                 BreakerOperation("2");
+
+                Messenger.Default.Send(new NotificationMessage(element, target, "UpdateTelemetry"));
+
             }
             else if (string.Compare(element, "Breaker3") == 0)
             {
                 SubstationCurrent.Breakers[0].NewState = ((Breaker)target).NewState;
                 SubstationCurrent.Breakers[0].State = SubstationCurrent.Breakers[0].NewState;
                 BreakerOperation("1");
+
+                Messenger.Default.Send(new NotificationMessage(element, target, "UpdateTelemetry"));
+
             }
             else if (string.Compare(element, "Breaker4") == 0)
             {
                 SubstationCurrent.Breakers[1].NewState = ((Breaker)target).NewState;
                 SubstationCurrent.Breakers[1].State = SubstationCurrent.Breakers[1].NewState;
                 BreakerOperation("4");
+
+                Messenger.Default.Send(new NotificationMessage(element, target, "UpdateTelemetry"));
+
             }
             else if (string.Compare(element, "Breaker5") == 0)
             {
@@ -612,6 +623,9 @@ namespace UserInterface.ViewModel
                     SubstationCurrent.Breakers[2].NewState = ((Breaker)target).NewState;
                     SubstationCurrent.Breakers[2].State = SubstationCurrent.Breakers[2].NewState;
                     BreakerOperation("5");
+
+                    Messenger.Default.Send(new NotificationMessage(element, target, "UpdateTelemetry"));
+
                 }
             }
             else if (string.Compare(element, "Disconector1") == 0)
@@ -619,12 +633,18 @@ namespace UserInterface.ViewModel
                 SubstationCurrent.Disconectors[0].NewState = ((Disconector)target).NewState;
                 SubstationCurrent.Disconectors[0].State = SubstationCurrent.Disconectors[0].NewState;
                 DisconectorOperation("1");
+
+                Messenger.Default.Send(new NotificationMessage(element, target, "UpdateTelemetry"));
+
             }
             else if (string.Compare(element, "Disconector2") == 0)
             {
                 SubstationCurrent.Disconectors[1].NewState = ((Disconector)target).NewState;
                 SubstationCurrent.Disconectors[1].State = SubstationCurrent.Disconectors[1].NewState;
                 DisconectorOperation("2");
+
+                Messenger.Default.Send(new NotificationMessage(element, target, "UpdateTelemetry"));
+
             }
             //TODO add elements
         }
