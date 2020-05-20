@@ -94,9 +94,9 @@
 	</cim:TransformerWinding>
 	<cim:RatioTapChanger rdf:ID="RatioTC_1">
 		<cim:RatioTapChanger.TransformerWinding rdf:resource="#TRWinding_1"/>
-		<cim:TapChanger.highStep>15</cim:TapChanger.highStep>
-		<cim:TapChanger.lowStep>5</cim:TapChanger.lowStep>
-		<cim:TapChanger.normalStep>10</cim:TapChanger.normalStep>
+		<cim:TapChanger.highStep>7</cim:TapChanger.highStep>
+		<cim:TapChanger.lowStep>-7</cim:TapChanger.lowStep>
+		<cim:TapChanger.normalStep>0</cim:TapChanger.normalStep>
 		<cim:IdentifiedObject.description>RatioTapChanger</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>RatioTC_1</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>RatioTC_1</ftn:IdentifiedObject.name>
@@ -123,9 +123,9 @@
 	</cim:TransformerWinding>
 	<cim:RatioTapChanger rdf:ID="RatioTC_2">
 		<cim:RatioTapChanger.TransformerWinding rdf:resource="#TRWinding_3"/>
-		<cim:TapChanger.highStep>15</cim:TapChanger.highStep>
-		<cim:TapChanger.lowStep>5</cim:TapChanger.lowStep>
-		<cim:TapChanger.normalStep>10</cim:TapChanger.normalStep>
+		<cim:TapChanger.highStep>7</cim:TapChanger.highStep>
+		<cim:TapChanger.lowStep>-7</cim:TapChanger.lowStep>
+		<cim:TapChanger.normalStep>0</cim:TapChanger.normalStep>
 		<cim:IdentifiedObject.description>RatioTapChanger</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>RatioTC_2</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>RatioTC_2</ftn:IdentifiedObject.name>
@@ -348,26 +348,26 @@
 		<ftn:IdentifiedObject.name>PTCurrent</ftn:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_8">
-		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.maxValue>7</cim:Analog.maxValue>
+		<cim:Analog.minValue>-7</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
-		<cim:Measurement.measurementType>Voltage</cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource="#Breaker_1"/>
-		<cim:IdentifiedObject.description>Breaker voltage</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>BreakerVoltage</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>BreakerVoltage</ftn:IdentifiedObject.name>
+		<cim:Measurement.measurementType>TapChanger</cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#PTR_1"/>
+		<cim:IdentifiedObject.description>Power transformer TapChanger</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>PTTapChanger</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>PTTapChanger</ftn:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_9">
-		<cim:Analog.maxValue>100</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.maxValue>7</cim:Analog.maxValue>
+		<cim:Analog.minValue>-7</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
-		<cim:Measurement.measurementType>Current</cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource="#Breaker_1"/>
-		<cim:IdentifiedObject.description>Breaker current</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>BreakerCurrent</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>BreakerCurrent</ftn:IdentifiedObject.name>
+		<cim:Measurement.measurementType>TapChanger</cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#PTR_2"/>
+		<cim:IdentifiedObject.description>Power transformer TapChanger</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>PTTapChanger</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>PTTapChanger</ftn:IdentifiedObject.name>
 	</cim:Analog>
 	
 	<cim:Discrete rdf:ID="Breaker_1SwitchStatus">

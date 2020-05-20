@@ -111,7 +111,7 @@
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Width="140" Height="30" Visibility="{Binding AlarmAck, Converter={StaticResource BooleanToVisibilityConverter}}" Command="{Binding DataContext.AcknowledgeAlarmCommand, ElementName=AlarmItems}" CommandParameter="{Binding Path=ID}" Content="Acknowledge alarm" Style="{StaticResource MyButtonStyle}" FontFamily="Consolas" Background="#fc035a" Foreground="#FF252525"></Button>
+                            <Button Width="140" Height="30" Visibility="{Binding AlarmAck, Converter={StaticResource BooleanToVisibilityConverter}}" Command="{Binding DataContext.AcknowledgeAlarmCommand, ElementName=AlarmItems}" CommandParameter="{Binding Path=ID}" Content="Acknowledge alarm" Style="{StaticResource MyButtonStyle}" FontFamily="Consolas" Background="Crimson" Foreground="#FF252525"></Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

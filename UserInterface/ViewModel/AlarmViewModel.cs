@@ -19,6 +19,7 @@ namespace UserInterface.ViewModel
 
         private ObservableCollection<Alarm> alarmItems = new ObservableCollection<Alarm>();
         private ObservableCollection<string> visible = new ObservableCollection<string>();
+        private List<Substation> substations = new List<Substation>();
 
         public ObservableCollection<Alarm> AlarmItems
         {
@@ -31,19 +32,74 @@ namespace UserInterface.ViewModel
             set { visible = value; OnPropertyChanged("Visible"); }
         }
 
-        public AlarmViewModel(AlarmHandler alarmHandler)
+        public AlarmViewModel(AlarmHandler alarmHandler, List<Substation> substations)
         {
             this.alarmHandler = alarmHandler;
-            //AlarmItems = new ObservableCollection<Alarm>(ProxyServices.AlarmEventServiceProxy.GetAllAlarms());
+            this.substations = substations;
+
             AlarmItems = new ObservableCollection<Alarm>(this.alarmHandler.Alarms);
             this.alarmHandler.UpdateAlarmsCollection += AlarmHandler_UpdateAlarmsCollection;
 
             AcknowledgeAlarmCommand = new MyICommand<int>(AcknowledgeAlarm);
+
+            FillList();
+        }
+
+        private void FillList ()
+        {
+            foreach(Substation s in substations)
+            {
+                foreach (Disconector vv in s.Disconectors)
+                {
+                    foreach (Alarm a in AlarmItems)
+                    {
+                        if(a.GiD == vv.DiscreteGID)
+                        {
+                            a.PointName = vv.Name;
+                        }
+                    }
+                }
+                foreach (Breaker vv in s.Breakers)
+                {
+                    foreach (Alarm a in AlarmItems)
+                    {
+                        if (a.GiD == vv.DiscreteGID)
+                        {
+                            a.PointName = vv.Name;
+                        }
+                    }
+                }
+                /*foreach (Alarm a in AlarmItems)
+                {
+                    if (a.GiD == s.TapChanger.Gid)
+                    {
+                        a.PointName = s.TapChanger.Name;
+                    }
+                }*/
+                /*foreach (AsynchronousMachine vv in s.AsynchronousMachines)
+                {
+                    foreach (Alarm a in AlarmItems)
+                    {
+                        if (a.GiD == vv.gid)
+                        {
+                            a.PointName = vv.Name;
+                        }
+                    }
+                }*/
+                foreach (Alarm a in AlarmItems)
+                {
+                    if (a.GiD == s.Transformator.AnalogTapChangerGID)
+                    {
+                        a.PointName = s.Transformator.Name;
+                    }
+                }
+            }
         }
 
         private void AlarmHandler_UpdateAlarmsCollection(object sender, EventArgs e)
         {
             AlarmItems = new ObservableCollection<Alarm>(this.alarmHandler.Alarms);
+            FillList();
         }
 
         public void AcknowledgeAlarm(int id)

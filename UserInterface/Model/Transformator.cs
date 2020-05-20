@@ -22,6 +22,10 @@ namespace UserInterface.Model
         private double voltage;
         private double minVoltage;
         private double maxVoltage;
+        private long analogTapChangerGID;
+        private long tapChangerValue;
+        private double minValueTapChanger;
+        private double maxValueTapChanger;
 
         public Transformator(string mRID, string gID, string name, string description, string time)
         {
@@ -81,6 +85,26 @@ namespace UserInterface.Model
         {
             get { return maxVoltage; }
             set { maxVoltage = value; }
+        }
+        public long AnalogTapChangerGID
+        {
+            get { return analogTapChangerGID; }
+            set { analogTapChangerGID = value; }
+        }
+        public long TapChangerValue
+        {
+            get { return tapChangerValue; }
+            set { tapChangerValue = value; }
+        }
+        public double MinValueTapChanger
+        {
+            get { return minValueTapChanger; }
+            set { minValueTapChanger = value; }
+        }
+        public double MaxValueTapChanger
+        {
+            get { return maxValueTapChanger; }
+            set { maxValueTapChanger = value; }
         }
     }
 }
