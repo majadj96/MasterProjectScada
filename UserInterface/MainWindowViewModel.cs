@@ -3,6 +3,7 @@ using Common.AlarmEvent;
 using Common.GDA;
 using GalaSoft.MvvmLight.Messaging;
 using PubSubCommon;
+using RepositoryCore.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,9 +17,12 @@ using UserInterface.BaseError;
 using UserInterface.Command;
 using UserInterface.Converters;
 using UserInterface.Model;
+using UserInterface.Networking;
 using UserInterface.ProxyPool;
 using UserInterface.Subscription;
 using UserInterface.ViewModel;
+using System.ServiceModel;
+
 
 namespace UserInterface
 {
@@ -40,6 +44,10 @@ namespace UserInterface
 
         private DispatcherTimer AlarmButtonTimer = new DispatcherTimer();
         //private Thread threadAlarms;
+
+        private MeasurementProxy measurementRepository;
+
+
 
         #region Variables
         private BindableBase currentMeshViewModel;
@@ -310,6 +318,9 @@ namespace UserInterface
             alarmHandler = new AlarmHandler();
             alarmHandler.Alarms = ProxyServices.AlarmEventServiceProxy.GetAllAlarms();
 
+            measurementRepository = new MeasurementProxy("MeasurementEndPoint");
+            measurementRepository.Open();
+
             Sub subNMS = new Sub();
             subNMS.OnSubscribe("nms");
             subNMS.OnSubscribe("scada");
@@ -362,7 +373,7 @@ namespace UserInterface
         {
             AnalyticsWindow analyticsWindow = new AnalyticsWindow();
 
-            AnalyticsWindowViewModel analyticsWindowViewModel = new AnalyticsWindowViewModel(substations);
+            AnalyticsWindowViewModel analyticsWindowViewModel = new AnalyticsWindowViewModel(substations, measurementRepository);
 
             analyticsWindow.DataContext = analyticsWindowViewModel;
 

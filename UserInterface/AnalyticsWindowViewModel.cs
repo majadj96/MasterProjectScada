@@ -1,6 +1,8 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using LiveCharts;
 using LiveCharts.Wpf;
+using RepositoryCore;
+using RepositoryCore.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,6 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using UserInterface.BaseError;
 using UserInterface.Model;
+using UserInterface.Networking;
 using UserInterface.ViewModel;
 
 namespace UserInterface
@@ -23,7 +26,6 @@ namespace UserInterface
         public Dictionary<long, Substation> substations;
         public Dictionary<long, StepLineSeries> signalsOn;
         public SeriesCollection SeriesCollection { get; set; }
-        private List<SignalListItemViewModel> _allSignalList;
 
         private ObservableCollection<RadioButton> radioButtons = new ObservableCollection<RadioButton>();
 
@@ -47,17 +49,34 @@ namespace UserInterface
             set => SetProperty(ref signalList, value);
         }
 
+        private DateTime? startDate = null;
+        public DateTime? StartDate
+        {
+            get { return startDate; }
+            set { startDate = value; OnPropertyChanged("StartDate"); }
+        }
+
+        private DateTime? endDate = null;
+        public DateTime? EndDate
+        {
+            get { return endDate; }
+            set { endDate = value; OnPropertyChanged("EndDate"); }
+        }
+
+
         private Messenger messenger = new Messenger();
         private Substation selectedSubstation;
-        
 
-        public AnalyticsWindowViewModel(Dictionary<long, Substation> substations)
+        private IMeasurementRepository measurementProxy;
+
+        public AnalyticsWindowViewModel(Dictionary<long, Substation> substations, IMeasurementRepository measurementProxy)
         {
             this.substations = substations;
             SeriesCollection = new SeriesCollection();
             signalsOn = new Dictionary<long, StepLineSeries>();
             Setup();
             Set();
+            this.measurementProxy = measurementProxy;
         }
 
         public void Setup()
@@ -69,34 +88,29 @@ namespace UserInterface
         {
             Messenger.Default.Register<SignalListItemViewModel>(this, (message) => { HandleSignalChecked(message); });
         }
-        int rand = 0;
 
         private void HandleSignalChecked(SignalListItemViewModel signal)
         {
-            Console.WriteLine($"Selected signal {signal.Name}/{signal.Gid}/{signal.IsChecked}");
-            StepLineSeries test;
-            if (rand == 0)
-            {
-                test = Mock(signal.Gid.ToString());
-
-            }
-            else if (rand == 1)
-            {
-                test = Mock1(signal.Gid.ToString());
-
-            }
-            else
-            {
-                test = Mock2(signal.Gid.ToString());
-
-
-            }
-            rand++;
 
             if (signal.IsChecked)
             {
-                SeriesCollection.Add(test);
-                signalsOn.Add(signal.Gid, test);
+                Measurement[] measurements;
+                if (StartDate != null && EndDate != null)
+                {
+                    DateTime start = StartDate ?? DateTime.Now;
+                    DateTime end = EndDate ?? DateTime.Now;
+
+                    measurements = measurementProxy.GetAllMeasurementsByTime(start, end, signal.Gid);
+
+                } else
+                {
+                    measurements = measurementProxy.GetAllMeasurementsByGid(signal.Gid);
+                }
+
+               
+                StepLineSeries line = MakeSignal(signal.Gid.ToString(), measurements);
+                SeriesCollection.Add(line);
+                signalsOn.Add(signal.Gid, line);
             }
             else
             {
@@ -105,32 +119,21 @@ namespace UserInterface
             }
         }
 
-        public StepLineSeries Mock(string title)
+        public StepLineSeries MakeSignal(string title, Measurement[] measurements)
         {
-            StepLineSeries test = new StepLineSeries();
-            test.Title = title;
-            test.Stroke = Brushes.Red;
-            test.AlternativeStroke = Brushes.LightPink;
-            test.Values = new ChartValues<int> { 1, 1, 1, 0, 0, 1 };
-            return test;
-        }
-        public StepLineSeries Mock1(string title)
-        {
-            StepLineSeries test = new StepLineSeries();
-            test.Title = title;
-            test.Stroke = Brushes.Yellow;
-            test.AlternativeStroke = Brushes.LightGoldenrodYellow;
-            test.Values = new ChartValues<int> { 0, 0, 1, 1, 1, 0 };
-            return test;
-        }
-        public StepLineSeries Mock2(string title)
-        {
-            StepLineSeries test = new StepLineSeries();
-            test.Title = title;
-            test.Stroke = Brushes.Blue;
-            test.AlternativeStroke = Brushes.LightSkyBlue;
-            test.Values = new ChartValues<int> { 0, 0, 0, 1, 1, 0 };
-            return test;
+            StepLineSeries line = new StepLineSeries();
+            line.Title = title;
+            line.AlternativeStroke = Brushes.White;
+            line.Stroke = Brushes.Red;
+
+            ChartValues<int> chartValues = new ChartValues<int>();
+            
+            foreach(var measure in measurements)
+                chartValues.Add(measure.Value);
+            
+
+            line.Values = chartValues;
+            return line;
         }
 
 
@@ -143,7 +146,7 @@ namespace UserInterface
             {
                 tempList.Add(new SignalListItemViewModel()
                 {
-                    Name = dis.Name,
+                    Name = dis.DiscreteGID.ToString(),
                     Gid = dis.DiscreteGID
                 });
             }
@@ -152,7 +155,7 @@ namespace UserInterface
             {
                 tempList.Add(new SignalListItemViewModel()
                 {
-                    Name = breaker.Name,
+                    Name = breaker.DiscreteGID.ToString(),
                     Gid = breaker.DiscreteGID
                 });
             }
@@ -161,7 +164,7 @@ namespace UserInterface
             {
                 tempList.Add(new SignalListItemViewModel()
                 {
-                    Name = asyncMach.Name,
+                    Name = asyncMach.SignalGid.ToString(),
                     Gid = asyncMach.SignalGid
                 });
             }

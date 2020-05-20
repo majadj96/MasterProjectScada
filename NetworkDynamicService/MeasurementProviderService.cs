@@ -35,7 +35,7 @@ namespace NetworkDynamicService
 
         public Measurement[] GetAllMeasurementsByTime(DateTime startTime, DateTime endTime, long gid)
         {
-            return this.GetAllMeasurementsByTime(startTime, endTime, gid);
+            return this.measurementRepository.GetAllMeasurementsByTime(startTime, endTime, gid);
         }
     }
 }
