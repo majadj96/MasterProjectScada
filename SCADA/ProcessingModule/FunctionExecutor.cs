@@ -658,7 +658,7 @@ namespace ProcessingModule
             byte confirmRestartTime = (byte)((message[11] & mask) >> 5);
             if (confirmRestartTime == 1)
             {
-                byte transportHeaderSeq = (byte)(message[10] & 0xf);
+                byte transportHeaderSeq = (byte)(message[10] & 0x3f);
                 byte applicationControl = (byte)(message[11] & 0xf);
 
                 p = new DNP3ApplicationObjectParameters((byte)(0xd0 | applicationControl), (byte)DNP3FunctionCode.CONFIRM, 0, 0, 0x0001, 0, 0, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, (byte)((0xc0 | transportHeaderSeq) + 1));

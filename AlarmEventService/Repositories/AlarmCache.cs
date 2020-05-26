@@ -28,6 +28,8 @@ namespace AlarmEventService.Repositories
         {
             string alarmKey = string.Empty;
             alarmKey = GetAlarmKey(alarm.Category, alarm.GiD);
+            alarm.AlarmKey = alarmKey;
+            alarm.ID = alarmCache.Count + 1;
 
             if (!alarmCache.ContainsKey(alarmKey)) {
                 alarmCache.Add(alarmKey, alarm);
