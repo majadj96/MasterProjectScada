@@ -56,127 +56,130 @@ namespace NetworkDynamicService.Cache
             float maxAnalog = 0;
             float normalAnalog = 0;
 
-            foreach (ResourceDescription item in inputPoints.InsertOperations)
+            if (ndsModelNew.Count == 0)
             {
-                if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(item.Id)) == DMSType.DISCRETE)
-                {                
-                    foreach (Property item2 in item.Properties)
-                    {
-                        switch (item2.Id)
-                        {
-                            case ModelCode.IDOBJ_DESC:
-                                description = item2.ToString();
-                                break;
-                            case ModelCode.IDOBJ_MRID:
-                                mrId = item2.ToString();
-                                break;
-                            case ModelCode.IDOBJ_NAME:
-                                name = item2.ToString();
-                                break;
-                            case ModelCode.MEASUREMENT_DIRECTION:
-                                if((SignalDirection)(long)item2.GetValue() == SignalDirection.Read)
-                                {
-                                    pointType = PointType.BINARY_INPUT;
-                                    adress = digitalInputAdress;
-                                    digitalInputAdress++;
-                                }
-                                else if((SignalDirection)(long)item2.GetValue() == SignalDirection.ReadWrite)
-                                {
-                                    pointType = PointType.BINARY_OUTPUT;
-                                    adress = digitalOutputAdress;
-                                    digitalOutputAdress++;
-                                }
-                                break;
-                            case ModelCode.MEASUREMENT_MEASTYPE:
-                                measurementType = (MeasurementType)(long)item2.GetValue();
-                                break;
-                            case ModelCode.DISCRETE_MINVALUE:
-                                minDiscrete = (int)(long)item2.GetValue();
-                                break;
-                            case ModelCode.DISCRETE_MAXVALUE:
-                                maxDiscrete = (int)(long)item2.GetValue();
-                                break;
-                            case ModelCode.DISCRETE_NORMALVALUE:
-                                normalDiscrete = (int)(long)item2.GetValue();
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    BasePointCacheItem digital = new DigitalPointCacheItem()
-                    {
-                        Gid = item.Id,
-                        Description = description,
-                        MrId = mrId,
-                        Name = name,
-                        Type = pointType,
-                        MeasurementType = measurementType,
-                        MinValue = minDiscrete,
-                        MaxValue = maxDiscrete,
-                        NormalValue = normalDiscrete,
-                        Address = (ushort)adress
-                    };
-                    ndsModelNew.Add(item.Id, digital);
-                }
-                else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(item.Id)) == DMSType.ANALOG)
+                foreach (ResourceDescription item in inputPoints.InsertOperations)
                 {
-                    foreach (Property item2 in item.Properties)
+                    if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(item.Id)) == DMSType.DISCRETE)
                     {
-                        switch (item2.Id)
+                        foreach (Property item2 in item.Properties)
                         {
-                            case ModelCode.IDOBJ_DESC:
-                                description = item2.ToString();
-                                break;
-                            case ModelCode.IDOBJ_MRID:
-                                mrId = item2.ToString();
-                                break;
-                            case ModelCode.IDOBJ_NAME:
-                                name = item2.ToString();
-                                break;
-                            case ModelCode.MEASUREMENT_DIRECTION:
-                                if ((SignalDirection)(long)item2.GetValue() == SignalDirection.Read)
-                                {
-                                    pointType = PointType.ANALOG_INPUT;
-                                    adress = analogInputAdress;
-                                    analogInputAdress++;
-                                }
-                                else if ((SignalDirection)(long)item2.GetValue() == SignalDirection.ReadWrite)
-                                {
-                                    pointType = PointType.ANALOG_OUTPUT;
-                                    adress = analogOutputAdress;
-                                    analogOutputAdress++;
-                                }
-                                break;
-                            case ModelCode.MEASUREMENT_MEASTYPE:
-                                measurementType = (MeasurementType)(long)item2.GetValue();
-                                break;
-                            case ModelCode.ANALOG_MINVALUE:
-                                minAnalog = (float)item2.GetValue();
-                                break;
-                            case ModelCode.ANALOG_MAXVALUE:
-                                maxAnalog = (float)item2.GetValue();
-                                break;
-                            case ModelCode.ANALOG_NORMALVALUE:
-                                normalAnalog = (float)item2.GetValue();
-                                break;
-                            default:
-                                break;
+                            switch (item2.Id)
+                            {
+                                case ModelCode.IDOBJ_DESC:
+                                    description = item2.ToString();
+                                    break;
+                                case ModelCode.IDOBJ_MRID:
+                                    mrId = item2.ToString();
+                                    break;
+                                case ModelCode.IDOBJ_NAME:
+                                    name = item2.ToString();
+                                    break;
+                                case ModelCode.MEASUREMENT_DIRECTION:
+                                    if ((SignalDirection)(long)item2.GetValue() == SignalDirection.Read)
+                                    {
+                                        pointType = PointType.BINARY_INPUT;
+                                        adress = digitalInputAdress;
+                                        digitalInputAdress++;
+                                    }
+                                    else if ((SignalDirection)(long)item2.GetValue() == SignalDirection.ReadWrite)
+                                    {
+                                        pointType = PointType.BINARY_OUTPUT;
+                                        adress = digitalOutputAdress;
+                                        digitalOutputAdress++;
+                                    }
+                                    break;
+                                case ModelCode.MEASUREMENT_MEASTYPE:
+                                    measurementType = (MeasurementType)(long)item2.GetValue();
+                                    break;
+                                case ModelCode.DISCRETE_MINVALUE:
+                                    minDiscrete = (int)(long)item2.GetValue();
+                                    break;
+                                case ModelCode.DISCRETE_MAXVALUE:
+                                    maxDiscrete = (int)(long)item2.GetValue();
+                                    break;
+                                case ModelCode.DISCRETE_NORMALVALUE:
+                                    normalDiscrete = (int)(long)item2.GetValue();
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
+                        BasePointCacheItem digital = new DigitalPointCacheItem()
+                        {
+                            Gid = item.Id,
+                            Description = description,
+                            MrId = mrId,
+                            Name = name,
+                            Type = pointType,
+                            MeasurementType = measurementType,
+                            MinValue = minDiscrete,
+                            MaxValue = maxDiscrete,
+                            NormalValue = normalDiscrete,
+                            Address = (ushort)adress
+                        };
+                        ndsModelNew.Add(item.Id, digital);
                     }
-                    BasePointCacheItem analog = new AnalogPointCacheItem()
+                    else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(item.Id)) == DMSType.ANALOG)
                     {
-                        Gid = item.Id,
-                        Description = description,
-                        MrId = mrId,
-                        Name = name,
-                        Type = pointType,
-                        MeasurementType = measurementType,
-                        MinValue = minAnalog,
-                        MaxValue = maxAnalog,
-                        NormalValue = normalAnalog,
-                        Address = (ushort)adress
-                    };
-                    ndsModelNew.Add(item.Id, analog);
+                        foreach (Property item2 in item.Properties)
+                        {
+                            switch (item2.Id)
+                            {
+                                case ModelCode.IDOBJ_DESC:
+                                    description = item2.ToString();
+                                    break;
+                                case ModelCode.IDOBJ_MRID:
+                                    mrId = item2.ToString();
+                                    break;
+                                case ModelCode.IDOBJ_NAME:
+                                    name = item2.ToString();
+                                    break;
+                                case ModelCode.MEASUREMENT_DIRECTION:
+                                    if ((SignalDirection)(long)item2.GetValue() == SignalDirection.Read)
+                                    {
+                                        pointType = PointType.ANALOG_INPUT;
+                                        adress = analogInputAdress;
+                                        analogInputAdress++;
+                                    }
+                                    else if ((SignalDirection)(long)item2.GetValue() == SignalDirection.ReadWrite)
+                                    {
+                                        pointType = PointType.ANALOG_OUTPUT;
+                                        adress = analogOutputAdress;
+                                        analogOutputAdress++;
+                                    }
+                                    break;
+                                case ModelCode.MEASUREMENT_MEASTYPE:
+                                    measurementType = (MeasurementType)(long)item2.GetValue();
+                                    break;
+                                case ModelCode.ANALOG_MINVALUE:
+                                    minAnalog = (float)item2.GetValue();
+                                    break;
+                                case ModelCode.ANALOG_MAXVALUE:
+                                    maxAnalog = (float)item2.GetValue();
+                                    break;
+                                case ModelCode.ANALOG_NORMALVALUE:
+                                    normalAnalog = (float)item2.GetValue();
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        BasePointCacheItem analog = new AnalogPointCacheItem()
+                        {
+                            Gid = item.Id,
+                            Description = description,
+                            MrId = mrId,
+                            Name = name,
+                            Type = pointType,
+                            MeasurementType = measurementType,
+                            MinValue = minAnalog,
+                            MaxValue = maxAnalog,
+                            NormalValue = normalAnalog,
+                            Address = (ushort)adress
+                        };
+                        ndsModelNew.Add(item.Id, analog);
+                    }
                 }
             }
 
