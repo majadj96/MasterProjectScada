@@ -38,69 +38,35 @@ namespace UserInterface.ViewModel
         {
             switch(type)
             {
-                case "CurrentUp":
+                case "TapChangerUp":
                     {
-                        TranformerCurrent.Current++;
-                        if (TranformerCurrent.Current <= TranformerCurrent.MaxCurrent)
+                        TranformerCurrent.TapChangerValue++;
+                        if (TranformerCurrent.TapChangerValue <= TranformerCurrent.MaxValueTapChanger)
                         {
-                            CommandObject commandObject = new CommandObject() { CommandingTime = DateTime.Now, CommandOwner = "UI", EguValue = (float)TranformerCurrent.Current, SignalGid = TranformerCurrent.AnalogCurrentGID };
+                            CommandObject commandObject = new CommandObject() { CommandingTime = DateTime.Now, CommandOwner = "UI", EguValue = (float)TranformerCurrent.TapChangerValue, SignalGid = TranformerCurrent.AnalogTapChangerGID };
                             var v = ProxyServices.CommandingServiceProxy.WriteAnalogOutput(commandObject);
                             if (v == ScadaCommon.CommandResult.Success)
                             {
-                                Messenger.Default.Send(new NotificationMessage("commandTransformer", TranformerCurrent, "CurrentUp"));
+                                Messenger.Default.Send(new NotificationMessage("commandTransformer", TranformerCurrent, "TapChangerUp"));
 
-                                Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.UI, GiD = long.Parse(TranformerCurrent.GID), Message = "Commanding transformer current up.", PointName = TranformerCurrent.Name };
+                                Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.UI, GiD = long.Parse(TranformerCurrent.GID), Message = "Commanding transformer TapChanger up.", PointName = TranformerCurrent.Name };
                                 ProxyServices.AlarmEventServiceProxy.AddEvent(e);
                             }
                         }
                     }
                     break;
-                case "CurrentDown":
+                case "TapChangerDown":
                     {
-                        TranformerCurrent.Current--;
-                        if (TranformerCurrent.Current >= TranformerCurrent.MinCurrent)
+                        TranformerCurrent.TapChangerValue--;
+                        if (TranformerCurrent.TapChangerValue >= TranformerCurrent.MinValueTapChanger)
                         {
-                            CommandObject commandObject = new CommandObject() { CommandingTime = DateTime.Now, CommandOwner = "UI", EguValue = (float)TranformerCurrent.Current, SignalGid = TranformerCurrent.AnalogCurrentGID };
+                            CommandObject commandObject = new CommandObject() { CommandingTime = DateTime.Now, CommandOwner = "UI", EguValue = (float)TranformerCurrent.TapChangerValue, SignalGid = TranformerCurrent.AnalogTapChangerGID };
                             var v = ProxyServices.CommandingServiceProxy.WriteAnalogOutput(commandObject);
                             if (v == ScadaCommon.CommandResult.Success)
                             {
-                                Messenger.Default.Send(new NotificationMessage("commandTransformer", TranformerCurrent, "CurrentDown"));
+                                Messenger.Default.Send(new NotificationMessage("commandTransformer", TranformerCurrent, "TapChangerDown"));
 
-                                Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.UI, GiD = long.Parse(TranformerCurrent.GID), Message = "Commanding transformer current down.", PointName = TranformerCurrent.Name };
-                                ProxyServices.AlarmEventServiceProxy.AddEvent(e);
-                            }
-                        }
-                    }
-                    break;
-                case "VoltageUp":
-                    {
-                        TranformerCurrent.Voltage = TranformerCurrent.Voltage + 10;
-                        if (TranformerCurrent.Voltage <= 10000)//TranformerCurrent.MaxVoltage
-                        {
-                            CommandObject commandObject = new CommandObject() { CommandingTime = DateTime.Now, CommandOwner = "UI", EguValue = (float)TranformerCurrent.Voltage, SignalGid = TranformerCurrent.AnalogVoltageGID};
-                            var v = ProxyServices.CommandingServiceProxy.WriteAnalogOutput(commandObject);
-                            if (v == ScadaCommon.CommandResult.Success)
-                            {
-                                Messenger.Default.Send(new NotificationMessage("commandTransformer", TranformerCurrent, "VoltageUp"));
-
-                                Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.UI, GiD = long.Parse(TranformerCurrent.GID), Message = "Commanding transformer voltage up.", PointName = TranformerCurrent.Name };
-                                ProxyServices.AlarmEventServiceProxy.AddEvent(e);
-                            }
-                        }
-                    }
-                    break;
-                case "VoltageDown":
-                    {
-                        TranformerCurrent.Voltage = TranformerCurrent.Voltage - 10;
-                        if (TranformerCurrent.Voltage >= TranformerCurrent.MinVoltage)
-                        {
-                            CommandObject commandObject = new CommandObject() { CommandingTime = DateTime.Now, CommandOwner = "UI", EguValue = (float)TranformerCurrent.Voltage, SignalGid = TranformerCurrent.AnalogVoltageGID };
-                            var v = ProxyServices.CommandingServiceProxy.WriteAnalogOutput(commandObject);
-                            if (v == ScadaCommon.CommandResult.Success)
-                            {
-                                Messenger.Default.Send(new NotificationMessage("commandTransformer", TranformerCurrent, "VoltageDown"));
-
-                                Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.UI, GiD = long.Parse(TranformerCurrent.GID), Message = "Commanding transformer voltage down.", PointName = TranformerCurrent.Name };
+                                Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.UI, GiD = long.Parse(TranformerCurrent.GID), Message = "Commanding transformer TapChanger down.", PointName = TranformerCurrent.Name };
                                 ProxyServices.AlarmEventServiceProxy.AddEvent(e);
                             }
                         }

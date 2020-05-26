@@ -65,6 +65,7 @@ namespace UserInterface
         public string searchTypeSelected { get; set; }
         private string transformerCurrent;
         private string transformerVoltage;
+        private string transformerTapChanger;
 
         private bool BlinkOnFlag = false, FlagToStartBlinking = false;
         private bool meshVisible = true;
@@ -268,6 +269,11 @@ namespace UserInterface
             get { return transformerVoltage; }
             set { transformerVoltage = value; OnPropertyChanged("TransformerVoltage"); }
         }
+        public string TransformerTapChanger
+        {
+            get { return transformerTapChanger; }
+            set { transformerTapChanger = value; OnPropertyChanged("TransformerTapChanger"); }
+        }
 
 
         public SolidColorBrush ButtonAlarmBrush
@@ -428,7 +434,7 @@ namespace UserInterface
         {
             TablesWindow tablesWindow = new TablesWindow();
 
-            TablesWindowViewModel tablesWindowViewModel = new TablesWindowViewModel(SubstationItems, this.alarmHandler, this.customEventHandler);
+            TablesWindowViewModel tablesWindowViewModel = new TablesWindowViewModel(SubstationItems, this.alarmHandler, Substations.Values.ToList());
 
             tablesWindow.DataContext = tablesWindowViewModel;
 
@@ -463,9 +469,6 @@ namespace UserInterface
                             c.Value = vv.State.ToString();
                             c.Time = vv.Time;
                             i++;
-
-                            /*if (vv.NewState != vv.State)
-                                vv.State = vv.NewState;*/
                         }
                     }
                 }
@@ -486,10 +489,8 @@ namespace UserInterface
                 }
                 if (SubstationItems[i].GID == v.Transformator.GID)
                 {
-                    SubstationItems[i].Value = ConverterState.ConvertToDiscreteState(v.Transformator.State).ToString();
                     SubstationItems[i].Time = v.Transformator.Time;
-                    //SubstationItems[i].Value = v.Transformator.Current.ToString();
-
+                    SubstationItems[i].Value = v.Transformator.TapChangerValue.ToString();
                     i++;
                 }
             }
@@ -509,6 +510,10 @@ namespace UserInterface
                     SubstationCurrent = SelectedSubstation;
                 else
                     SubstationCurrent = Substations.Values.First();
+
+                TransformerCurrent = SubstationCurrent.Transformator.Current.ToString();
+                TransformerVoltage = SubstationCurrent.Transformator.Voltage.ToString();
+                TransformerTapChanger = SubstationCurrent.Transformator.TapChangerValue.ToString();
 
                 //Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = long.Parse(substationCurrent.Gid), Message = "Substation selected.", PointName = SubstationCurrent.Name };
                 //ProxyServices.AlarmEventServiceProxy.AddEvent(e);
@@ -635,7 +640,7 @@ namespace UserInterface
             }
             if(sub.Transformator.AnalogCurrentGID == newValue.Gid)
             {
-                sub.Transformator.Time = newValue.Time.ToLongDateString();
+                sub.Transformator.Time = newValue.Time.ToString();
                 sub.Transformator.Current = (float)newValue.Value;
                 TransformerCurrent = newValue.Value.ToString();
             }
@@ -645,6 +650,12 @@ namespace UserInterface
                 sub.Transformator.Voltage = (float)newValue.Value;
                 TransformerVoltage = newValue.Value.ToString();
             }
+            if (sub.Transformator.AnalogTapChangerGID == newValue.Gid)
+            {
+                sub.Transformator.Time = newValue.Time.ToLongDateString();
+                sub.Transformator.TapChangerValue = (long)newValue.Value;
+                TransformerTapChanger = newValue.Value.ToString();
+            }
         }
 
         public void CommandToAM(double value)
@@ -652,15 +663,43 @@ namespace UserInterface
             GaugeClasic = value.ToString();
         }
 
-        public void CommandTransformerCurrentVoltage(object trasfomer, string type)
+        public void CommandTransformerCurrentVoltage(object transformer, string type)
         {
-            if(type.Contains("Current"))
+            Transformator t = ((Transformator)transformer);
+
+            if (type.Contains("Current"))
             {
-                TransformerCurrent = ((Transformator)trasfomer).Current.ToString();
+                TransformerCurrent = t.Current.ToString();
             }
             if (type.Contains("Voltage"))
             {
-                TransformerVoltage = ((Transformator)trasfomer).Voltage.ToString();
+                TransformerVoltage = t.Voltage.ToString();
+            }
+            if (type.Contains("TapChanger"))
+            {
+                TransformerTapChanger = t.TapChangerValue.ToString();
+                int i = 0;
+                foreach (Substation s in Substations.Values)
+                {
+                    if (s.Transformator.GID == t.GID)
+                    {
+                        if (s.Breakers.Count == 2)
+                            i = 1;
+                        else
+                            i = 2;
+                        break;
+                    }
+                }
+                if(i == 1)
+                {
+                    SubstationItems.Where(x => x.Description.Contains("TapChanger")).ToList()[0].Value = t.TapChangerValue.ToString();
+                    Messenger.Default.Send(new NotificationMessage("TapChanger", SubstationItems.Where(x => x.Description.Contains("TapChanger")).ToList()[0], "UpdateTelemetry"));
+                }
+                else if (i == 2)
+                {
+                    SubstationItems.Where(x => x.Description.Contains("TapChanger")).ToList()[1].Value = t.TapChangerValue.ToString();
+                    Messenger.Default.Send(new NotificationMessage("TapChanger", SubstationItems.Where(x => x.Description.Contains("TapChanger")).ToList()[1], "UpdateTelemetry"));
+                }
             }
         }
 
@@ -914,6 +953,13 @@ namespace UserInterface
                                                 s.Transformator.MaxVoltage = maxValue;
                                                 s.Transformator.MinVoltage = minValue;
                                             }
+                                            else if (type.Contains("TapChanger"))
+                                            {
+                                                s.Transformator.AnalogTapChangerGID = resource.Id;
+                                                s.Transformator.TapChangerValue = (long)value;
+                                                s.Transformator.MaxValueTapChanger = maxValue;
+                                                s.Transformator.MinValueTapChanger = minValue;
+                                            }
                                         }
                                     }
                                 }
@@ -989,6 +1035,8 @@ namespace UserInterface
                             break;
                     }
                 }
+                model.Time = DateTime.Now.ToString();
+
                 response.Add(model);
             }
             return response;
