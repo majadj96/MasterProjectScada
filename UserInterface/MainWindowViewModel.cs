@@ -434,7 +434,7 @@ namespace UserInterface
         {
             TablesWindow tablesWindow = new TablesWindow();
 
-            TablesWindowViewModel tablesWindowViewModel = new TablesWindowViewModel(SubstationItems, this.alarmHandler, Substations.Values.ToList());
+            TablesWindowViewModel tablesWindowViewModel = new TablesWindowViewModel(SubstationItems, this.alarmHandler, Substations.Values.ToList(), customEventHandler);
 
             tablesWindow.DataContext = tablesWindowViewModel;
 
