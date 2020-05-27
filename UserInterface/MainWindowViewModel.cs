@@ -58,12 +58,17 @@ namespace UserInterface
         public string timeStampStatusBar { get; set; }
         public string gaugeValue { get; set; }
         public string anguarValue { get; set; }
-        public string gaugeClasic { get; set; }
+        public string gaugeClasic1 { get; set; }
+        public string gaugeClasic2 { get; set; }
         public string searchTerm { get; set; }
         public string searchTypeSelected { get; set; }
         private string transformerCurrent;
         private string transformerVoltage;
         private string transformerTapChanger;
+        public string gaugeClasicOpacity;
+        private string gridElectricity;
+        private string gridPower;
+        private string waterPresureWidget;
 
         private bool BlinkOnFlag = false, FlagToStartBlinking = false;
         private bool meshVisible = true;
@@ -71,6 +76,29 @@ namespace UserInterface
         #endregion
 
         #region Props
+        public string GaugeClasicOpacity
+        {
+            get { return gaugeClasicOpacity; }
+            set { gaugeClasicOpacity = value; OnPropertyChanged("GaugeClasicOpacity"); }
+        }
+        public string GridPower
+        {
+            get { return gridPower; }
+            set { gridPower = value; OnPropertyChanged("GridPower"); }
+        }
+
+        public string GridElectricity
+        {
+            get { return gridElectricity; }
+            set { gridElectricity = value; OnPropertyChanged("GridElectricity"); }
+        }
+
+        public string WaterPresureWidget
+        {
+            get { return waterPresureWidget; }
+            set { waterPresureWidget = value; OnPropertyChanged("WaterPresureWidget"); }
+        }
+
         public BindableBase CurrentMeshViewModel
         {
             get { return currentMeshViewModel; }
@@ -173,16 +201,28 @@ namespace UserInterface
                 OnPropertyChanged("SelectedSubstation");
             }
         }
-        public string GaugeClasic
+        public string GaugeClasic1
         {
             get
             {
-                return gaugeClasic;
+                return gaugeClasic1;
             }
             set
             {
-                gaugeClasic = value;
-                OnPropertyChanged("GaugeClasic");
+                gaugeClasic1 = value;
+                OnPropertyChanged("GaugeClasic1");
+            }
+        }
+        public string GaugeClasic2
+        {
+            get
+            {
+                return gaugeClasic2;
+            }
+            set
+            {
+                gaugeClasic2 = value;
+                OnPropertyChanged("GaugeClasic2");
             }
         }
         public string SearchTypeSelected
@@ -339,6 +379,10 @@ namespace UserInterface
                 else
                     PopulateModel(message.Target, message.Notification);
             });
+
+            GridElectricity = "-";
+            GridPower = "-";
+            GaugeClasicOpacity = "100";
         }
 
         private void changeGrid(string a)
@@ -501,11 +545,27 @@ namespace UserInterface
                     SubstationCurrent = SelectedSubstation;
                 else
                     SubstationCurrent = Substations.Values.First();
-
+                
                 TransformerCurrent = SubstationCurrent.Transformator.Current.ToString();
                 TransformerVoltage = SubstationCurrent.Transformator.Voltage.ToString();
                 TransformerTapChanger = SubstationCurrent.Transformator.TapChangerValue.ToString();
 
+                GridPower = substationCurrent.Transformator.Voltage.ToString();
+                
+                if(substationCurrent.AsynchronousMachines[0] != null)
+                {
+                    GaugeClasic1 = SubstationCurrent.AsynchronousMachines[0].CosPhi.ToString();
+                }
+
+                if (substationCurrent.AsynchronousMachines.Count == 2)
+                {
+                    GaugeClasic1 = SubstationCurrent.AsynchronousMachines[1].CosPhi.ToString();
+                    GaugeClasicOpacity = "100";
+                }
+                else
+                {
+                    GaugeClasicOpacity = "0";
+                }
                 //Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = long.Parse(substationCurrent.Gid), Message = "Substation selected.", PointName = SubstationCurrent.Name };
                 //ProxyServices.AlarmEventServiceProxy.AddEvent(e);
             }
@@ -643,7 +703,7 @@ namespace UserInterface
 
         public void CommandToAM(double value)
         {
-            GaugeClasic = value.ToString();
+            GaugeClasic1 = value.ToString();
         }
 
         public void CommandTransformerCurrentVoltage(object transformer, string type)
