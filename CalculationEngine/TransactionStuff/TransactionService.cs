@@ -1,18 +1,15 @@
 ﻿using CalculationEngine.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TransactionManagerContracts;
 
 namespace CalculationEngine
 {
-	public class TransactionService : ITransactionSteps
+    public class TransactionService : ITransactionSteps
 	{
         public static ProcessingData _processingData;
 
-		public bool Prepare()
+        public bool Prepare()
 		{
 			Console.WriteLine("CE Prepare");
 			return true;
@@ -26,14 +23,12 @@ namespace CalculationEngine
 			ConcreteModel.CurrentModel = new Dictionary<long, IdObject>(ConcreteModel.CurrentModel_Copy);
 			ConcreteModel.CurrentModel_Copy.Clear();
 
-            _processingData.UpdateAsyncMachines();
+            //_processingData.UpdateAsyncMachines();
+            _processingData.IsModelChanged = true;
 
-            if(!CalcEngine.aTimer.Enabled)
-            {
-                CalcEngine.aTimer.Enabled = true;
-            }
+            CalcEngine.aTimer.Start();
 
-			return true;
+            return true;
 		}
 
 		public void Rollback()

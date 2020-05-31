@@ -66,7 +66,7 @@ namespace NetworkDynamicService
             //ndSConfigurationProxy.Open();
            // stateUpdateProxy.Open();
             fepCmdProxy.Open();
-            publisherProxy.Open();
+            //publisherProxy.Open();
         }
 
         private void StartHosts()

@@ -11,5 +11,7 @@ namespace CalculationEngine.Model
         public static Dictionary<long, IdObject> CurrentModel = new Dictionary<long, IdObject>();
         public static Dictionary<long, IdObject> CurrentModel_Copy = new Dictionary<long, IdObject>();
         public static Dictionary<long, IdObject> BackupModel = new Dictionary<long, IdObject>();
+
+        public static List<Tank> Tanks = new List<Tank>();
     }
 }

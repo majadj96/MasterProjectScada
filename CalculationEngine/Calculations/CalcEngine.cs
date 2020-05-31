@@ -33,36 +33,42 @@ namespace CalculationEngine
                 _processingData.workingDifference = res;
             }
 
-            configString = ConfigurationManager.AppSettings.Get("MaxFluidLevel");
-            if (float.TryParse(configString, out float result))
-            {
-                _processingData.maxFluidLevel = result;
-            }
+            //configString = ConfigurationManager.AppSettings.Get("MaxFluidLevel");
+            //if (float.TryParse(configString, out float result))
+            //{
+            //    _processingData.maxFluidLevel = result;
+            //}
 
-            configString = ConfigurationManager.AppSettings.Get("NominalFluidLvlTank1");
-            if (float.TryParse(configString, out result))
-            {
-                _processingData.currentFluidLvlTank1 = result;
-            }
+            //configString = ConfigurationManager.AppSettings.Get("NominalFluidLvlTank1");
+            //if (float.TryParse(configString, out result))
+            //{
+            //    _processingData.currentFluidLvlTank1 = result;
+            //}
 
-            configString = ConfigurationManager.AppSettings.Get("NominalFluidLvlTank2");
-            if(float.TryParse(configString, out result))
-            {
-                _processingData.currentFluidLvlTank2 = result;
-            }                
+            //configString = ConfigurationManager.AppSettings.Get("NominalFluidLvlTank2");
+            //if(float.TryParse(configString, out result))
+            //{
+            //    _processingData.currentFluidLvlTank2 = result;
+            //}                
         }
 
         private void SetTimer()
         {
-            aTimer = new Timer(20000);
+            aTimer = new Timer(5000);
             aTimer.Elapsed += OnTimedEvent;
             aTimer.AutoReset = true;
         }
 
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
+            if(_processingData.IsModelChanged)
+            {
+                _processingData.UpdateMachineStates();
+                _processingData.UpdateFluidLevels();
+                _processingData.IsModelChanged = false;
+            }
             _processingData.UpdateWorkingTimes();
-            _processingData.UpdateFluidLevel();
+            _processingData.CheckFluidLevel();
         }
     }
 }

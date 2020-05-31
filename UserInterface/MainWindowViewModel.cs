@@ -909,56 +909,59 @@ namespace UserInterface
                             double minValue = (resource.Properties.Where(x => x.Id == ModelCode.ANALOG_MINVALUE).First()).PropertyValue.FloatValue;
 
                             long gid = analog.PropertyValue.LongValue;
-                            
-                            ResourceDescription resource1 = resources.Where(x => x.Id == gid).ToList().First();
-                            
-                            if(ModelCodeHelper.ExtractTypeFromGlobalId(resource1.Id) == (short)DMSType.ASYNCHRONOUSMACHINE)
+
+                            if (gid != 0)
                             {
-                                foreach(Substation s in Substations.Values)
+                                ResourceDescription resource1 = resources.Where(x => x.Id == gid).ToList().First();
+
+                                if (ModelCodeHelper.ExtractTypeFromGlobalId(resource1.Id) == (short)DMSType.ASYNCHRONOUSMACHINE)
                                 {
-                                    if (s.AsynchronousMachines.Count > 0)
+                                    foreach (Substation s in Substations.Values)
                                     {
-                                        foreach(var am in s.AsynchronousMachines)
+                                        if (s.AsynchronousMachines.Count > 0)
                                         {
-                                            if(am.GID == gid.ToString())
+                                            foreach (var am in s.AsynchronousMachines)
                                             {
-                                                am.SignalGid = resource.Id;
-                                                am.State = true;
+                                                if (am.GID == gid.ToString())
+                                                {
+                                                    am.SignalGid = resource.Id;
+                                                    am.State = true;
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
-                            else if(ModelCodeHelper.ExtractTypeFromGlobalId(resource1.Id) == (short)DMSType.POWERTRANSFORMER)
-                            {
-                                string type = resource.Properties.Where(x => x.Id == ModelCode.IDOBJ_MRID).First().PropertyValue.StringValue;
-
-                                foreach(Substation s in Substations.Values)
+                                else if (ModelCodeHelper.ExtractTypeFromGlobalId(resource1.Id) == (short)DMSType.POWERTRANSFORMER)
                                 {
-                                    if(s.Transformator != null)
+                                    string type = resource.Properties.Where(x => x.Id == ModelCode.IDOBJ_MRID).First().PropertyValue.StringValue;
+
+                                    foreach (Substation s in Substations.Values)
                                     {
-                                        if(s.Transformator.GID == gid.ToString())
+                                        if (s.Transformator != null)
                                         {
-                                            if (type.Contains("Voltage"))
+                                            if (s.Transformator.GID == gid.ToString())
                                             {
-                                                s.Transformator.AnalogVoltageGID = resource.Id;
-                                                s.Transformator.Current = value;
-                                                s.Transformator.MaxCurrent = 10000;
-                                                s.Transformator.MinCurrent = minValue;
-                                            }
-                                            else if (type.Contains("Current"))
-                                            {
-                                                s.Transformator.AnalogCurrentGID = resource.Id;
-                                                s.Transformator.Voltage = value;
-                                                s.Transformator.MaxVoltage = maxValue;
-                                                s.Transformator.MinVoltage = minValue;
-                                            }
-                                            else if (type.Contains("TapChanger"))
-                                            {
-                                                s.Transformator.AnalogTapChangerGID = resource.Id;
-                                                s.Transformator.TapChangerValue = (long)value;
-                                                s.Transformator.MaxValueTapChanger = maxValue;
-                                                s.Transformator.MinValueTapChanger = minValue;
+                                                if (type.Contains("Voltage"))
+                                                {
+                                                    s.Transformator.AnalogVoltageGID = resource.Id;
+                                                    s.Transformator.Current = value;
+                                                    s.Transformator.MaxCurrent = 10000;
+                                                    s.Transformator.MinCurrent = minValue;
+                                                }
+                                                else if (type.Contains("Current"))
+                                                {
+                                                    s.Transformator.AnalogCurrentGID = resource.Id;
+                                                    s.Transformator.Voltage = value;
+                                                    s.Transformator.MaxVoltage = maxValue;
+                                                    s.Transformator.MinVoltage = minValue;
+                                                }
+                                                else if (type.Contains("TapChanger"))
+                                                {
+                                                    s.Transformator.AnalogTapChangerGID = resource.Id;
+                                                    s.Transformator.TapChangerValue = (long)value;
+                                                    s.Transformator.MaxValueTapChanger = maxValue;
+                                                    s.Transformator.MinValueTapChanger = minValue;
+                                                }
                                             }
                                         }
                                     }
