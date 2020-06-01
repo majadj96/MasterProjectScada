@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UserInterface.ProxyPool;
 
 namespace UserInterface
 {
@@ -9,9 +10,17 @@ namespace UserInterface
     {
         public List<Event> Events = new List<Event>();
 
-        public CustomEventHandler(List<Event> events)
+        public CustomEventHandler()
         {
-            Events = events.OrderByDescending(e => e.EventReported).ToList();
+            try
+            {
+                List<Event> events = ProxyServices.AlarmEventServiceProxy.GetAllEvents();
+                Events = events.OrderByDescending(e => e.EventReported).ToList();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Error while requesting Events");
+            }
         }
 
         public event EventHandler UpdateEventsCollection;

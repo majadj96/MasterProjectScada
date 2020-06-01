@@ -470,7 +470,7 @@
 		<cim:Analog.normalValue>10</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Unitless</cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource=""/>
+		<cim:Measurement.PowerSystemResource rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.description>Level of fluid in first tank</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>FluidLevel_Tank1</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>FluidLevel_Tank1</ftn:IdentifiedObject.name>
@@ -481,7 +481,7 @@
 		<cim:Analog.normalValue>10</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Unitless</cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource=""/>
+		<cim:Measurement.PowerSystemResource rdf:resource="#Substation_2"/>
 		<cim:IdentifiedObject.description>Level of fluid in second tank</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>FluidLevel_Tank2</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>FluidLevel_Tank2</ftn:IdentifiedObject.name>
