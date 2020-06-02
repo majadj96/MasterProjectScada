@@ -53,7 +53,7 @@ namespace BackEndProcessorService
             }
             measurementRepository.AddMeasurements(measurementsDB.ToArray());
            // this.pointUpdateProxy.UpdatePoint(inputObj);
-            publisherProxy.PublishMeasure(measurement.ToArray(), "scada");
+            publisherProxy.Publish(measurement.ToArray(), "scada");
         }
 
         public void CommandingProcess(ProcessingObject[] inputObj)

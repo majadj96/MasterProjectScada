@@ -29,7 +29,7 @@ namespace AlarmEventService.Repositories
         public void AddEvent(Event newEvent)
         {
             eventCache.Add(newEvent);
-            eventPublisher.PublishEvent(newEvent, "event");
+            eventPublisher.Publish(newEvent, "event");
         }
     }
 }

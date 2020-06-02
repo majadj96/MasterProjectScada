@@ -46,6 +46,7 @@
     <Compile Include="IPub.cs" />
     <Compile Include="ISub.cs" />
     <Compile Include="NMSModel.cs" />
+    <Compile Include="ObjectTypeHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScadaModel.cs" />
     <Compile Include="ScadaUIExchangeModel.cs" />

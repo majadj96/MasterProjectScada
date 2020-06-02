@@ -12,34 +12,13 @@ namespace NetworkDynamicService
 {
     public class PublisherProxy : ClientBase<IPub>, IPub
     {
-        public PublisherProxy(string endpoint) : base(endpoint)
+		public PublisherProxy(string endpoint) : base(endpoint)
         {
 
         }
-
-        public void Publish(NMSModel model, string topicName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void PublishAlarm(AlarmDescription alarmDesc, string topicName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void PublishMeasure(ScadaUIExchangeModel []measurement, string topicName)
-        {
-            Channel.PublishMeasure(measurement, topicName);
-        }
-
-		public void PublishConnectionState(ConnectionState connectionState, string topicName)
+		public void Publish(object data, string topicName)
 		{
-			Channel.PublishConnectionState(connectionState, topicName);
+			Channel.Publish(data, topicName);
 		}
-
-        public void PublishEvent(Event eventObject, string topicName)
-        {
-            throw new NotImplementedException();
-        }
-    }
+	}
 }

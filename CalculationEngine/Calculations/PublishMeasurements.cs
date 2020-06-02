@@ -26,7 +26,12 @@ namespace CalculationEngine
             _proxy = new SubscribeProxy(this);
         }
 
-        public void SubscribeTo(string topic)
+		public void Publish(object data, string topicName)
+		{
+			_processingData.ProccessData(data);
+		}
+
+		public void SubscribeTo(string topic)
         {
             _proxy.Subscribe(topic);
         }
@@ -34,31 +39,6 @@ namespace CalculationEngine
         public void UnsubscribeFrom(string topic)
         {
             _proxy.UnSubscribe(topic);
-        }
-
-        public void Publish(NMSModel model, string topicName)
-        {
-            throw new ActionNotSupportedException("CE does not have implementation for this method.");
-        }
-
-        public void PublishMeasure(ScadaUIExchangeModel[] measurement, string topicName)
-        {
-            _processingData.ProccessData(measurement);
-        }
-
-        public void PublishAlarm(AlarmDescription alarmDesc, string topicName)
-        {
-            throw new ActionNotSupportedException("CE does not have implementation for this method.");
-        }
-
-		public void PublishConnectionState(ConnectionState connectionState, string topicName)
-		{
-			throw new ActionNotSupportedException("CE does not have implementation for this method.");
-		}
-
-        public void PublishEvent(Event eventObject, string topicName)
-        {
-            throw new ActionNotSupportedException("CE does not have implementation for this method.");
         }
     }
 }
