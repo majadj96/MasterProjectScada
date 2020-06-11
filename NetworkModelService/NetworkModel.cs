@@ -5,10 +5,7 @@ using NetworkModelService.GDA;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.ServiceModel;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using TransactionManagerContracts;
 
@@ -930,6 +927,7 @@ namespace NetworkModelService
                 try
                 {
                     ModelUpdateProxy _proxyCE = new ModelUpdateProxy("CE");
+
                     if (_proxyCE.UpdateModel(delta).Result == ResultType.Failed)
                     {
                         _proxyTM.EndEnlist(false);

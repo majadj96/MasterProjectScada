@@ -74,10 +74,6 @@
       <Project>{6109286A-0DC9-469C-A271-0605C18ED32C}</Project>
       <Name>PubSubCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ScadaContracts\ScadaContracts.csproj">
-      <Project>{5B9135BD-40C9-4DFB-AE6C-054A8CDBE18F}</Project>
-      <Name>ScadaContracts</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SCADA\ScadaCommon\ScadaCommon.csproj">
       <Project>{823D1355-EFD0-481C-A0D9-FDA0C4EA37DF}</Project>
       <Name>ScadaCommon</Name>
@@ -85,10 +81,6 @@
     <ProjectReference Include="..\TransactionManagerContracts\TransactionManagerContracts.csproj">
       <Project>{0a8f68ec-31cb-4fd1-b54a-dcf2fc97bbec}</Project>
       <Name>TransactionManagerContracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TransactionManager\TransactionManager.csproj">
-      <Project>{518AD2F0-337F-40A0-8091-5FD0B2364815}</Project>
-      <Name>TransactionManager</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
