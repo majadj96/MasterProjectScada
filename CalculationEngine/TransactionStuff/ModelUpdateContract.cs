@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 using CalculationEngine.Model;
 using Common;
 using Common.GDA;
-using TransactionManager;
 using TransactionManagerContracts;
 
 namespace CalculationEngine
 {
-	public class ModelUpdateContract : IModelUpdateContract
+    public class ModelUpdateContract : IModelUpdateContract
 	{
 		public UpdateResult UpdateModel(Delta delta)
 		{
@@ -49,7 +44,7 @@ namespace CalculationEngine
 			return new UpdateResult() { Result = ResultType.Succeeded };
 		}
 
-		#region Populate Entities
+		#region Populate Entities Methods
 
 		private void RemoveEntity(ResourceDescription rd)
 		{

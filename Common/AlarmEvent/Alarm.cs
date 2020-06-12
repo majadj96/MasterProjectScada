@@ -9,6 +9,7 @@ namespace Common.AlarmEvent
     public class Alarm
     {
         #region Variables
+        private string alarmKey;
         private int iD;
         private long giD;
         private DateTime alarmReported;
@@ -28,6 +29,13 @@ namespace Common.AlarmEvent
         {
             get { return iD; }
             set { iD = value; }
+        }
+
+        [DataMember]
+        public string AlarmKey
+        {
+            get { return alarmKey; }
+            set { alarmKey = value; }
         }
         [DataMember]
         public long GiD

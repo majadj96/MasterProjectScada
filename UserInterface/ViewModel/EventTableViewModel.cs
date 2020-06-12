@@ -9,6 +9,7 @@ namespace UserInterface.ViewModel
 {
     public class EventTableViewModel : BindableBase
     {
+        private CustomEventHandler customEventHandler;
         public MyICommand<string> FilterCommand { get; private set; }
 
         #region Variables
@@ -37,14 +38,22 @@ namespace UserInterface.ViewModel
         }
         #endregion
 
-        public EventTableViewModel()
+        public EventTableViewModel(CustomEventHandler customEventHandler)
         {
-            EventItems = new ObservableCollection<Event>(ProxyPool.ProxyServices.AlarmEventServiceProxy.GetAllEvents());
+            this.customEventHandler = customEventHandler;
+            EventItems = new ObservableCollection<Event>(customEventHandler.Events);
+
+            this.customEventHandler.UpdateEventsCollection += CustomEventHandler_UpdateEventsCollection;
 
             DateFrom = DateTime.Now;
             DateTo = DateTime.Now;
 
             FilterCommand = new MyICommand<string>(ApplyFilter);
+        }
+
+        private void CustomEventHandler_UpdateEventsCollection(object sender, EventArgs e)
+        {
+            EventItems = new ObservableCollection<Event>(customEventHandler.Events);
         }
 
         public void ApplyFilter(string option)
@@ -56,12 +65,12 @@ namespace UserInterface.ViewModel
                 if (DateTime.Compare(DateTo, DateFrom) < 0)
                     DateTo = DateTime.Now;
 
-                EventItems = new ObservableCollection<Event>(EventItems.Where(x => DateTime.Compare(DateFrom.Date, x.EventReported.Date) <= 0 &&
+                EventItems = new ObservableCollection<Event>(customEventHandler.Events.Where(x => DateTime.Compare(DateFrom.Date, x.EventReported.Date) <= 0 &&
                                                                                    DateTime.Compare(x.EventReported.Date, DateTo.Date) <= 0));
             }
             else if (string.Compare(option, "Disable") == 0)
             {
-                EventItems = new ObservableCollection<Event>(ProxyPool.ProxyServices.AlarmEventServiceProxy.GetAllEvents());
+                EventItems = new ObservableCollection<Event>(customEventHandler.Events);
             }
         }
     }

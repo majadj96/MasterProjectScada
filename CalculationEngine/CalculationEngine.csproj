@@ -55,6 +55,7 @@
     <Compile Include="Calculations\ProcessingData.cs" />
     <Compile Include="Calculations\PublishMeasurements.cs" />
     <Compile Include="Channels\SubscribeProxy.cs" />
+    <Compile Include="Model\Tank.cs" />
     <Compile Include="TransactionStuff\ModelUpdateContract.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

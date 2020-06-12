@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
+using PubSubCommon;
 using ScadaCommon;
 using ScadaCommon.ServiceContract;
 
@@ -8,16 +9,16 @@ namespace NetworkDynamicService.PointUpdater
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class StateUpdateService : IStateUpdateService
     {
-        private StateUpdateServiceProxy stateUpdateProxy;
+        private IPub publisherProxy;
 
-        public StateUpdateService(StateUpdateServiceProxy stateUpdateProxy)
+        public StateUpdateService(IPub publisherProxy)
         {
-            this.stateUpdateProxy = stateUpdateProxy;
+            this.publisherProxy = publisherProxy;
         }
 
         public void UpdateState(ConnectionState connectionState)
         {
-          //  stateUpdateProxy.UpdateState(connectionState);
+            publisherProxy.Publish(connectionState, "connectionState");
             Console.WriteLine(connectionState.ToString());
         }
     }

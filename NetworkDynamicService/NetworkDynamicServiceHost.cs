@@ -41,7 +41,6 @@ namespace NetworkDynamicService
             pointUpdateProxy = new PointUpdateProxy("UpdatePointEndPoint");
             alarmEventServiceProxy = new AlarmEventServiceProxy("AlarmEventServiceEndPoint");
             ndSConfigurationProxy = new NDSConfigurationProxy("IFEPConfigService");
-            stateUpdateProxy = new StateUpdateServiceProxy("StateUpdateServiceEndPoint");
             fepCmdProxy = new FepCommandingServiceProxy("FEPCommandingServiceContract");
             publisherProxy = new PublisherProxy("PublisherEndPoint");
            
@@ -52,7 +51,7 @@ namespace NetworkDynamicService
             transactionService =  new TransactionService(nDSRealTimePointCache, OpenProxies);
             measurementRepository = new MeasurementProviderService(measurementsRepository);
             modelUpdateContract = new ModelUpdateContract(nDSRealTimePointCache, ndSConfigurationProxy, transactionService);
-            stateUpdateService = new StateUpdateService(stateUpdateProxy);
+            stateUpdateService = new StateUpdateService(publisherProxy);
             commandingService = new CommandingService(fepCmdProxy, backEndPocessingModule, nDSRealTimePointCache);
             processingService = new ProcessingService(backEndPocessingModule);
             InitializeHosts();
@@ -70,7 +69,7 @@ namespace NetworkDynamicService
             //ndSConfigurationProxy.Open();
            // stateUpdateProxy.Open();
             fepCmdProxy.Open();
-            publisherProxy.Open();
+            //publisherProxy.Open();
         }
 
         private void StartHosts()

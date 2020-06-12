@@ -19,32 +19,80 @@ namespace CalculationEngine
 
         public CommandResult ReadAnalogInput(CommandObject command)
         {
-            return Channel.ReadAnalogInput(command);
+            try
+            {
+                return Channel.ReadAnalogInput(command);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CommandResult.Failure;
+            }
         }
 
         public CommandResult ReadAnalogOutput(CommandObject command)
         {
-            return Channel.ReadAnalogOutput(command);
+            try
+            {
+                return Channel.ReadAnalogOutput(command);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CommandResult.Failure;
+            }
         }
 
         public CommandResult ReadDigitalInput(CommandObject command)
         {
-            return Channel.ReadDigitalInput(command);
+            try
+            {
+                return Channel.ReadDigitalInput(command);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CommandResult.Failure;
+            }
         }
 
         public CommandResult ReadDigitalOutput(CommandObject command)
         {
-            return Channel.ReadDigitalOutput(command);
+            try
+            {
+                return Channel.ReadDigitalOutput(command);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CommandResult.Failure;
+            }
         }
 
         public CommandResult WriteAnalogOutput(CommandObject command)
         {
-            return Channel.WriteAnalogOutput(command);
+            try
+            {
+                return Channel.WriteAnalogOutput(command);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CommandResult.Failure;
+            }
         }
 
         public CommandResult WriteDigitalOutput(CommandObject command)
         {
-            return Channel.WriteDigitalOutput(command);
+            try
+            {
+                return Channel.WriteDigitalOutput(command);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CommandResult.Failure;
+            }
         }
 
         public CommandObject CreateCommand(DateTime dateTime, string commandOwner, float value, long gid)

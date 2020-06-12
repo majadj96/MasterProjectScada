@@ -1,6 +1,7 @@
 ﻿using Common.AlarmEvent;
 using GalaSoft.MvvmLight.Messaging;
 using PubSubCommon;
+using ScadaCommon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,16 +33,6 @@ namespace UserInterface.Subscription
             _proxy = channelFactory.CreateChannel();
         }
 
-        public void Publish(NMSModel model, string topicName)
-        {
-            if (model != null)
-            {
-                _eventCount += 1;
-                NotificationMessage n = new NotificationMessage(null, model, topicName);
-                Messenger.Default.Send<NotificationMessage>(n);
-            }
-        }
-
         public void OnSubscribe(string topic)
         {
             try
@@ -59,24 +50,14 @@ namespace UserInterface.Subscription
             _proxy.UnSubscribe(topic);
         }
 
-        public void PublishMeasure(ScadaUIExchangeModel []measurement, string topicName)
-        {
-            Console.WriteLine("Stigao model....");
-            _eventCount += 1;
-            NotificationMessage n = new NotificationMessage(null, measurement, topicName);
-            Messenger.Default.Send<NotificationMessage>(n);
-
-            //Ovde stizu merenje sa skade, izmenjen je contract odnosno interfejs kod ove metode....
-        }
-
-        public void PublishAlarm(AlarmDescription alarmDesc, string topicName)
-        {
-            if (alarmDesc != null)
-            {
-                _eventCount += 1;
-                NotificationMessage n = new NotificationMessage(null, alarmDesc, topicName);
-                Messenger.Default.Send<NotificationMessage>(n);
-            }
-        }
-    }
+		public void Publish(object data, string topicName)
+		{
+			if (data != null)
+			{
+				_eventCount += 1;
+				NotificationMessage n = new NotificationMessage(null, data, topicName);
+				Messenger.Default.Send<NotificationMessage>(n);
+			}
+		}
+	}
 }

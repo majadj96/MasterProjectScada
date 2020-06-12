@@ -21,16 +21,18 @@ namespace AlarmEventService
         {
             publisherProxy = CreatePublisherProxy();
             alarmCache = new AlarmCache(publisherProxy);
-            eventCache = new EventCache();
+            eventCache = new EventCache(publisherProxy, alarmEventDB);
         }
 
         public bool AcknowledgeAlarm(Alarm alarm)
         {
             Alarm cacheAlarm = alarmCache.FindAlarmInCache(alarm);
-            
-            if(alarm.AbnormalIndicator != true)
+
+            if (cacheAlarm.AbnormalIndicator != true)
             {
                 alarmCache.RemoveAlarm(cacheAlarm);
+
+                ReportAlarmEvent(alarm, AlarmOperation.DELETE);
                 return true;
             }
             else
@@ -39,18 +41,25 @@ namespace AlarmEventService
                 cacheAlarm.Username = alarm.Username;
                 cacheAlarm.AlarmAck = true;
                 alarmCache.UpdateAlarm(cacheAlarm);
+
+                ReportAlarmEvent(alarm, AlarmOperation.ACKNOWLEDGE);
+
                 return true;
             }
         }
 
         public void AddAlarm(Alarm alarm)
         {
+            Event alarmEventToReport;
             alarmCache.AddAlarm(alarm);
+            AlarmToEventConverter(alarm, out alarmEventToReport);
+
+            eventCache.AddEvent(alarmEventToReport);
         }
 
         public void AddEvent(Event newEvent)
         {
-            alarmEventDB.AddEvent(newEvent);
+            eventCache.AddEvent(newEvent);
         }
 
         public List<Alarm> GetAllAlarms()
@@ -60,14 +69,7 @@ namespace AlarmEventService
 
         public List<Event> GetAllEvents()
         {
-            try
-            {
-                return alarmEventDB.GetAllEvents();
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
-            }
+            return eventCache.GetAllEvents();
         }
 
         private IPub CreatePublisherProxy()
@@ -80,9 +82,36 @@ namespace AlarmEventService
 
         private void AlarmToEventConverter(Alarm alarm, out Event alarmEvent)
         {
-            Event retAlarmEvent = new Event();
+            Event retAlarmEvent = new Event()
+            {
+                GiD = alarm.GiD,
+                EventReported = alarm.AlarmReported,
+                Message = alarm.Message,
+                EventReportedBy = alarm.AlarmReportedBy,
+                PointName = alarm.PointName
+            };
 
             alarmEvent = retAlarmEvent;
+        }
+
+        private void ReportAlarmEvent(Alarm alarm, AlarmOperation operation)
+        {
+            Event alarmEventToReport;
+            string alarmEventMessage;
+
+            AlarmToEventConverter(alarm, out alarmEventToReport);
+            alarmEventMessage = alarmEventToReport.Message;
+
+            switch (operation) {
+                case AlarmOperation.DELETE:
+                    alarmEventToReport.Message = String.Format("Remove '{0}', Resaon: 'Alarm is acknowledged'", alarmEventMessage);
+                    break;
+                case AlarmOperation.ACKNOWLEDGE:
+                    alarmEventToReport.Message = String.Format("Acknowledge '{0}' alarm", alarmEventMessage);
+                    break;
+            }
+            alarmEventToReport.Message = String.Format("Acknowledge '{0}' alarm", alarmEventMessage);
+            eventCache.AddEvent(alarmEventToReport);
         }
     }
 }
