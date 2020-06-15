@@ -282,7 +282,7 @@
 		<cim:IdentifiedObject.mRID>Pump1Pressure</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>Pump1Pressure</ftn:IdentifiedObject.name>
 	</cim:Analog>
-	<cim:Analog rdf:ID="Analog_Pump1Voltage">
+<!--	<cim:Analog rdf:ID="Analog_Pump1Voltage">
 		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
 		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
@@ -303,7 +303,7 @@
 		<cim:IdentifiedObject.description>Pump current</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>Pump1Current</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>Pump1Current</ftn:IdentifiedObject.name>
-	</cim:Analog>
+	</cim:Analog> -->
 <!-- AsyncMachine 2 measurements -->
 	<cim:Analog rdf:ID="Analog_Pump2Power">
 		<cim:Analog.maxValue>100</cim:Analog.maxValue>
@@ -327,7 +327,7 @@
 		<cim:IdentifiedObject.mRID>Pump2Pressure</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>Pump2Pressure</ftn:IdentifiedObject.name>
 	</cim:Analog>
-	<cim:Analog rdf:ID="Analog_Pump2Voltage">
+<!--	<cim:Analog rdf:ID="Analog_Pump2Voltage">
 		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
 		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
@@ -348,7 +348,7 @@
 		<cim:IdentifiedObject.description>Pump current</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>Pump2Current</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>Pump2Current</ftn:IdentifiedObject.name>
-	</cim:Analog>
+	</cim:Analog> -->
 <!-- AsyncMachine 3 measurements -->
 	<cim:Analog rdf:ID="Analog_Pump3Power">
 		<cim:Analog.maxValue>100</cim:Analog.maxValue>
@@ -372,7 +372,7 @@
 		<cim:IdentifiedObject.mRID>Pump3Pressure</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>Pump3Pressure</ftn:IdentifiedObject.name>
 	</cim:Analog>
-	<cim:Analog rdf:ID="Analog_Pump3Voltage">
+<!--	<cim:Analog rdf:ID="Analog_Pump3Voltage">
 		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
 		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
@@ -393,7 +393,7 @@
 		<cim:IdentifiedObject.description>Pump current</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>Pump3Current</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>Pump3Current</ftn:IdentifiedObject.name>
-	</cim:Analog>
+	</cim:Analog> -->
 <!-- PowerTransformer 1 measurements -->
 	<cim:Analog rdf:ID="Analog_PT1Voltage">
 		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
@@ -401,7 +401,7 @@
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Voltage</cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource="#PTR_1"/>
+		<cim:Measurement.PowerSystemResource rdf:resource="#TRWinding_2"/>
 		<cim:IdentifiedObject.description>Power transformer voltage</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>PT1Voltage</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>PT1Voltage</ftn:IdentifiedObject.name>
@@ -412,7 +412,7 @@
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Current</cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource="#PTR_1"/>
+		<cim:Measurement.PowerSystemResource rdf:resource="#TRWinding_2"/>
 		<cim:IdentifiedObject.description>Power transformer current</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>PT1Current</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>PT1Current</ftn:IdentifiedObject.name>
@@ -424,7 +424,7 @@
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Voltage</cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource="#PTR_2"/>
+		<cim:Measurement.PowerSystemResource rdf:resource="#TRWinding_4"/>
 		<cim:IdentifiedObject.description>Power transformer voltage</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>PT2Voltage</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>PT2Voltage</ftn:IdentifiedObject.name>
@@ -435,7 +435,7 @@
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Current</cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource="#PTR_2"/>
+		<cim:Measurement.PowerSystemResource rdf:resource="#TRWinding_4"/>
 		<cim:IdentifiedObject.description>Power transformer current</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>PT2Current</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>PT2Current</ftn:IdentifiedObject.name>

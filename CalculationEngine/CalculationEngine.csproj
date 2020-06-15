@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calculations\CalcEngine.cs" />
+    <Compile Include="Calculations\PowerCalculator.cs" />
     <Compile Include="Channels\CommandingProxy.cs" />
     <Compile Include="Model\Analog.cs" />
     <Compile Include="Model\AsyncMachine.cs" />
@@ -56,6 +57,9 @@
     <Compile Include="Calculations\PublishMeasurements.cs" />
     <Compile Include="Channels\SubscribeProxy.cs" />
     <Compile Include="Model\Tank.cs" />
+    <Compile Include="Model\TapChanger.cs" />
+    <Compile Include="Model\Transformer.cs" />
+    <Compile Include="Model\TransformerWinding.cs" />
     <Compile Include="TransactionStuff\ModelUpdateContract.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
