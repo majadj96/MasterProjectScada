@@ -395,7 +395,29 @@
 		<ftn:IdentifiedObject.name>Pump3Current</ftn:IdentifiedObject.name>
 	</cim:Analog> -->
 <!-- PowerTransformer 1 measurements -->
-	<cim:Analog rdf:ID="Analog_PT1Voltage">
+	<cim:Analog rdf:ID="Analog_PT1Voltage_W1">
+		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.normalValue>0</cim:Analog.normalValue>
+		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
+		<cim:Measurement.measurementType>Voltage</cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#TRWinding_1"/>
+		<cim:IdentifiedObject.description>Power transformer voltage</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>PT1Voltage_W1</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>PT1Voltage_W1</ftn:IdentifiedObject.name>
+	</cim:Analog>
+	<cim:Analog rdf:ID="Analog_PT1Current_W1">
+		<cim:Analog.maxValue>100</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.normalValue>0</cim:Analog.normalValue>
+		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
+		<cim:Measurement.measurementType>Current</cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#TRWinding_1"/>
+		<cim:IdentifiedObject.description>Power transformer current</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>PT1Current_W1</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>PT1Current_W1</ftn:IdentifiedObject.name>
+	</cim:Analog>
+	<cim:Analog rdf:ID="Analog_PT1Voltage_W2">
 		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
 		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
@@ -403,10 +425,10 @@
 		<cim:Measurement.measurementType>Voltage</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#TRWinding_2"/>
 		<cim:IdentifiedObject.description>Power transformer voltage</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>PT1Voltage</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>PT1Voltage</ftn:IdentifiedObject.name>
+		<cim:IdentifiedObject.mRID>PT1Voltage_W2</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>PT1Voltage_W2</ftn:IdentifiedObject.name>
 	</cim:Analog>
-	<cim:Analog rdf:ID="Analog_PT1Current">
+	<cim:Analog rdf:ID="Analog_PT1Current_W2">
 		<cim:Analog.maxValue>100</cim:Analog.maxValue>
 		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
@@ -414,11 +436,33 @@
 		<cim:Measurement.measurementType>Current</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#TRWinding_2"/>
 		<cim:IdentifiedObject.description>Power transformer current</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>PT1Current</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>PT1Current</ftn:IdentifiedObject.name>
+		<cim:IdentifiedObject.mRID>PT1Current_W2</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>PT1Current_W2</ftn:IdentifiedObject.name>
 	</cim:Analog>
 <!-- PowerTransformer 2 measurements -->
-	<cim:Analog rdf:ID="Analog_PT2Voltage">
+	<cim:Analog rdf:ID="Analog_PT2Voltage_W1">
+		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.normalValue>0</cim:Analog.normalValue>
+		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
+		<cim:Measurement.measurementType>Voltage</cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#TRWinding_3"/>
+		<cim:IdentifiedObject.description>Power transformer voltage</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>PT2Voltage_W1</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>PT2Voltage_W1</ftn:IdentifiedObject.name>
+	</cim:Analog>
+	<cim:Analog rdf:ID="Analog_PT2Current_W1">
+		<cim:Analog.maxValue>100</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.normalValue>0</cim:Analog.normalValue>
+		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
+		<cim:Measurement.measurementType>Current</cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#TRWinding_3"/>
+		<cim:IdentifiedObject.description>Power transformer current</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>PT2Current_W1</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>PT2Current_W1</ftn:IdentifiedObject.name>
+	</cim:Analog>
+	<cim:Analog rdf:ID="Analog_PT2Voltage_W2">
 		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
 		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
@@ -426,10 +470,10 @@
 		<cim:Measurement.measurementType>Voltage</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#TRWinding_4"/>
 		<cim:IdentifiedObject.description>Power transformer voltage</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>PT2Voltage</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>PT2Voltage</ftn:IdentifiedObject.name>
+		<cim:IdentifiedObject.mRID>PT2Voltage_W2</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>PT2Voltage_W2</ftn:IdentifiedObject.name>
 	</cim:Analog>
-	<cim:Analog rdf:ID="Analog_PT2Current">
+	<cim:Analog rdf:ID="Analog_PT2Current_W2">
 		<cim:Analog.maxValue>100</cim:Analog.maxValue>
 		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
@@ -437,8 +481,8 @@
 		<cim:Measurement.measurementType>Current</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#TRWinding_4"/>
 		<cim:IdentifiedObject.description>Power transformer current</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>PT2Current</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>PT2Current</ftn:IdentifiedObject.name>
+		<cim:IdentifiedObject.mRID>PT2Current_W2</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>PT2Current_W2</ftn:IdentifiedObject.name>
 	</cim:Analog>
 <!-- TapChanger measurements -->
 	<cim:Analog rdf:ID="Analog_TapChanger1">

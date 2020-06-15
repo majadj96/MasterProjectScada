@@ -45,9 +45,9 @@ namespace CalculationEngine
                     }
                 }
 
-                UpdateTransformersMeasurements();
-                UpdateMachineStates();
-                UpdateFluidLevels();
+                //UpdateTransformersMeasurements();
+                //UpdateMachineStates();
+                //UpdateFluidLevels();
             });
 
             task.Start();
