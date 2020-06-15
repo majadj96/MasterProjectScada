@@ -67,7 +67,9 @@ namespace UserInterface
         private string gaugePressure2;
         private string gaugePower1;
         private string gaugePower2;
-        private string transformerCurrent;
+		private string gaugePower2visibility = "Hidden";
+		private string gaugePressure2visibility = "Hidden";
+		private string transformerCurrent;
         private string transformerVoltage;
         private string transformerTapChanger;
 
@@ -275,7 +277,33 @@ namespace UserInterface
                 OnPropertyChanged("GaugePower2");
             }
         }
-        public string PubSub
+		public string GaugePower2Visibility
+		{
+			get
+			{
+				return gaugePower2visibility;
+			}
+			set
+			{
+				gaugePower2visibility = value;
+				OnPropertyChanged("GaugePower2Visibility");
+			}
+		}
+
+		public string GaugePressure2Visibility
+		{
+			get
+			{
+				return gaugePressure2visibility;
+			}
+			set
+			{
+				gaugePressure2visibility = value;
+				OnPropertyChanged("GaugePressure2visibility");
+			}
+		}
+
+		public string PubSub
         {
             get
             {
@@ -571,6 +599,8 @@ namespace UserInterface
                             GaugePressure1 = meas.Value.ToString();
                         }
                         GaugePower2 = string.Empty;
+						GaugePower2Visibility = "Hidden";
+						GaugePressure2Visibility = "Hidden";
                         GaugePressure2 = string.Empty;
                     }
                 }
@@ -591,11 +621,13 @@ namespace UserInterface
                     {
                         if (meas.Mrid.ToLower().Contains("power"))
                         {
+							GaugePower2Visibility = "Visible";
                             GaugePower2 = meas.Value.ToString();
                         }
                         else if (meas.Mrid.ToLower().Contains("pressure"))
                         {
-                            GaugePressure2 = meas.Value.ToString();
+							GaugePressure2Visibility = "Visible";
+							GaugePressure2 = meas.Value.ToString();
                         }
                     }
                 }
