@@ -70,7 +70,9 @@ namespace UserInterface
         private string gaugePressure2;
         private string gaugePower1;
         private string gaugePower2;
-        private string transformerCurrent;
+		private string gaugePower2visibility = "Hidden";
+		private string gaugePressure2visibility = "Hidden";
+		private string transformerCurrent;
         private string transformerVoltage;
         private string transformerTapChanger;
 
@@ -278,7 +280,33 @@ namespace UserInterface
                 OnPropertyChanged("GaugePower2");
             }
         }
-        public string PubSub
+		public string GaugePower2Visibility
+		{
+			get
+			{
+				return gaugePower2visibility;
+			}
+			set
+			{
+				gaugePower2visibility = value;
+				OnPropertyChanged("GaugePower2Visibility");
+			}
+		}
+
+		public string GaugePressure2Visibility
+		{
+			get
+			{
+				return gaugePressure2visibility;
+			}
+			set
+			{
+				gaugePressure2visibility = value;
+				OnPropertyChanged("GaugePressure2visibility");
+			}
+		}
+
+		public string PubSub
         {
             get
             {
@@ -557,6 +585,25 @@ namespace UserInterface
 
             foreach (Measurement meas in Measurements.Values)
             {
+				if (SubstationCurrent.Transformator.TransformerWindings.Contains(meas.PowerSystemResource))
+				{
+					if (meas.Mrid == "PT1Current_W1")
+						meshViewModel.StrujaW1 = meas.Value.ToString() + " A";
+					else if (meas.Mrid == "PT1Current_W2")
+						meshViewModel.StrujaW2 = meas.Value.ToString() + " A";
+					else if (meas.Mrid == "PT1Voltage_W1")
+						meshViewModel.NaponW1 = meas.Value.ToString() + " V";
+					else if (meas.Mrid == "PT1Voltage_W2")
+						meshViewModel.NaponW2 = meas.Value.ToString() + " V";
+					else if (meas.Mrid == "PT2Current_W1")
+						meshViewModel.Struja2W1 = meas.Value.ToString() + " A";
+					else if (meas.Mrid == "PT2Current_W2")
+						meshViewModel.Struja2W2 = meas.Value.ToString() + " A";
+					else if (meas.Mrid == "PT2Voltage_W1")
+						meshViewModel.Napon2W1 = meas.Value.ToString() + " V";
+					else if (meas.Mrid == "PT2Voltage_W2")
+						meshViewModel.Napon2W2 = meas.Value.ToString() + " V";
+				}
                 if (meas.PowerSystemResource.ToString() == SubstationCurrent.Gid)
                 {
                     CommandToAM(meas.Value);
@@ -565,6 +612,7 @@ namespace UserInterface
                 {
                     TransformerTapChanger = meas.Value.ToString();
                 }
+
                 if (SubstationCurrent.AsynchronousMachines.Count == 1)
                 {
                     if (SubstationCurrent.AsynchronousMachines[0].GID == meas.PowerSystemResource.ToString())
@@ -578,12 +626,17 @@ namespace UserInterface
                             GaugePressure1 = meas.Value.ToString();
                         }
                         GaugePower2 = string.Empty;
+						GaugePower2Visibility = "Hidden";
+						GaugePressure2Visibility = "Hidden";
+						meshViewModel.Sub2Visibility = "Hidden";
                         GaugePressure2 = string.Empty;
                     }
                 }
                 else if (SubstationCurrent.AsynchronousMachines.Count == 2)
                 {
-                    if (SubstationCurrent.AsynchronousMachines[0].GID == meas.PowerSystemResource.ToString())
+					meshViewModel.Sub2Visibility = "Visible";
+
+					if (SubstationCurrent.AsynchronousMachines[0].GID == meas.PowerSystemResource.ToString())
                     {
                         if (meas.Mrid.ToLower().Contains("power"))
                         {
@@ -598,11 +651,13 @@ namespace UserInterface
                     {
                         if (meas.Mrid.ToLower().Contains("power"))
                         {
+							GaugePower2Visibility = "Visible";
                             GaugePower2 = meas.Value.ToString();
                         }
                         else if (meas.Mrid.ToLower().Contains("pressure"))
                         {
-                            GaugePressure2 = meas.Value.ToString();
+							GaugePressure2Visibility = "Visible";
+							GaugePressure2 = meas.Value.ToString();
                         }
                     }
                 }
@@ -931,6 +986,7 @@ namespace UserInterface
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.BREAKER) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.RATIOTAPCHANGER) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.POWERTRANSFORMER) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.TRANSFORMERWINDING) ||
                                                                          (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ANALOG) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ASYNCHRONOUSMACHINE) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.DISCRETE)))
@@ -1100,9 +1156,14 @@ namespace UserInterface
                                         }
                                     }
                                 }
-                            }
+							}
                         }
-                        break;
+						break;
+					case (short)DMSType.TRANSFORMERWINDING:
+						TransformerWinding transformerWinding = new TransformerWinding();
+						populateEquipment(transformerWinding, resource.Properties);
+						getMySubstation(resource.Properties).Transformator.TransformerWindings.Add(long.Parse(transformerWinding.GID));
+						break;
                 }
 
             }

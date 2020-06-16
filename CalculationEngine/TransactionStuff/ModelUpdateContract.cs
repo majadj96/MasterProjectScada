@@ -83,7 +83,34 @@ namespace CalculationEngine
 					ConcreteModel.CurrentModel_Copy.Add(asyncMachine.GID, asyncMachine);
 				}
 			}
-			else
+            else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.POWERTRANSFORMER)
+            {
+                if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
+                {
+                    Transformer transformer = PopulateTransformerProperties(rd);
+
+                    ConcreteModel.CurrentModel_Copy.Add(transformer.GID, transformer);
+                }
+            }
+            else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.RATIOTAPCHANGER)
+            {
+                if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
+                {
+                    TapChanger tapChanger = PopulateTapChangerProperties(rd);
+
+                    ConcreteModel.CurrentModel_Copy.Add(tapChanger.GID, tapChanger);
+                }
+            }
+            else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.TRANSFORMERWINDING)
+            {
+                if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
+                {
+                    TransformerWinding winding = PopulateWindingProperties(rd);
+
+                    ConcreteModel.CurrentModel_Copy.Add(winding.GID, winding);
+                }
+            }
+            else
 			{
 				if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
@@ -94,7 +121,7 @@ namespace CalculationEngine
 			}
 		}
 
-		private void UpdateEntity(ResourceDescription rd)
+        private void UpdateEntity(ResourceDescription rd)
 		{
 			if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ANALOG)
 			{
@@ -107,7 +134,7 @@ namespace CalculationEngine
 			}
 			else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.DISCRETE)
 			{
-				if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
+				if (ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
 					Discrete discrete = PopulateDiscreteProperties(rd);
 
@@ -116,14 +143,32 @@ namespace CalculationEngine
 			}
 			else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ASYNCHRONOUSMACHINE)
 			{
-				if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
+				if (ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
 					AsyncMachine asyncMachine = PopulateAsyncMachineProperties(rd);
 
 					ConcreteModel.CurrentModel_Copy[asyncMachine.GID] = asyncMachine;
 				}
 			}
-			else
+            else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.POWERTRANSFORMER)
+            {
+                if (ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
+                {
+                    Transformer transformer = PopulateTransformerProperties(rd);
+
+                    ConcreteModel.CurrentModel_Copy[transformer.GID] = transformer;
+                }
+            }
+            else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.RATIOTAPCHANGER)
+            {
+                if (ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
+                {
+                    TapChanger tapChanger = PopulateTapChangerProperties(rd);
+
+                    ConcreteModel.CurrentModel_Copy[tapChanger.GID] = tapChanger;
+                }
+            }
+            else
 			{
 				if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
@@ -255,6 +300,81 @@ namespace CalculationEngine
             return analog;
 		}
 
-		#endregion
-	}
+        private TransformerWinding PopulateWindingProperties(ResourceDescription rd)
+        {
+            IdObject idObject = PopulateIdObjectProperties(rd);
+
+            TransformerWinding winding = new TransformerWinding(idObject.GID)
+            {
+                MRID = idObject.MRID,
+                Name = idObject.Name,
+                Description = idObject.Description
+            };
+
+            Property p;
+
+            if ((p = rd.GetProperty(ModelCode.TRANSFORMERWINDING_POWERTR)) != null)
+            {
+                winding.Transformer = p.AsReference();
+            }
+
+            return winding;
+        }
+
+        private Transformer PopulateTransformerProperties(ResourceDescription rd)
+        {
+            IdObject idObject = PopulateIdObjectProperties(rd);
+
+            Transformer transformer = new Transformer(idObject.GID)
+            {
+                MRID = idObject.MRID,
+                Name = idObject.Name,
+                Description = idObject.Description
+            };
+
+            Property p;
+
+            if ((p = rd.GetProperty(ModelCode.POWERTRANSFORMER_TRWINDINGS)) != null)
+            {
+                transformer.Windings = p.AsReferences();
+            }
+
+            return transformer;
+        }
+
+        private TapChanger PopulateTapChangerProperties(ResourceDescription rd)
+        {
+            IdObject idObject = PopulateIdObjectProperties(rd);
+
+            TapChanger tapChanger = new TapChanger(idObject.GID)
+            {
+                MRID = idObject.MRID,
+                Name = idObject.Name,
+                Description = idObject.Description
+            };
+
+            Property p;
+
+            if ((p = rd.GetProperty(ModelCode.TAPCHANGER_HIGHSTEP)) != null)
+            {
+                tapChanger.HighStep = p.AsInt();
+            }
+            if ((p = rd.GetProperty(ModelCode.TAPCHANGER_LOWSTEP)) != null)
+            {
+                tapChanger.LowStep = p.AsInt();
+            }
+            if ((p = rd.GetProperty(ModelCode.TAPCHANGER_NORMALSTEP)) != null)
+            {
+                tapChanger.NormalStep = p.AsInt();
+            }
+            if ((p = rd.GetProperty(ModelCode.RATIOTAPCHANGER_TRWINDING)) != null)
+            {
+                tapChanger.Winding = p.AsReference();
+            }
+
+            return tapChanger;
+        }
+
+        #endregion
+    }
 }

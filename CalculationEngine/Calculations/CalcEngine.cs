@@ -65,9 +65,15 @@ namespace CalculationEngine
             {
                 _processingData.UpdateMachineStates();
                 _processingData.UpdateFluidLevels();
+
                 _processingData.IsModelChanged = false;
             }
+
+            _processingData.CheckTransformersMeasurements();
+            _processingData.CheckMachineMeasurements();
+            //_processingData.UpdateMachineStates();
             _processingData.UpdateWorkingTimes();
+            //_processingData.UpdateFluidLevels();
             _processingData.CheckFluidLevel();
         }
     }

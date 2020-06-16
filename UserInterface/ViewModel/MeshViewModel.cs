@@ -43,10 +43,20 @@ namespace UserInterface.ViewModel
         public string lineUpBreakerSecondPump  { get; set; }
         public string lineUpBreakerFirstPumpCN { get; set; }
         public string lineUpBreakerSecondPumpCN { get; set; }
-        #endregion
+		private string strujaW1 = "0 A";
+		private string strujaW2 = "0 A";
+		private string naponW1 = "0 A";
+		private string naponW2 = "0 A";
+		private string struja2W1 = "0 A";
+		private string struja2W2 = "0 A";
+		private string napon2W1 = "0 A";
+		private string napon2W2 = "0 A";
+		private string sub1Visibility = "Visible";
+		private string sub2Visibility = "Hidden";
+		#endregion
 
-        #region Props
-        public string LineUpBreakerSecondPumpCN
+		#region Props
+		public string LineUpBreakerSecondPumpCN
         {
             get
             {
@@ -119,7 +129,155 @@ namespace UserInterface.ViewModel
             }
         }
 
-        public Substation SubstationCurrent
+		public string StrujaW1
+		{
+			get
+			{
+				return strujaW1;
+			}
+			set
+			{
+				strujaW1 = value;
+				OnPropertyChanged(nameof(StrujaW1));
+			}
+		}
+
+		public string Struja2W1
+		{
+			get
+			{
+				return struja2W1;
+			}
+			set
+			{
+				struja2W1 = value;
+				OnPropertyChanged(nameof(Struja2W1));
+			}
+		}
+
+		public string StrujaW2
+		{
+			get
+			{
+				return strujaW2;
+			}
+			set
+			{
+				strujaW2 = value;
+				OnPropertyChanged(nameof(StrujaW2));
+			}
+		}
+
+		public string Struja2W2
+		{
+			get
+			{
+				return struja2W2;
+			}
+			set
+			{
+				struja2W2 = value;
+				OnPropertyChanged(nameof(Struja2W2));
+			}
+		}
+
+		public string NaponW1
+		{
+			get
+			{
+				return naponW1;
+			}
+			set
+			{
+				naponW1 = value;
+				OnPropertyChanged(nameof(NaponW1));
+			}
+		}
+
+		public string Napon2W1
+		{
+			get
+			{
+				return napon2W1;
+			}
+			set
+			{
+				napon2W1 = value;
+				OnPropertyChanged(nameof(Napon2W1));
+			}
+		}
+
+		public string NaponW2
+		{
+			get
+			{
+				return naponW2;
+			}
+			set
+			{
+				naponW2 = value;
+				OnPropertyChanged(nameof(NaponW2));
+			}
+		}
+
+		public string Napon2W2
+		{
+			get
+			{
+				return napon2W2;
+			}
+			set
+			{
+				napon2W2 = value;
+				OnPropertyChanged(nameof(Napon2W2));
+			}
+		}
+
+		public string Sub2Visibility
+		{
+			get
+			{
+				return sub2Visibility;
+			}
+			set
+			{
+				sub2Visibility = value;
+				if(sub2Visibility == "Hidden")
+				{
+					sub1Visibility = "Visible";
+				}
+				else
+				{
+					sub1Visibility = "Hidden";
+				}
+				OnPropertyChanged(nameof(Sub2Visibility));
+			}
+		}
+
+		public string Sub1Visibility
+		{
+			get
+			{
+				return sub1Visibility;
+			}
+			set
+			{
+				sub1Visibility = value;
+
+				if (sub1Visibility == "Hidden")
+				{
+					sub2Visibility = "Visible";
+				}
+				else
+				{
+					sub2Visibility = "Hidden";
+				}
+
+				OnPropertyChanged(nameof(Sub1Visibility));
+			}
+		}
+
+		public Substation SubstationCurrent
         {
             get { return substationCurrent; }
             set { substationCurrent = value; OnPropertyChanged("SubstationCurrent"); }
@@ -536,9 +694,9 @@ namespace UserInterface.ViewModel
         public MyICommand<string> CommandDisconnector { get; private set; }
         public MyICommand<string> CommandBreaker { get; private set; }
         public MyICommand CommandPT { get; private set; }
-        #endregion
+		#endregion
 
-        DispatcherTimer timer = new DispatcherTimer();
+		DispatcherTimer timer = new DispatcherTimer();
 
         public MeshViewModel()
         {
