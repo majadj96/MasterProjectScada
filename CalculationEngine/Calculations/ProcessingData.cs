@@ -35,12 +35,20 @@ namespace CalculationEngine
                     {
                         if (idObject.GetType() == typeof(Analog))
                         {
-                            ((Analog)idObject).NormalValue = (float)meas.Value;
+                            Analog analog = (Analog)idObject;
+                            analog.NormalValue = (float)meas.Value;
+
+                            if(analog.MRID == "FluidLevel_Tank1" || analog.MRID == "FluidLevel_Tank2")
+                            {
+                                UpdateFluidLevels();
+                            }
                         }
                         else if (idObject.GetType() == typeof(Discrete))
                         {
                             Discrete discrete = (Discrete)idObject;
                             discrete.NormalValue = (int)meas.Value;
+
+                            UpdateMachineStates();
                         }
                     }
                 }
@@ -72,6 +80,17 @@ namespace CalculationEngine
                         // Svi prekidaci su zatvoreni, masina radi
                         machine.IsRunning = true;
                     }
+                }
+            }
+        }
+
+        public void CheckMachineMeasurements()
+        {
+            foreach (IdObject item in ConcreteModel.CurrentModel.Values)
+            {
+                if(item.GetType() == typeof(AsyncMachine))
+                {
+                    AsyncMachine machine = (AsyncMachine)item;
 
                     List<Analog> machineMeasurements = GetMeasurementsForEquipment(machine.GID);
                     Analog powerMeas = null;
@@ -79,11 +98,11 @@ namespace CalculationEngine
 
                     foreach (Analog meas in machineMeasurements)
                     {
-                        if(meas.MeasurementType == MeasurementType.ActivePower)
+                        if (meas.MeasurementType == MeasurementType.ActivePower)
                         {
                             powerMeas = meas;
                         }
-                        else if(meas.Name.ToLower().Contains("pressure"))
+                        else if (meas.Name.ToLower().Contains("pressure"))
                         {
                             pressureMeas = meas;
                         }
@@ -92,11 +111,11 @@ namespace CalculationEngine
                     float activePower = GetActivePowerForMachine(machine.MRID);
                     float pressure = _powerCalculator.GetPressure(activePower);
 
-                    if(powerMeas != null && powerMeas.NormalValue != activePower)
+                    if (powerMeas != null && powerMeas.NormalValue != activePower)
                     {
                         SendAnalogCommand(activePower, powerMeas.GID);
                     }
-                    if(pressureMeas != null && pressureMeas.NormalValue != pressure)
+                    if (pressureMeas != null && pressureMeas.NormalValue != pressure)
                     {
                         SendAnalogCommand(pressure, pressureMeas.GID);
                     }
@@ -126,7 +145,6 @@ namespace CalculationEngine
                             else if (analog.MeasurementType == MeasurementType.Current)
                             {
                                 current = analog.NormalValue;
-
                             }
                         }
 
@@ -378,7 +396,7 @@ namespace CalculationEngine
             }
         }
 
-        public void UpdateTransformersMeasurements()
+        public void CheckTransformersMeasurements()
         {
             foreach (IdObject item in ConcreteModel.CurrentModel.Values)
             {
@@ -430,6 +448,52 @@ namespace CalculationEngine
                                     {
                                         SendAnalogCommand(0, meas.GID);
                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (item.MRID == "TRWinding_1" || item.MRID == "TRWinding_3")
+                {
+                    TransformerWinding winding = (TransformerWinding)item;
+                    Transformer transformer = (Transformer)ConcreteModel.CurrentModel[winding.Transformer];
+                    List<Analog> analogs = GetMeasurementsForEquipment(winding.GID);
+
+                    foreach (Analog meas in analogs)
+                    {
+                        if (IsTransformerSupplied(winding.Transformer))
+                        {
+                            if (meas.MeasurementType == MeasurementType.Voltage)
+                            {
+                                float commandVoltage = _powerCalculator.NominalVoltage;
+
+                                if (meas.NormalValue != commandVoltage)
+                                {
+                                    SendAnalogCommand(commandVoltage, meas.GID);
+                                }
+                            }
+                            else if (meas.MeasurementType == MeasurementType.Current)
+                            {
+                                if (meas.NormalValue != _powerCalculator.NominalCurrent)
+                                {
+                                    SendAnalogCommand(_powerCalculator.NominalCurrent, meas.GID);
+                                }
+                            }
+                        }
+                        else // Transformer is not supplied
+                        {
+                            if (meas.MeasurementType == MeasurementType.Voltage)
+                            {
+                                if (meas.NormalValue != 0)
+                                {
+                                    SendAnalogCommand(0, meas.GID);
+                                }
+                            }
+                            else if (meas.MeasurementType == MeasurementType.Current)
+                            {
+                                if (meas.NormalValue != 0)
+                                {
+                                    SendAnalogCommand(0, meas.GID);
                                 }
                             }
                         }

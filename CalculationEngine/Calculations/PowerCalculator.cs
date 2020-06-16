@@ -35,7 +35,7 @@ namespace CalculationEngine
 
         public float GetPressure(float activePower)
         {
-            return activePower / 1000;
+            return activePower / 100;
         }
     }
 }
