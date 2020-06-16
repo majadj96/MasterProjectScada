@@ -578,6 +578,25 @@ namespace UserInterface
 
             foreach (Measurement meas in Measurements.Values)
             {
+				if (SubstationCurrent.Transformator.TransformerWindings.Contains(meas.PowerSystemResource))
+				{
+					if (meas.Mrid == "PT1Current_W1")
+						meshViewModel.StrujaW1 = meas.Value.ToString() + " A";
+					else if (meas.Mrid == "PT1Current_W2")
+						meshViewModel.StrujaW2 = meas.Value.ToString() + " A";
+					else if (meas.Mrid == "PT1Voltage_W1")
+						meshViewModel.NaponW1 = meas.Value.ToString() + " V";
+					else if (meas.Mrid == "PT1Voltage_W2")
+						meshViewModel.NaponW2 = meas.Value.ToString() + " V";
+					else if (meas.Mrid == "PT2Current_W1")
+						meshViewModel.Struja2W1 = meas.Value.ToString() + " A";
+					else if (meas.Mrid == "PT2Current_W2")
+						meshViewModel.Struja2W2 = meas.Value.ToString() + " A";
+					else if (meas.Mrid == "PT2Voltage_W1")
+						meshViewModel.Napon2W1 = meas.Value.ToString() + " V";
+					else if (meas.Mrid == "PT2Voltage_W2")
+						meshViewModel.Napon2W2 = meas.Value.ToString() + " V";
+				}
                 if (meas.PowerSystemResource.ToString() == SubstationCurrent.Gid)
                 {
                     CommandToAM(meas.Value);
@@ -586,6 +605,7 @@ namespace UserInterface
                 {
                     TransformerTapChanger = meas.Value.ToString();
                 }
+
                 if (SubstationCurrent.AsynchronousMachines.Count == 1)
                 {
                     if (SubstationCurrent.AsynchronousMachines[0].GID == meas.PowerSystemResource.ToString())
@@ -601,12 +621,15 @@ namespace UserInterface
                         GaugePower2 = string.Empty;
 						GaugePower2Visibility = "Hidden";
 						GaugePressure2Visibility = "Hidden";
+						meshViewModel.Sub2Visibility = "Hidden";
                         GaugePressure2 = string.Empty;
                     }
                 }
                 else if (SubstationCurrent.AsynchronousMachines.Count == 2)
                 {
-                    if (SubstationCurrent.AsynchronousMachines[0].GID == meas.PowerSystemResource.ToString())
+					meshViewModel.Sub2Visibility = "Visible";
+
+					if (SubstationCurrent.AsynchronousMachines[0].GID == meas.PowerSystemResource.ToString())
                     {
                         if (meas.Mrid.ToLower().Contains("power"))
                         {
@@ -956,6 +979,7 @@ namespace UserInterface
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.BREAKER) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.RATIOTAPCHANGER) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.POWERTRANSFORMER) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.TRANSFORMERWINDING) ||
                                                                          (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ANALOG) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ASYNCHRONOUSMACHINE) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.DISCRETE)))
@@ -1125,9 +1149,14 @@ namespace UserInterface
                                         }
                                     }
                                 }
-                            }
+							}
                         }
-                        break;
+						break;
+					case (short)DMSType.TRANSFORMERWINDING:
+						TransformerWinding transformerWinding = new TransformerWinding();
+						populateEquipment(transformerWinding, resource.Properties);
+						getMySubstation(resource.Properties).Transformator.TransformerWindings.Add(long.Parse(transformerWinding.GID));
+						break;
                 }
 
             }

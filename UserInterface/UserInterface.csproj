@@ -104,6 +104,7 @@
     <Compile Include="Model\Substation.cs" />
     <Compile Include="Model\TapChanger.cs" />
     <Compile Include="Model\Transformator.cs" />
+    <Compile Include="Model\TransformerWinding.cs" />
     <Compile Include="Model\UIModel.cs" />
     <Compile Include="ProxyPool\AlarmEventServiceProxy.cs" />
     <Compile Include="ProxyPool\CommandingServiceProxy.cs" />
