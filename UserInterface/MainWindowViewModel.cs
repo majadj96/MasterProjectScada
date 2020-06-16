@@ -17,6 +17,7 @@ using UserInterface.BaseError;
 using UserInterface.Command;
 using UserInterface.Converters;
 using UserInterface.Model;
+using UserInterface.Networking;
 using UserInterface.ProxyPool;
 using UserInterface.Subscription;
 using UserInterface.ViewModel;
@@ -41,6 +42,8 @@ namespace UserInterface
         private CustomEventHandler customEventHandler;
 
         private DispatcherTimer AlarmButtonTimer = new DispatcherTimer();
+        private MeasurementProxy measurementRepository;
+
         //private Thread threadAlarms;
 
         #region Variables
@@ -348,6 +351,10 @@ namespace UserInterface
             alarmHandler = new AlarmHandler();
             customEventHandler = new CustomEventHandler();
 
+            measurementRepository = new MeasurementProxy("MeasurementEndPoint");
+            measurementRepository.Open();
+
+
             Sub subNMS = new Sub();
             subNMS.OnSubscribe("nms");
             subNMS.OnSubscribe("scada");
@@ -403,7 +410,7 @@ namespace UserInterface
         {
             AnalyticsWindow analyticsWindow = new AnalyticsWindow();
 
-            AnalyticsWindowViewModel analyticsWindowViewModel = new AnalyticsWindowViewModel(substations);
+            AnalyticsWindowViewModel analyticsWindowViewModel = new AnalyticsWindowViewModel(substations, measurementRepository);
 
             analyticsWindow.DataContext = analyticsWindowViewModel;
 

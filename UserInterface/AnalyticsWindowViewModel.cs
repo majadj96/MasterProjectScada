@@ -15,6 +15,7 @@ using UserInterface.BaseError;
 using UserInterface.Model;
 using UserInterface.Networking;
 using UserInterface.ViewModel;
+using RepositoryCore;
 
 namespace UserInterface
 {
@@ -94,7 +95,7 @@ namespace UserInterface
 
             if (signal.IsChecked)
             {
-                Measurement[] measurements;
+                RepositoryCore.Measurement[] measurements;
                 if (StartDate != null && EndDate != null)
                 {
                     DateTime start = StartDate ?? DateTime.Now;
@@ -119,7 +120,7 @@ namespace UserInterface
             }
         }
 
-        public StepLineSeries MakeSignal(string title, Measurement[] measurements)
+        public StepLineSeries MakeSignal(string title, RepositoryCore.Measurement[] measurements)
         {
             StepLineSeries line = new StepLineSeries();
             line.Title = title;
