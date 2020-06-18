@@ -7,7 +7,14 @@ namespace CalculationEngine
 {
     public class TransactionService : ITransactionSteps
 	{
-        public static ProcessingData _processingData;
+        private ProcessingData _processingData;
+        private ConcreteModel Model;
+
+        public TransactionService(ProcessingData processingData, ConcreteModel model)
+        {
+            _processingData = processingData;
+            Model = model;
+        }
 
         public bool Prepare()
 		{
@@ -19,9 +26,9 @@ namespace CalculationEngine
 		{
 			Console.WriteLine("CE Commit");
 
-			ConcreteModel.BackupModel = new Dictionary<long, IdObject>(ConcreteModel.CurrentModel);
-			ConcreteModel.CurrentModel = new Dictionary<long, IdObject>(ConcreteModel.CurrentModel_Copy);
-			ConcreteModel.CurrentModel_Copy.Clear();
+			Model.BackupModel = new Dictionary<long, IdObject>(Model.CurrentModel);
+			Model.CurrentModel = new Dictionary<long, IdObject>(Model.CurrentModel_Copy);
+			Model.CurrentModel_Copy.Clear();
 
             //_processingData.UpdateAsyncMachines();
             _processingData.IsModelChanged = true;
@@ -35,8 +42,8 @@ namespace CalculationEngine
 		{
 			Console.WriteLine("CE Rollback");
 
-			ConcreteModel.CurrentModel = new Dictionary<long, IdObject>(ConcreteModel.BackupModel);
-			ConcreteModel.CurrentModel_Copy.Clear();
+			Model.CurrentModel = new Dictionary<long, IdObject>(Model.BackupModel);
+			Model.CurrentModel_Copy.Clear();
 		}
 	}
 }
