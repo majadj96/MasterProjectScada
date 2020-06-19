@@ -256,7 +256,7 @@
     <Resource Include="Assets\breaker-on.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\transformator-off.png" />
+    <Resource Include="Assets\transformator-off1.png" />
     <Resource Include="Assets\transformator-on.png" />
   </ItemGroup>
   <ItemGroup>
@@ -278,6 +278,53 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\scadaIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Digital-Circuit-Wallpapers-Top-Free-Digital-Circuit-.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\lalala.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\lalaPlavoCrna.jpg" />
+    <Resource Include="Assets\pLAVOpLAVAL.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\PLACO.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\PLACOaaa.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\PLACObbbb.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\PLACOccc.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\PLACOmmm.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\crop.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\breaker-off1.png" />
+    <Resource Include="Assets\breaker-on1.png" />
+    <Resource Include="Assets\resloser-off1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\recloser-on1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\transformator-on1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\pump-off1.png" />
+    <Resource Include="Assets\pump-on-rotate1.png" />
+    <Resource Include="Assets\pump-on1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
