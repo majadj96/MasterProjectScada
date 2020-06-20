@@ -51,14 +51,12 @@ namespace CalculationEngine
                         {
                             Discrete discrete = (Discrete)idObject;
                             discrete.NormalValue = (int)meas.Value;
-
-                            UpdateMachineStates();
                         }
                     }
                 }
 
                 //UpdateTransformersMeasurements();
-                //UpdateMachineStates();
+                UpdateMachineStates();
                 //UpdateFluidLevels();
             });
 
@@ -74,15 +72,15 @@ namespace CalculationEngine
                     AsyncMachine machine = (AsyncMachine)item;
                     List<long> switchSequence = GetMachineSwitchSequence(machine.MRID, 1);
 
-                    if (switchSequence.Count > 0)
-                    {
-                        // Neki prekidac je otvoren, masina ne radi
-                        machine.IsRunning = false;
-                    }
-                    else
+                    if (switchSequence.Count == 0 && IsMachineSupplied(machine))
                     {
                         // Svi prekidaci su zatvoreni, masina radi
                         machine.IsRunning = true;
+                    }
+                    else
+                    {
+                        // Neki prekidac je otvoren, masina ne radi
+                        machine.IsRunning = false;
                     }
                 }
             }
@@ -535,22 +533,48 @@ namespace CalculationEngine
         //    return null;
         //}
 
-        //private List<Analog> GetMeasurementsForEquipment(long equipGid)
-        //{
-        //    List<Analog> ret = new List<Analog>();
+        private List<Analog> GetMeasurementsForEquipment(long equipGid)
+        {
+            List<Analog> ret = new List<Analog>();
 
-        //    foreach (IdObject item in Model.CurrentModel.Values)
-        //    {
-        //        if(item.GetType() == typeof(Analog))
-        //        {
-        //            Analog meas = (Analog)item;
-        //            if (meas.EquipmentGid == equipGid)
-        //                ret.Add(meas);
-        //        }
-        //    }
+            foreach (IdObject item in Model.CurrentModel.Values)
+            {
+                if (item.GetType() == typeof(Analog))
+                {
+                    Analog meas = (Analog)item;
+                    if (meas.EquipmentGid == equipGid)
+                        ret.Add(meas);
+                }
+            }
 
-        //    return ret;
-        //}
+            return ret;
+        }
+
+        private bool IsMachineSupplied(AsyncMachine machine)
+        {
+            long winding = 0;
+
+            if (machine.MRID == "AsyncM_1")
+            {
+                winding = GetObjectByMrid("TRWinding_2").GID;
+            }
+            else if (machine.MRID == "AsyncM_2" || machine.MRID == "AsyncM_3")
+            {
+                winding = GetObjectByMrid("TRWinding_4").GID;
+            }
+
+            List<Analog> measurements = GetMeasurementsForEquipment(winding);
+
+            foreach (Analog meas in measurements)
+            {
+                if(meas.NormalValue <= meas.MinValue)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         //private bool IsTransformerSupplied(long transformerGid)
         //{
