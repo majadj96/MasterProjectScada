@@ -819,11 +819,11 @@ namespace UserInterface.ViewModel
             {
                 SubstationCurrent.Transformator.State = true;
                 foreach (var v in SubstationCurrent.AsynchronousMachines)
-                    v.State = true;
+                    v.State = false;
                 foreach (var v in SubstationCurrent.Breakers)
-                    v.State = DiscreteState.ON;
+                    v.State = DiscreteState.OFF;
                 foreach (var v in SubstationCurrent.Disconectors)
-                    v.State = DiscreteState.ON;
+                    v.State = DiscreteState.OFF;
             }
         }
 
@@ -834,14 +834,14 @@ namespace UserInterface.ViewModel
             lineFirst = lineSecond = lineThird = lineUpDis1 = lineDownDis1 = lineUpBreaker = lineDownBreaker = lineUpDis2 =
             lineDownDis2 = lineUpPT = lineDownPT = lineUpBreaker2 = lineFourth = lineStart = lineUpFirstPump = lineUpMultiPump =
             lineUpSecondPump = lineUpPumpOne = lineUpBreakerFirstPump = lineUpBreakerSecondPump = lineDownBreaker2 =
-            lineUpBreakerSecondPumpCN = lineUpBreakerFirstPumpCN = "#FF29BF30";
+            lineUpBreakerSecondPumpCN = lineUpBreakerFirstPumpCN = "#FF29A2B5";
             Two_AM_Visible = "Hidden";
-            breakerImage = breakerPumpOneImage = breaker_PM1Image = breaker_PM2Image = "Assets/breaker-on1.png";
-            disconector1Image = disconector2Image = "Assets/recloser-on1.png";
-            ptImage = "Assets/transformator-on1.png";
-            PumpImage = "Assets/pump-on-rotate1.png";
-            Pump1Image = "Assets/pump-on-rotate1.png";
-            Pump2Image = "Assets/pump-on-rotate1.png";
+            breakerImage = breakerPumpOneImage = breaker_PM1Image = breaker_PM2Image = "Assets/breaker-off1.png";
+            disconector1Image = disconector2Image = "Assets/resloser-off1.png";
+            ptImage = "Assets/transformator-off1.png";
+            PumpImage = "Assets/pump-off1.png"; // "Assets/pump-on-rotate1.png";
+            Pump1Image = "Assets/pump-off1.png";
+            Pump2Image = "Assets/pump-off1.png";
         }
 
         private void TimerTick(object sender, EventArgs e)

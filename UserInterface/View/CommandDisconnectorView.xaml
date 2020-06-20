@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:UserInterface.View"
              mc:Ignorable="d" 
-             d:DesignHeight="370" d:DesignWidth="370" Background="#FF474747">
+             d:DesignHeight="370" d:DesignWidth="370" Background="White">
     <UserControl.Resources>
         <Style x:Key="MyButtonStyle" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -35,9 +35,9 @@
 
             <Style.Resources>
                 <Color x:Key="Color.Additional.Lime">#FF00FF00</Color>
-                <Color x:Key="Color.Additional.LimeGreen">#FF32CD32</Color>
-                <Color x:Key="Color.MedtronicBranding.Crimson">#FFDC143C</Color>
-                <Color x:Key="Color.MedtronicBranding.Red">#FFFF634D</Color>
+                <Color x:Key="Color.Additional.LimeGreen">#FF81E264</Color>
+                <Color x:Key="Color.MedtronicBranding.Crimson">#FF5AA3B4</Color>
+                <Color x:Key="Color.MedtronicBranding.Red">#FF64CBE2</Color>
 
                 <Style x:Key="ToggleButtonContentTextbox"
                TargetType="TextBlock">
@@ -62,12 +62,12 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>
-                                <TextBlock FontFamily="Consolas"
+                                <TextBlock FontFamily="Calibri"
                                    FontSize="20"
-                                   FontWeight="Bold"
+                                   FontWeight="Light"
                                    Foreground="Black"
                                    Style="{StaticResource ToggleButtonContentTextbox}"
-                                   Text="ON" />
+                                   Text="OFF" />
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -81,11 +81,11 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>
-                                <TextBlock FontSize="18" FontFamily="Consolas"
-                                           FontWeight="Bold"
+                                <TextBlock FontSize="18" FontFamily="Calibri"
+                                           FontWeight="Light"
                                    Foreground="Black"
                                    Style="{StaticResource ToggleButtonContentTextbox}"
-                                   Text="OFF" />
+                                   Text="ON" />
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -190,36 +190,36 @@
     </UserControl.Resources>
 
     <Grid>
-        <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="55" Margin="10,39,0,0" VerticalAlignment="Top" Width="347">
-            <Label Content="Commanding Disconnector" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="37" VerticalAlignment="Top" Width="329" Margin="8.4,8.4,0,0" FontFamily="Consolas" FontSize="22" Foreground="AntiqueWhite"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="10,39,0,0" VerticalAlignment="Top" Width="347">
+            <Label Content="Commanding Disconnector" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="37" VerticalAlignment="Top" Width="329" Margin="8.4,8.4,0,0" FontFamily="Calibri" FontSize="22" Foreground="Black"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="55" Margin="10,92,0,0" VerticalAlignment="Top" Width="175">
-            <Label Content="Name:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" VerticalAlignment="Top" Width="155" Margin="8.4,8.4,0,0" FontFamily="Consolas" FontSize="20" Foreground="AntiqueWhite"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="10,92,0,0" VerticalAlignment="Top" Width="175">
+            <Label Content="Name:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" VerticalAlignment="Top" Width="155" Margin="8.4,8.4,0,0" FontFamily="Calibri" FontSize="20" Foreground="Black"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="55" Margin="10,145,0,0" VerticalAlignment="Top" Width="175">
-            <Label Content="Description:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" VerticalAlignment="Top" Width="155" Margin="8.4,8.4,0,0" FontFamily="Consolas" FontSize="20" Foreground="AntiqueWhite"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="10,145,0,0" VerticalAlignment="Top" Width="175">
+            <Label Content="Description:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" VerticalAlignment="Top" Width="155" Margin="8.4,8.4,0,0" FontFamily="Calibri" FontSize="20" Foreground="Black"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="55" Margin="10,198,0,0" VerticalAlignment="Top" Width="175">
-            <Label Content="New state:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" VerticalAlignment="Top" Width="155" Margin="8.4,8.4,0,0" FontFamily="Consolas" FontSize="20" Foreground="AntiqueWhite"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="10,198,0,0" VerticalAlignment="Top" Width="175">
+            <Label Content="New state:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" VerticalAlignment="Top" Width="155" Margin="8.4,8.4,0,0" FontFamily="Calibri" FontSize="20" Foreground="Black"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="55" Margin="182,92,0,0" VerticalAlignment="Top" Width="175">
-            <Label Content="{Binding DisconectorCurrent.Name}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" Width="155" Margin="8.4,8.4,0,7.8" FontFamily="Consolas" FontSize="20" Foreground="#FFB1E698"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="182,92,0,0" VerticalAlignment="Top" Width="175">
+            <Label Content="{Binding DisconectorCurrent.Name}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" Width="155" Margin="8.4,8.4,0,7.8" FontFamily="Calibri" FontSize="20" Foreground="Black"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="55" Margin="182,145,0,0" VerticalAlignment="Top" Width="175">
-            <Label Content="{Binding DisconectorCurrent.Description}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" Width="155" Margin="8.4,8.4,0,7.8" FontFamily="Consolas" FontSize="20" Foreground="#FFB1E698"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="182,145,0,0" VerticalAlignment="Top" Width="175">
+            <Label Content="{Binding DisconectorCurrent.Description}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" Width="155" Margin="8.4,8.4,0,7.8" FontFamily="Calibri" FontSize="20" Foreground="Black"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="55" Margin="182,198,0,0" VerticalAlignment="Top" Width="175">
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="182,198,0,0" VerticalAlignment="Top" Width="175">
             <ToggleButton Height="35" Width="70" Margin="8.4,8.4,0,7.8" Visibility="Visible" Style="{StaticResource SwitchTypeToggleButton}" IsChecked="{Binding NewState, Mode=TwoWay}"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="55" Margin="10,252,0,0" VerticalAlignment="Top" Width="347">
-            <Button Style="{StaticResource MyButtonStyle}" Height="35" Width="100" Content="Command" Margin="123.4,8.4,119.8,7.8" Background="#FF94E264" Foreground="#FF252525" Command="{Binding Command}" FontFamily="Consolas" FontSize="16"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="10,252,0,0" VerticalAlignment="Top" Width="347">
+            <Button Style="{StaticResource MyButtonStyle}" Height="35" Width="100" Content="Command" Margin="123.4,8.4,119.8,7.8" Background="#FF64CBE2" Foreground="#FF252525" Command="{Binding Command}" FontFamily="Consolas" FontSize="16"/>
         </Border>
-        
+
         <!--<Label Content="{Binding DisconectorCurrent.Name}" HorizontalContentAlignment="Center" Margin="10,52,10,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="20" Foreground="#FFB1E698"/>
         <Label Content="{Binding DisconectorCurrent.Description}" HorizontalContentAlignment="Center" Margin="11,104,9,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="18" Foreground="#FFB1E698"/>
         <Label Content="New state" HorizontalContentAlignment="Center" Margin="4,165,16,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="16" Foreground="#FFE69898"/>
         <ToggleButton Height="35" Width="70" Margin="144,217,155.6,117.6" Visibility="Visible" Style="{StaticResource SwitchTypeToggleButton}" IsChecked="{Binding NewState, Mode=TwoWay}"/>
         <Button Style="{StaticResource MyButtonStyle}" Height="30" Width="80" Content="Command" Margin="144,293,145.6,46.6" Background="#FF94E264" Foreground="#FF252525" Command="{Binding Command}" FontFamily="Consolas" FontSize="16"/>
    -->
-        </Grid>
+    </Grid>
 </UserControl>
