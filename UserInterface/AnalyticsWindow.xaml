@@ -7,7 +7,7 @@
         xmlns:views="clr-namespace:UserInterface.View"
         xmlns:analytics="clr-namespace:UserInterface.View.AnalyticsViews"
         xmlns:viewModel="clr-namespace:UserInterface.ViewModel"
-        xmlns:wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"      
+        xmlns:wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
         Title="Analytics Window" Height="700" Width="1000" Background="LightGray" WindowStartupLocation="CenterScreen">
     <Window.Resources>
@@ -43,21 +43,14 @@
 
         <StackPanel x:Name="SubstationsPanel" Canvas.Left="3" Margin="40,297,808,352" Orientation="Vertical"/>
         <wpf:CartesianChart Margin="254,152,22,48" Series="{Binding SeriesCollection}" Foreground="{x:Null}" Background="White">
-            <wpf:CartesianChart.AxisX>
-                <wpf:Axis>
-                    <wpf:Axis.Separator>
-                        <wpf:Separator Stroke="Black"/>
-                    </wpf:Axis.Separator>
-                </wpf:Axis>
-            </wpf:CartesianChart.AxisX>
-            <wpf:CartesianChart.AxisY>
-                <wpf:Axis>
-                    <wpf:Axis.Separator>
-                        <wpf:Separator Stroke="Black"/>
-                    </wpf:Axis.Separator>
-                </wpf:Axis>
-            </wpf:CartesianChart.AxisY>
-        </wpf:CartesianChart>
+			<wpf:CartesianChart.AxisX>
+				<wpf:Axis LabelFormatter="{Binding Formatter}" MinValue="{Binding InitialDateTime.Ticks}" MaxValue="{Binding MaxDateTime.Ticks}">
+				</wpf:Axis>
+			</wpf:CartesianChart.AxisX>
+			<wpf:CartesianChart.DataTooltip>
+				<wpf:DefaultTooltip SelectionMode="OnlySender" Foreground="Black" />
+			</wpf:CartesianChart.DataTooltip>
+		</wpf:CartesianChart>
         <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding SubstationList}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedSubstation, Mode=TwoWay}" Margin="118,189,0,0" VerticalAlignment="Top" Height="24" Width="120" FontFamily="Consolas"/>
         <Label Content="Subsation:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Margin="26,188,0,0" VerticalAlignment="Top" FontFamily="Consolas" Width="81" Foreground="White" FontSize="13"/>
         <Label Content="Measurements" HorizontalAlignment="Left" Margin="54,280,0,0"  HorizontalContentAlignment="Center" VerticalAlignment="Top" FontFamily="Consolas" Width="144" Foreground="White" FontSize="13"/>
