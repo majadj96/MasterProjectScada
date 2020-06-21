@@ -94,9 +94,9 @@
 	</cim:TransformerWinding>
 	<cim:RatioTapChanger rdf:ID="RatioTC_1">
 		<cim:RatioTapChanger.TransformerWinding rdf:resource="#TRWinding_2"/>
-		<cim:TapChanger.highStep>7</cim:TapChanger.highStep>
-		<cim:TapChanger.lowStep>-7</cim:TapChanger.lowStep>
-		<cim:TapChanger.normalStep>0</cim:TapChanger.normalStep>
+		<cim:TapChanger.highStep>14</cim:TapChanger.highStep>
+		<cim:TapChanger.lowStep>0</cim:TapChanger.lowStep>
+		<cim:TapChanger.normalStep>7</cim:TapChanger.normalStep>
 		<cim:IdentifiedObject.description>RatioTapChanger</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>RatioTC_1</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>RatioTC_1</ftn:IdentifiedObject.name>
@@ -123,9 +123,9 @@
 	</cim:TransformerWinding>
 	<cim:RatioTapChanger rdf:ID="RatioTC_2">
 		<cim:RatioTapChanger.TransformerWinding rdf:resource="#TRWinding_4"/>
-		<cim:TapChanger.highStep>7</cim:TapChanger.highStep>
-		<cim:TapChanger.lowStep>-7</cim:TapChanger.lowStep>
-		<cim:TapChanger.normalStep>0</cim:TapChanger.normalStep>
+		<cim:TapChanger.highStep>14</cim:TapChanger.highStep>
+		<cim:TapChanger.lowStep>0</cim:TapChanger.lowStep>
+		<cim:TapChanger.normalStep>7</cim:TapChanger.normalStep>
 		<cim:IdentifiedObject.description>RatioTapChanger</cim:IdentifiedObject.description>
 		<cim:IdentifiedObject.mRID>RatioTC_2</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>RatioTC_2</ftn:IdentifiedObject.name>

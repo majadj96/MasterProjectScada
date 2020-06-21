@@ -74,7 +74,7 @@ namespace UserInterface
 		private string gaugePressure2visibility = "Hidden";
 		private string transformerCurrent;
         private string transformerVoltage;
-        private string transformerTapChanger;
+        private string transformerTapChanger = "7";
 
         private bool BlinkOnFlag = false, FlagToStartBlinking = false;
         private bool meshVisible = true;
@@ -581,7 +581,7 @@ namespace UserInterface
         {
             TransformerCurrent = SubstationCurrent.Transformator.Current.ToString();
             TransformerVoltage = SubstationCurrent.Transformator.Voltage.ToString();
-            //TransformerTapChanger = SubstationCurrent.Transformator.TapChangerValue.ToString();
+            TransformerTapChanger = SubstationCurrent.Transformator.TapChangerValue.ToString();
 
             foreach (Measurement meas in Measurements.Values)
             {
@@ -695,14 +695,14 @@ namespace UserInterface
                     if(Measurements.TryGetValue(measure.Gid, out Measurement meas))
                     {
                         meas.Value = measure.Value;
-                        //if(meas.PowerSystemResource.ToString() == SubstationCurrent.Gid)
-                        //{
-                        //    CommandToAM(meas.Value);
-                        //}
-                        //else if (meas.PowerSystemResource.ToString() == SubstationCurrent.TapChanger.GID)
-                        //{
-                        //    TransformerTapChanger = meas.Value.ToString();
-                        //}
+                        if(meas.PowerSystemResource.ToString() == SubstationCurrent.Gid)
+                        {
+                            CommandToAM(meas.Value);
+                        }
+                        else if (meas.PowerSystemResource.ToString() == SubstationCurrent.TapChanger.GID)
+                        {
+                            TransformerTapChanger = meas.Value.ToString();
+                        }
                     }
 
                     //measure.Gid to da se poklapa sa nekim od gidova od asinhrone ili od brejkera ili od diskonektora ili od ono za fluide itd..trebaju nam merenja
@@ -765,7 +765,7 @@ namespace UserInterface
                     {
                         br.NewState = ConverterState.ConvertToDiscreteState(newValue.Value);
                         br.State = br.NewState;
-                        br.Time = newValue.Time.ToLongDateString();
+                        br.Time = newValue.Time.ToString();
                         if (sub.Breakers.Count > 2 && i != 1)
                             i += 2;
                         meshViewModel.ChangeStatesOfElements("Breaker" + i.ToString(), br);
@@ -782,7 +782,7 @@ namespace UserInterface
                     {
                         dis.NewState = ConverterState.ConvertToDiscreteState(newValue.Value);
                         dis.State = dis.NewState;
-                        dis.Time = newValue.Time.ToLongDateString();
+                        dis.Time = newValue.Time.ToString();
                         meshViewModel.ChangeStatesOfElements("Disconector" + i.ToString(), dis);
                     }
                 }
@@ -794,7 +794,7 @@ namespace UserInterface
                 {
                     if (am.SignalGid == newValue.Gid)
                     {
-                        am.Time = newValue.Time.ToLongDateString();
+                        am.Time = newValue.Time.ToString();
                         //CommandToAM(newValue.Value);
                     }
                 }
@@ -811,12 +811,12 @@ namespace UserInterface
                 sub.Transformator.Voltage = (float)newValue.Value;
                 TransformerVoltage = newValue.Value.ToString();
             }
-            //if (sub.Transformator.AnalogTapChangerGID == newValue.Gid)
-            //{
-            //    sub.Transformator.Time = newValue.Time.ToLongDateString();
-            //    sub.Transformator.TapChangerValue = (long)newValue.Value;
-            //    TransformerTapChanger = newValue.Value.ToString();
-            //}
+            if (sub.Transformator.AnalogTapChangerGID == newValue.Gid)
+            {
+                sub.Transformator.Time = newValue.Time.ToLongDateString();
+                sub.Transformator.TapChangerValue = (long)newValue.Value;
+                TransformerTapChanger = newValue.Value.ToString();
+            }
         }
 
         public void CommandToAM(double value)

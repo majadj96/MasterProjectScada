@@ -15,7 +15,6 @@ using UserInterface.BaseError;
 using UserInterface.Model;
 using UserInterface.Networking;
 using UserInterface.ViewModel;
-using RepositoryCore;
 
 namespace UserInterface
 {
