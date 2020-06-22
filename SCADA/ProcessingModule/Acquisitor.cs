@@ -27,8 +27,11 @@ namespace ProcessingModule
             this.acquisitionTrigger = acquisitionTrigger;
             this.processingManager = processingManager;
             this.configuration = configuration;
-            this.InitializeAcquisitionThread();
-            this.StartAcquisitionThread();
+            if (configuration.Class0Acquisition > 0)
+            {
+                this.InitializeAcquisitionThread();
+                this.StartAcquisitionThread();
+            }
         }
 
         #region Private Methods
