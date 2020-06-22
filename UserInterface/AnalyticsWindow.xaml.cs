@@ -10,6 +10,6 @@ namespace UserInterface
         public AnalyticsWindow()
         {
             InitializeComponent();
-        }
+		}
     }
 }
