@@ -11,7 +11,7 @@ namespace UserInterface.Model
     {
         public UIModel() {}
 
-        public UIModel(string name, string description, string time, string value, string alarm, string gID, string mRID)
+        public UIModel(string name, string description, string time, string value, string alarm, string gID, string mRID, string min, string max)
         {
             Name = name;
             Description = description;
@@ -20,6 +20,8 @@ namespace UserInterface.Model
             Alarm = alarm;
             GID = gID;
             MRID = mRID;
+            Min = min;
+            Max = max;
         }
 
         public string Name { get; set; }
@@ -35,6 +37,8 @@ namespace UserInterface.Model
         public string  GID { get; set; }
 
         public string MRID { get; set; }
+        public string Min { get; set; }
+        public string Max { get; set; }
 
     }
 

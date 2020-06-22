@@ -72,6 +72,8 @@
                 <DataGridTextColumn Header="Name" Width="*"  Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Description" Width="*" Binding="{Binding Description}"/>
                 <DataGridTextColumn Header="Value" Width="*" Binding="{Binding Value}"/>
+                <DataGridTextColumn Header="Min" Width="*" Binding="{Binding Min}"/>
+                <DataGridTextColumn Header="Max" Width="*" Binding="{Binding Max}"/>
                 <DataGridTextColumn Header="Time" Width="*" Binding="{Binding Time}"/>
                 <DataGridTextColumn Header="Alarm" Width="*" Binding="{Binding Alarm}"/>
             </DataGrid.Columns>
