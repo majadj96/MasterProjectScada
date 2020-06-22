@@ -273,17 +273,6 @@
     <Resource Include="Assets\transformator-on.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\recloser-on.png" />
-    <Resource Include="Assets\resloser-off.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\pump-off.png" />
-    <Resource Include="Assets\pump-on.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\pump-on-rotate.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Assets\search.png" />
   </ItemGroup>
   <ItemGroup>

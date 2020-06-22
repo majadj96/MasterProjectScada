@@ -212,7 +212,7 @@
             <ToggleButton Height="35" Width="70" Margin="8.4,8.4,0,7.8" Visibility="Visible" Style="{StaticResource SwitchTypeToggleButton}" IsChecked="{Binding NewState, Mode=TwoWay}"/>
         </Border>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="10,252,0,0" VerticalAlignment="Top" Width="347">
-            <Button Style="{StaticResource MyButtonStyle}" Height="35" Width="100" Content="Command" Margin="123.4,8.4,119.8,7.8" Background="#FF64CBE2" Foreground="#FF252525" Command="{Binding Command}" FontFamily="Consolas" FontSize="16"/>
+            <Button Style="{StaticResource MyButtonStyle}" Height="35" Width="100" Content="Command" Margin="123.4,8.4,119.8,7.8" Background="#FF64CBE2" Foreground="Black" Command="{Binding Command}" FontFamily="Consolas" FontSize="16"/>
         </Border>
 
         <!--<Label Content="{Binding DisconectorCurrent.Name}" HorizontalContentAlignment="Center" Margin="10,52,10,0" VerticalAlignment="Top" FontFamily="Consolas" FontSize="20" Foreground="#FFB1E698"/>

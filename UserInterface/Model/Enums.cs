@@ -2,7 +2,7 @@
 {
     public enum DiscreteState
     {
-        ON = 0,//true
-        OFF = 1//false
+        ON = 1,//true
+        OFF = 0//false
     }
 }

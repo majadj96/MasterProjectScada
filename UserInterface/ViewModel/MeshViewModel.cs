@@ -829,8 +829,8 @@ namespace UserInterface.ViewModel
 
         public void populateUI()
         {
-            //Green color: #FF7DFB4E  -- #FF29BF30 -- ON
-            //Red color: #FFFF634D  -- Blue #FF29A2B5 -- OFF
+            //off - #FF29A2B5 - BLUE
+            //#FF29BF30 - GREEN
             lineFirst = lineSecond = lineThird = lineUpDis1 = lineDownDis1 = lineUpBreaker = lineDownBreaker = lineUpDis2 =
             lineDownDis2 = lineUpPT = lineDownPT = lineUpBreaker2 = lineFourth = lineStart = lineUpFirstPump = lineUpMultiPump =
             lineUpSecondPump = lineUpPumpOne = lineUpBreakerFirstPump = lineUpBreakerSecondPump = lineDownBreaker2 =
@@ -927,6 +927,8 @@ namespace UserInterface.ViewModel
             SubstationCurrent.Disconectors[0].State = DiscreteState.OFF;
             Disconector1Image = "Assets/resloser-off1.png";
             LineUpDis1 = LineDownDis1 = LineSecond = "#FF29A2B5";
+            LineFirst = LineStart = "#FF29A2B5";
+
             drawBreakerOff();
 
             if (SubstationCurrent.Breakers.Count > 2)
@@ -936,11 +938,14 @@ namespace UserInterface.ViewModel
             }
         }
 
+        //off - #FF29A2B5 - BLUE
+        //#FF29BF30 - GREEN
         public void SetFirstDisconectorOn()
         {
             SubstationCurrent.Disconectors[0].State = DiscreteState.ON;
             Disconector1Image = "Assets/recloser-on1.png";
             LineUpDis1 = LineDownDis1 = LineSecond = "#FF29BF30";
+            LineFirst = LineStart = "#FF29BF30";
 
             if (SubstationCurrent.Breakers[0].State == DiscreteState.ON)
             {
@@ -966,6 +971,7 @@ namespace UserInterface.ViewModel
         {
             SubstationCurrent.Disconectors[1].State = DiscreteState.OFF;
             Disconector2Image = "Assets/resloser-off1.png";
+
             drawDis2Off();
             if (SubstationCurrent.Breakers.Count > 2)
             {
@@ -1219,6 +1225,8 @@ namespace UserInterface.ViewModel
         }
 
         #region Coloring lines
+        //off - #FF29A2B5 - BLUE
+        //#FF29BF30 - GREEN
         private void drawBreakerOn()
         {
             LineUpBreaker = LineDownBreaker = LineThird = "#FF29BF30";
@@ -1257,12 +1265,12 @@ namespace UserInterface.ViewModel
 
         private void drawBreakerOff()
         {
-            LineDownBreaker = LineUpBreaker = LineThird = "#FF29A2B5";
+            LineUpBreaker =  LineDownBreaker = LineThird = "#FF29A2B5";
             drawDis2Off();
         }
         private void drawDis2Off()
         {
-            LineUpDis2 = LineDownDis2 = LineFourth = LineUpPT = LineDownPT = "#FF29A2B5";
+            LineUpDis2 = LineUpPT =  LineDownDis2 = LineFourth = LineDownPT = "#FF29A2B5";
             PTImage = "Assets/transformator-off1.png";
             DrawBreaker2Off();
         }
@@ -1273,7 +1281,7 @@ namespace UserInterface.ViewModel
         }
         public void DrawBreaker4Off()
         {
-            LineUpFirstPump = LineUpBreakerFirstPump = LineUpBreakerFirstPumpCN = "#FF29A2B5";
+            LineUpFirstPump =   LineUpBreakerFirstPump = LineUpBreakerFirstPumpCN = "#FF29A2B5";
             SubstationCurrent.AsynchronousMachines[0].State = false;
             Pump1Image = "Assets/pump-off1.png";
         }

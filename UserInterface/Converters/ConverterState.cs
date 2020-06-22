@@ -23,9 +23,9 @@ namespace UserInterface.Converters
         public static DiscreteState ConvertToDiscreteState(double value)
         {
             if(value == 1)
-                return DiscreteState.OFF;
-            else
                 return DiscreteState.ON;
+            else
+                return DiscreteState.OFF;
 
         }
     }
