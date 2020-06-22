@@ -1234,7 +1234,8 @@ namespace UserInterface
                     }
                 }
                 model.Time = DateTime.Now.ToString();
-
+                model.Max = "1000";
+                model.Min = "100";
                 response.Add(model);
             }
             return response;
