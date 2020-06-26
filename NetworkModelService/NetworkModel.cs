@@ -1,6 +1,8 @@
 ﻿using Common;
 using Common.GDA;
 using DataModel.Core;
+using NetworkModelService.DeltaDB;
+using NetworkModelService.DeltaDB.Interfaces;
 using NetworkModelService.GDA;
 using System;
 using System.Collections.Generic;
@@ -36,14 +38,19 @@ namespace NetworkModelService
         /// </summary>
         private ModelResourcesDesc resourcesDescs;
 
+
+        private IDeltaRepository deltaRepository;
+
         /// <summary>
         /// Initializes a new instance of the Model class.
         /// </summary>
+        /// 
         public NetworkModel()
         {
             networkDataModel = new Dictionary<DMSType, Container>();
             networkDataModelCopy = new Dictionary<DMSType, Container>();
             resourcesDescs = new ModelResourcesDesc();
+            deltaRepository = new DeltaRepository();
             Initialize();
         }
 

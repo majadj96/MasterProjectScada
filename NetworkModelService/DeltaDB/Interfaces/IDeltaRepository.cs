@@ -15,5 +15,8 @@ namespace NetworkModelService.DeltaDB.Interfaces
 
         [OperationContract]
         List<DeltaDBModel> GetAllDeltas();
+
+        [OperationContract]
+        int GetNumberOfDeltas();
     }
 }

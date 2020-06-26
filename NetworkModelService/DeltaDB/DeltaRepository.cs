@@ -21,5 +21,10 @@ namespace NetworkModelService.DeltaDB
         {
             return context.Deltas.ToList();
         }
+
+        public int GetNumberOfDeltas()
+        {
+            return context.Deltas.Count();
+        }
     }
 }
