@@ -752,108 +752,64 @@ namespace NetworkModelService
         {
             List<Delta> result = ReadAllDeltas();
 
-            foreach (Delta delta in result)
-            {
-                try
-                {
-                    foreach (ResourceDescription rd in delta.InsertOperations)
-                    {
-                        InsertEntity(rd);
-                    }
+            //if(result.Count > 0)
+            //{
+            //    UpdateModel(result[0]);
+            //}
 
-                    foreach (ResourceDescription rd in delta.UpdateOperations)
-                    {
-                        UpdateEntity(rd);
-                    }
+            //foreach (Delta delta in result)
+            //{
+            //    try
+            //    {
+            //        foreach (ResourceDescription rd in delta.InsertOperations)
+            //        {
+            //            InsertEntity(rd);
+            //        }
 
-                    foreach (ResourceDescription rd in delta.DeleteOperations)
-                    {
-                        DeleteEntity(rd);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    CommonTrace.WriteTrace(CommonTrace.TraceError, "Error while applying delta (id = {0}) during service initialization. {1}", delta.Id, ex.Message);
-                }
-            }
+            //        foreach (ResourceDescription rd in delta.UpdateOperations)
+            //        {
+            //            UpdateEntity(rd);
+            //        }
+
+            //        foreach (ResourceDescription rd in delta.DeleteOperations)
+            //        {
+            //            DeleteEntity(rd);
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        CommonTrace.WriteTrace(CommonTrace.TraceError, "Error while applying delta (id = {0}) during service initialization. {1}", delta.Id, ex.Message);
+            //    }
+            //}
         }
 
         private void SaveDelta(Delta delta)
-        {
-            bool fileExisted = false;
+        {        
+            //int deltaCount = deltaRepository.GetNumberOfDeltas();
 
-            if (File.Exists(Config.Instance.ConnectionString))
-            {
-                fileExisted = true;
-            }
+            DeltaDBModel newDelta = new DeltaDBModel();
+            //newDelta.Id = ++deltaCount;
+            newDelta.Data = delta.Serialize();
 
-            FileStream fs = new FileStream(Config.Instance.ConnectionString, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            fs.Seek(0, SeekOrigin.Begin);
-
-            BinaryReader br = null;
-            int deltaCount = 0;
-
-            if (fileExisted)
-            {
-                br = new BinaryReader(fs);
-                deltaCount = br.ReadInt32();
-            }
-
-            BinaryWriter bw = new BinaryWriter(fs);
-            fs.Seek(0, SeekOrigin.Begin);
-
-            delta.Id = ++deltaCount;
-            byte[] deltaSerialized = delta.Serialize();
-            int deltaLength = deltaSerialized.Length;
-
-            bw.Write(deltaCount);
-            fs.Seek(0, SeekOrigin.End);
-            bw.Write(deltaLength);
-            bw.Write(deltaSerialized);
-
-            if (br != null)
-            {
-                br.Close();
-            }
-
-            bw.Close();
-            fs.Close();
+            deltaRepository.Add(newDelta);
         }
 
         private List<Delta> ReadAllDeltas()
         {
             List<Delta> result = new List<Delta>();
 
-            if (!File.Exists(Config.Instance.ConnectionString))
+            List<DeltaDBModel> deltasInDB = deltaRepository.GetAllDeltas();
+            
+            //uzmi samo prvu Deltu (ako ih i bude vise, sve su iste kod nas)
+            if (deltasInDB.Count > 0)
             {
-                return result;
+                result.Add(Delta.Deserialize(deltasInDB[0].Data));
             }
 
-            FileStream fs = new FileStream(Config.Instance.ConnectionString, FileMode.OpenOrCreate, FileAccess.Read);
-            fs.Seek(0, SeekOrigin.Begin);
-
-            if (fs.Position < fs.Length) // if it is not empty stream
-            {
-                BinaryReader br = new BinaryReader(fs);
-
-                int deltaCount = br.ReadInt32();
-                int deltaLength = 0;
-                byte[] deltaSerialized = null;
-                Delta delta = null;
-
-                for (int i = 0; i < deltaCount; i++)
-                {
-                    deltaLength = br.ReadInt32();
-                    deltaSerialized = new byte[deltaLength];
-                    br.Read(deltaSerialized, 0, deltaLength);
-                    delta = Delta.Deserialize(deltaSerialized);
-                    result.Add(delta);
-                }
-
-                br.Close();
-            }
-
-            fs.Close();
+            //foreach (var delta in deltasInDB)
+            //{
+            //    result.Add(Delta.Deserialize(delta.Data));
+            //}
 
             return result;
         }

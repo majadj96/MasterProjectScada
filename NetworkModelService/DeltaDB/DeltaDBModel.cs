@@ -8,7 +8,7 @@ namespace NetworkModelService.DeltaDB
 {
     public class DeltaDBModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public byte[] Data { get; set; }
     }
 }

@@ -56,6 +56,10 @@
     <Compile Include="Config.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="DeltaDB\DeltaContext.cs" />
+    <Compile Include="DeltaDB\DeltaDBModel.cs" />
+    <Compile Include="DeltaDB\DeltaInitializeDB.cs" />
+    <Compile Include="DeltaDB\DeltaRepository.cs" />
+    <Compile Include="DeltaDB\Interfaces\IDeltaRepository.cs" />
     <Compile Include="GDA\GenericDataAccess.cs" />
     <Compile Include="GDA\ResourceIterator.cs" />
     <Compile Include="NetworkModel.cs" />
