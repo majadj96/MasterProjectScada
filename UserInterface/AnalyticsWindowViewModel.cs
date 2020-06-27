@@ -12,6 +12,8 @@ using UserInterface.BaseError;
 using UserInterface.Model;
 using UserInterface.ViewModel;
 using LiveCharts.Configurations;
+using System.ComponentModel;
+using System.Windows;
 
 namespace UserInterface
 {
@@ -22,7 +24,7 @@ namespace UserInterface
 
         public Dictionary<long, Substation> substations;
 
-        public static Dictionary<long, StepLineSeries> signalsOn;
+        public Dictionary<long, StepLineSeries> signalsOn;
         public SeriesCollection SeriesCollection { get; set; }
 
         private ObservableCollection<RadioButton> radioButtons = new ObservableCollection<RadioButton>();
@@ -74,6 +76,14 @@ namespace UserInterface
 
         public AnalyticsWindowViewModel(Dictionary<long, Substation> substations, IMeasurementRepository measurementProxy)
         {
+			foreach (var item in Application.Current.Windows)
+			{
+				if(item.GetType() == typeof(AnalyticsWindow))
+				{
+					((Window)item).Closing += new CancelEventHandler(AnalyticsWindow_Closing);
+				}
+			}
+
 			signalsOn = new Dictionary<long, StepLineSeries>();
 
 			this.substations = substations;
@@ -231,6 +241,11 @@ namespace UserInterface
             }
         }
 
+		void AnalyticsWindow_Closing(object sender, CancelEventArgs e)
+		{
+			signalsOn = new Dictionary<long, StepLineSeries>();
+			Messenger.Default.Unregister<SignalListItemViewModel>(this);
+		}
 	}
 
 	public class ChartModel
