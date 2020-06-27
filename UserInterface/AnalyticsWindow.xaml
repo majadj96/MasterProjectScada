@@ -49,7 +49,7 @@
 				</wpf:Axis>
 			</wpf:CartesianChart.AxisX>
 			<wpf:CartesianChart.DataTooltip>
-				<wpf:DefaultTooltip SelectionMode="OnlySender" Foreground="Black" />
+				<views:AnalyticsGraphTooltip></views:AnalyticsGraphTooltip>
 			</wpf:CartesianChart.DataTooltip>
 		</wpf:CartesianChart>
         <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding SubstationList}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedSubstation, Mode=TwoWay}" Margin="118,232,0,0" VerticalAlignment="Top" Height="24" Width="120" FontFamily="Calibri"/>

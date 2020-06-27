@@ -140,6 +140,9 @@
     <Compile Include="View\AlarmView.xaml.cs">
       <DependentUpon>AlarmView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\AnalyticsGraphTooltip.xaml.cs">
+      <DependentUpon>AnalyticsGraphTooltip.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\AnalyticsViews\SignalListItem.xaml.cs">
       <DependentUpon>SignalListItem.xaml</DependentUpon>
     </Compile>
@@ -186,6 +189,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\AlarmView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AnalyticsGraphTooltip.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
