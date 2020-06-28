@@ -752,35 +752,43 @@ namespace NetworkModelService
         {
             List<Delta> result = ReadAllDeltas();
 
-            //if(result.Count > 0)
-            //{
-            //    UpdateModel(result[0]);
-            //}
+            foreach (Delta delta in result)
+            {
+                try
+                {
+                    foreach (ResourceDescription rd in delta.InsertOperations)
+                    {
+                        InsertEntity(rd);
+                    }
 
-            //foreach (Delta delta in result)
-            //{
-            //    try
-            //    {
-            //        foreach (ResourceDescription rd in delta.InsertOperations)
-            //        {
-            //            InsertEntity(rd);
-            //        }
+                    foreach (ResourceDescription rd in delta.UpdateOperations)
+                    {
+                        UpdateEntity(rd);
+                    }
 
-            //        foreach (ResourceDescription rd in delta.UpdateOperations)
-            //        {
-            //            UpdateEntity(rd);
-            //        }
+                    foreach (ResourceDescription rd in delta.DeleteOperations)
+                    {
+                        DeleteEntity(rd);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    CommonTrace.WriteTrace(CommonTrace.TraceError, "Error while applying delta (id = {0}) during service initialization. {1}", delta.Id, ex.Message);
+                }
+            }
 
-            //        foreach (ResourceDescription rd in delta.DeleteOperations)
-            //        {
-            //            DeleteEntity(rd);
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        CommonTrace.WriteTrace(CommonTrace.TraceError, "Error while applying delta (id = {0}) during service initialization. {1}", delta.Id, ex.Message);
-            //    }
-            //}
+            networkDataModel = new Dictionary<DMSType, Container>(networkDataModelCopy);
+            networkDataModelCopy.Clear();
+
+            Pub pub = new Pub();
+            try
+            {
+                pub.SendEvent(new PubSubCommon.NMSModel() { ResourceDescs = GetResourceDescriptions() }, null);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error invoking publish method. Message:{ex.Message}");
+            }
         }
 
         private void SaveDelta(Delta delta)

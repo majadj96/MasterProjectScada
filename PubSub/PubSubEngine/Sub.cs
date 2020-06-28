@@ -34,7 +34,13 @@ namespace PubSub.PubSubEngine
 			if(topicName == "nms")
 			{
 				INotifyNMS proxy = CreateNMSProxy();
-				proxy.UpdateUIModel();
+                try
+                {
+                    proxy.UpdateUIModel();
+                }
+                catch (Exception)
+                {
+                }
 			}
 		}
 
