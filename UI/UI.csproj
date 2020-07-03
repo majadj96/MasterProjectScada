@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EBF3CBFD-9CCD-454D-8E3C-B619FD321055}</ProjectGuid>
+    <ProjectGuid>{00C15F10-2FBC-4D61-8B09-3E4398D2BAB4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>UserInterface</RootNamespace>
-    <AssemblyName>UserInterface</AssemblyName>
+    <RootNamespace>UI</RootNamespace>
+    <AssemblyName>UI</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -23,7 +24,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,31 +35,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CommonServiceLocator, Version=2.0.5.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommonServiceLocator.2.0.5\lib\net46\CommonServiceLocator.dll</HintPath>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight, Version=5.4.1.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.4.1.0, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.4.1.0, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
-    </Reference>
-    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
-      <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
-    </Reference>
-    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
-      <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -78,44 +55,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Handlers\AlarmHandler.cs" />
-    <Compile Include="AnalyticsWindow.xaml.cs">
-      <DependentUpon>AnalyticsWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="AnalyticsWindowViewModel.cs" />
-    <Compile Include="BaseError\BindableBase.cs" />
-    <Compile Include="BaseError\ValidationBase.cs" />
-    <Compile Include="BaseError\ValidationErrors.cs" />
-    <Compile Include="CommandingWindow.xaml.cs">
-      <DependentUpon>CommandingWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="CommandingWindowViewModel.cs" />
-    <Compile Include="Command\MyICommand.cs" />
-    <Compile Include="Converters\BooleanConverter.cs" />
-    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Converters\ConverterState.cs" />
-    <Compile Include="Handlers\CustomEventHandler.cs" />
-    <Compile Include="MainWindow1.xaml.cs">
-      <DependentUpon>MainWindow1.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\AsynchronousMachine.cs" />
-    <Compile Include="Model\Breaker.cs" />
-    <Compile Include="Model\Disconector.cs" />
-    <Compile Include="Model\Enums.cs" />
-    <Compile Include="Model\IEquipment.cs" />
-    <Compile Include="Model\Measurement.cs" />
-    <Compile Include="Model\Substation.cs" />
-    <Compile Include="Model\TapChanger.cs" />
-    <Compile Include="Model\Transformator.cs" />
-    <Compile Include="Model\UIModel.cs" />
     <Compile Include="ProxyPool\AlarmEventServiceProxy.cs" />
     <Compile Include="ProxyPool\CommandingServiceProxy.cs" />
     <Compile Include="ProxyPool\ProxyServices.cs" />
     <Compile Include="Subscription\Sub.cs" />
-    <Compile Include="TablesWindow.xaml.cs">
-      <DependentUpon>TablesWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="TablesWindowViewModel.cs" />
     <Compile Include="ViewModel\AlarmViewModel.cs" />
     <Compile Include="ViewModel\AnalyticsViewModel.cs" />
     <Compile Include="ViewModel\CommandBreakerViewModel.cs" />
@@ -146,20 +89,9 @@
     <Compile Include="View\MeshView.xaml.cs">
       <DependentUpon>MeshView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MeshView1.xaml.cs">
-      <DependentUpon>MeshView1.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\TableView.xaml.cs">
       <DependentUpon>TableView.xaml</DependentUpon>
     </Compile>
-    <Page Include="AnalyticsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="CommandingWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -168,57 +100,63 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BaseError\BindableBase.cs" />
+    <Compile Include="BaseError\ValidationBase.cs" />
+    <Compile Include="BaseError\ValidationErrors.cs" />
+    <Compile Include="Command\MyICommand.cs" />
+    <Compile Include="Converters\BooleanConverter.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\ConverterState.cs" />
+    <Compile Include="Handlers\AlarmHandler.cs" />
+    <Compile Include="Handlers\CustomEventHandler.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MainWindow1.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="TablesWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\AlarmView.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\AnalyticsViews\SignalListItem.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\CommandBreakerView.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\CommandDisconnectorView.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\CommandPowerTransformerView.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\EventTableView.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\MeshView.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\MeshView1.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\TableView.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="Model\AsynchronousMachine.cs" />
+    <Compile Include="Model\Breaker.cs" />
+    <Compile Include="Model\Disconector.cs" />
+    <Compile Include="Model\Enums.cs" />
+    <Compile Include="Model\IEquipment.cs" />
+    <Compile Include="Model\Measurement.cs" />
+    <Compile Include="Model\Substation.cs" />
+    <Compile Include="Model\TapChanger.cs" />
+    <Compile Include="Model\Transformator.cs" />
+    <Compile Include="Model\UIModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -236,7 +174,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -246,50 +183,43 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{6C234280-508A-47A4-B9CA-2677082EF85F}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PubSubCommon\PubSubCommon.csproj">
-      <Project>{6109286A-0DC9-469C-A271-0605C18ED32C}</Project>
-      <Name>PubSubCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RepositoryCore\RepositoryCore.csproj">
-      <Project>{46F879CD-DF1D-402A-9373-62153FDE9ED4}</Project>
-      <Name>RepositoryCore</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SCADA\ScadaCommon\ScadaCommon.csproj">
-      <Project>{823D1355-EFD0-481C-A0D9-FDA0C4EA37DF}</Project>
-      <Name>ScadaCommon</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Assets\breaker-off.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Assets\breaker-on.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\transformator-off.png" />
-    <Resource Include="Assets\transformator-on.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\recloser-on.png" />
-    <Resource Include="Assets\resloser-off.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\pump-off.png" />
-    <Resource Include="Assets\pump-on.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\pump-on-rotate.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\search.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\dismiss.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="search.png" />
+    <Resource Include="Assets\pump-off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\pump-on-rotate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\pump-on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\recloser-on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\resloser-off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\transformator-off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\transformator-on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{6c234280-508a-47a4-b9ca-2677082ef85f}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
