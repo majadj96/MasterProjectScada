@@ -335,5 +335,17 @@
     <Resource Include="Assets\pump-on-rotate1.png" />
     <Resource Include="Assets\pump-on1.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\recloser-onn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\resloser-offf.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\searchIkona.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\cross.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

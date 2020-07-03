@@ -327,12 +327,12 @@
             <ComboBox Canvas.Left="157" FontFamily="Calibri" SelectedIndex="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Canvas.Top="567" Width="113" Height="26" ItemsSource="{Binding Path=SearchType}" SelectedValue="{Binding Path=SearchTypeSelected}" FontSize="13" />
             <Button Content="" Command="{Binding SearchSubsCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="33"  VerticalAlignment="Top" Width="36" FontFamily="Consolas" FontSize="16" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0" HorizontalAlignment="Right" Canvas.Left="-4" Canvas.Top="598">
                 <Button.Background>
-                    <ImageBrush ImageSource="Assets/search.png"/>
+                    <ImageBrush ImageSource="Assets/search.png" Stretch="Uniform"/>
                 </Button.Background>
             </Button>
             <Button Content="" Command="{Binding DissmisSubsCommand}" CommandParameter="Summary" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="28"  VerticalAlignment="Top" Width="31" FontFamily="Consolas" FontSize="16" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0" HorizontalAlignment="Right" Canvas.Left="39" Canvas.Top="601">
                 <Button.Background>
-                    <ImageBrush ImageSource="Assets/dismiss.png"/>
+                    <ImageBrush ImageSource="Assets/cross.png" Stretch="Uniform"/>
                 </Button.Background>
             </Button>
             <Label Content="(search by)" FontFamily="Calibri" FontSize="13" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Canvas.Left="165" Canvas.Top="591" Height="26" Width="98" Foreground="White"/>

@@ -37,14 +37,14 @@
         <DatePicker SelectedDate="{Binding DateFrom, Mode=TwoWay}" Cursor="Pen" Height="30" Width="100" Margin="142,37,568,643.4"/>
         <Label Content="Events to:" Height="30" Foreground="Black" FontFamily="Calibri" FontSize="16" Margin="336,37,428,643.4"/>
         <DatePicker SelectedDate="{Binding DateTo, Mode=TwoWay}" Cursor="Pen" Height="30" Width="100" Margin="422,37,318,643.4"/>
-        <Button Content="" Command="{Binding FilterCommand}" CommandParameter="Apply" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="55"  VerticalAlignment="Top" Width="55" FontFamily="Calibri" FontSize="16" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0,16,228,0" HorizontalAlignment="Right" Canvas.Left="9" Canvas.Top="598">
+        <Button Content="" Command="{Binding FilterCommand}" CommandParameter="Apply" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="34"  VerticalAlignment="Top" Width="53" FontFamily="Calibri" FontSize="16" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0,37,228,0" HorizontalAlignment="Right" Canvas.Left="9" Canvas.Top="598">
             <Button.Background>
-                <ImageBrush ImageSource="../Assets/search.png"/>
+                <ImageBrush ImageSource="/UserInterface;component/Assets/search.png" Stretch="Uniform"/>
             </Button.Background>
         </Button>
-        <Button Content="" Command="{Binding FilterCommand}" CommandParameter="Disable" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="45"  VerticalAlignment="Top" Width="45" FontFamily="Calibri" FontSize="16" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0,22,169,0" HorizontalAlignment="Right" Canvas.Left="73" Canvas.Top="606">
+        <Button Content="" Command="{Binding FilterCommand}" CommandParameter="Disable" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="25"  VerticalAlignment="Top" Width="39" FontFamily="Calibri" FontSize="16" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0,42,169,0" HorizontalAlignment="Right" Canvas.Left="73" Canvas.Top="606">
             <Button.Background>
-                <ImageBrush ImageSource="../Assets/dismiss.png"/>
+                <ImageBrush ImageSource="/UserInterface;component/Assets/cross.png" Stretch="Uniform"/>
             </Button.Background>
         </Button>
         <DataGrid x:Name="EventItems"

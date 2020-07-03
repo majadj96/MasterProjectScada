@@ -559,7 +559,7 @@ namespace UserInterface
 
         public void setUpInitState()
         {
-            connectedStatusBar = "DISCONNECTED"; //SCADA konekcija
+            connectedStatusBar = "Disconnected"; //SCADA konekcija
             timeStampStatusBar = DateTime.Now.ToLongDateString();  //SCADA konekcija
         }
 

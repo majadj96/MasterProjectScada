@@ -267,13 +267,13 @@
                         <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Breaker5"/>
                     </Button.InputBindings>
                 </Button>
-                <Rectangle Height="12" Canvas.Left="51" Stroke="{Binding LineUpFirstPump}" StrokeThickness="4" Canvas.Top="4" Width="2"/>
-                <Rectangle Height="12" Canvas.Left="183" Stroke="{Binding LineUpSecondPump}" StrokeThickness="4" Canvas.Top="4" Width="2"/>
-                <Rectangle Height="13" Canvas.Left="51" Stroke="{Binding LineUpBreakerFirstPump}" StrokeThickness="4" Canvas.Top="34" Width="2"/>
-                <Rectangle Height="12" Canvas.Left="51" Stroke="{Binding LineUpBreakerFirstPumpCN}" StrokeThickness="4" Canvas.Top="49" Width="2"/>
-                <Rectangle Height="2" Canvas.Left="51" Stroke="{Binding LineUpMultiPump}" StrokeThickness="4" Width="134" Canvas.Top="-1"/>
-                <Rectangle Height="14" Canvas.Left="183" Stroke="{Binding LineUpBreakerSecondPump}" StrokeThickness="4" Canvas.Top="34" Width="2"/>
-                <Rectangle Height="9" Canvas.Left="183" Stroke="{Binding LineUpBreakerSecondPumpCN}" StrokeThickness="4" Canvas.Top="53" Width="2"/>
+                <Rectangle Height="12" Canvas.Left="51" Stroke="{Binding LineUpFirstPump}" StrokeThickness="4" Canvas.Top="4" Width="3"/>
+                <Rectangle Height="12" Canvas.Left="183" Stroke="{Binding LineUpSecondPump}" StrokeThickness="4" Canvas.Top="4" Width="3"/>
+                <Rectangle Height="13" Canvas.Left="51" Stroke="{Binding LineUpBreakerFirstPump}" StrokeThickness="4" Canvas.Top="34" Width="3"/>
+                <Rectangle Height="12" Canvas.Left="51" Stroke="{Binding LineUpBreakerFirstPumpCN}" StrokeThickness="4" Canvas.Top="49" Width="3"/>
+                <Rectangle Height="3" Canvas.Left="51" Stroke="{Binding LineUpMultiPump}" StrokeThickness="4" Width="134" Canvas.Top="-1"/>
+                <Rectangle Height="14" Canvas.Left="183" Stroke="{Binding LineUpBreakerSecondPump}" StrokeThickness="4" Canvas.Top="34" Width="3"/>
+                <Rectangle Height="9" Canvas.Left="183" Stroke="{Binding LineUpBreakerSecondPumpCN}" StrokeThickness="4" Canvas.Top="53" Width="3"/>
 
                 <Ellipse
                 Fill="Black"
