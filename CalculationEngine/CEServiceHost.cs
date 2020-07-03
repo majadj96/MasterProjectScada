@@ -11,13 +11,11 @@ namespace CalculationEngine
     public class CEServiceHost : IDisposable
     {
         private List<ServiceHost> hosts = null;
-        private readonly CalcEngine _calcEngine = null;
 
-        public CEServiceHost()
+        public CEServiceHost(IModelUpdateContract modelUpdateContract)
         {
-            InitializeHosts();
+            InitializeHosts(modelUpdateContract);
             StartHosts();
-			_calcEngine = new CalcEngine();
         }
 
         public void Dispose()
@@ -26,11 +24,11 @@ namespace CalculationEngine
             GC.SuppressFinalize(this);
         }
 
-        private void InitializeHosts()
+        private void InitializeHosts(IModelUpdateContract modelUpdateContract)
         {
             hosts = new List<ServiceHost>
             {
-                new ServiceHost(typeof(ModelUpdateContract))
+                new ServiceHost(modelUpdateContract)
             };
         }
 

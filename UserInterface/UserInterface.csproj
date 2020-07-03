@@ -38,6 +38,9 @@
     <Reference Include="CommonServiceLocator, Version=2.0.5.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.5\lib\net46\CommonServiceLocator.dll</HintPath>
     </Reference>
+    <Reference Include="ControlzEx, Version=4.0.0.0, Culture=neutral, PublicKeyToken=69f1c32f803d307e, processorArchitecture=MSIL">
+      <HintPath>..\packages\ControlzEx.4.3.0\lib\net45\ControlzEx.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.4.1.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
@@ -53,9 +56,19 @@
     <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="MahApps.Metro, Version=2.0.0.0, Culture=neutral, PublicKeyToken=51482d6f650b2b3f, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.2.0.1\lib\net46\MahApps.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.19\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -100,10 +113,13 @@
     <Compile Include="Model\Disconector.cs" />
     <Compile Include="Model\Enums.cs" />
     <Compile Include="Model\IEquipment.cs" />
+    <Compile Include="Model\Measurement.cs" />
     <Compile Include="Model\Substation.cs" />
     <Compile Include="Model\TapChanger.cs" />
     <Compile Include="Model\Transformator.cs" />
+    <Compile Include="Model\TransformerWinding.cs" />
     <Compile Include="Model\UIModel.cs" />
+    <Compile Include="Networking\MeasurementProxy.cs" />
     <Compile Include="ProxyPool\AlarmEventServiceProxy.cs" />
     <Compile Include="ProxyPool\CommandingServiceProxy.cs" />
     <Compile Include="ProxyPool\ProxyServices.cs" />
@@ -123,6 +139,9 @@
     <Compile Include="ViewModel\TableViewModel.cs" />
     <Compile Include="View\AlarmView.xaml.cs">
       <DependentUpon>AlarmView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AnalyticsGraphTooltip.xaml.cs">
+      <DependentUpon>AnalyticsGraphTooltip.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\AnalyticsViews\SignalListItem.xaml.cs">
       <DependentUpon>SignalListItem.xaml</DependentUpon>
@@ -170,6 +189,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\AlarmView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AnalyticsGraphTooltip.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -253,19 +276,8 @@
     <Resource Include="Assets\breaker-on.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\transformator-off.png" />
+    <Resource Include="Assets\transformator-off1.png" />
     <Resource Include="Assets\transformator-on.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\recloser-on.png" />
-    <Resource Include="Assets\resloser-off.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\pump-off.png" />
-    <Resource Include="Assets\pump-on.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\pump-on-rotate.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\search.png" />
@@ -275,6 +287,65 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\scadaIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Digital-Circuit-Wallpapers-Top-Free-Digital-Circuit-.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\lalala.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\lalaPlavoCrna.jpg" />
+    <Resource Include="Assets\pLAVOpLAVAL.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\PLACO.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\PLACOaaa.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\PLACObbbb.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\PLACOccc.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\PLACOmmm.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\crop.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\breaker-off1.png" />
+    <Resource Include="Assets\breaker-on1.png" />
+    <Resource Include="Assets\resloser-off1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\recloser-on1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\transformator-on1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\pump-off1.png" />
+    <Resource Include="Assets\pump-on-rotate1.png" />
+    <Resource Include="Assets\pump-on1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\recloser-onn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\resloser-offf.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\searchIkona.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\cross.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

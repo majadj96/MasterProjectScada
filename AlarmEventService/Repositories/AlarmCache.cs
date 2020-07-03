@@ -33,12 +33,12 @@ namespace AlarmEventService.Repositories
 
             if (!alarmCache.ContainsKey(alarmKey)) {
                 alarmCache.Add(alarmKey, alarm);
-                alarmPublisher.PublishAlarm(new AlarmDescription(alarm, AlarmOperation.INSERT), "alarm");
+                alarmPublisher.Publish(new AlarmDescription(alarm, AlarmOperation.INSERT), "alarm");
             }
             else
             {
                 alarmCache[alarmKey] = alarm;
-                alarmPublisher.PublishAlarm(new AlarmDescription(alarm, AlarmOperation.UPDATE), "alarm");
+                alarmPublisher.Publish(new AlarmDescription(alarm, AlarmOperation.UPDATE), "alarm");
             }
         }
 
@@ -80,7 +80,7 @@ namespace AlarmEventService.Repositories
             if (alarmCache.ContainsKey(alarmKey))
             {
                 alarmCache[alarmKey] = alarm;
-                alarmPublisher.PublishAlarm(new AlarmDescription(alarm, AlarmOperation.UPDATE), "alarm");
+                alarmPublisher.Publish(new AlarmDescription(alarm, AlarmOperation.UPDATE), "alarm");
             }
         }
 
@@ -92,7 +92,7 @@ namespace AlarmEventService.Repositories
             if (alarmCache.ContainsKey(alarmKey))
             {
                 alarmCache.Remove(alarmKey);
-                alarmPublisher.PublishAlarm(new AlarmDescription(alarm, AlarmOperation.DELETE), "alarm");
+                alarmPublisher.Publish(new AlarmDescription(alarm, AlarmOperation.DELETE), "alarm");
             }
         }
 

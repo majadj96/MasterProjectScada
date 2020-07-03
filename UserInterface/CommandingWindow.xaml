@@ -19,7 +19,7 @@
         </DataTemplate>
     </Window.Resources>
     
-    <Grid Background="#FF474747">
+    <Grid Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20*"/>
             <ColumnDefinition Width="380*"/>

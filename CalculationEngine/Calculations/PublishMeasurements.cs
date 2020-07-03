@@ -12,53 +12,16 @@ namespace CalculationEngine
 {
     public class PublishMeasurements : IPub
     {
-        private static ProcessingData _processingData;
-        private SubscribeProxy _proxy;
-
-        public PublishMeasurements()
-        {
-            
-        }
+        private ProcessingData ProcessingData;
 
         public PublishMeasurements(ProcessingData processingData)
         {
-            _processingData = processingData;
-            _proxy = new SubscribeProxy(this);
+            ProcessingData = processingData;
         }
 
-        public void SubscribeTo(string topic)
-        {
-            _proxy.Subscribe(topic);
-        }
-
-        public void UnsubscribeFrom(string topic)
-        {
-            _proxy.UnSubscribe(topic);
-        }
-
-        public void Publish(NMSModel model, string topicName)
-        {
-            throw new ActionNotSupportedException("CE does not have implementation for this method.");
-        }
-
-        public void PublishMeasure(ScadaUIExchangeModel[] measurement, string topicName)
-        {
-            _processingData.ProccessData(measurement);
-        }
-
-        public void PublishAlarm(AlarmDescription alarmDesc, string topicName)
-        {
-            throw new ActionNotSupportedException("CE does not have implementation for this method.");
-        }
-
-		public void PublishConnectionState(ConnectionState connectionState, string topicName)
+		public void Publish(object data, string topicName)
 		{
-			throw new ActionNotSupportedException("CE does not have implementation for this method.");
+			ProcessingData.ProccessData(data);
 		}
-
-        public void PublishEvent(Event eventObject, string topicName)
-        {
-            throw new ActionNotSupportedException("CE does not have implementation for this method.");
-        }
     }
 }

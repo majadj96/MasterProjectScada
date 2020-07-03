@@ -5,57 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:UserInterface.View"
              mc:Ignorable="d" 
-             d:DesignHeight="740" d:DesignWidth="860">
+             d:DesignHeight="710" d:DesignWidth="860">
     <UserControl.Resources>
-        <Style TargetType="DataGrid">
-            <!-- On mouse hover -->
-            <Setter Property="BorderBrush" Value="#FF999999" />
-            <Setter Property="HorizontalGridLinesBrush" Value="#DDDDDD" />
-            <Setter Property="VerticalGridLinesBrush" Value="#DDDDDD" />
-
-            <Setter Property="RowStyle">
-                <Setter.Value>
-                    <Style TargetType="DataGridRow">
-                        <Setter Property="Background" Value="#A9A9A9" />
-                        <Style.Triggers>
-                            <!-- Highlight a grid row as the mouse passes over -->
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#FF999999" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="CellStyle">
-                <Setter.Value>
-                    <Style TargetType="DataGridCell">
-                        <!-- Add some padding around the contents of a cell -->
-                        <Setter Property="Padding" Value="4,3,4,3" />
-                        <Setter Property="BorderBrush" Value="Transparent"/>
-                        <Setter Property="BorderThickness" Value="1"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="DataGridCell">
-                                    <Border Padding="{TemplateBinding Padding}" 
-                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                            BorderThickness="{TemplateBinding BorderThickness}"
-                                            Background="{TemplateBinding Background}">
-                                        <ContentPresenter />
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        <Setter Property="FocusVisualStyle">
-                            <Setter.Value>
-                                <Style TargetType="Control">
-                                    <Setter Property="BorderBrush" Value="Transparent" />
-                                </Style>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </Setter.Value>
-            </Setter>
-        </Style>
         <Style x:Key="MyButtonStyle" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True"/>
             <Setter Property="Margin" Value="5"/>
@@ -82,28 +33,29 @@
     </UserControl.Resources>
 
     <Grid>
-        <Label Content="Events from:" Height="30" Foreground="#FFF5D856" FontFamily="Consolas" FontSize="16" Margin="17,19,730,691"/>
-        <DatePicker SelectedDate="{Binding DateFrom, Mode=TwoWay}" Cursor="Pen" Height="30" Width="150" Margin="135,19,615,691"/>
-        <Label Content="Events to:" Height="30" Foreground="#FFF5D856" FontFamily="Consolas" FontSize="16" Margin="337,19,427,691"/>
-        <DatePicker SelectedDate="{Binding DateTo, Mode=TwoWay}" Cursor="Pen" Height="30" Width="150" Margin="438,19,312,691"/>
-        <Button Content="" Command="{Binding FilterCommand}" CommandParameter="Apply" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="55"  VerticalAlignment="Top" Width="55" FontFamily="Consolas" FontSize="16" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0,4,221,0" HorizontalAlignment="Right" Canvas.Left="9" Canvas.Top="598">
+        <Label Content="Events from:" Height="30" Foreground="Black" FontFamily="Calibri" FontSize="16" Margin="54,37,693,643.4"/>
+        <DatePicker SelectedDate="{Binding DateFrom, Mode=TwoWay}" Cursor="Pen" Height="30" Width="100" Margin="142,37,568,643.4"/>
+        <Label Content="Events to:" Height="30" Foreground="Black" FontFamily="Calibri" FontSize="16" Margin="336,37,428,643.4"/>
+        <DatePicker SelectedDate="{Binding DateTo, Mode=TwoWay}" Cursor="Pen" Height="30" Width="100" Margin="422,37,318,643.4"/>
+        <Button Content="" Command="{Binding FilterCommand}" CommandParameter="Apply" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="34"  VerticalAlignment="Top" Width="53" FontFamily="Calibri" FontSize="16" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0,37,228,0" HorizontalAlignment="Right" Canvas.Left="9" Canvas.Top="598">
             <Button.Background>
-                <ImageBrush ImageSource="../Assets/search.png"/>
+                <ImageBrush ImageSource="/UserInterface;component/Assets/search.png" Stretch="Uniform"/>
             </Button.Background>
         </Button>
-        <Button Content="" Command="{Binding FilterCommand}" CommandParameter="Disable" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="45"  VerticalAlignment="Top" Width="45" FontFamily="Consolas" FontSize="16" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0,10,162,0" HorizontalAlignment="Right" Canvas.Left="73" Canvas.Top="606">
+        <Button Content="" Command="{Binding FilterCommand}" CommandParameter="Disable" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="25"  VerticalAlignment="Top" Width="39" FontFamily="Calibri" FontSize="16" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0,42,169,0" HorizontalAlignment="Right" Canvas.Left="73" Canvas.Top="606">
             <Button.Background>
-                <ImageBrush ImageSource="../Assets/dismiss.png"/>
+                <ImageBrush ImageSource="/UserInterface;component/Assets/cross.png" Stretch="Uniform"/>
             </Button.Background>
         </Button>
         <DataGrid x:Name="EventItems"
                   ItemsSource="{Binding EventItems, UpdateSourceTrigger=PropertyChanged}"
                   IsReadOnly="True"
                   VerticalScrollBarVisibility="Auto"
+                  BorderThickness="3" BorderBrush="#FF29ABBF"
                   VerticalAlignment="Top"
                   AutoGenerateColumns="False"
                   CanUserResizeRows="False"
-                  CanUserAddRows="False" Background="#A9A9A9" BorderBrush="#FF3C3C3C" FontFamily="Consolas" FontSize="14" Margin="0,69,0,0">
+                  CanUserAddRows="False" Background="White" FontFamily="Calibri" FontSize="14" Margin="0,87,0,0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Event reported" Width="180"  Binding="{Binding EventReported}"/>
                 <DataGridTextColumn Header="Event reported by" Width="140"  Binding="{Binding EventReportedBy}"/>

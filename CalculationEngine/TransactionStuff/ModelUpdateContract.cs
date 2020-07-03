@@ -1,24 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 using CalculationEngine.Model;
 using Common;
 using Common.GDA;
-using TransactionManager;
 using TransactionManagerContracts;
 
 namespace CalculationEngine
 {
-	public class ModelUpdateContract : IModelUpdateContract
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    public class ModelUpdateContract : IModelUpdateContract
 	{
-		public UpdateResult UpdateModel(Delta delta)
+        private ConcreteModel Model;
+        private ITransactionSteps TransactionCallback { get; }
+
+        public ModelUpdateContract(ConcreteModel model, ITransactionSteps transactionCallback)
+        {
+            Model = model;
+            TransactionCallback = transactionCallback;
+        }
+
+        public UpdateResult UpdateModel(Delta delta)
 		{
 			Console.WriteLine("Update model invoked");
 
-			ConcreteModel.CurrentModel_Copy = new Dictionary<long, IdObject>(ConcreteModel.CurrentModel);
+			Model.CurrentModel_Copy = new Dictionary<long, IdObject>(Model.CurrentModel);
 
 			foreach (ResourceDescription rd in delta.InsertOperations)
 			{
@@ -37,7 +43,7 @@ namespace CalculationEngine
 
 			try
 			{
-				TMProxy _proxy = new TMProxy(new TransactionService());
+				TMProxy _proxy = new TMProxy(TransactionCallback);
 				_proxy.Enlist();
 			}
 			catch (Exception e)
@@ -49,13 +55,13 @@ namespace CalculationEngine
 			return new UpdateResult() { Result = ResultType.Succeeded };
 		}
 
-		#region Populate Entities
+		#region Populate Entities Methods
 
 		private void RemoveEntity(ResourceDescription rd)
 		{
-			if (ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
+			if (Model.CurrentModel_Copy.ContainsKey(rd.Id))
 			{
-				ConcreteModel.CurrentModel_Copy.Remove(rd.Id);
+				Model.CurrentModel_Copy.Remove(rd.Id);
 			}
 		}
 
@@ -63,78 +69,123 @@ namespace CalculationEngine
 		{
 			if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ANALOG)
 			{
-				if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
+				if (!Model.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
 					Analog analog = PopulateAnalogProperties(rd);
 
-					ConcreteModel.CurrentModel_Copy.Add(analog.GID, analog);
+					Model.CurrentModel_Copy.Add(analog.GID, analog);
 				}
 			}
 			else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.DISCRETE)
 			{
-				if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
+				if (!Model.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
 					Discrete discrete = PopulateDiscreteProperties(rd);
 
-					ConcreteModel.CurrentModel_Copy.Add(discrete.GID, discrete);
+					Model.CurrentModel_Copy.Add(discrete.GID, discrete);
 				}
 			}
 			else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ASYNCHRONOUSMACHINE)
 			{
-				if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
+				if (!Model.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
 					AsyncMachine asyncMachine = PopulateAsyncMachineProperties(rd);
 
-					ConcreteModel.CurrentModel_Copy.Add(asyncMachine.GID, asyncMachine);
+					Model.CurrentModel_Copy.Add(asyncMachine.GID, asyncMachine);
 				}
 			}
-			else
+            else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.POWERTRANSFORMER)
+            {
+                if (!Model.CurrentModel_Copy.ContainsKey(rd.Id))
+                {
+                    Transformer transformer = PopulateTransformerProperties(rd);
+
+                    Model.CurrentModel_Copy.Add(transformer.GID, transformer);
+                }
+            }
+            else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.RATIOTAPCHANGER)
+            {
+                if (!Model.CurrentModel_Copy.ContainsKey(rd.Id))
+                {
+                    TapChanger tapChanger = PopulateTapChangerProperties(rd);
+
+                    Model.CurrentModel_Copy.Add(tapChanger.GID, tapChanger);
+                }
+            }
+            else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.TRANSFORMERWINDING)
+            {
+                if (!Model.CurrentModel_Copy.ContainsKey(rd.Id))
+                {
+                    TransformerWinding winding = PopulateWindingProperties(rd);
+
+                    Model.CurrentModel_Copy.Add(winding.GID, winding);
+                }
+            }
+            else
 			{
-				if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
+				if (!Model.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
 					IdObject idObject = PopulateIdObjectProperties(rd);
 
-					ConcreteModel.CurrentModel_Copy.Add(idObject.GID, idObject);
+					Model.CurrentModel_Copy.Add(idObject.GID, idObject);
 				}
 			}
 		}
 
-		private void UpdateEntity(ResourceDescription rd)
+        private void UpdateEntity(ResourceDescription rd)
 		{
 			if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ANALOG)
 			{
-				if (ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
+				if (Model.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
 					Analog analog = PopulateAnalogProperties(rd);
 
-					ConcreteModel.CurrentModel_Copy[analog.GID] = analog;
+					Model.CurrentModel_Copy[analog.GID] = analog;
 				}
 			}
 			else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.DISCRETE)
 			{
-				if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
+				if (Model.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
 					Discrete discrete = PopulateDiscreteProperties(rd);
 
-					ConcreteModel.CurrentModel_Copy[discrete.GID] = discrete;
+					Model.CurrentModel_Copy[discrete.GID] = discrete;
 				}
 			}
 			else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.ASYNCHRONOUSMACHINE)
 			{
-				if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
+				if (Model.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
 					AsyncMachine asyncMachine = PopulateAsyncMachineProperties(rd);
 
-					ConcreteModel.CurrentModel_Copy[asyncMachine.GID] = asyncMachine;
+					Model.CurrentModel_Copy[asyncMachine.GID] = asyncMachine;
 				}
 			}
-			else
+            else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.POWERTRANSFORMER)
+            {
+                if (Model.CurrentModel_Copy.ContainsKey(rd.Id))
+                {
+                    Transformer transformer = PopulateTransformerProperties(rd);
+
+                    Model.CurrentModel_Copy[transformer.GID] = transformer;
+                }
+            }
+            else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)) == DMSType.RATIOTAPCHANGER)
+            {
+                if (Model.CurrentModel_Copy.ContainsKey(rd.Id))
+                {
+                    TapChanger tapChanger = PopulateTapChangerProperties(rd);
+
+                    Model.CurrentModel_Copy[tapChanger.GID] = tapChanger;
+                }
+            }
+            else
 			{
-				if (!ConcreteModel.CurrentModel_Copy.ContainsKey(rd.Id))
+				if (!Model.CurrentModel_Copy.ContainsKey(rd.Id))
 				{
 					IdObject idObject = PopulateIdObjectProperties(rd);
 
-					ConcreteModel.CurrentModel_Copy[idObject.GID] = idObject;
+					Model.CurrentModel_Copy[idObject.GID] = idObject;
 				}
 			}
 		}
@@ -260,6 +311,81 @@ namespace CalculationEngine
             return analog;
 		}
 
-		#endregion
-	}
+        private TransformerWinding PopulateWindingProperties(ResourceDescription rd)
+        {
+            IdObject idObject = PopulateIdObjectProperties(rd);
+
+            TransformerWinding winding = new TransformerWinding(idObject.GID)
+            {
+                MRID = idObject.MRID,
+                Name = idObject.Name,
+                Description = idObject.Description
+            };
+
+            Property p;
+
+            if ((p = rd.GetProperty(ModelCode.TRANSFORMERWINDING_POWERTR)) != null)
+            {
+                winding.Transformer = p.AsReference();
+            }
+
+            return winding;
+        }
+
+        private Transformer PopulateTransformerProperties(ResourceDescription rd)
+        {
+            IdObject idObject = PopulateIdObjectProperties(rd);
+
+            Transformer transformer = new Transformer(idObject.GID)
+            {
+                MRID = idObject.MRID,
+                Name = idObject.Name,
+                Description = idObject.Description
+            };
+
+            Property p;
+
+            if ((p = rd.GetProperty(ModelCode.POWERTRANSFORMER_TRWINDINGS)) != null)
+            {
+                transformer.Windings = p.AsReferences();
+            }
+
+            return transformer;
+        }
+
+        private TapChanger PopulateTapChangerProperties(ResourceDescription rd)
+        {
+            IdObject idObject = PopulateIdObjectProperties(rd);
+
+            TapChanger tapChanger = new TapChanger(idObject.GID)
+            {
+                MRID = idObject.MRID,
+                Name = idObject.Name,
+                Description = idObject.Description
+            };
+
+            Property p;
+
+            if ((p = rd.GetProperty(ModelCode.TAPCHANGER_HIGHSTEP)) != null)
+            {
+                tapChanger.HighStep = p.AsInt();
+            }
+            if ((p = rd.GetProperty(ModelCode.TAPCHANGER_LOWSTEP)) != null)
+            {
+                tapChanger.LowStep = p.AsInt();
+            }
+            if ((p = rd.GetProperty(ModelCode.TAPCHANGER_NORMALSTEP)) != null)
+            {
+                tapChanger.NormalStep = p.AsInt();
+            }
+            if ((p = rd.GetProperty(ModelCode.RATIOTAPCHANGER_TRWINDING)) != null)
+            {
+                tapChanger.Winding = p.AsReference();
+            }
+
+            return tapChanger;
+        }
+
+        #endregion
+    }
 }

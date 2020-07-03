@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:UserInterface.View"
              mc:Ignorable="d" 
-             d:DesignHeight="370" d:DesignWidth="370" Background="#FF474747">
+             d:DesignHeight="370" d:DesignWidth="370" Background="White">
     <UserControl.Resources>
         <Style x:Key="MyButtonStyle" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -190,30 +190,30 @@
     </UserControl.Resources>
 
     <Grid>
-        <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="55" Margin="10,69,0,0" VerticalAlignment="Top" Width="347">
-            <Label Content="Commanding Power Transformer" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="37" VerticalAlignment="Top" Width="347" Margin="-1.6,8.4,-2.2,0" FontFamily="Consolas" FontSize="22" Foreground="AntiqueWhite"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="10,69,0,0" VerticalAlignment="Top" Width="347">
+            <Label Content="Commanding Power Transformer" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="37" VerticalAlignment="Top" Width="347" Margin="-1.6,8.4,-2.2,0" FontFamily="Calibri" FontSize="22" Foreground="Black"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="55" Margin="10,122,0,0" VerticalAlignment="Top" Width="175">
-            <Label Content="Name:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" VerticalAlignment="Top" Width="155" Margin="8.4,8.4,0,0" FontFamily="Consolas" FontSize="20" Foreground="AntiqueWhite"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="10,122,0,0" VerticalAlignment="Top" Width="175">
+            <Label Content="Name:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" VerticalAlignment="Top" Width="155" Margin="8.4,8.4,0,0" FontFamily="Calibri" FontSize="20" Foreground="Black"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="55" Margin="10,175,0,0" VerticalAlignment="Top" Width="175">
-            <Label Content="Description:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" VerticalAlignment="Top" Width="155" Margin="8.4,8.4,0,0" FontFamily="Consolas" FontSize="20" Foreground="AntiqueWhite"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="10,175,0,0" VerticalAlignment="Top" Width="175">
+            <Label Content="Description:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" VerticalAlignment="Top" Width="155" Margin="8.4,8.4,0,0" FontFamily="Calibri" FontSize="20" Foreground="Black"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="55" Margin="10,228,0,0" VerticalAlignment="Top" Width="175">
-            <Label Content="TapChanger:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" VerticalAlignment="Top" Width="155" Margin="8.4,8.4,0,0" FontFamily="Consolas" FontSize="20" Foreground="AntiqueWhite"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="10,228,0,0" VerticalAlignment="Top" Width="175">
+            <Label Content="TapChanger:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" VerticalAlignment="Top" Width="155" Margin="8.4,8.4,0,0" FontFamily="Calibri" FontSize="20" Foreground="Black"/>
         </Border>
 
-        <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="55" Margin="182,122,0,0" VerticalAlignment="Top" Width="175">
-            <Label Content="{Binding TranformerCurrent.Name}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" Width="155" Margin="8.4,8.4,0,7.8" FontFamily="Consolas" FontSize="20" Foreground="#FFB1E698"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="182,122,0,0" VerticalAlignment="Top" Width="175">
+            <Label Content="{Binding TranformerCurrent.Name}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" Width="155" Margin="8.4,8.4,0,7.8" FontFamily="Calibri" FontSize="20" Foreground="Black"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="55" Margin="182,175,0,0" VerticalAlignment="Top" Width="175">
-            <Label Content="{Binding TranformerCurrent.Description}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" Width="155" Margin="8.4,8.4,0,7.8" FontFamily="Consolas" FontSize="16" Foreground="#FFB1E698"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="182,175,0,0" VerticalAlignment="Top" Width="175">
+            <Label Content="{Binding TranformerCurrent.Description}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="35" Width="155" Margin="8.4,8.4,0,7.8" FontFamily="Calibri" FontSize="16" Foreground="Black"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="55" Margin="182,228,0,0" VerticalAlignment="Top" Width="88">
-            <Button FontFamily="Segoe UI Symbol" Content="&#xE110;" Command="{Binding CurrentVoltageCommand}" CommandParameter="TapChangerUp" Background="Yellow" FontSize="25" Margin="8.4,8.4,7.8,7.8"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="182,228,0,0" VerticalAlignment="Top" Width="88">
+            <Button FontFamily="Segoe UI Symbol" Content="&#xE110;" Command="{Binding CurrentVoltageCommand}" CommandParameter="TapChangerUp" Background="#FF32BDCB" FontSize="25" Margin="8.4,8.4,7.8,7.8" Foreground="White"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="55" Margin="269,228,0,0" VerticalAlignment="Top" Width="89">
-            <Button FontFamily="Segoe UI Symbol" Content="&#xE1FD;" Command="{Binding CurrentVoltageCommand}" CommandParameter="TapChangerDown" Background="#FFDDA417" FontSize="25" Margin="8.4,8.4,7.8,7.8"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="269,228,0,0" VerticalAlignment="Top" Width="89">
+            <Button FontFamily="Segoe UI Symbol" Content="&#xE1FD;" Command="{Binding CurrentVoltageCommand}" CommandParameter="TapChangerDown" Background="#FF6ED1CC" FontSize="25" Margin="8.4,8.4,7.8,7.8" Foreground="White"/>
         </Border>
     </Grid>
 </UserControl>

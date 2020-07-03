@@ -17,6 +17,7 @@ using UserInterface.BaseError;
 using UserInterface.Command;
 using UserInterface.Converters;
 using UserInterface.Model;
+using UserInterface.Networking;
 using UserInterface.ProxyPool;
 using UserInterface.Subscription;
 using UserInterface.ViewModel;
@@ -41,6 +42,8 @@ namespace UserInterface
         private CustomEventHandler customEventHandler;
 
         private DispatcherTimer AlarmButtonTimer = new DispatcherTimer();
+        private MeasurementProxy measurementRepository;
+
         //private Thread threadAlarms;
 
         #region Variables
@@ -50,6 +53,8 @@ namespace UserInterface
         private Dictionary<long, Substation> substations;
         private ObservableCollection<UIModel> substationItems = new ObservableCollection<UIModel>();
 
+        private Dictionary<long, Measurement> measurements = new Dictionary<long, Measurement>();
+
         private Substation substationCurrent;
 
         private Substation selectedSubstation;
@@ -58,14 +63,18 @@ namespace UserInterface
         public string pubSub { get; set; }
         public string connectedStatusBar { get; set; }
         public string timeStampStatusBar { get; set; }
-        public string gaugeValue { get; set; }
-        public string anguarValue { get; set; }
         public string gaugeClasic { get; set; }
         public string searchTerm { get; set; }
         public string searchTypeSelected { get; set; }
-        private string transformerCurrent;
+        private string gaugePressure1;
+        private string gaugePressure2;
+        private string gaugePower1;
+        private string gaugePower2;
+		private string gaugePower2visibility = "Hidden";
+		private string gaugePressure2visibility = "Hidden";
+		private string transformerCurrent;
         private string transformerVoltage;
-        private string transformerTapChanger;
+        private string transformerTapChanger = "7";
 
         private bool BlinkOnFlag = false, FlagToStartBlinking = false;
         private bool meshVisible = true;
@@ -223,31 +232,81 @@ namespace UserInterface
                 OnPropertyChanged("TimeStampStatusBar");
             }
         }
-        public string GaugeValue
+        public string GaugePressure1
         {
             get
             {
-                return gaugeValue;
+                return gaugePressure1;
             }
             set
             {
-                gaugeValue = value;
-                OnPropertyChanged("GaugeValue");
+                gaugePressure1 = value;
+                OnPropertyChanged("GaugePressure1");
             }
         }
-        public string AnguarValue
+        public string GaugePressure2
         {
             get
             {
-                return anguarValue;
+                return gaugePressure2;
             }
             set
             {
-                anguarValue = value;
-                OnPropertyChanged("AnguarValue");
+                gaugePressure2 = value;
+                OnPropertyChanged("GaugePressure2");
             }
         }
-        public string PubSub
+        public string GaugePower1
+        {
+            get
+            {
+                return gaugePower1;
+            }
+            set
+            {
+                gaugePower1 = value;
+                OnPropertyChanged("GaugePower1");
+            }
+        }
+        public string GaugePower2
+        {
+            get
+            {
+                return gaugePower2;
+            }
+            set
+            {
+                gaugePower2 = value;
+                OnPropertyChanged("GaugePower2");
+            }
+        }
+		public string GaugePower2Visibility
+		{
+			get
+			{
+				return gaugePower2visibility;
+			}
+			set
+			{
+				gaugePower2visibility = value;
+				OnPropertyChanged("GaugePower2Visibility");
+			}
+		}
+
+		public string GaugePressure2Visibility
+		{
+			get
+			{
+				return gaugePressure2visibility;
+			}
+			set
+			{
+				gaugePressure2visibility = value;
+				OnPropertyChanged("GaugePressure2visibility");
+			}
+		}
+
+		public string PubSub
         {
             get
             {
@@ -300,6 +359,8 @@ namespace UserInterface
                 OnPropertyChanged("MeshVisible");
             }
         }
+
+        public Dictionary<long, Measurement> Measurements { get => measurements; set => measurements = value; }
         #endregion
 
         DispatcherTimer timer = new DispatcherTimer();
@@ -315,13 +376,12 @@ namespace UserInterface
             DissmisSubsCommand = new MyICommand<string>(dissmisSubstation);
             AnalyticsOpenCommand = new MyICommand<string>(openAnalytics);
 
-            alarmHandler = new AlarmHandler
-            {
-                Alarms = ProxyServices.AlarmEventServiceProxy.GetAllAlarms()
-            };
+            alarmHandler = new AlarmHandler();
+            customEventHandler = new CustomEventHandler();
 
-            List<Event> events = ProxyServices.AlarmEventServiceProxy.GetAllEvents();
-            customEventHandler = new CustomEventHandler(events);
+            measurementRepository = new MeasurementProxy("MeasurementEndPoint");
+            measurementRepository.Open();
+
 
             Sub subNMS = new Sub();
             subNMS.OnSubscribe("nms");
@@ -353,6 +413,7 @@ namespace UserInterface
         private void changeGrid(string a)
         {
             SetCurrentSubstation();
+            SetGaugeValues();
             meshViewModel.UpdateSubstationModel(SubstationCurrent);
         }
         private void searchSubstation(string a)
@@ -377,7 +438,7 @@ namespace UserInterface
         {
             AnalyticsWindow analyticsWindow = new AnalyticsWindow();
 
-            AnalyticsWindowViewModel analyticsWindowViewModel = new AnalyticsWindowViewModel(substations);
+            AnalyticsWindowViewModel analyticsWindowViewModel = new AnalyticsWindowViewModel(substations, measurementRepository);
 
             analyticsWindow.DataContext = analyticsWindowViewModel;
 
@@ -410,9 +471,9 @@ namespace UserInterface
 
         private void Test(object sender, EventArgs e)
         {
-            GaugeValue = rand.Next(0, 100).ToString();
+            //GaugeValue = rand.Next(0, 100).ToString();
 
-            AnguarValue = rand.Next(-7, 7).ToString();
+            //AnguarValue = rand.Next(-7, 7).ToString();
 
            // GaugeClasic = rand.Next(300, 1000).ToString();
         }
@@ -434,7 +495,7 @@ namespace UserInterface
         {
             TablesWindow tablesWindow = new TablesWindow();
 
-            TablesWindowViewModel tablesWindowViewModel = new TablesWindowViewModel(SubstationItems, this.alarmHandler, Substations.Values.ToList());
+            TablesWindowViewModel tablesWindowViewModel = new TablesWindowViewModel(SubstationItems, this.alarmHandler, Substations.Values.ToList(), customEventHandler);
 
             tablesWindow.DataContext = tablesWindowViewModel;
 
@@ -498,7 +559,7 @@ namespace UserInterface
 
         public void setUpInitState()
         {
-            connectedStatusBar = "Dissconnected"; //SCADA konekcija
+            connectedStatusBar = "Disconnected"; //SCADA konekcija
             timeStampStatusBar = DateTime.Now.ToLongDateString();  //SCADA konekcija
         }
 
@@ -511,12 +572,95 @@ namespace UserInterface
                 else
                     SubstationCurrent = Substations.Values.First();
 
-                TransformerCurrent = SubstationCurrent.Transformator.Current.ToString();
-                TransformerVoltage = SubstationCurrent.Transformator.Voltage.ToString();
-                TransformerTapChanger = SubstationCurrent.Transformator.TapChangerValue.ToString();
-
                 //Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = long.Parse(substationCurrent.Gid), Message = "Substation selected.", PointName = SubstationCurrent.Name };
                 //ProxyServices.AlarmEventServiceProxy.AddEvent(e);
+            }
+        }
+
+        private void SetGaugeValues()
+        {
+            TransformerCurrent = SubstationCurrent.Transformator.Current.ToString();
+            TransformerVoltage = SubstationCurrent.Transformator.Voltage.ToString();
+            TransformerTapChanger = SubstationCurrent.Transformator.TapChangerValue.ToString();
+
+            foreach (Measurement meas in Measurements.Values)
+            {
+				if (SubstationCurrent.Transformator.TransformerWindings.Contains(meas.PowerSystemResource))
+				{
+					if (meas.Mrid == "PT1Current_W1")
+						meshViewModel.StrujaW1 = meas.Value.ToString() + " A";
+					else if (meas.Mrid == "PT1Current_W2")
+						meshViewModel.StrujaW2 = meas.Value.ToString() + " A";
+					else if (meas.Mrid == "PT1Voltage_W1")
+						meshViewModel.NaponW1 = meas.Value.ToString() + " V";
+					else if (meas.Mrid == "PT1Voltage_W2")
+						meshViewModel.NaponW2 = meas.Value.ToString() + " V";
+					else if (meas.Mrid == "PT2Current_W1")
+						meshViewModel.Struja2W1 = meas.Value.ToString() + " A";
+					else if (meas.Mrid == "PT2Current_W2")
+						meshViewModel.Struja2W2 = meas.Value.ToString() + " A";
+					else if (meas.Mrid == "PT2Voltage_W1")
+						meshViewModel.Napon2W1 = meas.Value.ToString() + " V";
+					else if (meas.Mrid == "PT2Voltage_W2")
+						meshViewModel.Napon2W2 = meas.Value.ToString() + " V";
+				}
+                if (meas.PowerSystemResource.ToString() == SubstationCurrent.Gid)
+                {
+                    CommandToAM(meas.Value);
+                }
+                else if (meas.PowerSystemResource.ToString() == SubstationCurrent.TapChanger.GID)
+                {
+                    TransformerTapChanger = meas.Value.ToString();
+                }
+
+                if (SubstationCurrent.AsynchronousMachines.Count == 1)
+                {
+                    if (SubstationCurrent.AsynchronousMachines[0].GID == meas.PowerSystemResource.ToString())
+                    {
+                        if (meas.Mrid.ToLower().Contains("power"))
+                        {
+                            GaugePower1 = meas.Value.ToString();
+                        }
+                        else if (meas.Mrid.ToLower().Contains("pressure"))
+                        {
+                            GaugePressure1 = meas.Value.ToString();
+                        }
+                        GaugePower2 = string.Empty;
+						GaugePower2Visibility = "Hidden";
+						GaugePressure2Visibility = "Hidden";
+						meshViewModel.Sub2Visibility = "Hidden";
+                        GaugePressure2 = string.Empty;
+                    }
+                }
+                else if (SubstationCurrent.AsynchronousMachines.Count == 2)
+                {
+					meshViewModel.Sub2Visibility = "Visible";
+
+					if (SubstationCurrent.AsynchronousMachines[0].GID == meas.PowerSystemResource.ToString())
+                    {
+                        if (meas.Mrid.ToLower().Contains("power"))
+                        {
+                            GaugePower1 = meas.Value.ToString();
+                        }
+                        else if (meas.Mrid.ToLower().Contains("pressure"))
+                        {
+                            GaugePressure1 = meas.Value.ToString();
+                        }
+                    }
+                    else if (SubstationCurrent.AsynchronousMachines[1].GID == meas.PowerSystemResource.ToString())
+                    {
+                        if (meas.Mrid.ToLower().Contains("power"))
+                        {
+							GaugePower2Visibility = "Visible";
+                            GaugePower2 = meas.Value.ToString();
+                        }
+                        else if (meas.Mrid.ToLower().Contains("pressure"))
+                        {
+							GaugePressure2Visibility = "Visible";
+							GaugePressure2 = meas.Value.ToString();
+                        }
+                    }
+                }
             }
         }
 
@@ -525,18 +669,22 @@ namespace UserInterface
             if (topic == "nms")
             {
                 NMSModel nMSModel = (NMSModel)resources;
-                SubstationItems = toUIModelList(nMSModel.ResourceDescs);
-                setModel(nMSModel.ResourceDescs);
-                SetCurrentSubstation();
-                FillSubstationItems();
-                if (SubstationCurrent != null)
+                if (nMSModel.ResourceDescs.Count > 0)
                 {
-                    meshViewModel.UpdateSubstationModel(SubstationCurrent);
-                }
+                    SubstationItems = toUIModelList(nMSModel.ResourceDescs);
+                    setModel(nMSModel.ResourceDescs);
+                    SetCurrentSubstation();
+                    SetGaugeValues();
+                    FillSubstationItems();
+                    if (SubstationCurrent != null)
+                    {
+                        meshViewModel.UpdateSubstationModel(SubstationCurrent);
+                    }
 
-                //Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
-                //    Message = "Model arrived and loaded from NMS.", PointName = "" };
-                //ProxyServices.AlarmEventServiceProxy.AddEvent(e);
+                    //Event e = new Event() { EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
+                    //    Message = "Model arrived and loaded from NMS.", PointName = "" };
+                    //ProxyServices.AlarmEventServiceProxy.AddEvent(e);
+                }
             }
             else if (topic == "scada")
             {
@@ -544,6 +692,19 @@ namespace UserInterface
                 List<ScadaUIExchangeModel> measurements = ((ScadaUIExchangeModel[])resources).ToList();
                 foreach (var measure in measurements)
                 {
+                    if(Measurements.TryGetValue(measure.Gid, out Measurement meas))
+                    {
+                        meas.Value = measure.Value;
+                        if(meas.PowerSystemResource.ToString() == SubstationCurrent.Gid)
+                        {
+                            CommandToAM(meas.Value);
+                        }
+                        else if (meas.PowerSystemResource.ToString() == SubstationCurrent.TapChanger.GID)
+                        {
+                            TransformerTapChanger = meas.Value.ToString();
+                        }
+                    }
+
                     //measure.Gid to da se poklapa sa nekim od gidova od asinhrone ili od brejkera ili od diskonektora ili od ono za fluide itd..trebaju nam merenja
                     //Prodje se kroz sve podstanice i onda kroz svaki od elemenata i onda radi radnju
 
@@ -564,13 +725,13 @@ namespace UserInterface
                         meshViewModel.UpdateSubstationModel(SubstationCurrent);
                     }
                 }
+
+                SetGaugeValues();
                 FillSubstationItems();
 
                 //Event e = new Event() {  EventReported = DateTime.Now, EventReportedBy = AlarmEventType.UI, GiD = 0,
                 //    Message = "Acquisition arrived from SCADA.", PointName = "" };
                 //ProxyServices.AlarmEventServiceProxy.AddEvent(e);
-
-                Console.WriteLine(resources);
             }
             else if(topic == "alarm")
             {
@@ -604,7 +765,7 @@ namespace UserInterface
                     {
                         br.NewState = ConverterState.ConvertToDiscreteState(newValue.Value);
                         br.State = br.NewState;
-                        br.Time = newValue.Time.ToLongDateString();
+                        br.Time = newValue.Time.ToString();
                         if (sub.Breakers.Count > 2 && i != 1)
                             i += 2;
                         meshViewModel.ChangeStatesOfElements("Breaker" + i.ToString(), br);
@@ -621,7 +782,7 @@ namespace UserInterface
                     {
                         dis.NewState = ConverterState.ConvertToDiscreteState(newValue.Value);
                         dis.State = dis.NewState;
-                        dis.Time = newValue.Time.ToLongDateString();
+                        dis.Time = newValue.Time.ToString();
                         meshViewModel.ChangeStatesOfElements("Disconector" + i.ToString(), dis);
                     }
                 }
@@ -633,8 +794,8 @@ namespace UserInterface
                 {
                     if (am.SignalGid == newValue.Gid)
                     {
-                        am.Time = newValue.Time.ToLongDateString();
-                        CommandToAM(newValue.Value);
+                        am.Time = newValue.Time.ToString();
+                        //CommandToAM(newValue.Value);
                     }
                 }
             }
@@ -825,6 +986,7 @@ namespace UserInterface
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.BREAKER) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.RATIOTAPCHANGER) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.POWERTRANSFORMER) ||
+                                                                        (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.TRANSFORMERWINDING) ||
                                                                          (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ANALOG) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.ASYNCHRONOUSMACHINE) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.DISCRETE)))
@@ -860,7 +1022,21 @@ namespace UserInterface
                         getMySubstation(resource.Properties).Transformator = transformator;
                         break;
                     case (short)DMSType.DISCRETE:
-                        foreach(var v in resource.Properties.Where(x => x.Id == ModelCode.MEASUREMENT_PSR))
+                        Measurement meas = new Measurement(resource.Id)
+                        {
+                            Value = resource.GetProperty(ModelCode.DISCRETE_NORMALVALUE).AsInt(),
+                            Mrid = resource.GetProperty(ModelCode.IDOBJ_MRID).AsString(),
+                            Name = resource.GetProperty(ModelCode.IDOBJ_NAME).AsString(),
+                            Description = resource.GetProperty(ModelCode.IDOBJ_DESC).AsString(),
+                            PowerSystemResource = resource.GetProperty(ModelCode.MEASUREMENT_PSR).AsReference()
+                        };
+
+                        if(!Measurements.ContainsKey(meas.Gid))
+                        {
+                            Measurements.Add(meas.Gid, meas);
+                        }
+
+                        foreach (var v in resource.Properties.Where(x => x.Id == ModelCode.MEASUREMENT_PSR))
                         {
                             float value = (resource.Properties.Where(x => x.Id == ModelCode.DISCRETE_NORMALVALUE).First()).PropertyValue.FloatValue;
 
@@ -902,6 +1078,20 @@ namespace UserInterface
                         break;
 
                     case (short)DMSType.ANALOG:
+                        Measurement meas_analog = new Measurement(resource.Id)
+                        {
+                            Value = resource.GetProperty(ModelCode.ANALOG_NORMALVALUE).AsFloat(),
+                            Mrid = resource.GetProperty(ModelCode.IDOBJ_MRID).AsString(),
+                            Name = resource.GetProperty(ModelCode.IDOBJ_NAME).AsString(),
+                            Description = resource.GetProperty(ModelCode.IDOBJ_DESC).AsString(),
+                            PowerSystemResource = resource.GetProperty(ModelCode.MEASUREMENT_PSR).AsReference()
+                        };
+
+                        if (!Measurements.ContainsKey(meas_analog.Gid))
+                        {
+                            Measurements.Add(meas_analog.Gid, meas_analog);
+                        }
+
                         foreach (var analog in resource.Properties.Where(x=>x.Id == ModelCode.MEASUREMENT_PSR))
                         {
                             float value = (resource.Properties.Where(x => x.Id == ModelCode.ANALOG_NORMALVALUE).First()).PropertyValue.FloatValue;
@@ -909,63 +1099,71 @@ namespace UserInterface
                             double minValue = (resource.Properties.Where(x => x.Id == ModelCode.ANALOG_MINVALUE).First()).PropertyValue.FloatValue;
 
                             long gid = analog.PropertyValue.LongValue;
-                            
-                            ResourceDescription resource1 = resources.Where(x => x.Id == gid).ToList().First();
-                            
-                            if(ModelCodeHelper.ExtractTypeFromGlobalId(resource1.Id) == (short)DMSType.ASYNCHRONOUSMACHINE)
-                            {
-                                foreach(Substation s in Substations.Values)
-                                {
-                                    if (s.AsynchronousMachines.Count > 0)
-                                    {
-                                        foreach(var am in s.AsynchronousMachines)
-                                        {
-                                            if(am.GID == gid.ToString())
-                                            {
-                                                am.SignalGid = resource.Id;
-                                                am.State = true;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            else if(ModelCodeHelper.ExtractTypeFromGlobalId(resource1.Id) == (short)DMSType.POWERTRANSFORMER)
-                            {
-                                string type = resource.Properties.Where(x => x.Id == ModelCode.IDOBJ_MRID).First().PropertyValue.StringValue;
 
-                                foreach(Substation s in Substations.Values)
+                            if (gid != 0)
+                            {
+                                ResourceDescription resource1 = resources.First(x => x.Id == gid);
+
+                                if (ModelCodeHelper.ExtractTypeFromGlobalId(resource1.Id) == (short)DMSType.ASYNCHRONOUSMACHINE)
                                 {
-                                    if(s.Transformator != null)
+                                    foreach (Substation s in Substations.Values)
                                     {
-                                        if(s.Transformator.GID == gid.ToString())
+                                        if (s.AsynchronousMachines.Count > 0)
                                         {
-                                            if (type.Contains("Voltage"))
+                                            foreach (var am in s.AsynchronousMachines)
                                             {
-                                                s.Transformator.AnalogVoltageGID = resource.Id;
-                                                s.Transformator.Current = value;
-                                                s.Transformator.MaxCurrent = 10000;
-                                                s.Transformator.MinCurrent = minValue;
-                                            }
-                                            else if (type.Contains("Current"))
-                                            {
-                                                s.Transformator.AnalogCurrentGID = resource.Id;
-                                                s.Transformator.Voltage = value;
-                                                s.Transformator.MaxVoltage = maxValue;
-                                                s.Transformator.MinVoltage = minValue;
-                                            }
-                                            else if (type.Contains("TapChanger"))
-                                            {
-                                                s.Transformator.AnalogTapChangerGID = resource.Id;
-                                                s.Transformator.TapChangerValue = (long)value;
-                                                s.Transformator.MaxValueTapChanger = maxValue;
-                                                s.Transformator.MinValueTapChanger = minValue;
+                                                if (am.GID == gid.ToString())
+                                                {
+                                                    am.SignalGid = resource.Id;
+                                                    am.State = true;
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
+                                else if (ModelCodeHelper.ExtractTypeFromGlobalId(resource1.Id) == (short)DMSType.POWERTRANSFORMER)
+                                {
+                                    string type = resource.Properties.Where(x => x.Id == ModelCode.IDOBJ_MRID).First().PropertyValue.StringValue;
+
+                                    foreach (Substation s in Substations.Values)
+                                    {
+                                        if (s.Transformator != null)
+                                        {
+                                            if (s.Transformator.GID == gid.ToString())
+                                            {
+                                                if (type.Contains("Voltage"))
+                                                {
+                                                    s.Transformator.AnalogVoltageGID = resource.Id;
+                                                    s.Transformator.Voltage = value;
+                                                    s.Transformator.MaxCurrent = 10000;
+                                                    s.Transformator.MinCurrent = minValue;
+                                                }
+                                                else if (type.Contains("Current"))
+                                                {
+                                                    s.Transformator.AnalogCurrentGID = resource.Id;
+                                                    s.Transformator.Current = value;
+                                                    s.Transformator.MaxVoltage = maxValue;
+                                                    s.Transformator.MinVoltage = minValue;
+                                                }
+                                                //else if (type.Contains("TapChanger"))
+                                                //{
+                                                //    s.Transformator.AnalogTapChangerGID = resource.Id;
+                                                //    s.Transformator.TapChangerValue = (long)value;
+                                                //    s.Transformator.MaxValueTapChanger = maxValue;
+                                                //    s.Transformator.MinValueTapChanger = minValue;
+                                                //}
+                                            }
+                                        }
+                                    }
+                                }
+							}
                         }
-                        break;
+						break;
+					case (short)DMSType.TRANSFORMERWINDING:
+						TransformerWinding transformerWinding = new TransformerWinding();
+						populateEquipment(transformerWinding, resource.Properties);
+						getMySubstation(resource.Properties).Transformator.TransformerWindings.Add(long.Parse(transformerWinding.GID));
+						break;
                 }
 
             }
@@ -1036,7 +1234,8 @@ namespace UserInterface
                     }
                 }
                 model.Time = DateTime.Now.ToString();
-
+                model.Max = "1000";
+                model.Min = "100";
                 response.Add(model);
             }
             return response;

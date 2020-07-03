@@ -8,61 +8,56 @@ namespace CalculationEngine
 {
     public class CalcEngine
     {       
-        private PublishMeasurements _pub;
         private ProcessingData _processingData;
         public static Timer aTimer;
 
         public CalcEngine()
         {
-            _processingData = new ProcessingData();
+            ConcreteModel model = new ConcreteModel();
 
-            LoadConfiguration();
+            int config = LoadConfiguration();
+            _processingData = new ProcessingData(model, config);
 
-            TransactionService._processingData = _processingData;
-            _pub = new PublishMeasurements(_processingData);
-            _pub.SubscribeTo("scada");
+            TransactionService transactionService = new TransactionService(_processingData, model);
+            ModelUpdateContract modelUpdateService = new ModelUpdateContract(model, transactionService);
+            CEServiceHost svcHost = new CEServiceHost(modelUpdateService);
+
+            PublishMeasurements pub = new PublishMeasurements(_processingData);
+            SubscribeProxy sub = new SubscribeProxy(pub);
+            sub.Subscribe("scada");
 
             SetTimer();
         }
 
-        private void LoadConfiguration()
+        private int LoadConfiguration()
         {
             string configString = ConfigurationManager.AppSettings.Get("MaxDifference");
-            if (int.TryParse(configString, out int res))
-            {
-                _processingData.workingDifference = res;
-            }
-
-            configString = ConfigurationManager.AppSettings.Get("MaxFluidLevel");
-            if (float.TryParse(configString, out float result))
-            {
-                _processingData.maxFluidLevel = result;
-            }
-
-            configString = ConfigurationManager.AppSettings.Get("NominalFluidLvlTank1");
-            if (float.TryParse(configString, out result))
-            {
-                _processingData.currentFluidLvlTank1 = result;
-            }
-
-            configString = ConfigurationManager.AppSettings.Get("NominalFluidLvlTank2");
-            if(float.TryParse(configString, out result))
-            {
-                _processingData.currentFluidLvlTank2 = result;
-            }                
+            return int.Parse(configString);
         }
 
         private void SetTimer()
         {
-            aTimer = new Timer(20000);
+            aTimer = new Timer(5000);
             aTimer.Elapsed += OnTimedEvent;
             aTimer.AutoReset = true;
         }
 
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
+            if(_processingData.IsModelChanged)
+            {
+                _processingData.UpdateMachineStates();
+                _processingData.UpdateFluidLevels();
+
+                _processingData.IsModelChanged = false;
+            }
+
+            //_processingData.CheckTransformersMeasurements();
+            //_processingData.CheckMachineMeasurements();
+            //_processingData.UpdateMachineStates();
             _processingData.UpdateWorkingTimes();
-            _processingData.UpdateFluidLevel();
+            //_processingData.UpdateFluidLevels();
+            _processingData.CheckFluidLevel();
         }
     }
 }

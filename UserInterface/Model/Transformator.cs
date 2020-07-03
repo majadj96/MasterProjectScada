@@ -26,6 +26,7 @@ namespace UserInterface.Model
         private long tapChangerValue;
         private double minValueTapChanger;
         private double maxValueTapChanger;
+		private List<long> transformerWindings = new List<long>();
 
         public Transformator(string mRID, string gID, string name, string description, string time)
         {
@@ -106,5 +107,7 @@ namespace UserInterface.Model
             get { return maxValueTapChanger; }
             set { maxValueTapChanger = value; }
         }
-    }
+
+		public List<long> TransformerWindings { get => transformerWindings; set => transformerWindings = value; }
+	}
 }

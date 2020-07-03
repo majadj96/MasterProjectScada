@@ -1,17 +1,19 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using LiveCharts;
 using LiveCharts.Wpf;
+using RepositoryCore.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 using UserInterface.BaseError;
 using UserInterface.Model;
 using UserInterface.ViewModel;
+using LiveCharts.Configurations;
+using System.ComponentModel;
+using System.Windows;
 
 namespace UserInterface
 {
@@ -21,15 +23,20 @@ namespace UserInterface
         private List<SignalListItemViewModel> signalList;
 
         public Dictionary<long, Substation> substations;
+
         public Dictionary<long, StepLineSeries> signalsOn;
         public SeriesCollection SeriesCollection { get; set; }
-        private List<SignalListItemViewModel> _allSignalList;
 
         private ObservableCollection<RadioButton> radioButtons = new ObservableCollection<RadioButton>();
 
         public List<Substation> SubstationList { get; set; }
-       
-        public Substation SelectedSubstation
+		private DateTime initialDateTime;
+		public DateTime InitialDateTime { get { return initialDateTime; } set { initialDateTime = value; OnPropertyChanged(nameof(InitialDateTime)); } }
+		private DateTime maxDateTime;
+		public DateTime MaxDateTime { get { return maxDateTime; } set { maxDateTime = value; OnPropertyChanged(nameof(MaxDateTime)); } }
+		public Func<double, string> Formatter { get; set; }
+
+		public Substation SelectedSubstation
         {
             get { return selectedSubstation; }
             set
@@ -47,20 +54,62 @@ namespace UserInterface
             set => SetProperty(ref signalList, value);
         }
 
-        private Messenger messenger = new Messenger();
-        private Substation selectedSubstation;
-        
-
-        public AnalyticsWindowViewModel(Dictionary<long, Substation> substations)
+        private DateTime? startDate = null;
+        public DateTime? StartDate
         {
-            this.substations = substations;
-            SeriesCollection = new SeriesCollection();
-            signalsOn = new Dictionary<long, StepLineSeries>();
-            Setup();
-            Set();
+            get { return startDate; }
+            set { startDate = value; OnPropertyChanged("StartDate"); InitialDateTime = startDate.Value; }
         }
 
-        public void Setup()
+        private DateTime? endDate = null;
+        public DateTime? EndDate
+        {
+            get { return endDate; }
+            set { endDate = value; OnPropertyChanged("EndDate"); MaxDateTime = endDate.Value; }
+        }
+
+
+        private Messenger messenger = new Messenger();
+        private Substation selectedSubstation;
+
+        private IMeasurementRepository measurementProxy;
+
+        public AnalyticsWindowViewModel(Dictionary<long, Substation> substations, IMeasurementRepository measurementProxy)
+        {
+			foreach (var item in Application.Current.Windows)
+			{
+				if(item.GetType() == typeof(AnalyticsWindow))
+				{
+					((Window)item).Closing += new CancelEventHandler(AnalyticsWindow_Closing);
+				}
+			}
+
+			signalsOn = new Dictionary<long, StepLineSeries>();
+
+			this.substations = substations;
+			
+			SetChartModelValues();
+
+            this.measurementProxy = measurementProxy;
+        }
+
+		private void SetChartModelValues()
+		{
+			Setup();
+			Set();
+			var dayConfig = Mappers.Xy<ChartModel>()
+							   .X(dayModel => dayModel.DateTime.Ticks)
+							   .Y(dayModel => dayModel.Value);
+
+			this.SeriesCollection = new SeriesCollection(dayConfig);
+
+			this.InitialDateTime = DateTime.Now;
+			this.MaxDateTime = DateTime.Now.AddDays(30);
+
+			this.Formatter = value => new DateTime((long)value).ToString("yyyy-MM:dd HH:mm:ss");
+		}
+
+		public void Setup()
         {
             SubstationList = substations.Values.ToList();
         }
@@ -69,34 +118,31 @@ namespace UserInterface
         {
             Messenger.Default.Register<SignalListItemViewModel>(this, (message) => { HandleSignalChecked(message); });
         }
-        int rand = 0;
 
         private void HandleSignalChecked(SignalListItemViewModel signal)
         {
-            Console.WriteLine($"Selected signal {signal.Name}/{signal.Gid}/{signal.IsChecked}");
-            StepLineSeries test;
-            if (rand == 0)
-            {
-                test = Mock(signal.Gid.ToString());
-
-            }
-            else if (rand == 1)
-            {
-                test = Mock1(signal.Gid.ToString());
-
-            }
-            else
-            {
-                test = Mock2(signal.Gid.ToString());
-
-
-            }
-            rand++;
 
             if (signal.IsChecked)
             {
-                SeriesCollection.Add(test);
-                signalsOn.Add(signal.Gid, test);
+                RepositoryCore.Measurement[] measurements;
+                if (StartDate != null && EndDate != null)
+                {
+                    DateTime start = StartDate ?? DateTime.Now;
+                    DateTime end = EndDate ?? DateTime.Now;
+
+					this.InitialDateTime = start;
+					this.MaxDateTime = end;
+
+					measurements = measurementProxy.GetAllMeasurementsByTime(start, end, signal.Gid);
+
+                } else
+                {
+                    measurements = measurementProxy.GetAllMeasurementsByGid(signal.Gid);
+                }
+
+                StepLineSeries line = MakeSignal(signal.Gid.ToString(), measurements);
+                SeriesCollection.Add(line);
+                signalsOn.Add(signal.Gid, line);
             }
             else
             {
@@ -105,34 +151,28 @@ namespace UserInterface
             }
         }
 
-        public StepLineSeries Mock(string title)
+        public StepLineSeries MakeSignal(string title, RepositoryCore.Measurement[] measurements)
         {
-            StepLineSeries test = new StepLineSeries();
-            test.Title = title;
-            test.Stroke = Brushes.Red;
-            test.AlternativeStroke = Brushes.LightPink;
-            test.Values = new ChartValues<int> { 1, 1, 1, 0, 0, 1 };
-            return test;
-        }
-        public StepLineSeries Mock1(string title)
-        {
-            StepLineSeries test = new StepLineSeries();
-            test.Title = title;
-            test.Stroke = Brushes.Yellow;
-            test.AlternativeStroke = Brushes.LightGoldenrodYellow;
-            test.Values = new ChartValues<int> { 0, 0, 1, 1, 1, 0 };
-            return test;
-        }
-        public StepLineSeries Mock2(string title)
-        {
-            StepLineSeries test = new StepLineSeries();
-            test.Title = title;
-            test.Stroke = Brushes.Blue;
-            test.AlternativeStroke = Brushes.LightSkyBlue;
-            test.Values = new ChartValues<int> { 0, 0, 0, 1, 1, 0 };
-            return test;
-        }
+			StepLineSeries line = new StepLineSeries();
+            line.Title = title;
+            //line.AlternativeStroke = Brushes.White;
+            line.Stroke = Brushes.Red;
 
+            ChartValues<ChartModel> chartValues = new ChartValues<ChartModel>();
+
+			measurements.OrderBy(m => m.ChangedTime.Value);
+
+			DateTime now = DateTime.Now;
+
+			foreach (var measure in measurements)
+			{
+				DateTime dt = new DateTime(measure.ChangedTime.Value.Ticks);
+				chartValues.Add(new ChartModel(measure.ChangedTime.Value, measure.Value));
+			}
+
+			line.Values = chartValues;
+			return line;
+        }
 
         private void PopulateSignals(string substationGid)
         {
@@ -143,7 +183,7 @@ namespace UserInterface
             {
                 tempList.Add(new SignalListItemViewModel()
                 {
-                    Name = dis.Name,
+                    Name = dis.DiscreteGID.ToString(),
                     Gid = dis.DiscreteGID
                 });
             }
@@ -152,7 +192,7 @@ namespace UserInterface
             {
                 tempList.Add(new SignalListItemViewModel()
                 {
-                    Name = breaker.Name,
+                    Name = breaker.DiscreteGID.ToString(),
                     Gid = breaker.DiscreteGID
                 });
             }
@@ -161,53 +201,36 @@ namespace UserInterface
             {
                 tempList.Add(new SignalListItemViewModel()
                 {
-                    Name = asyncMach.Name,
+                    Name = asyncMach.SignalGid.ToString(),
                     Gid = asyncMach.SignalGid
                 });
             }
-            SignalList = tempList;
+
+			tempList.Add(new SignalListItemViewModel()
+			{
+				Name = selectedSub.TapChanger.GID.ToString(),
+				Gid = long.Parse(selectedSub.TapChanger.GID)
+			});
+
+			tempList.Add(new SignalListItemViewModel()
+			{
+				Name = selectedSub.Transformator.GID.ToString(),
+				Gid = long.Parse(selectedSub.Transformator.GID)
+			});
+
+			foreach (var item in selectedSub.Transformator.TransformerWindings)
+			{
+				tempList.Add(new SignalListItemViewModel()
+				{
+					Name = item.ToString(),
+					Gid = item
+				});
+			}
+
+			SignalList = tempList;
         }
 
-        private void PopulateSignals1(string substationGid)
-            => SignalList = substations.Where(x => x.Value.Gid == substationGid)
-            .Select(x => new { x.Value.AsynchronousMachines, x.Value.Breakers, x.Value.Disconectors })
-            .Select(x => MapSignals(x))
-            .SelectMany(x => x)
-            .ToList();
-        
 
-        private IEnumerable<SignalListItemViewModel> MapSignals(dynamic x)
-        {
-            if (isDiscreteSelected)
-            {
-                return new List<SignalListItemViewModel>(
-                    ((List<Disconector>)x.Disconectors)
-                    .Select(d =>
-                                new SignalListItemViewModel()
-                                {
-                                    Name = d.Name,
-                                    Gid = d.DiscreteGID
-                                }))
-                   {
-                        new SignalListItemViewModel()
-                        {
-                            Name = x.Breaker.Name,
-                            Gid = x.Breaker.DiscreteGID
-                        }
-                 };
-            }
-
-
-            return new List<SignalListItemViewModel>(
-                ((List<AsynchronousMachine>)x.AsynchronousMachines)
-                .Select(d =>
-                            new SignalListItemViewModel()
-                            {
-                                Name = d.Name,
-                                Gid = d.SignalGid
-                            }));
-        }
-        
         public bool IsDiscreteSelected
         {
             get => isDiscreteSelected;
@@ -217,5 +240,24 @@ namespace UserInterface
                 PopulateSignals(selectedSubstation.Gid);
             }
         }
-    }
+
+		void AnalyticsWindow_Closing(object sender, CancelEventArgs e)
+		{
+			signalsOn = new Dictionary<long, StepLineSeries>();
+			Messenger.Default.Unregister<SignalListItemViewModel>(this);
+		}
+	}
+
+	public class ChartModel
+	{
+		public DateTime DateTime { get; set; }
+		public double Value { get; set; }
+
+		public ChartModel(DateTime dateTime, double value)
+		{
+			this.DateTime = dateTime;
+			this.Value = value;
+		}
+	}
 }
+

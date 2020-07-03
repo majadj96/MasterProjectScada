@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:viewModel="clr-namespace:UserInterface.ViewModel"
              xmlns:converters="clr-namespace:UserInterface.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="1000">
@@ -12,55 +11,6 @@
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" True="Collapsed" False="Visible" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
 
-        <Style TargetType="DataGrid">
-            <!-- On mouse hover -->
-            <Setter Property="BorderBrush" Value="#FF999999" />
-            <Setter Property="HorizontalGridLinesBrush" Value="#DDDDDD" />
-            <Setter Property="VerticalGridLinesBrush" Value="#DDDDDD" />
-
-            <Setter Property="RowStyle">
-                <Setter.Value>
-                    <Style TargetType="DataGridRow">
-                        <Setter Property="Background" Value="#A9A9A9" />
-                        <Style.Triggers>
-                            <!-- Highlight a grid row as the mouse passes over -->
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#FF999999" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="CellStyle">
-                <Setter.Value>
-                    <Style TargetType="DataGridCell">
-                        <!-- Add some padding around the contents of a cell -->
-                        <Setter Property="Padding" Value="4,3,4,3" />
-                        <Setter Property="BorderBrush" Value="Transparent"/>
-                        <Setter Property="BorderThickness" Value="1"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="DataGridCell">
-                                    <Border Padding="{TemplateBinding Padding}" 
-                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                            BorderThickness="{TemplateBinding BorderThickness}"
-                                            Background="{TemplateBinding Background}">
-                                        <ContentPresenter />
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        <Setter Property="FocusVisualStyle">
-                            <Setter.Value>
-                                <Style TargetType="Control">
-                                    <Setter Property="BorderBrush" Value="Transparent" />
-                                </Style>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </Setter.Value>
-            </Setter>
-        </Style>
         <Style x:Key="MyButtonStyle" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True"/>
             <Setter Property="Margin" Value="5"/>
@@ -91,10 +41,11 @@
                       ItemsSource="{Binding AlarmItems, UpdateSourceTrigger=PropertyChanged}"
                       IsReadOnly="True"
                       VerticalScrollBarVisibility="Auto"
+                      BorderThickness="3" BorderBrush="#FF29ABBF"
                       VerticalAlignment="Top"
                       AutoGenerateColumns="False"
                       CanUserResizeRows="False"
-                      CanUserAddRows="False" Grid.Column="1" Background="#A9A9A9" Grid.Row="1" BorderBrush="#FF3C3C3C" FontFamily="Consolas" FontSize="14">
+                      CanUserAddRows="False" Grid.Column="1" Background="White" Grid.Row="1" FontFamily="Calibri" FontSize="14">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Alarm reported" Width="165"  Binding="{Binding AlarmReported}"/>
                 <DataGridTextColumn Header="Alarm reported by" Width="135"  Binding="{Binding AlarmReportedBy}"/>

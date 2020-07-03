@@ -1,18 +1,22 @@
 ﻿using CalculationEngine.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TransactionManagerContracts;
 
 namespace CalculationEngine
 {
-	public class TransactionService : ITransactionSteps
+    public class TransactionService : ITransactionSteps
 	{
-        public static ProcessingData _processingData;
+        private ProcessingData _processingData;
+        private ConcreteModel Model;
 
-		public bool Prepare()
+        public TransactionService(ProcessingData processingData, ConcreteModel model)
+        {
+            _processingData = processingData;
+            Model = model;
+        }
+
+        public bool Prepare()
 		{
 			Console.WriteLine("CE Prepare");
 			return true;
@@ -22,26 +26,24 @@ namespace CalculationEngine
 		{
 			Console.WriteLine("CE Commit");
 
-			ConcreteModel.BackupModel = new Dictionary<long, IdObject>(ConcreteModel.CurrentModel);
-			ConcreteModel.CurrentModel = new Dictionary<long, IdObject>(ConcreteModel.CurrentModel_Copy);
-			ConcreteModel.CurrentModel_Copy.Clear();
+			Model.BackupModel = new Dictionary<long, IdObject>(Model.CurrentModel);
+			Model.CurrentModel = new Dictionary<long, IdObject>(Model.CurrentModel_Copy);
+			Model.CurrentModel_Copy.Clear();
 
-            _processingData.UpdateAsyncMachines();
+            //_processingData.UpdateAsyncMachines();
+            _processingData.IsModelChanged = true;
 
-            if(!CalcEngine.aTimer.Enabled)
-            {
-                CalcEngine.aTimer.Enabled = true;
-            }
+            CalcEngine.aTimer.Start();
 
-			return true;
+            return true;
 		}
 
 		public void Rollback()
 		{
 			Console.WriteLine("CE Rollback");
 
-			ConcreteModel.CurrentModel = new Dictionary<long, IdObject>(ConcreteModel.BackupModel);
-			ConcreteModel.CurrentModel_Copy.Clear();
+			Model.CurrentModel = new Dictionary<long, IdObject>(Model.BackupModel);
+			Model.CurrentModel_Copy.Clear();
 		}
 	}
 }
