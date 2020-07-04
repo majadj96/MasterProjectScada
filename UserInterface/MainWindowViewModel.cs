@@ -351,9 +351,9 @@ namespace UserInterface
             Sub subNMS = new Sub();
             subNMS.OnSubscribe("nms");
             subNMS.OnSubscribe("scada");
-            subNMS.OnSubscribe("alarm");
-            subNMS.OnSubscribe("connectionState");
-            subNMS.OnSubscribe("event");
+            //subNMS.OnSubscribe("alarm");
+            //subNMS.OnSubscribe("connectionState");
+            //subNMS.OnSubscribe("event");
             setUpInitState();
 
             substations = new Dictionary<long, Substation>();
