@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows.Threading;
@@ -18,6 +19,7 @@ namespace UserInterface.ViewModel
         private string breakerId { get; set; }
         
         private Substation substationCurrent;
+        public Dictionary<long, Measurement> Measurements; 
         #endregion
 
         #region Line_colors
@@ -882,7 +884,7 @@ namespace UserInterface.ViewModel
             {
                 CommandingWindow commandingWindow = new CommandingWindow();
 
-                CommandingWindowViewModel commandingWindowViewModel = new CommandingWindowViewModel(SubstationCurrent);
+                CommandingWindowViewModel commandingWindowViewModel = new CommandingWindowViewModel(SubstationCurrent, Measurements);
 
                 commandingWindow.DataContext = commandingWindowViewModel;
 

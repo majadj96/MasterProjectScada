@@ -368,6 +368,7 @@ namespace UserInterface
 
         public MainWindowViewModel()
         {
+            meshViewModel.Measurements = Measurements;
             CurrentMeshViewModel = meshViewModel;
 
             ButtonTablesCommand = new MyICommand<string>(OnNavigation);
