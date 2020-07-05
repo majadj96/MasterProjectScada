@@ -43,30 +43,32 @@
     <Grid Background="#FFE6E6E6">
 
         <StackPanel x:Name="SubstationsPanel" Canvas.Left="3" Margin="40,297,808,352" Orientation="Vertical"/>
-        <wpf:CartesianChart Margin="254,152,22,48" Series="{Binding SeriesCollection}" Foreground="{x:Null}" Background="White">
-			<wpf:CartesianChart.AxisX>
-				<wpf:Axis LabelFormatter="{Binding Formatter}" MinValue="{Binding InitialDateTime.Ticks}" MaxValue="{Binding MaxDateTime.Ticks}">
-				</wpf:Axis>
-			</wpf:CartesianChart.AxisX>
-			<wpf:CartesianChart.DataTooltip>
-				<views:AnalyticsGraphTooltip></views:AnalyticsGraphTooltip>
-			</wpf:CartesianChart.DataTooltip>
-		</wpf:CartesianChart>
-        <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding SubstationList}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedSubstation, Mode=TwoWay}" Margin="118,232,0,0" VerticalAlignment="Top" Height="24" Width="120" FontFamily="Calibri"/>
-        <Label Content="Subsation:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Margin="26,231,0,0" VerticalAlignment="Top" FontFamily="Calibri" Width="81" Foreground="Black" FontSize="13"/>
-        <Label Content="Measurements" HorizontalAlignment="Left" Margin="54,301,0,0"  HorizontalContentAlignment="Center" VerticalAlignment="Top" FontFamily="Calibri" Width="144" Foreground="Black" FontSize="20"/>
-        <ListView HorizontalAlignment="Left" ItemsSource="{Binding SignalList}" Height="274" Margin="26,341,0,0" VerticalAlignment="Top" Width="199" Background="White" BorderBrush="Black" BorderThickness="2" FontSize="13">
+        <wpf:CartesianChart Margin="32,294,31,23" Series="{Binding SeriesCollection}" Foreground="{x:Null}" Background="White" LegendLocation="Bottom">
+            <wpf:CartesianChart.AxisX>
+                <wpf:Axis LabelFormatter="{Binding Formatter}" MinValue="{Binding InitialDateTime.Ticks}" MaxValue="{Binding MaxDateTime.Ticks}">
+                </wpf:Axis>
+            </wpf:CartesianChart.AxisX>
+            <wpf:CartesianChart.DataTooltip>
+                <views:AnalyticsGraphTooltip></views:AnalyticsGraphTooltip>
+            </wpf:CartesianChart.DataTooltip>
+        </wpf:CartesianChart>
+        <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding SubstationList}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedSubstation, Mode=TwoWay}" Margin="124,77,0,0" VerticalAlignment="Top" Height="24" Width="120" FontFamily="Calibri"/>
+        <Label Content="Subsation:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Margin="40,76,0,0" VerticalAlignment="Top" FontFamily="Calibri" Width="81" Foreground="Black" FontSize="13" RenderTransformOrigin="0.5,0.385"/>
+        <Label Content="Measurements" HorizontalAlignment="Left" Margin="32,114,0,0"  HorizontalContentAlignment="Center" VerticalAlignment="Top" FontFamily="Calibri" Width="144" Foreground="Black" FontSize="20"/>
+        <ListView HorizontalAlignment="Left" ItemsSource="{Binding SignalList}" Height="132" Margin="32,149,0,0" VerticalAlignment="Top" Width="929" Background="White" BorderBrush="Black" BorderThickness="2" FontSize="13">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <analytics:SignalListItem/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Label Content="Analytic" FontWeight="Bold" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="10,24,0,0" VerticalAlignment="Top" FontFamily="Calibri" Width="972" Foreground="Black" FontSize="40" Height="57"/>
-        <DatePicker HorizontalAlignment="Left" Margin="123,178,0,0" VerticalAlignment="Top" SelectedDate="{Binding EndDate}"/>
-        <DatePicker HorizontalAlignment="Left" Margin="123,128,0,0" VerticalAlignment="Top" SelectedDate="{Binding StartDate}"/>
-        <Label Content="Start date:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Margin="26,128,0,0" VerticalAlignment="Top" FontFamily="Calibri" Width="92" Foreground="Black" FontSize="13"/>
-        <Label Content="End date:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Margin="26,178,0,0" VerticalAlignment="Top" FontFamily="Calibri" Width="92" Foreground="Black" FontSize="13"/>
+        <Label Content="Analytic" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="10,4,0,0" VerticalAlignment="Top" FontFamily="Calibri" Width="972" Foreground="Black" FontSize="40" Height="57"/>
+        <DatePicker HorizontalAlignment="Left" Margin="843,76,0,0" VerticalAlignment="Top" SelectedDate="{Binding EndDate}"/>
+        <DatePicker HorizontalAlignment="Left" Margin="627,77,0,0" VerticalAlignment="Top" SelectedDate="{Binding StartDate}"/>
+        <Label Content="Start date:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Margin="536,76,0,0" VerticalAlignment="Top" FontFamily="Calibri" Width="92" Foreground="Black" FontSize="13"/>
+        <Label Content="End date:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Margin="762,77,0,0" VerticalAlignment="Top" FontFamily="Calibri" Width="92" Foreground="Black" FontSize="13" RenderTransformOrigin="0.457,0.442"/>
+        <Label Content="Measure type:" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Margin="283,77,0,0" VerticalAlignment="Top" FontFamily="Calibri" Width="90" Foreground="Black" FontSize="13"/>
+        <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding MeasureType}" SelectedItem="{Binding SelectedType, Mode=TwoWay}" Margin="378,77,0,0" VerticalAlignment="Top" Height="24" Width="120" FontFamily="Calibri"/>
 
     </Grid>
 </mah:MetroWindow>

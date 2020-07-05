@@ -30,6 +30,7 @@ namespace UserInterface
         private ObservableCollection<RadioButton> radioButtons = new ObservableCollection<RadioButton>();
 
         public List<Substation> SubstationList { get; set; }
+        public List<string> MeasureType { get; set; }
 		private DateTime initialDateTime;
 		public DateTime InitialDateTime { get { return initialDateTime; } set { initialDateTime = value; OnPropertyChanged(nameof(InitialDateTime)); } }
 		private DateTime maxDateTime;
@@ -42,11 +43,22 @@ namespace UserInterface
             set
             {
                 selectedSubstation = value;
-                PopulateSignals(selectedSubstation.Gid);
+            }
+        }
+
+        public string SelectedType
+        {
+            get { return selectedType; }
+            set
+            {
+                selectedType = value;
+                PopulateSignals(selectedSubstation.Gid, selectedType);
                 signalsOn.Clear();
                 SeriesCollection.Clear();
             }
         }
+
+
 
         public List<SignalListItemViewModel> SignalList
         {
@@ -71,6 +83,7 @@ namespace UserInterface
 
         private Messenger messenger = new Messenger();
         private Substation selectedSubstation;
+        private string selectedType;
 
         private IMeasurementRepository measurementProxy;
 
@@ -91,6 +104,7 @@ namespace UserInterface
 			SetChartModelValues();
 
             this.measurementProxy = measurementProxy;
+            
         }
 
 		private void SetChartModelValues()
@@ -109,9 +123,11 @@ namespace UserInterface
 			this.Formatter = value => new DateTime((long)value).ToString("yyyy-MM:dd HH:mm:ss");
 		}
 
-		public void Setup()
+        public void Setup()
         {
             SubstationList = substations.Values.ToList();
+
+            MeasureType = new List<string> { "Digital", "Analog" };
         }
 
         public void Set()
@@ -174,59 +190,63 @@ namespace UserInterface
 			return line;
         }
 
-        private void PopulateSignals(string substationGid)
+        private void PopulateSignals(string substationGid, string type)
         {
             List<SignalListItemViewModel> tempList = new List<SignalListItemViewModel>();
             Substation selectedSub = substations.Where(x => x.Value.Gid == substationGid).FirstOrDefault().Value;
 
-            foreach(var dis in selectedSub.Disconectors)
-            {
+            if (type.Equals("Digital")) {
+                foreach (var dis in selectedSub.Disconectors)
+                {
+                    tempList.Add(new SignalListItemViewModel()
+                    {
+                        Name = dis.Name,
+                        Gid = dis.DiscreteGID,
+                        Type = "State"
+                    });
+                }
+
+                foreach (var breaker in selectedSub.Breakers)
+                {
+                    tempList.Add(new SignalListItemViewModel()
+                    {
+                        Name = breaker.Name,
+                        Gid = breaker.DiscreteGID,
+                        Type = "State"
+                    });
+                }
+            } else {
+                foreach (var asyncMach in selectedSub.AsynchronousMachines)
+                {
+                    tempList.Add(new SignalListItemViewModel()
+                    {
+                        Name = asyncMach.Name,
+                        Gid = asyncMach.SignalGid,
+                        Type = "Power"
+                    });
+                }
+
                 tempList.Add(new SignalListItemViewModel()
                 {
-                    Name = dis.DiscreteGID.ToString(),
-                    Gid = dis.DiscreteGID
+                    Name = "Tap Changer",
+                    Gid = long.Parse(selectedSub.TapChanger.GID),
+                    Type = "Position"
                 });
-            }
 
-            foreach (var breaker in selectedSub.Breakers)
-            {
                 tempList.Add(new SignalListItemViewModel()
                 {
-                    Name = breaker.DiscreteGID.ToString(),
-                    Gid = breaker.DiscreteGID
+                    Name = "Primary winding",
+                    Gid = selectedSub.Transformator.TransformerWindings[0],
+                    Type = "Voltage"
                 });
-            }
 
-            foreach (var asyncMach in selectedSub.AsynchronousMachines)
-            {
                 tempList.Add(new SignalListItemViewModel()
                 {
-                    Name = asyncMach.SignalGid.ToString(),
-                    Gid = asyncMach.SignalGid
+                    Name = "Primary winding",
+                    Gid = selectedSub.Transformator.TransformerWindings[1],
+                    Type = "Current"
                 });
             }
-
-			tempList.Add(new SignalListItemViewModel()
-			{
-				Name = selectedSub.TapChanger.GID.ToString(),
-				Gid = long.Parse(selectedSub.TapChanger.GID)
-			});
-
-			tempList.Add(new SignalListItemViewModel()
-			{
-				Name = selectedSub.Transformator.GID.ToString(),
-				Gid = long.Parse(selectedSub.Transformator.GID)
-			});
-
-			foreach (var item in selectedSub.Transformator.TransformerWindings)
-			{
-				tempList.Add(new SignalListItemViewModel()
-				{
-					Name = item.ToString(),
-					Gid = item
-				});
-			}
-
 			SignalList = tempList;
         }
 
@@ -237,7 +257,7 @@ namespace UserInterface
             set
             {
                 SetProperty(ref isDiscreteSelected, value);
-                PopulateSignals(selectedSubstation.Gid);
+                //PopulateSignals(selectedSubstation.Gid);
             }
         }
 
