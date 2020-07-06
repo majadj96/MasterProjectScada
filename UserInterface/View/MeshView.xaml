@@ -39,7 +39,7 @@
 
             <Line
             X1="0" Y1="0"
-            X2="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=190}" Y2="0"
+            X2="190" Y2="0"
             Stroke="{Binding LineStart}"
             StrokeThickness="4" Canvas.Left="15" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=1}"/>
             <Line

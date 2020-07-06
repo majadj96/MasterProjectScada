@@ -48,12 +48,12 @@ namespace UserInterface.ViewModel
         public string lineUpBreakerSecondPumpCN { get; set; }
 		private string strujaW1 = "0 A";
 		private string strujaW2 = "0 A";
-		private string naponW1 = "0 A";
-		private string naponW2 = "0 A";
+		private string naponW1 = "0 V";
+		private string naponW2 = "0 V";
 		private string struja2W1 = "0 A";
 		private string struja2W2 = "0 A";
-		private string napon2W1 = "0 A";
-		private string napon2W2 = "0 A";
+		private string napon2W1 = "0 V";
+		private string napon2W2 = "0 V";
 		private string sub1Visibility = "Visible";
 		private string sub2Visibility = "Hidden";
 		#endregion
