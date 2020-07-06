@@ -42,12 +42,14 @@
     </Window.Resources>
     <Grid Background="#FFE6E6E6">
 
-        <StackPanel x:Name="SubstationsPanel" Canvas.Left="3" Margin="40,297,808,352" Orientation="Vertical"/>
-        <wpf:CartesianChart Margin="32,294,31,23" Series="{Binding SeriesCollection}" Foreground="{x:Null}" Background="White" LegendLocation="Bottom">
+        <wpf:CartesianChart Margin="32,294,31,23" Series="{Binding SeriesCollection}" Foreground="Black" Background="White" LegendLocation="Right">
             <wpf:CartesianChart.AxisX>
-                <wpf:Axis LabelFormatter="{Binding Formatter}" MinValue="{Binding InitialDateTime.Ticks}" MaxValue="{Binding MaxDateTime.Ticks}">
+                <wpf:Axis Title="Time" LabelFormatter="{Binding Formatter}" MinValue="{Binding InitialDateTime.Ticks}" MaxValue="{Binding MaxDateTime.Ticks}">
                 </wpf:Axis>
             </wpf:CartesianChart.AxisX>
+            <wpf:CartesianChart.AxisY>
+                <wpf:Axis Title="Value"></wpf:Axis>
+            </wpf:CartesianChart.AxisY>
             <wpf:CartesianChart.DataTooltip>
                 <views:AnalyticsGraphTooltip></views:AnalyticsGraphTooltip>
             </wpf:CartesianChart.DataTooltip>

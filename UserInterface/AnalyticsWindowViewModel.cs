@@ -14,11 +14,14 @@ using UserInterface.ViewModel;
 using LiveCharts.Configurations;
 using System.ComponentModel;
 using System.Windows;
+using UserInterface.Command;
+using LiveCharts.Definitions.Series;
 
 namespace UserInterface
 {
     class AnalyticsWindowViewModel : BindableBase
     {
+        
         private bool isDiscreteSelected;
         private List<SignalListItemViewModel> signalList;
 
@@ -43,6 +46,10 @@ namespace UserInterface
             set
             {
                 selectedSubstation = value;
+                signalsOn.Clear();
+                SeriesCollection.Clear();
+                if(SignalList != null)
+                    SignalList.Clear();
             }
         }
 
@@ -89,7 +96,7 @@ namespace UserInterface
 
         public AnalyticsWindowViewModel(Dictionary<long, Substation> substations, IMeasurementRepository measurementProxy)
         {
-			foreach (var item in Application.Current.Windows)
+            foreach (var item in Application.Current.Windows)
 			{
 				if(item.GetType() == typeof(AnalyticsWindow))
 				{
@@ -107,7 +114,20 @@ namespace UserInterface
             
         }
 
-		private void SetChartModelValues()
+        //private void OnZoom(string destination)
+        //{
+        //    List<ChartPoint> values = new List<ChartPoint>();
+        //    foreach(var series in SeriesCollection)
+        //    {
+        //        values.AddRange(series.ActualValues.GetPoints(series));
+        //    }
+
+        //    values.OrderBy(x => x.X);
+        //    var maxDateTime = new DateTime((long)values.Last().X);
+
+        //    InitialDateTime = maxDateTime.AddHours(-5);
+        //}
+        private void SetChartModelValues()
 		{
 			Setup();
 			Set();
@@ -120,7 +140,7 @@ namespace UserInterface
 			this.InitialDateTime = DateTime.Now;
 			this.MaxDateTime = DateTime.Now.AddDays(30);
 
-			this.Formatter = value => new DateTime((long)value).ToString("yyyy-MM:dd HH:mm:ss");
+			this.Formatter = value => new DateTime((long)value).ToString("yyyy-MM-dd HH:mm:ss");
 		}
 
         public void Setup()
@@ -156,7 +176,7 @@ namespace UserInterface
                     measurements = measurementProxy.GetAllMeasurementsByGid(signal.Gid);
                 }
 
-                StepLineSeries line = MakeSignal(signal.Gid.ToString(), measurements);
+                StepLineSeries line = MakeSignal(signal.Name, measurements);
                 SeriesCollection.Add(line);
                 signalsOn.Add(signal.Gid, line);
             }
@@ -171,8 +191,8 @@ namespace UserInterface
         {
 			StepLineSeries line = new StepLineSeries();
             line.Title = title;
-            //line.AlternativeStroke = Brushes.White;
-            line.Stroke = Brushes.Red;
+            line.AlternativeStroke = Brushes.Gray;
+            //line.Stroke = Brushes.Red;
 
             ChartValues<ChartModel> chartValues = new ChartValues<ChartModel>();
 
@@ -185,8 +205,9 @@ namespace UserInterface
 				DateTime dt = new DateTime(measure.ChangedTime.Value.Ticks);
 				chartValues.Add(new ChartModel(measure.ChangedTime.Value, measure.Value));
 			}
-
-			line.Values = chartValues;
+            this.InitialDateTime = chartValues.FirstOrDefault()?.DateTime ?? DateTime.MinValue;
+            this.MaxDateTime = chartValues.LastOrDefault()?.DateTime ?? DateTime.Now;
+            line.Values = chartValues;
 			return line;
         }
 
