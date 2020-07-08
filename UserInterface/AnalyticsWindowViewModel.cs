@@ -50,6 +50,8 @@ namespace UserInterface
                 SeriesCollection.Clear();
                 if(SignalList != null)
                     SignalList.Clear();
+                if(selectedType == "Analog" || selectedType == "Digital")
+                    PopulateSignals(selectedSubstation.Gid, selectedType);
             }
         }
 
@@ -166,10 +168,10 @@ namespace UserInterface
                     DateTime start = StartDate ?? DateTime.Now;
                     DateTime end = EndDate ?? DateTime.Now;
 
-					this.InitialDateTime = start;
-					this.MaxDateTime = end;
+                    this.InitialDateTime = start;
+                    this.MaxDateTime = end;
 
-					measurements = measurementProxy.GetAllMeasurementsByTime(start, end, signal.Gid);
+                    measurements = measurementProxy.GetAllMeasurementsByTime(start, end, signal.Gid);
 
                 } else
                 {
@@ -177,11 +179,19 @@ namespace UserInterface
                 }
 
                 StepLineSeries line = MakeSignal(signal.Name, measurements);
+                if (line.Values.Count == 0)
+                    return;
                 SeriesCollection.Add(line);
                 signalsOn.Add(signal.Gid, line);
             }
             else
             {
+                if (!signalsOn.ContainsKey(signal.Gid))
+                    return;
+                
+                if (!SeriesCollection.Contains(signalsOn[signal.Gid]))
+                    return;
+
                 SeriesCollection.Remove(signalsOn[signal.Gid]);
                 signalsOn.Remove(signal.Gid);
             }
@@ -191,12 +201,13 @@ namespace UserInterface
         {
 			StepLineSeries line = new StepLineSeries();
             line.Title = title;
-            line.AlternativeStroke = Brushes.Gray;
-            //line.Stroke = Brushes.Red;
+            line.AlternativeStroke = Brushes.LightGray;
+            if (selectedType == "Digital")
+                line.PointGeometry = DefaultGeometries.Square;
 
             ChartValues<ChartModel> chartValues = new ChartValues<ChartModel>();
 
-			measurements.OrderBy(m => m.ChangedTime.Value);
+            measurements = measurements.OrderBy(m => m.ChangedTime.Value).ToArray();
 
 			DateTime now = DateTime.Now;
 
@@ -205,8 +216,13 @@ namespace UserInterface
 				DateTime dt = new DateTime(measure.ChangedTime.Value.Ticks);
 				chartValues.Add(new ChartModel(measure.ChangedTime.Value, measure.Value));
 			}
-            this.InitialDateTime = chartValues.FirstOrDefault()?.DateTime ?? DateTime.MinValue;
-            this.MaxDateTime = chartValues.LastOrDefault()?.DateTime ?? DateTime.Now;
+
+            if (chartValues.Count != 0)
+            {
+                this.InitialDateTime = chartValues.FirstOrDefault()?.DateTime ?? chartValues.LastOrDefault()?.DateTime.AddSeconds(-10) ?? DateTime.Now;
+
+                this.MaxDateTime = chartValues.LastOrDefault()?.DateTime.AddSeconds(10) ?? chartValues.FirstOrDefault()?.DateTime.AddMinutes(10) ?? DateTime.Now;
+            }
             line.Values = chartValues;
 			return line;
         }
@@ -236,16 +252,16 @@ namespace UserInterface
                         Type = "State"
                     });
                 }
-            } else {
-                foreach (var asyncMach in selectedSub.AsynchronousMachines)
-                {
-                    tempList.Add(new SignalListItemViewModel()
-                    {
-                        Name = asyncMach.Name,
-                        Gid = asyncMach.SignalGid,
-                        Type = "Power"
-                    });
-                }
+            } else
+            {
+                tempList
+                    .AddRange(selectedSub.AsynchronousMachines
+                        .Select(x => new SignalListItemViewModel
+                            {
+                                Name = x.Name,
+                                Gid = x.SignalGid,
+                                Type = "Power"
+                            }));
 
                 tempList.Add(new SignalListItemViewModel()
                 {
@@ -270,7 +286,6 @@ namespace UserInterface
             }
 			SignalList = tempList;
         }
-
 
         public bool IsDiscreteSelected
         {
