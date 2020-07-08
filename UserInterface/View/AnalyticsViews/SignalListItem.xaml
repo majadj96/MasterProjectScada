@@ -5,13 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:UserInterface.View.AnalyticsViews"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="800">
+             d:DesignHeight="50" d:DesignWidth="1000">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.8*"/>
-            <ColumnDefinition Width="0.2*"/>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="0.05*"/>
         </Grid.ColumnDefinitions>
-        <Label Grid.Column="0" HorizontalAlignment="Stretch" Content="{Binding Name}" />
-        <CheckBox Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
+        <Label Grid.Column="0" HorizontalAlignment="Stretch" Content="{Binding Gid}" />
+        <Label Grid.Column="1" HorizontalAlignment="Stretch" Content="{Binding Name}" />
+        <Label Grid.Column="2" HorizontalAlignment="Stretch" Content="{Binding Type}" />
+        <CheckBox Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
     </Grid>
 </UserControl>
