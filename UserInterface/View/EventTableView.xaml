@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:dgx="http://schemas.devexpress.com/winfx/2008/xaml/grid"
              xmlns:local="clr-namespace:UserInterface.View"
              mc:Ignorable="d" 
              d:DesignHeight="710" d:DesignWidth="860">
@@ -47,28 +48,26 @@
                 <ImageBrush ImageSource="/UserInterface;component/Assets/cross.png" Stretch="Uniform"/>
             </Button.Background>
         </Button>
-        <DataGrid x:Name="EventItems"
+        <dgx:GridControl x:Name="EventItems"
                   ItemsSource="{Binding EventItems, UpdateSourceTrigger=PropertyChanged}"
-                  IsReadOnly="True"
-                  VerticalScrollBarVisibility="Auto"
                   BorderThickness="3" BorderBrush="#FF29ABBF"
-                  VerticalAlignment="Top"
-                  AutoGenerateColumns="False"
-                  CanUserResizeRows="False"
-                  CanUserAddRows="False" Background="White" FontFamily="Calibri" FontSize="14" Margin="0,87,0,0">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Event reported" Width="180"  Binding="{Binding EventReported}"/>
-                <DataGridTextColumn Header="Event reported by" Width="140"  Binding="{Binding EventReportedBy}"/>
-                <DataGridTemplateColumn Header="Message" Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
+                  VerticalAlignment="Top" Background="White" FontFamily="Calibri" FontSize="14" Margin="0,87,0,0">
+            <dgx:GridControl.Columns>
+                <dgx:GridColumn Header="Event reported" Width="180"  Binding="{Binding EventReported}"/>
+                <dgx:GridColumn Header="Event reported by" Width="140"  Binding="{Binding EventReportedBy}"/>
+                <dgx:GridColumn Header="Message" Width="*">
+                    <dgx:GridColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Message}" TextWrapping="Wrap" ToolTip="{Binding Message}"/>
                         </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Point name" Width="120" Binding="{Binding PointName}"/>
-                <DataGridTextColumn Header="GID" Width="100" Binding="{Binding GiD}"/>
-            </DataGrid.Columns>
-        </DataGrid>
+                    </dgx:GridColumn.CellTemplate>
+                </dgx:GridColumn>
+                <dgx:GridColumn Header="Point name" Width="120" Binding="{Binding PointName}"/>
+                <dgx:GridColumn Header="GID" Width="100" Binding="{Binding GiD}"/>
+            </dgx:GridControl.Columns>
+            <dgx:GridControl.View>
+                <dgx:TableView AllowPaging="True" AllowEditing="False"/>
+            </dgx:GridControl.View>
+        </dgx:GridControl>
     </Grid>
 </UserControl>
