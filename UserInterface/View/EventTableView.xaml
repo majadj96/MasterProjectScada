@@ -50,7 +50,6 @@
         </Button>
         <dgx:GridControl x:Name="EventItems"
                   ItemsSource="{Binding EventItems, UpdateSourceTrigger=PropertyChanged}"
-              
                   BorderThickness="3" BorderBrush="#FF29ABBF"
                   VerticalAlignment="Top" Background="White" FontFamily="Calibri" FontSize="14" Margin="0,87,0,0">
             <dgx:GridControl.Columns>
@@ -67,7 +66,7 @@
                 <dgx:GridColumn Header="GID" Width="100" Binding="{Binding GiD}"/>
             </dgx:GridControl.Columns>
             <dgx:GridControl.View>
-                <dgx:TableView AllowPaging="True"/>
+                <dgx:TableView AllowPaging="True" AllowEditing="False"/>
             </dgx:GridControl.View>
         </dgx:GridControl>
     </Grid>
