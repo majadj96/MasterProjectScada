@@ -496,7 +496,7 @@ namespace UserInterface
         {
             TablesWindow tablesWindow = new TablesWindow();
 
-            TablesWindowViewModel tablesWindowViewModel = new TablesWindowViewModel(SubstationItems, this.alarmHandler, Substations.Values.ToList(), customEventHandler);
+            TablesWindowViewModel tablesWindowViewModel = new TablesWindowViewModel(SubstationItems, this.alarmHandler, Substations.Values.ToList(), customEventHandler, Measurements);
 
             tablesWindow.DataContext = tablesWindowViewModel;
 
@@ -696,6 +696,7 @@ namespace UserInterface
                     if(Measurements.TryGetValue(measure.Gid, out Measurement meas))
                     {
                         meas.Value = measure.Value;
+                        meas.Time = DateTime.UtcNow;
                         if(meas.PowerSystemResource.ToString() == SubstationCurrent.Gid)
                         {
                             CommandToAM(meas.Value);
@@ -704,6 +705,8 @@ namespace UserInterface
                         {
                             TransformerTapChanger = meas.Value.ToString();
                         }
+
+                        Messenger.Default.Send<Measurement>(meas);
                     }
 
                     //measure.Gid to da se poklapa sa nekim od gidova od asinhrone ili od brejkera ili od diskonektora ili od ono za fluide itd..trebaju nam merenja
@@ -1029,12 +1032,17 @@ namespace UserInterface
                             Mrid = resource.GetProperty(ModelCode.IDOBJ_MRID).AsString(),
                             Name = resource.GetProperty(ModelCode.IDOBJ_NAME).AsString(),
                             Description = resource.GetProperty(ModelCode.IDOBJ_DESC).AsString(),
-                            PowerSystemResource = resource.GetProperty(ModelCode.MEASUREMENT_PSR).AsReference()
+                            PowerSystemResource = resource.GetProperty(ModelCode.MEASUREMENT_PSR).AsReference(),
+                            Min = resource.GetProperty(ModelCode.DISCRETE_MINVALUE).AsInt(),
+                            Max = resource.GetProperty(ModelCode.DISCRETE_MAXVALUE).AsInt(),
+                            Type = (MeasurementType)resource.GetProperty(ModelCode.MEASUREMENT_MEASTYPE).AsEnum(),
+                            Time = DateTime.UtcNow
                         };
 
                         if(!Measurements.ContainsKey(meas.Gid))
                         {
                             Measurements.Add(meas.Gid, meas);
+                            Messenger.Default.Send<Measurement>(meas);
                         }
 
                         foreach (var v in resource.Properties.Where(x => x.Id == ModelCode.MEASUREMENT_PSR))
@@ -1085,12 +1093,17 @@ namespace UserInterface
                             Mrid = resource.GetProperty(ModelCode.IDOBJ_MRID).AsString(),
                             Name = resource.GetProperty(ModelCode.IDOBJ_NAME).AsString(),
                             Description = resource.GetProperty(ModelCode.IDOBJ_DESC).AsString(),
-                            PowerSystemResource = resource.GetProperty(ModelCode.MEASUREMENT_PSR).AsReference()
+                            PowerSystemResource = resource.GetProperty(ModelCode.MEASUREMENT_PSR).AsReference(),
+                            Min = resource.GetProperty(ModelCode.ANALOG_MINVALUE).AsFloat(),
+                            Max = resource.GetProperty(ModelCode.ANALOG_MAXVALUE).AsFloat(),
+                            Type = (MeasurementType)resource.GetProperty(ModelCode.MEASUREMENT_MEASTYPE).AsEnum(),
+                            Time = DateTime.UtcNow
                         };
 
                         if (!Measurements.ContainsKey(meas_analog.Gid))
                         {
                             Measurements.Add(meas_analog.Gid, meas_analog);
+                            Messenger.Default.Send<Measurement>(meas_analog);
                         }
 
                         foreach (var analog in resource.Properties.Where(x=>x.Id == ModelCode.MEASUREMENT_PSR))

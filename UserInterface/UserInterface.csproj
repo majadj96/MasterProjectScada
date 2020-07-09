@@ -347,5 +347,8 @@
   <ItemGroup>
     <Resource Include="Assets\cross.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\alarm-bell.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

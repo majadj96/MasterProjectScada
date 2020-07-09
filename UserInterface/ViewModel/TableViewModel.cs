@@ -1,5 +1,8 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using Common;
+using Common.AlarmEvent;
+using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using UserInterface.BaseError;
@@ -10,6 +13,9 @@ namespace UserInterface.ViewModel
     public class TableViewModel : BindableBase
     {
         public BindingList<UIModel> substationItems = new BindingList<UIModel>();
+        public BindingList<Measurement> analogs = new BindingList<Measurement>();
+        public BindingList<Measurement> discretes = new BindingList<Measurement>();
+        private List<Alarm> alarms;
 
         public BindingList<UIModel> SubstationItems
         {
@@ -24,15 +30,114 @@ namespace UserInterface.ViewModel
             }
         }
 
-        public TableViewModel(ObservableCollection<UIModel> model)
+        public BindingList<Measurement> Analogs
         {
-            SubstationItems = new BindingList<UIModel>(model);
-
-            Messenger.Default.Register<NotificationMessage>(this, (message) =>
+            get
             {
-                if (message.Notification == "UpdateTelemetry")
-                    UpdateTelemetry((string)message.Sender, message.Target);
+                return analogs;
+            }
+            set
+            {
+                analogs = value;
+                OnPropertyChanged("Analogs");
+            }
+        }
+
+        public BindingList<Measurement> Discretes
+        {
+            get
+            {
+                return discretes;
+            }
+            set
+            {
+                discretes = value;
+                OnPropertyChanged("Discretes");
+            }
+        }
+
+        public TableViewModel(ObservableCollection<UIModel> model, Dictionary<long, Measurement> measurements, List<Alarm> alarms)
+        {
+            //SubstationItems = new BindingList<UIModel>(model);
+
+            this.alarms = alarms;
+
+            Analogs = new BindingList<Measurement>();
+            Discretes = new BindingList<Measurement>();
+
+            foreach (var meas in measurements)
+            {
+                if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(meas.Key) == DMSType.ANALOG)
+                {
+                    if(IsInAlarmState(meas.Key))
+                    {
+                        meas.Value.AlarmVisibility = "Visible";
+                    }
+                    else
+                    {
+                        meas.Value.AlarmVisibility = "Hidden";
+                    }
+                    Analogs.Add(meas.Value);
+                }
+                else if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(meas.Key) == DMSType.DISCRETE)
+                {
+                    if (IsInAlarmState(meas.Key))
+                    {
+                        meas.Value.AlarmVisibility = "Visible";
+                    }
+                    else
+                    {
+                        meas.Value.AlarmVisibility = "Hidden";
+                    }
+                    Discretes.Add(meas.Value);
+                }
+            }
+
+            Messenger.Default.Register<Measurement>(this, (meas) =>
+            {
+                //if (message.Notification == "UpdateTelemetry")
+                //    UpdateTelemetry((string)message.Sender, message.Target);
+                UpdateMeas(meas);
             });
+        }
+
+        private void UpdateMeas(Measurement meas)
+        {
+            if (IsInAlarmState(meas.Gid))
+            {
+                meas.AlarmVisibility = "Visible";
+            }
+            else
+            {
+                meas.AlarmVisibility = "Hidden";
+            }
+
+            if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(meas.Gid) == DMSType.ANALOG)
+            {
+                for (int i = 0; i < Analogs.Count; i++)
+                {
+                    if(Analogs[i].Gid == meas.Gid)
+                    {
+                        Analogs.ResetItem(i);
+                        return;
+                    }
+                }
+
+                Analogs.Add(meas);
+            }
+            else if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(meas.Gid) == DMSType.DISCRETE)
+            {
+                for (int i = 0; i < Discretes.Count; i++)
+                {
+                    if (Discretes[i].Gid == meas.Gid)
+                    {
+                        Discretes.ResetItem(i);
+                        return;
+                    }
+                }
+
+                Discretes.Add(meas);
+            }
         }
 
         private void UpdateTelemetry(string type, object target)
@@ -92,6 +197,17 @@ namespace UserInterface.ViewModel
                 }
                 i++;
             }
+        }
+
+        private bool IsInAlarmState(long measGid)
+        {
+            for (int i = 0; i < alarms.Count; i++)
+            {
+                if (alarms[i].GiD == measGid)
+                    return true;
+            }
+
+            return false;
         }
     }
 }
