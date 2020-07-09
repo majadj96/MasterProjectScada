@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:UserInterface.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="900">
-    <TabControl  HorizontalAlignment="Left" Height="700" VerticalAlignment="Top" Width="900">
-        <TabItem Header="Discrete measurements" Width="450">
+             d:DesignHeight="630" d:DesignWidth="960">
+    <TabControl  HorizontalAlignment="Left" Height="630" VerticalAlignment="Top" Width="960">
+        <TabItem Header="Discrete measurements" Width="480">
             <Grid>
                 <DataGrid x:Name="Discretes"
                   ItemsSource="{Binding Discretes, UpdateSourceTrigger=PropertyChanged}"
@@ -29,7 +29,7 @@
                 </DataGrid>
             </Grid>
         </TabItem>
-        <TabItem Header="Analog measurements" Width="450">
+        <TabItem Header="Analog measurements" Width="480">
             <Grid>
                 <DataGrid x:Name="SubstationItems"
                   ItemsSource="{Binding Analogs, UpdateSourceTrigger=PropertyChanged}"
