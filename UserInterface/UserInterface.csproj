@@ -112,13 +112,19 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WpfAnimatedGif, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7cd3b544a090dc, processorArchitecture=MSIL">
+      <HintPath>..\packages\WpfAnimatedGif.2.0.0\lib\net40\WpfAnimatedGif.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\DialogMessageToColorConverter.cs" />
+    <Compile Include="Converters\InvertBooleanConverter.cs" />
     <Compile Include="Converters\PixelsConverter.cs" />
+    <Compile Include="Dialog\DialogViewModel..cs" />
     <Compile Include="Handlers\AlarmHandler.cs" />
     <Compile Include="AnalyticsWindow.xaml.cs">
       <DependentUpon>AnalyticsWindow.xaml</DependentUpon>
@@ -136,6 +142,7 @@
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\ConverterState.cs" />
     <Compile Include="Handlers\CustomEventHandler.cs" />
+    <Compile Include="Helper\RetryHelper.cs" />
     <Compile Include="Model\AsynchronousMachine.cs" />
     <Compile Include="Model\Breaker.cs" />
     <Compile Include="Model\Disconector.cs" />
@@ -182,6 +189,9 @@
     </Compile>
     <Compile Include="View\CommandPowerTransformerView.xaml.cs">
       <DependentUpon>CommandPowerTransformerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\DialogUserControl.xaml.cs">
+      <DependentUpon>DialogUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\EventTableView.xaml.cs">
       <DependentUpon>EventTableView.xaml</DependentUpon>
@@ -237,6 +247,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\CommandPowerTransformerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Dialog\DialogUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -379,6 +393,8 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\alarm-bell.png" />
+    <Content Include="Assets\completeGif.mp4" />
+    <Resource Include="Assets\scadaCon.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
