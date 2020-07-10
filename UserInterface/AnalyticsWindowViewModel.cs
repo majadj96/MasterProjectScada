@@ -16,6 +16,7 @@ using System.ComponentModel;
 using System.Windows;
 using UserInterface.Command;
 using LiveCharts.Definitions.Series;
+using System.Threading.Tasks;
 
 namespace UserInterface
 {
@@ -23,6 +24,8 @@ namespace UserInterface
     {
         
         private bool isDiscreteSelected;
+        private static volatile bool _isFirstDbCall = true;
+
         private List<SignalListItemViewModel> signalList;
 
         public Dictionary<long, Substation> substations;
@@ -39,6 +42,17 @@ namespace UserInterface
 		private DateTime maxDateTime;
 		public DateTime MaxDateTime { get { return maxDateTime; } set { maxDateTime = value; OnPropertyChanged(nameof(MaxDateTime)); } }
 		public Func<double, string> Formatter { get; set; }
+
+        private bool _isBussy;
+
+        public bool IsBussy
+        {
+            get => _isBussy;
+            set
+            {
+                SetProperty(ref _isBussy, value);
+            }
+        }
 
 		public Substation SelectedSubstation
         {
@@ -154,15 +168,15 @@ namespace UserInterface
 
         public void Set()
         {
-            Messenger.Default.Register<SignalListItemViewModel>(this, (message) => { HandleSignalChecked(message); });
+            Messenger.Default.Register<SignalListItemViewModel>(this, async (message) => { await HandleSignalChecked(message); });
         }
 
-        private void HandleSignalChecked(SignalListItemViewModel signal)
+        private async Task HandleSignalChecked(SignalListItemViewModel signal)
         {
 
             if (signal.IsChecked)
             {
-                RepositoryCore.Measurement[] measurements;
+                RepositoryCore.Measurement[] measurements = default;
                 if (StartDate != null && EndDate != null)
                 {
                     DateTime start = StartDate ?? DateTime.Now;
@@ -170,12 +184,11 @@ namespace UserInterface
 
                     this.InitialDateTime = start;
                     this.MaxDateTime = end;
-
-                    measurements = measurementProxy.GetAllMeasurementsByTime(start, end, signal.Gid);
-
-                } else
+                    await ExecuteSafely(() => measurements = measurementProxy.GetAllMeasurementsByTime(start, end, signal.Gid), _isFirstDbCall);
+                }
+                else
                 {
-                    measurements = measurementProxy.GetAllMeasurementsByGid(signal.Gid);
+                    await ExecuteSafely(() => measurements = measurementProxy.GetAllMeasurementsByGid(signal.Gid), _isFirstDbCall);
                 }
 
                 StepLineSeries line = MakeSignal(signal.Name, measurements);
@@ -195,6 +208,8 @@ namespace UserInterface
                 SeriesCollection.Remove(signalsOn[signal.Gid]);
                 signalsOn.Remove(signal.Gid);
             }
+
+            _isFirstDbCall = false;
         }
 
         public StepLineSeries MakeSignal(string title, RepositoryCore.Measurement[] measurements)
@@ -270,19 +285,44 @@ namespace UserInterface
                     Type = "Position"
                 });
 
-                tempList.Add(new SignalListItemViewModel()
+                for (int i = 0; i < selectedSub.Transformator.TransformerWindings.Capacity * 2; i++)
                 {
-                    Name = "Primary winding",
-                    Gid = selectedSub.Transformator.TransformerWindings[0],
-                    Type = "Voltage"
-                });
-
-                tempList.Add(new SignalListItemViewModel()
-                {
-                    Name = "Primary winding",
-                    Gid = selectedSub.Transformator.TransformerWindings[1],
-                    Type = "Current"
-                });
+                    switch (i)
+                    {
+                        case 0:
+                            tempList.Add(new SignalListItemViewModel()
+                            {
+                                Name = "Transformer Winding - Primary",
+                                Gid = long.Parse(selectedSub.Transformator.TransformerWindings[i % 2].GID),
+                                Type = "Voltage"
+                            });
+                            break;
+                        case 2:
+                            tempList.Add(new SignalListItemViewModel()
+                            {
+                                Name = "Transformer Winding - Primary",
+                                Gid = long.Parse(selectedSub.Transformator.TransformerWindings[i % 2].GID),
+                                Type = "Current"
+                            });
+                            break;
+                        case 1:
+                            tempList.Add(new SignalListItemViewModel()
+                            {
+                                Name = "Transformer Winding - Secondary",
+                                Gid = long.Parse(selectedSub.Transformator.TransformerWindings[i % 2].GID),
+                                Type = "Voltage"
+                            });
+                            break;
+                        case 3:
+                            tempList.Add(new SignalListItemViewModel()
+                            {
+                                Name = "Transformer Winding - Secondary",
+                                Gid = long.Parse(selectedSub.Transformator.TransformerWindings[i % 2].GID),
+                                Type = "Current"
+                            });
+                            break;
+                    }
+                }                   
             }
 			SignalList = tempList;
         }
@@ -302,7 +342,56 @@ namespace UserInterface
 			signalsOn = new Dictionary<long, StepLineSeries>();
 			Messenger.Default.Unregister<SignalListItemViewModel>(this);
 		}
-	}
+
+        private int _dummyStatus;
+        public int DummyStatus
+        {
+            get => _dummyStatus;
+            set
+            {
+                SetProperty(ref _dummyStatus, value);
+            }
+        }
+
+        private async Task ExecuteSafely(Action action, bool isLongOperation)
+        {
+            try
+            {
+                IsBussy = true && isLongOperation;
+                Task.Run(async () =>
+                {
+                    int counter = 0;
+                    while (counter < 9)
+                    {
+                        App.Current.Dispatcher.Invoke(() =>
+                        {
+                            DummyStatus += 10;
+                            
+                        });
+                        await Task.Delay(500);
+                        counter++;
+                    }
+                });
+                await Task.Run(action);
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    DummyStatus = 100;
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error while accessing database. Reason: {ex}");
+            }
+            finally
+            {
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    DummyStatus = 0;
+                });
+                IsBussy = false;
+            }
+        }
+    }
 
 	public class ChartModel
 	{
