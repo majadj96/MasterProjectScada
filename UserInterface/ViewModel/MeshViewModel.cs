@@ -247,11 +247,11 @@ namespace UserInterface.ViewModel
 				sub2Visibility = value;
 				if(sub2Visibility == "Hidden")
 				{
-					sub1Visibility = "Visible";
+					Sub1Visibility = "Visible";
 				}
 				else
 				{
-					sub1Visibility = "Hidden";
+					Sub1Visibility = "Hidden";
 				}
 				OnPropertyChanged(nameof(Sub2Visibility));
 			}
