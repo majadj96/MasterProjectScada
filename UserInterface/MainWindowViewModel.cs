@@ -65,13 +65,11 @@ namespace UserInterface
         private string pubSub;
         private string connectedStatusBar;
         private string timeStampStatusBar;
-        private string gaugeClasic;
+        private double gaugeClasic = 0;
         private string searchTerm;
         private string searchTypeSelected;
-        private string gaugePressure1;
-        private string gaugePressure2;
-        private string gaugePower1;
-        private string gaugePower2;
+        private double gaugePower1 = 0;
+        private double gaugePower2 = 0;
 		private string gaugePower2visibility = "Hidden";
 		private string gaugePressure2visibility = "Hidden";
 		private string transformerCurrent;
@@ -191,7 +189,7 @@ namespace UserInterface
                 Set(ref selectedSubstation, value);
             }
         }
-        public string GaugeClasic
+        public double GaugeClasic
         {
             get
             {
@@ -235,29 +233,7 @@ namespace UserInterface
                 Set(ref timeStampStatusBar, value);
             }
         }
-        public string GaugePressure1
-        {
-            get
-            {
-                return gaugePressure1;
-            }
-            set
-            {
-                Set(ref gaugePressure1, value);
-            }
-        }
-        public string GaugePressure2
-        {
-            get
-            {
-                return gaugePressure2;
-            }
-            set
-            {
-                Set(ref gaugePressure1, value);
-            }
-        }
-        public string GaugePower1
+        public double GaugePower1
         {
             get
             {
@@ -268,7 +244,7 @@ namespace UserInterface
                 Set(ref gaugePower1, value);
             }
         }
-        public string GaugePower2
+        public double GaugePower2
         {
             get
             {
@@ -399,25 +375,27 @@ namespace UserInterface
             //    i++;
             //});
 
-            alarmHandler = new AlarmHandler();
+            alarmHandler = new AlarmHandler(Measurements);
             customEventHandler = new CustomEventHandler();
 
-            RetryHelper.Retry(
-                    action: () => 
-                    {
+            //RetryHelper.Retry(
+            //        action: () => 
+            //        {
 
-                        measurementRepository = new MeasurementProxy("MeasurementEndPoint");
-                        measurementRepository.Open();
-                    },
-                    retryCount: 30,
-                    delay: TimeSpan.FromSeconds(1),
-                    afterFailure: () =>
-                    {
-                        measurementRepository = null;
-                    })
-                .GetAwaiter()
-                .GetResult();
-            
+            //            measurementRepository = new MeasurementProxy("MeasurementEndPoint");
+            //            measurementRepository.Open();
+            //        },
+            //        retryCount: 30,
+            //        delay: TimeSpan.FromSeconds(1),
+            //        afterFailure: () =>
+            //        {
+            //            measurementRepository = null;
+            //        })
+            //    .GetAwaiter()
+            //    .GetResult();
+
+            measurementRepository = new MeasurementProxy("MeasurementEndPoint");
+
             Sub subNMS = new Sub();
             subNMS.OnSubscribe("nms");
             subNMS.OnSubscribe("scada");
@@ -643,7 +621,7 @@ namespace UserInterface
 				}
                 if (meas.PowerSystemResource.ToString() == SubstationCurrent.Gid)
                 {
-                    CommandToAM(meas.Value);
+                    GaugeClasic = meas.Value;
                 }
                 else if (meas.PowerSystemResource.ToString() == SubstationCurrent.TapChanger.GID)
                 {
@@ -656,17 +634,17 @@ namespace UserInterface
                     {
                         if (meas.Mrid.ToLower().Contains("power"))
                         {
-                            GaugePower1 = meas.Value.ToString();
+                            GaugePower1 = meas.Value;
                         }
-                        else if (meas.Mrid.ToLower().Contains("pressure"))
-                        {
-                            GaugePressure1 = meas.Value.ToString();
-                        }
-                        GaugePower2 = string.Empty;
+                        //else if (meas.Mrid.ToLower().Contains("pressure"))
+                        //{
+                        //    GaugePressure1 = meas.Value.ToString();
+                        //}
+                        GaugePower2 = 0;
 						GaugePower2Visibility = "Hidden";
-						GaugePressure2Visibility = "Hidden";
+						//GaugePressure2Visibility = "Hidden";
 						meshViewModel.Sub2Visibility = "Hidden";
-                        GaugePressure2 = string.Empty;
+                        //GaugePressure2 = string.Empty;
                     }
                 }
                 else if (SubstationCurrent.AsynchronousMachines.Count == 2)
@@ -677,25 +655,25 @@ namespace UserInterface
                     {
                         if (meas.Mrid.ToLower().Contains("power"))
                         {
-                            GaugePower1 = meas.Value.ToString();
+                            GaugePower1 = meas.Value;
                         }
-                        else if (meas.Mrid.ToLower().Contains("pressure"))
-                        {
-                            GaugePressure1 = meas.Value.ToString();
-                        }
+                        //else if (meas.Mrid.ToLower().Contains("pressure"))
+                        //{
+                        //    GaugePressure1 = meas.Value.ToString();
+                        //}
                     }
                     else if (SubstationCurrent.AsynchronousMachines[1].GID == meas.PowerSystemResource.ToString())
                     {
                         if (meas.Mrid.ToLower().Contains("power"))
                         {
 							GaugePower2Visibility = "Visible";
-                            GaugePower2 = meas.Value.ToString();
+                            GaugePower2 = meas.Value;
                         }
-                        else if (meas.Mrid.ToLower().Contains("pressure"))
-                        {
-							GaugePressure2Visibility = "Visible";
-							GaugePressure2 = meas.Value.ToString();
-                        }
+       //                 else if (meas.Mrid.ToLower().Contains("pressure"))
+       //                 {
+							//GaugePressure2Visibility = "Visible";
+							//GaugePressure2 = meas.Value.ToString();
+       //                 }
                     }
                 }
             }
@@ -735,7 +713,7 @@ namespace UserInterface
                         meas.Time = DateTime.UtcNow;
                         if(meas.PowerSystemResource.ToString() == SubstationCurrent.Gid)
                         {
-                            CommandToAM(meas.Value);
+                            GaugeClasic = meas.Value;
                         }
                         else if (meas.PowerSystemResource.ToString() == SubstationCurrent.TapChanger.GID)
                         {
@@ -886,11 +864,6 @@ namespace UserInterface
                 sub.Transformator.TapChangerValue = (long)newValue.Value;
                 TransformerTapChanger = newValue.Value.ToString();
             }
-        }
-
-        public void CommandToAM(double value)
-        {
-            GaugeClasic = value.ToString();
         }
 
         public void CommandTransformerCurrentVoltage(object transformer, string type)

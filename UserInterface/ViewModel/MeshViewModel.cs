@@ -286,7 +286,7 @@ namespace UserInterface.ViewModel
             set { substationCurrent = value; OnPropertyChanged("SubstationCurrent"); }
         }
 
-        public string singlePumpCN { get; set; }
+        public string singlePumpCN { get; set; } = "Visible";
         public string SinglePumpCN
         {
             get
