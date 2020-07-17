@@ -130,20 +130,16 @@ namespace FrontEndProcessorService.Simulator
             {
                 foreach (var v in model.Values)
                 {
-                    v.RawValue = 5;
-                    v.NormalValue = 5;
                     if (String.Compare(v.MrId, "PT1Current_W1") == 0)
-                        SendMessage(v);
+                        SendMessage(v.Address, 5);
                     if (String.Compare(v.MrId, "PT1Current_W2") == 0)
-                        SendMessage(v);
+                        SendMessage(v.Address, 5);
 
-                    v.RawValue = 220;
-                    v.NormalValue = 220;
                     if (String.Compare(v.MrId, "PT1Voltage_W1") == 0)
-                        SendMessage(v);
+                        SendMessage(v.Address, 220);
                     if (String.Compare(v.MrId, "PT1Voltage_W2") == 0)
                     {
-                        SendMessage(v);
+                        SendMessage(v.Address, 220);
                         break;
                     }
                 }
@@ -178,20 +174,16 @@ namespace FrontEndProcessorService.Simulator
             {
                 foreach (var v in model.Values)
                 {
-                    v.RawValue = 5;
-                    v.NormalValue = 5;
                     if (String.Compare(v.MrId, "PT2Current_W1") == 0)
-                        SendMessage(v);
+                        SendMessage(v.Address, 5);
                     if (String.Compare(v.MrId, "PT2Current_W2") == 0)
-                        SendMessage(v);
+                        SendMessage(v.Address, 5);
 
-                    v.RawValue = 220;
-                    v.NormalValue = 220;
                     if (String.Compare(v.MrId, "PT2Voltage_W1") == 0)
-                        SendMessage(v);
+                        SendMessage(v.Address, 220);
                     if (String.Compare(v.MrId, "PT2Voltage_W2") == 0)
                     {
-                        SendMessage(v);
+                        SendMessage(v.Address, 220);
                         break;
                     }
                 }
@@ -224,13 +216,13 @@ namespace FrontEndProcessorService.Simulator
         {
             if(tank1 != null)
             {
-                while(tank1.RawValue >= tank1.NormalValue)
+                float value = tank1.RawValue;
+
+                while (value >= tank1.NormalValue)
                 {
-                    tank1.RawValue -= 5;
+                    value -= 5;
 
-                    SendMessage(tank1);
-
-                    model.Values.Where(x => x.Gid == tank1.Gid).First().RawValue = tank1.RawValue;
+                    SendMessage(tank1.Address, value);
 
                     Thread.Sleep(5000);
                 }
@@ -242,13 +234,13 @@ namespace FrontEndProcessorService.Simulator
         {
             if (tank2 != null)
             {
-                while (tank2.RawValue >= tank2.NormalValue)
+                float value = tank2.RawValue;
+
+                while (value >= tank2.NormalValue)
                 {
-                    tank2.RawValue -= 5;
+                    value -= 5;
 
-                    SendMessage(tank2);
-
-                    model.Values.Where(x => x.Gid == tank2.Gid).First().RawValue = tank2.RawValue;
+                    SendMessage(tank2.Address, value);
 
                     Thread.Sleep(5000);
                 }
@@ -256,9 +248,9 @@ namespace FrontEndProcessorService.Simulator
             }
         }
 
-        private void SendMessage(BasePointCacheItem item)
+        private void SendMessage(ushort address, float value)
         {
-            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(0xc1, (byte)DNP3FunctionCode.DIRECT_OPERATE, (ushort)TypeField.ANALOG_OUTPUT_16BIT, 0x28, 0x0001, item.Address, (uint)item.RawValue, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
+            DNP3ApplicationObjectParameters p = new DNP3ApplicationObjectParameters(0xc1, (byte)DNP3FunctionCode.DIRECT_OPERATE, (ushort)TypeField.ANALOG_OUTPUT_16BIT, 0x28, 0x0001, address, (uint)value, 0x6405, 0x05, 0xc4, 0x0001, 0x0002, 0xc1);
             IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Function(p);
 
             functionExecutor.SendDirectMessage(fn);
