@@ -1,4 +1,5 @@
-﻿using UserInterface.BaseError;
+﻿using System.Collections.Generic;
+using UserInterface.BaseError;
 using UserInterface.Model;
 using UserInterface.ViewModel;
 
@@ -13,6 +14,7 @@ namespace UserInterface
 
         private BindableBase currentCommandViewModel;
         private Substation substationCurrent;
+        private Dictionary<long, Measurement> measurements;
         #endregion
 
         #region Props
@@ -28,9 +30,10 @@ namespace UserInterface
         }
         #endregion
 
-        public CommandingWindowViewModel(Substation substation)
+        public CommandingWindowViewModel(Substation substation, Dictionary<long, Measurement> measurements)
         {
             SubstationCurrent = substation;
+            this.measurements = measurements;
         }
 
         public void SetView(string window)
@@ -84,7 +87,7 @@ namespace UserInterface
             }
             else if (string.Compare(window, "PowerTransformer") == 0)
             {
-                commandPowerTransformerViewModel = new CommandPowerTransformerViewModel(SubstationCurrent.Transformator);
+                commandPowerTransformerViewModel = new CommandPowerTransformerViewModel(SubstationCurrent.Transformator, SubstationCurrent.TapChanger, measurements);
                 CurrentCommandViewModel = commandPowerTransformerViewModel;
             }
             else if (string.Compare(window, "AsynchronousMachine1") == 0)

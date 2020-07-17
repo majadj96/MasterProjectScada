@@ -18,7 +18,7 @@ namespace UserInterface.Model
         private List<Disconector> disconectors;
         private List<Breaker> breakers;
 
-        public Substation(string description, string name, string gid)
+        public Substation(string name, string description, string gid)
         {
             AsynchronousMachines = new List<AsynchronousMachine>();
             Disconectors = new List<Disconector>();

@@ -34,9 +34,9 @@ namespace UserInterface
         }
         #endregion
 
-        public TablesWindowViewModel(ObservableCollection<UIModel> model, AlarmHandler alarmHandler, List<Substation> substations, CustomEventHandler customEventHandler)
+        public TablesWindowViewModel(ObservableCollection<UIModel> model, AlarmHandler alarmHandler, List<Substation> substations, CustomEventHandler customEventHandler, Dictionary<long, Measurement> measurements)
         {
-            tableViewModel = new TableViewModel(model);
+            tableViewModel = new TableViewModel(model, measurements, alarmHandler.Alarms);
             alarmViewModel = new AlarmViewModel(alarmHandler, substations);
             eventViewModel = new EventTableViewModel(customEventHandler);
 

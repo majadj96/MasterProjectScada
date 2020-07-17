@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:dgx="http://schemas.devexpress.com/winfx/2008/xaml/grid"
              xmlns:local="clr-namespace:UserInterface.View"
              mc:Ignorable="d" 
              d:DesignHeight="710" d:DesignWidth="860">
@@ -37,38 +38,36 @@
         <DatePicker SelectedDate="{Binding DateFrom, Mode=TwoWay}" Cursor="Pen" Height="30" Width="100" Margin="142,37,568,643.4"/>
         <Label Content="Events to:" Height="30" Foreground="Black" FontFamily="Calibri" FontSize="16" Margin="336,37,428,643.4"/>
         <DatePicker SelectedDate="{Binding DateTo, Mode=TwoWay}" Cursor="Pen" Height="30" Width="100" Margin="422,37,318,643.4"/>
-        <Button Content="" Command="{Binding FilterCommand}" CommandParameter="Apply" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="55"  VerticalAlignment="Top" Width="55" FontFamily="Calibri" FontSize="16" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0,16,228,0" HorizontalAlignment="Right" Canvas.Left="9" Canvas.Top="598">
+        <Button Content="" Command="{Binding FilterCommand}" CommandParameter="Apply" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="34"  VerticalAlignment="Top" Width="53" FontFamily="Calibri" FontSize="16" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0,37,228,0" HorizontalAlignment="Right" Canvas.Left="9" Canvas.Top="598">
             <Button.Background>
-                <ImageBrush ImageSource="../Assets/search.png"/>
+                <ImageBrush ImageSource="/UserInterface;component/Assets/search.png" Stretch="Uniform"/>
             </Button.Background>
         </Button>
-        <Button Content="" Command="{Binding FilterCommand}" CommandParameter="Disable" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="45"  VerticalAlignment="Top" Width="45" FontFamily="Calibri" FontSize="16" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0,22,169,0" HorizontalAlignment="Right" Canvas.Left="73" Canvas.Top="606">
+        <Button Content="" Command="{Binding FilterCommand}" CommandParameter="Disable" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Height="25"  VerticalAlignment="Top" Width="39" FontFamily="Calibri" FontSize="16" Foreground="Black" BorderBrush="#FFC5C5C5" Margin="0,42,169,0" HorizontalAlignment="Right" Canvas.Left="73" Canvas.Top="606">
             <Button.Background>
-                <ImageBrush ImageSource="../Assets/dismiss.png"/>
+                <ImageBrush ImageSource="/UserInterface;component/Assets/cross.png" Stretch="Uniform"/>
             </Button.Background>
         </Button>
-        <DataGrid x:Name="EventItems"
+        <dgx:GridControl x:Name="EventItems"
                   ItemsSource="{Binding EventItems, UpdateSourceTrigger=PropertyChanged}"
-                  IsReadOnly="True"
-                  VerticalScrollBarVisibility="Auto"
                   BorderThickness="3" BorderBrush="#FF29ABBF"
-                  VerticalAlignment="Top"
-                  AutoGenerateColumns="False"
-                  CanUserResizeRows="False"
-                  CanUserAddRows="False" Background="White" FontFamily="Calibri" FontSize="14" Margin="0,87,0,0">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Event reported" Width="180"  Binding="{Binding EventReported}"/>
-                <DataGridTextColumn Header="Event reported by" Width="140"  Binding="{Binding EventReportedBy}"/>
-                <DataGridTemplateColumn Header="Message" Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
+                  VerticalAlignment="Top" Background="White" FontFamily="Calibri" FontSize="14" Margin="0,87,0,0">
+            <dgx:GridControl.Columns>
+                <dgx:GridColumn Header="Event reported" Width="180"  Binding="{Binding EventReported}"/>
+                <dgx:GridColumn Header="Event reported by" Width="140"  Binding="{Binding EventReportedBy}"/>
+                <dgx:GridColumn Header="Message" Width="*">
+                    <dgx:GridColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Message}" TextWrapping="Wrap" ToolTip="{Binding Message}"/>
                         </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Point name" Width="120" Binding="{Binding PointName}"/>
-                <DataGridTextColumn Header="GID" Width="100" Binding="{Binding GiD}"/>
-            </DataGrid.Columns>
-        </DataGrid>
+                    </dgx:GridColumn.CellTemplate>
+                </dgx:GridColumn>
+                <dgx:GridColumn Header="Point name" Width="120" Binding="{Binding PointName}"/>
+                <dgx:GridColumn Header="GID" Width="100" Binding="{Binding GiD}"/>
+            </dgx:GridControl.Columns>
+            <dgx:GridControl.View>
+                <dgx:TableView AllowPaging="True" AllowEditing="False"/>
+            </dgx:GridControl.View>
+        </dgx:GridControl>
     </Grid>
 </UserControl>

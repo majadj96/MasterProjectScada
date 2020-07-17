@@ -46,7 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calculations\CalcEngine.cs" />
-    <Compile Include="Calculations\PowerCalculator.cs" />
     <Compile Include="Channels\CommandingProxy.cs" />
     <Compile Include="Model\Analog.cs" />
     <Compile Include="Model\AsyncMachine.cs" />

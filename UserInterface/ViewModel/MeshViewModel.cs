@@ -1,5 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using System.Windows.Threading;
 using UserInterface.BaseError;
@@ -17,6 +19,7 @@ namespace UserInterface.ViewModel
         private string breakerId { get; set; }
         
         private Substation substationCurrent;
+        public Dictionary<long, Measurement> Measurements; 
         #endregion
 
         #region Line_colors
@@ -45,12 +48,12 @@ namespace UserInterface.ViewModel
         public string lineUpBreakerSecondPumpCN { get; set; }
 		private string strujaW1 = "0 A";
 		private string strujaW2 = "0 A";
-		private string naponW1 = "0 A";
-		private string naponW2 = "0 A";
+		private string naponW1 = "0 V";
+		private string naponW2 = "0 V";
 		private string struja2W1 = "0 A";
 		private string struja2W2 = "0 A";
-		private string napon2W1 = "0 A";
-		private string napon2W2 = "0 A";
+		private string napon2W1 = "0 V";
+		private string napon2W2 = "0 V";
 		private string sub1Visibility = "Visible";
 		private string sub2Visibility = "Hidden";
 		#endregion
@@ -244,11 +247,11 @@ namespace UserInterface.ViewModel
 				sub2Visibility = value;
 				if(sub2Visibility == "Hidden")
 				{
-					sub1Visibility = "Visible";
+					Sub1Visibility = "Visible";
 				}
 				else
 				{
-					sub1Visibility = "Hidden";
+					Sub1Visibility = "Hidden";
 				}
 				OnPropertyChanged(nameof(Sub2Visibility));
 			}
@@ -283,7 +286,7 @@ namespace UserInterface.ViewModel
             set { substationCurrent = value; OnPropertyChanged("SubstationCurrent"); }
         }
 
-        public string singlePumpCN { get; set; }
+        public string singlePumpCN { get; set; } = "Visible";
         public string SinglePumpCN
         {
             get
@@ -831,10 +834,11 @@ namespace UserInterface.ViewModel
         {
             //off - #FF29A2B5 - BLUE
             //#FF29BF30 - GREEN
+
             lineFirst = lineSecond = lineThird = lineUpDis1 = lineDownDis1 = lineUpBreaker = lineDownBreaker = lineUpDis2 =
             lineDownDis2 = lineUpPT = lineDownPT = lineUpBreaker2 = lineFourth = lineStart = lineUpFirstPump = lineUpMultiPump =
             lineUpSecondPump = lineUpPumpOne = lineUpBreakerFirstPump = lineUpBreakerSecondPump = lineDownBreaker2 =
-            lineUpBreakerSecondPumpCN = lineUpBreakerFirstPumpCN = "#FF29A2B5";
+            lineUpBreakerSecondPumpCN = lineUpBreakerFirstPumpCN = ColorState.OFF.ToDescriptionString();
             Two_AM_Visible = "Hidden";
             breakerImage = breakerPumpOneImage = breaker_PM1Image = breaker_PM2Image = "Assets/breaker-off1.png";
             disconector1Image = disconector2Image = "Assets/resloser-off1.png";
@@ -880,7 +884,7 @@ namespace UserInterface.ViewModel
             {
                 CommandingWindow commandingWindow = new CommandingWindow();
 
-                CommandingWindowViewModel commandingWindowViewModel = new CommandingWindowViewModel(SubstationCurrent);
+                CommandingWindowViewModel commandingWindowViewModel = new CommandingWindowViewModel(SubstationCurrent, Measurements);
 
                 commandingWindow.DataContext = commandingWindowViewModel;
 
@@ -926,8 +930,9 @@ namespace UserInterface.ViewModel
         {
             SubstationCurrent.Disconectors[0].State = DiscreteState.OFF;
             Disconector1Image = "Assets/resloser-off1.png";
-            LineUpDis1 = LineDownDis1 = LineSecond = "#FF29A2B5";
-            LineFirst = LineStart = "#FF29A2B5";
+            LineUpBreaker = LineUpDis1 = LineDownDis1 = LineSecond = ColorState.OFF.ToDescriptionString();
+            LineFirst = LineStart = LineUpDis1 = ColorState.ON.ToDescriptionString();
+
 
             drawBreakerOff();
 
@@ -944,8 +949,7 @@ namespace UserInterface.ViewModel
         {
             SubstationCurrent.Disconectors[0].State = DiscreteState.ON;
             Disconector1Image = "Assets/recloser-on1.png";
-            LineUpDis1 = LineDownDis1 = LineSecond = "#FF29BF30";
-            LineFirst = LineStart = "#FF29BF30";
+            LineFirst = LineStart = LineUpBreaker = LineUpDis1 = LineDownDis1 = LineSecond = ColorState.ON.ToDescriptionString();
 
             if (SubstationCurrent.Breakers[0].State == DiscreteState.ON)
             {
@@ -1229,33 +1233,39 @@ namespace UserInterface.ViewModel
         //#FF29BF30 - GREEN
         private void drawBreakerOn()
         {
-            LineUpBreaker = LineDownBreaker = LineThird = "#FF29BF30";
+            LineUpBreaker = LineDownBreaker = LineThird = LineUpDis2 = ColorState.ON.ToDescriptionString();
         }
         private void drawDis2On()
         {
-            LineUpDis2 = LineDownDis2 = LineFourth = LineUpPT = LineDownPT = "#FF29BF30";
+            LineUpBreaker2 = LineDownDis2 = LineFourth = LineUpPT = LineDownPT = ColorState.ON.ToDescriptionString();
             PTImage = "Assets/transformator-on1.png";
+
+            if (Two_AM_Visible == "Visible")
+            {
+                LineUpMultiPump = LineUpFirstPump = LineUpSecondPump = ColorState.ON.ToDescriptionString();
+            }
+
         }
         public void DrawBreaker2On()
         {
-            LineUpBreaker2 = LineDownBreaker2 = LineUpPumpOne = "#FF29BF30";
+            LineDownBreaker2 = LineUpPumpOne = ColorState.ON.ToDescriptionString();
             DrawPumpOn();
         }
         public void DrawBreaker4On()
         {
-            LineUpFirstPump = LineUpBreakerFirstPump = LineUpBreakerFirstPumpCN = "#FF29BF30";
+            LineUpBreakerFirstPump = LineUpBreakerFirstPumpCN = ColorState.ON.ToDescriptionString();
             SubstationCurrent.AsynchronousMachines[0].State = true;
             Pump1Image = "Assets/pump-on1.png";
         }
         public void DrawBreaker5On()
         {
-            LineUpSecondPump = LineUpBreakerSecondPump = LineUpBreakerSecondPumpCN = "#FF29BF30";
+            LineUpBreakerSecondPump = LineUpBreakerSecondPumpCN = ColorState.ON.ToDescriptionString();
             SubstationCurrent.AsynchronousMachines[1].State = true;
             Pump2Image = "Assets/pump-on1.png";
         }
         private void DrawPumpOn()
         {
-            LineUpMultiPump = LineUpFirstPump = LineUpSecondPump = "#FF29BF30";
+            LineUpMultiPump = LineUpFirstPump = LineUpSecondPump = ColorState.ON.ToDescriptionString();
             if (SubstationCurrent.AsynchronousMachines.Count == 1)
             {
                 PumpImage = "Assets/pump-on1.png";
@@ -1265,35 +1275,40 @@ namespace UserInterface.ViewModel
 
         private void drawBreakerOff()
         {
-            LineUpBreaker =  LineDownBreaker = LineThird = "#FF29A2B5";
+            LineUpDis2 =  LineDownBreaker = LineThird = ColorState.OFF.ToDescriptionString();
             drawDis2Off();
         }
         private void drawDis2Off()
         {
-            LineUpDis2 = LineUpPT =  LineDownDis2 = LineFourth = LineDownPT = "#FF29A2B5";
+            LineUpBreaker2 = LineUpPT =  LineDownDis2 = LineFourth = LineDownPT = ColorState.OFF.ToDescriptionString();
             PTImage = "Assets/transformator-off1.png";
             DrawBreaker2Off();
+
+            if (Two_AM_Visible == "Visible")
+            {
+                LineUpMultiPump = LineUpFirstPump = LineUpSecondPump = ColorState.OFF.ToDescriptionString();
+            }
         }
         public void DrawBreaker2Off()
         {
-            LineUpBreaker2 = LineDownBreaker2 = LineUpPumpOne = "#FF29A2B5";
+            LineDownBreaker2 = LineUpPumpOne = ColorState.OFF.ToDescriptionString();
             DrawPumpOff();
         }
         public void DrawBreaker4Off()
         {
-            LineUpFirstPump =   LineUpBreakerFirstPump = LineUpBreakerFirstPumpCN = "#FF29A2B5";
+            LineUpBreakerFirstPump = LineUpBreakerFirstPumpCN = ColorState.OFF.ToDescriptionString();
             SubstationCurrent.AsynchronousMachines[0].State = false;
             Pump1Image = "Assets/pump-off1.png";
         }
         public void DrawBreaker5Off()
         {
-            LineUpSecondPump = LineUpBreakerSecondPump = LineUpBreakerSecondPumpCN = "#FF29A2B5";
+            LineUpBreakerSecondPump = LineUpBreakerSecondPumpCN = ColorState.OFF.ToDescriptionString();
             SubstationCurrent.AsynchronousMachines[1].State = false;
             Pump2Image = "Assets/pump-off1.png";
         }
         private void DrawPumpOff()
         {
-            LineUpMultiPump = LineUpFirstPump = LineUpSecondPump = "#FF29A2B5";
+            LineUpMultiPump = LineUpFirstPump = LineUpSecondPump = ColorState.OFF.ToDescriptionString();
             if (SubstationCurrent.AsynchronousMachines.Count == 1)
             {
                 PumpImage = "Assets/pump-off1.png";

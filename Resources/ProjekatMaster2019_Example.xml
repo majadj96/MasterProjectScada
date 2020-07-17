@@ -238,20 +238,6 @@
 		<cim:IdentifiedObject.mRID>Terminal_7</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>Terminal_7</ftn:IdentifiedObject.name>
 	</cim:Terminal>
-	<cim:Terminal rdf:ID="Terminal_7">
-		<cim:Terminal.ConductingEquipment rdf:resource="#ACLS_1"/>
-		<cim:Terminal.ConnectivityNode rdf:resource="#CN_4"/>
-		<cim:IdentifiedObject.description>Terminal</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>Terminal_7</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>Terminal_7</ftn:IdentifiedObject.name>
-	</cim:Terminal>
-	<cim:Terminal rdf:ID="Terminal_8">
-		<cim:Terminal.ConductingEquipment rdf:resource="#ACLS_1"/>
-		<cim:Terminal.ConnectivityNode rdf:resource="#CN_5"/>
-		<cim:IdentifiedObject.description>Terminal</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>Terminal_8</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>Terminal_8</ftn:IdentifiedObject.name>
-	</cim:Terminal>
 	<cim:Terminal rdf:ID="Terminal_9">
 		<cim:Terminal.ConductingEquipment rdf:resource="#AsyncM_1"/>
 		<cim:Terminal.ConnectivityNode rdf:resource="#CN_5"/>
@@ -271,43 +257,21 @@
 		<cim:IdentifiedObject.mRID>Pump1Power</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>Pump1Power</ftn:IdentifiedObject.name>
 	</cim:Analog>
-	<cim:Analog rdf:ID="Analog_Pump1Pressure">
+	<cim:Analog rdf:ID="Analog_Pump1Speed">
 		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
 		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
-		<cim:Measurement.measurementType>Unitless</cim:Measurement.measurementType>
+		<cim:Measurement.measurementType>RotationSpeed</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#AsyncM_1"/>
-		<cim:IdentifiedObject.description>Pump pressure</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>Pump1Pressure</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>Pump1Pressure</ftn:IdentifiedObject.name>
+		<cim:IdentifiedObject.description>Pump rotation speed</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>Pump1Speed</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>Pump1Speed</ftn:IdentifiedObject.name>
 	</cim:Analog>
-<!--	<cim:Analog rdf:ID="Analog_Pump1Voltage">
-		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
-		<cim:Analog.normalValue>0</cim:Analog.normalValue>
-		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
-		<cim:Measurement.measurementType>Voltage</cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource="#AsyncM_1"/>
-		<cim:IdentifiedObject.description>Pump voltage</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>Pump1Voltage</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>Pump1Voltage</ftn:IdentifiedObject.name>
-	</cim:Analog>
-	<cim:Analog rdf:ID="Analog_Pump1Current">
-		<cim:Analog.maxValue>100</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
-		<cim:Analog.normalValue>0</cim:Analog.normalValue>
-		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
-		<cim:Measurement.measurementType>Current</cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource="#AsyncM_1"/>
-		<cim:IdentifiedObject.description>Pump current</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>Pump1Current</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>Pump1Current</ftn:IdentifiedObject.name>
-	</cim:Analog> -->
 <!-- AsyncMachine 2 measurements -->
 	<cim:Analog rdf:ID="Analog_Pump2Power">
-		<cim:Analog.maxValue>100</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.maxValue>15</cim:Analog.maxValue>
+		<cim:Analog.minValue>5</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>ActivePower</cim:Measurement.measurementType>
@@ -316,43 +280,21 @@
 		<cim:IdentifiedObject.mRID>Pump2Power</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>Pump2Power</ftn:IdentifiedObject.name>
 	</cim:Analog>
-	<cim:Analog rdf:ID="Analog_Pump2Pressure">
+	<cim:Analog rdf:ID="Analog_Pump2Speed">
 		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.minValue>1000</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
-		<cim:Measurement.measurementType>Unitless</cim:Measurement.measurementType>
+		<cim:Measurement.measurementType>RotationSpeed</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#AsyncM_2"/>
-		<cim:IdentifiedObject.description>Pump pressure</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>Pump2Pressure</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>Pump2Pressure</ftn:IdentifiedObject.name>
+		<cim:IdentifiedObject.description>Pump rotation speed</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>Pump2Speed</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>Pump2Speed</ftn:IdentifiedObject.name>
 	</cim:Analog>
-<!--	<cim:Analog rdf:ID="Analog_Pump2Voltage">
-		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
-		<cim:Analog.normalValue>0</cim:Analog.normalValue>
-		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
-		<cim:Measurement.measurementType>Voltage</cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource="#AsyncM_2"/>
-		<cim:IdentifiedObject.description>Pump voltage</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>Pump2Voltage</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>Pump2Voltage</ftn:IdentifiedObject.name>
-	</cim:Analog>
-	<cim:Analog rdf:ID="Analog_Pump2Current">
-		<cim:Analog.maxValue>100</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
-		<cim:Analog.normalValue>0</cim:Analog.normalValue>
-		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
-		<cim:Measurement.measurementType>Current</cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource="#AsyncM_2"/>
-		<cim:IdentifiedObject.description>Pump current</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>Pump2Current</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>Pump2Current</ftn:IdentifiedObject.name>
-	</cim:Analog> -->
 <!-- AsyncMachine 3 measurements -->
 	<cim:Analog rdf:ID="Analog_Pump3Power">
-		<cim:Analog.maxValue>100</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.maxValue>15</cim:Analog.maxValue>
+		<cim:Analog.minValue>5</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>ActivePower</cim:Measurement.measurementType>
@@ -361,43 +303,21 @@
 		<cim:IdentifiedObject.mRID>Pump3Power</cim:IdentifiedObject.mRID>
 		<ftn:IdentifiedObject.name>Pump3Power</ftn:IdentifiedObject.name>
 	</cim:Analog>
-	<cim:Analog rdf:ID="Analog_Pump3Pressure">
+	<cim:Analog rdf:ID="Analog_Pump3Speed">
 		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.minValue>1000</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
-		<cim:Measurement.measurementType>Unitless</cim:Measurement.measurementType>
+		<cim:Measurement.measurementType>RotationSpeed</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#AsyncM_3"/>
-		<cim:IdentifiedObject.description>Pump pressure</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>Pump3Pressure</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>Pump3Pressure</ftn:IdentifiedObject.name>
+		<cim:IdentifiedObject.description>Pump rotation speed</cim:IdentifiedObject.description>
+		<cim:IdentifiedObject.mRID>Pump3Speed</cim:IdentifiedObject.mRID>
+		<ftn:IdentifiedObject.name>Pump3Speed</ftn:IdentifiedObject.name>
 	</cim:Analog>
-<!--	<cim:Analog rdf:ID="Analog_Pump3Voltage">
-		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
-		<cim:Analog.normalValue>0</cim:Analog.normalValue>
-		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
-		<cim:Measurement.measurementType>Voltage</cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource="#AsyncM_3"/>
-		<cim:IdentifiedObject.description>Pump voltage</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>Pump3Voltage</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>Pump3Voltage</ftn:IdentifiedObject.name>
-	</cim:Analog>
-	<cim:Analog rdf:ID="Analog_Pump3Current">
-		<cim:Analog.maxValue>100</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
-		<cim:Analog.normalValue>0</cim:Analog.normalValue>
-		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
-		<cim:Measurement.measurementType>Current</cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource="#AsyncM_3"/>
-		<cim:IdentifiedObject.description>Pump current</cim:IdentifiedObject.description>
-		<cim:IdentifiedObject.mRID>Pump3Current</cim:IdentifiedObject.mRID>
-		<ftn:IdentifiedObject.name>Pump3Current</ftn:IdentifiedObject.name>
-	</cim:Analog> -->
 <!-- PowerTransformer 1 measurements -->
 	<cim:Analog rdf:ID="Analog_PT1Voltage_W1">
-		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.maxValue>242</cim:Analog.maxValue>
+		<cim:Analog.minValue>198</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Voltage</cim:Measurement.measurementType>
@@ -408,7 +328,7 @@
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_PT1Current_W1">
 		<cim:Analog.maxValue>100</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.minValue>20</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Current</cim:Measurement.measurementType>
@@ -418,8 +338,8 @@
 		<ftn:IdentifiedObject.name>PT1Current_W1</ftn:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_PT1Voltage_W2">
-		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.maxValue>242</cim:Analog.maxValue>
+		<cim:Analog.minValue>198</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Voltage</cim:Measurement.measurementType>
@@ -430,7 +350,7 @@
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_PT1Current_W2">
 		<cim:Analog.maxValue>100</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.minValue>20</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Current</cim:Measurement.measurementType>
@@ -441,8 +361,8 @@
 	</cim:Analog>
 <!-- PowerTransformer 2 measurements -->
 	<cim:Analog rdf:ID="Analog_PT2Voltage_W1">
-		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.maxValue>242</cim:Analog.maxValue>
+		<cim:Analog.minValue>198</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Voltage</cim:Measurement.measurementType>
@@ -453,7 +373,7 @@
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_PT2Current_W1">
 		<cim:Analog.maxValue>100</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.minValue>20</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Current</cim:Measurement.measurementType>
@@ -463,8 +383,8 @@
 		<ftn:IdentifiedObject.name>PT2Current_W1</ftn:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_PT2Voltage_W2">
-		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.maxValue>242</cim:Analog.maxValue>
+		<cim:Analog.minValue>198</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Voltage</cim:Measurement.measurementType>
@@ -475,7 +395,7 @@
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_PT2Current_W2">
 		<cim:Analog.maxValue>100</cim:Analog.maxValue>
-		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.minValue>20</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Current</cim:Measurement.measurementType>
