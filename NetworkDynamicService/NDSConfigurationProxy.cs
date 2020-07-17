@@ -1,4 +1,5 @@
-﻿using ScadaCommon.BackEnd_FrontEnd;
+﻿using ScadaCommon;
+using ScadaCommon.BackEnd_FrontEnd;
 using ScadaCommon.NDSDataModel;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace NetworkDynamicService
         {
 
         }
+
         public void SendConfiguration(List<BasePointCacheItem> basePointCacheItems)
         {
             Channel.SendConfiguration(basePointCacheItems);

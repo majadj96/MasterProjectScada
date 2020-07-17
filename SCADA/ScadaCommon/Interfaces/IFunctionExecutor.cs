@@ -30,6 +30,8 @@ namespace ScadaCommon.Interfaces
 
         void SendMessage(IDNP3Functions message);
 
+        void SendDirectMessage(IDNP3Functions message);
+
         void StartExecution();
     }
 }
