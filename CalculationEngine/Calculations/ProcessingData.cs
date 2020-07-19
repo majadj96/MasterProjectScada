@@ -336,7 +336,7 @@ namespace CalculationEngine
 
             foreach (Analog meas in measurements)
             {
-                if(meas.NormalValue <= meas.MinValue)
+                if(meas.NormalValue <= 0)
                 {
                     return false;
                 }

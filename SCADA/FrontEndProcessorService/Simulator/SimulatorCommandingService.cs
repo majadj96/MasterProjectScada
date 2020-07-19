@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Timers;
 
 namespace FrontEndProcessorService.Simulator
 {
@@ -18,21 +19,141 @@ namespace FrontEndProcessorService.Simulator
         private List<DigitalPointCacheItem> substationTwo = new List<DigitalPointCacheItem>();
         AnalogPointCacheItem tank1 = null;
         AnalogPointCacheItem tank2 = null;
+        Thread Tank1SimulatorThread;
+        Thread Tank2SimulatorThread;
+        Thread Tank2SimulatorThread2;
+
+        private System.Timers.Timer timer;
+        private bool pointUpdate = false;
+        private float pump1FluidFlow = 4;
+        private float pump2FluidFlow = 4;
+        private float pump3FluidFlow = 5;
 
         public SimulatorCommandingService(IFunctionExecutor functionExecutor)
         {
             this.functionExecutor = functionExecutor;
             this.model = new Dictionary<Tuple<ushort, PointType>, BasePointCacheItem>();
+
+            Tank1SimulatorThread = new Thread(EmptyTank1);
+            Tank2SimulatorThread = new Thread(EmptyTank2);
+            Tank2SimulatorThread2 = new Thread(EmptyTank2);
+
+            StartTimer();
+        }
+
+        private void StartTimer()
+        {
+            timer = new System.Timers.Timer(3000);
+            timer.Elapsed += SimulateValues;
+            timer.AutoReset = true;
+            timer.Start();
+        }
+
+        private void SimulateValues(object sender, ElapsedEventArgs e)
+        {
+            if (!pointUpdate || model.Count <= 0)
+                return;
+
+            pointUpdate = false;
+
+            BasePointCacheItem pump1power = null;
+            BasePointCacheItem pump2power = null;
+            BasePointCacheItem pump3power = null;
+            BasePointCacheItem pump1speed = null;
+            BasePointCacheItem pump2speed = null;
+            BasePointCacheItem pump3speed = null;
+            BasePointCacheItem pump1current = null;
+            BasePointCacheItem pump1voltage = null;
+            BasePointCacheItem pump2current = null;
+            BasePointCacheItem pump2voltage = null;
+
+            foreach (BasePointCacheItem item in model.Values)
+            {
+                if (item.MrId.Equals("Pump1Power"))
+                    pump1power = item;
+                else if (item.MrId.Equals("Pump2Power"))
+                    pump2power = item;
+                else if (item.MrId.Equals("Pump3Power"))
+                    pump3power = item;
+                else if (item.MrId.Equals("Pump1Speed"))
+                    pump1speed = item;
+                else if (item.MrId.Equals("Pump2Speed"))
+                    pump2speed = item;
+                else if (item.MrId.Equals("Pump3Speed"))
+                    pump3speed = item;
+                else if (item.MrId.Equals("PT1Current_W2"))
+                    pump1current = item;
+                else if (item.MrId.Equals("PT1Voltage_W2"))
+                    pump1voltage = item;
+                else if (item.MrId.Equals("PT2Current_W2"))
+                    pump2current = item;
+                else if (item.MrId.Equals("PT2Voltage_W2"))
+                    pump2voltage = item;
+            }
+
+            if (substationOne.Count == 4 && substationOne.TrueForAll(x => x.State == DState.ON))
+            {
+                if (pump1power.RawValue != pump1current.RawValue * pump1voltage.RawValue)
+                {
+                    SendMessage(pump1power.Address, pump1current.RawValue * pump1voltage.RawValue);
+                    SendMessage(pump1speed.Address, 1450);
+                }
+            }
+            else
+            {
+                if (pump1power.RawValue != 0)
+                {
+                    SendMessage(pump1power.Address, 0);
+                    SendMessage(pump1speed.Address, 0);
+                }
+            }
+            if (substationTwo.Count == 5 && substationTwo.Where(s => s.MrId != "Breaker_Pump3").ToList().TrueForAll(x => x.State == DState.ON))
+            {
+                if (pump2power.RawValue != pump2current.RawValue * pump2voltage.RawValue)
+                {
+                    SendMessage(pump2power.Address, pump2current.RawValue * pump2voltage.RawValue);
+                    SendMessage(pump2speed.Address, 1450);
+                }
+            }
+            else
+            {
+                if (pump2power.RawValue != 0)
+                {
+                    SendMessage(pump2power.Address, 0);
+                    SendMessage(pump2speed.Address, 0);
+                }
+            }
+            if (substationTwo.Count == 5 && substationTwo.Where(s => s.MrId != "Breaker_Pump2").ToList().TrueForAll(x => x.State == DState.ON))
+            {
+                if (pump3power.RawValue != pump2current.RawValue * pump2voltage.RawValue)
+                {
+                    SendMessage(pump3power.Address, pump2current.RawValue * pump2voltage.RawValue);
+                    SendMessage(pump3speed.Address, 1450);
+                }
+            }
+            else
+            {
+                if (pump3power.RawValue != 0)
+                {
+                    SendMessage(pump3power.Address, 0);
+                    SendMessage(pump3speed.Address, 0);
+                }
+            }
         }
 
         public void UpdatePoints(Tuple<ushort, PointType> tuple, BasePointCacheItem pointCacheItem)
         {
             if (model.ContainsKey(tuple))
+            {
                 model[tuple] = pointCacheItem;
+                pointUpdate = true;
+            }
             else
+            {
                 model.Add(tuple, pointCacheItem);
+            }
 
-            FillLists();
+            FillLists(pointCacheItem);
 
             if (pointCacheItem.MeasurementType == Common.MeasurementType.SwitchStatus)
             {
@@ -47,204 +168,176 @@ namespace FrontEndProcessorService.Simulator
                 }
             }
 
+            tank1 = (AnalogPointCacheItem)model.Values.FirstOrDefault(x => x.MrId == "FluidLevel_Tank1");
 
-            if (tank1 == null)
+            if (substationOne.Count == 4 && substationOne.TrueForAll(x => x.State == DState.ON)) // pump is working
             {
-                try
+                if (!Tank1SimulatorThread.IsAlive)
                 {
-                    tank1 = (AnalogPointCacheItem)model.Values.Where(x => x.MrId == "FluidLevel_Tank1").ToList()[0];
+                    Tank1SimulatorThread = new Thread(EmptyTank1);
+                    Tank1SimulatorThread.Start(pump1FluidFlow);
                 }
-                catch (Exception) { }
-
-                if (tank1 != null)
+            }
+            else
+            {
+                if (Tank1SimulatorThread.IsAlive)
                 {
-                    if (tank1.RawValue > 90 && substationOne.TrueForAll(x => x.State == DState.ON))
-                    {
-                        Thread t = new Thread(EmptyTank1);
-                        t.Start();
-                    }
-                    else
-                        tank1 = null;
+                    Tank1SimulatorThread.Abort();
                 }
             }
 
+            tank2 = (AnalogPointCacheItem)model.Values.FirstOrDefault(x => x.MrId == "FluidLevel_Tank2");
 
-            if (tank2 == null)
+            if (substationTwo.Count == 5)
             {
-                try
-                {
-                    tank2 = (AnalogPointCacheItem)model.Values.Where(x => x.MrId == "FluidLevel_Tank2").ToList()[0];
-                }
-                catch (Exception) { }
-
-                if (tank2 != null)
-                {
-                    if (tank2.RawValue > 90 && substationTwo.TrueForAll(x => x.State == DState.ON))
+                if(substationTwo.TrueForAll(x => x.State == DState.ON))
+                {   
+                    //both pumps are running
+                    if(!Tank2SimulatorThread.IsAlive)
                     {
-                        Thread t = new Thread(EmptyTank2);
-                        t.Start();
+                        Tank2SimulatorThread = new Thread(EmptyTank2);
+                        Tank2SimulatorThread.Start(pump2FluidFlow + pump3FluidFlow);
                     }
-                    else
-                        tank2 = null;
+                }
+                if(substationTwo.Where(s => s.MrId != "Breaker_Pump3").ToList().TrueForAll(x => x.State == DState.ON))
+                {
+                    //pump2 is running
+                    if (!Tank2SimulatorThread.IsAlive)
+                    {
+                        Tank2SimulatorThread = new Thread(EmptyTank2);
+                        Tank2SimulatorThread.Start(pump2FluidFlow);
+                    }
+                }
+                else
+                {
+                    if (Tank2SimulatorThread.IsAlive)
+                    {
+                        Tank2SimulatorThread.Abort();
+                    }
+                }
+                if (substationTwo.Where(s => s.MrId != "Breaker_Pump2").ToList().TrueForAll(x => x.State == DState.ON))
+                {
+                    //pump3 is running
+                    if (!Tank2SimulatorThread2.IsAlive)
+                    {
+                        Tank2SimulatorThread2 = new Thread(EmptyTank2);
+                        Tank2SimulatorThread2.Start(pump3FluidFlow);
+                    }
+                }
+                else
+                {
+                    if (Tank2SimulatorThread2.IsAlive)
+                    {
+                        Tank2SimulatorThread2.Abort();
+                    }
                 }
             }
         }
 
-        private void FillLists()
+        private void FillLists(BasePointCacheItem pointCacheItem)
         {
-            if (substationOne.Count == 0)
+            if (String.Compare(pointCacheItem.MrId, "Breaker_1SwitchStatus") == 0 ||
+                   String.Compare(pointCacheItem.MrId, "Breaker_Pump1") == 0 ||
+                   String.Compare(pointCacheItem.MrId, "Discrete_Disc1") == 0 ||
+                   String.Compare(pointCacheItem.MrId, "Discrete_Disc2") == 0)
             {
-                foreach (var c in model.Values.Where(x => x.Type == PointType.BINARY_OUTPUT).ToList())
+                if (!substationOne.Contains((DigitalPointCacheItem)pointCacheItem))
                 {
-                    if (String.Compare(c.MrId, "Breaker_1SwitchStatus") == 0 ||
-                       String.Compare(c.MrId, "Breaker_Pump1") == 0 ||
-                       String.Compare(c.MrId, "Discrete_Disc1") == 0 ||
-                       String.Compare(c.MrId, "Discrete_Disc2") == 0)
-                    {
-                        if(!substationOne.Contains((DigitalPointCacheItem)c))
-                            substationOne.Add((DigitalPointCacheItem)c);
-                    }
+                    substationOne.Add((DigitalPointCacheItem)pointCacheItem);
                 }
             }
-
-            if (substationTwo.Count == 0)
+            else if (String.Compare(pointCacheItem.MrId, "Breaker_2SwitchStatus") == 0 ||
+                       String.Compare(pointCacheItem.MrId, "Breaker_Pump2") == 0 ||
+                       String.Compare(pointCacheItem.MrId, "Breaker_Pump3") == 0 ||
+                       String.Compare(pointCacheItem.MrId, "Discrete_Disc3") == 0 ||
+                       String.Compare(pointCacheItem.MrId, "Discrete_Disc4") == 0)
             {
-                foreach (var c in model.Values.Where(x => x.Type == PointType.BINARY_OUTPUT).ToList())
+                if (!substationTwo.Contains((DigitalPointCacheItem)pointCacheItem))
                 {
-                    if (String.Compare(c.MrId, "Breaker_2SwitchStatus") == 0 ||
-                       String.Compare(c.MrId, "Breaker_Pump2") == 0 ||
-                       String.Compare(c.MrId, "Breaker_Pump3") == 0 ||
-                       String.Compare(c.MrId, "Discrete_Disc3") == 0 ||
-                       String.Compare(c.MrId, "Discrete_Disc4") == 0)
-                    {
-                        if (!substationTwo.Contains((DigitalPointCacheItem)c))
-                            substationTwo.Add((DigitalPointCacheItem)c);
-                    }
+                    substationTwo.Add((DigitalPointCacheItem)pointCacheItem);
                 }
             }
         }
 
         private void SetCurrentAndVoltage()
         {
-            if (substationOne.TrueForAll(x => x.State == DState.ON))
+            if (substationOne.Where(x => x.MrId != "Breaker_Pump1").ToList().TrueForAll(x => x.State == DState.ON))
             {
-                foreach (var v in model.Values)
-                {
-                    if (String.Compare(v.MrId, "PT1Current_W1") == 0)
-                        SendMessage(v.Address, 5);
-                    if (String.Compare(v.MrId, "PT1Current_W2") == 0)
-                        SendMessage(v.Address, 5);
+                SendMessageWithCheck("PT1Current_W1", 5);
+                SendMessageWithCheck("PT1Current_W2", 5);
+                SendMessageWithCheck("PT1Voltage_W1", 220);
+                SendMessageWithCheck("PT1Voltage_W2", 220);
+            }
+            else
+            {
+                SendMessageWithCheck("PT1Current_W1", 0);
+                SendMessageWithCheck("PT1Current_W2", 0);
+                SendMessageWithCheck("PT1Voltage_W1", 0);
+                SendMessageWithCheck("PT1Voltage_W2", 0);
+            }
+        }
 
-                    if (String.Compare(v.MrId, "PT1Voltage_W1") == 0)
-                        SendMessage(v.Address, 220);
-                    if (String.Compare(v.MrId, "PT1Voltage_W2") == 0)
+        private void SendMessageWithCheck(string mrid, float value)
+        {
+            foreach (var item in model.Values)
+            {
+                if(item.MrId == mrid)
+                {
+                    if(item.RawValue != value)
                     {
-                        SendMessage(v.Address, 220);
-                        break;
+                        SendMessage(item.Address, value);
                     }
+
+                    return;
                 }
             }
-            /*else if (lista.Where(x => x.MrId == "Discrete_Disc1").ToList()[0].State == DState.OFF)
-            {
-                foreach (var v in model.Values)
-                {
-                    v.RawValue = 0;
-                    v.NormalValue = 0;
-                    if (String.Compare(v.MrId, "PT1Current_W1") == 0)
-                        SendCurrentVoltageMessage(v);
-                    if (String.Compare(v.MrId, "PT1Current_W2") == 0)
-                        SendCurrentVoltageMessage(v);
-
-                    v.RawValue = 0;
-                    v.NormalValue = 0;
-                    if (String.Compare(v.MrId, "PT1Voltage_W1") == 0)
-                        SendCurrentVoltageMessage(v);
-                    if (String.Compare(v.MrId, "PT1Voltage_W2") == 0)
-                    {
-                        SendCurrentVoltageMessage(v);
-                        break;
-                    }
-                }
-            }*/
         }
 
         private void SetCurrentAndVoltageSubTwo()
         {
-            if (substationTwo.TrueForAll(x => x.State == DState.ON))
+            if (substationTwo.Where(x => x.MrId != "Breaker_Pump2" && x.MrId != "Breaker_Pump3").ToList().TrueForAll(x => x.State == DState.ON))
             {
-                foreach (var v in model.Values)
-                {
-                    if (String.Compare(v.MrId, "PT2Current_W1") == 0)
-                        SendMessage(v.Address, 5);
-                    if (String.Compare(v.MrId, "PT2Current_W2") == 0)
-                        SendMessage(v.Address, 5);
-
-                    if (String.Compare(v.MrId, "PT2Voltage_W1") == 0)
-                        SendMessage(v.Address, 220);
-                    if (String.Compare(v.MrId, "PT2Voltage_W2") == 0)
-                    {
-                        SendMessage(v.Address, 220);
-                        break;
-                    }
-                }
+                SendMessageWithCheck("PT2Current_W1", 5);
+                SendMessageWithCheck("PT2Current_W2", 5);
+                SendMessageWithCheck("PT2Voltage_W1", 220);
+                SendMessageWithCheck("PT2Voltage_W2", 220);
             }
-            /*else if (lista.Where(x => x.MrId == "Discrete_Disc3").ToList()[0].State == DState.OFF)
+            else
             {
-                foreach (var v in model.Values)
-                {
-                    v.RawValue = 0;
-                    v.NormalValue = 0;
-                    if (String.Compare(v.MrId, "PT2Current_W1") == 0)
-                        SendCurrentVoltageMessage(v);
-                    if (String.Compare(v.MrId, "PT2Current_W2") == 0)
-                        SendCurrentVoltageMessage(v);
-
-                    v.RawValue = 0;
-                    v.NormalValue = 0;
-                    if (String.Compare(v.MrId, "PT2Voltage_W1") == 0)
-                        SendCurrentVoltageMessage(v);
-                    if (String.Compare(v.MrId, "PT2Voltage_W2") == 0)
-                    {
-                        SendCurrentVoltageMessage(v);
-                        break;
-                    }
-                }
-            }*/
+                SendMessageWithCheck("PT2Current_W1", 0);
+                SendMessageWithCheck("PT2Current_W2", 0);
+                SendMessageWithCheck("PT2Voltage_W1", 0);
+                SendMessageWithCheck("PT2Voltage_W2", 0);
+            }
         }
         
-        private void EmptyTank1()
+        private void EmptyTank1(object parameter)
         {
+            float fluidFlow = (float)parameter;
+
             if(tank1 != null)
             {
-                float value = tank1.RawValue;
-
-                while (value >= tank1.NormalValue)
+                while (tank1.RawValue - fluidFlow >= 0)
                 {
-                    value -= 2;
+                    SendMessage(tank1.Address, tank1.RawValue - fluidFlow);
 
-                    SendMessage(tank1.Address, value);
-
-                    Thread.Sleep(2000);
+                    Thread.Sleep(3000);
                 }
             }
-            tank1 = null;
         }
 
-        private void EmptyTank2()
+        private void EmptyTank2(object parameter)
         {
+            float fluidFlow = (float)parameter;
+
             if (tank2 != null)
             {
-                float value = tank2.RawValue;
-
-                while (value >= tank2.NormalValue)
+                while (tank2.RawValue - fluidFlow >= 0)
                 {
-                    value -= 2;
+                    SendMessage(tank2.Address, tank2.RawValue - fluidFlow);
 
-                    SendMessage(tank2.Address, value);
-
-                    Thread.Sleep(2000);
+                    Thread.Sleep(3000);
                 }
-                tank2 = null;
             }
         }
 
