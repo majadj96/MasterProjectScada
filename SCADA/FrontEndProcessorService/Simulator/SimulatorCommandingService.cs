@@ -25,9 +25,15 @@ namespace FrontEndProcessorService.Simulator
 
         private System.Timers.Timer timer;
         private bool pointUpdate = false;
+        const float nominalPump1Flow = 4;
+        const float nominalPump2Flow = 4;
+        const float nominalPump3Flow = 5;
         private float pump1FluidFlow = 4;
         private float pump2FluidFlow = 4;
         private float pump3FluidFlow = 5;
+        private bool Pump1Running = false;
+        private bool Pump2Running = false;
+        private bool Pump3Running = false;
 
         public SimulatorCommandingService(IFunctionExecutor functionExecutor)
         {
@@ -44,12 +50,12 @@ namespace FrontEndProcessorService.Simulator
         private void StartTimer()
         {
             timer = new System.Timers.Timer(3000);
-            timer.Elapsed += SimulateValues;
+            timer.Elapsed += SimulateValues_OnTimer;
             timer.AutoReset = true;
             timer.Start();
         }
 
-        private void SimulateValues(object sender, ElapsedEventArgs e)
+        private void SimulateValues_OnTimer(object sender, ElapsedEventArgs e)
         {
             if (!pointUpdate || model.Count <= 0)
                 return;
@@ -93,6 +99,8 @@ namespace FrontEndProcessorService.Simulator
 
             if (substationOne.Count == 4 && substationOne.TrueForAll(x => x.State == DState.ON))
             {
+                Pump1Running = true;
+
                 if (pump1power.RawValue != pump1current.RawValue * pump1voltage.RawValue)
                 {
                     SendMessage(pump1power.Address, pump1current.RawValue * pump1voltage.RawValue);
@@ -101,6 +109,8 @@ namespace FrontEndProcessorService.Simulator
             }
             else
             {
+                Pump1Running = false;
+
                 if (pump1power.RawValue != 0)
                 {
                     SendMessage(pump1power.Address, 0);
@@ -109,6 +119,8 @@ namespace FrontEndProcessorService.Simulator
             }
             if (substationTwo.Count == 5 && substationTwo.Where(s => s.MrId != "Breaker_Pump3").ToList().TrueForAll(x => x.State == DState.ON))
             {
+                Pump2Running = true;
+
                 if (pump2power.RawValue != pump2current.RawValue * pump2voltage.RawValue)
                 {
                     SendMessage(pump2power.Address, pump2current.RawValue * pump2voltage.RawValue);
@@ -117,6 +129,8 @@ namespace FrontEndProcessorService.Simulator
             }
             else
             {
+                Pump2Running = false;
+
                 if (pump2power.RawValue != 0)
                 {
                     SendMessage(pump2power.Address, 0);
@@ -125,6 +139,8 @@ namespace FrontEndProcessorService.Simulator
             }
             if (substationTwo.Count == 5 && substationTwo.Where(s => s.MrId != "Breaker_Pump2").ToList().TrueForAll(x => x.State == DState.ON))
             {
+                Pump3Running = true;
+
                 if (pump3power.RawValue != pump2current.RawValue * pump2voltage.RawValue)
                 {
                     SendMessage(pump3power.Address, pump2current.RawValue * pump2voltage.RawValue);
@@ -133,12 +149,20 @@ namespace FrontEndProcessorService.Simulator
             }
             else
             {
+                Pump3Running = false;
+
                 if (pump3power.RawValue != 0)
                 {
                     SendMessage(pump3power.Address, 0);
                     SendMessage(pump3speed.Address, 0);
                 }
             }
+
+            pump1FluidFlow = CalculateFluidFlow(nominalPump1Flow, pump1power.RawValue);
+            pump2FluidFlow = CalculateFluidFlow(nominalPump2Flow, pump2power.RawValue);
+            pump3FluidFlow = CalculateFluidFlow(nominalPump3Flow, pump3power.RawValue);
+
+            UpdateFluidLevel();
         }
 
         public void UpdatePoints(Tuple<ushort, PointType> tuple, BasePointCacheItem pointCacheItem)
@@ -168,14 +192,26 @@ namespace FrontEndProcessorService.Simulator
                 }
             }
 
+            if(pointCacheItem.MrId == "Analog_TapChanger1")
+            {
+                SetCurrentAndVoltage();
+            }
+            else if (pointCacheItem.MrId == "Analog_TapChanger2")
+            {
+                SetCurrentAndVoltageSubTwo();
+            }   
+        }
+
+        private void UpdateFluidLevel()
+        {
             tank1 = (AnalogPointCacheItem)model.Values.FirstOrDefault(x => x.MrId == "FluidLevel_Tank1");
 
-            if (substationOne.Count == 4 && substationOne.TrueForAll(x => x.State == DState.ON)) // pump is working
+            if (Pump1Running)
             {
                 if (!Tank1SimulatorThread.IsAlive)
                 {
                     Tank1SimulatorThread = new Thread(EmptyTank1);
-                    Tank1SimulatorThread.Start(pump1FluidFlow);
+                    Tank1SimulatorThread.Start();
                 }
             }
             else
@@ -188,48 +224,19 @@ namespace FrontEndProcessorService.Simulator
 
             tank2 = (AnalogPointCacheItem)model.Values.FirstOrDefault(x => x.MrId == "FluidLevel_Tank2");
 
-            if (substationTwo.Count == 5)
+            if (Pump2Running || Pump3Running)
             {
-                if(substationTwo.TrueForAll(x => x.State == DState.ON))
-                {   
-                    //both pumps are running
-                    if(!Tank2SimulatorThread.IsAlive)
-                    {
-                        Tank2SimulatorThread = new Thread(EmptyTank2);
-                        Tank2SimulatorThread.Start(pump2FluidFlow + pump3FluidFlow);
-                    }
-                }
-                if(substationTwo.Where(s => s.MrId != "Breaker_Pump3").ToList().TrueForAll(x => x.State == DState.ON))
+                if (!Tank2SimulatorThread.IsAlive)
                 {
-                    //pump2 is running
-                    if (!Tank2SimulatorThread.IsAlive)
-                    {
-                        Tank2SimulatorThread = new Thread(EmptyTank2);
-                        Tank2SimulatorThread.Start(pump2FluidFlow);
-                    }
+                    Tank2SimulatorThread = new Thread(EmptyTank2);
+                    Tank2SimulatorThread.Start();
                 }
-                else
+            }
+            else
+            {
+                if (Tank2SimulatorThread.IsAlive)
                 {
-                    if (Tank2SimulatorThread.IsAlive)
-                    {
-                        Tank2SimulatorThread.Abort();
-                    }
-                }
-                if (substationTwo.Where(s => s.MrId != "Breaker_Pump2").ToList().TrueForAll(x => x.State == DState.ON))
-                {
-                    //pump3 is running
-                    if (!Tank2SimulatorThread2.IsAlive)
-                    {
-                        Tank2SimulatorThread2 = new Thread(EmptyTank2);
-                        Tank2SimulatorThread2.Start(pump3FluidFlow);
-                    }
-                }
-                else
-                {
-                    if (Tank2SimulatorThread2.IsAlive)
-                    {
-                        Tank2SimulatorThread2.Abort();
-                    }
+                    Tank2SimulatorThread.Abort();
                 }
             }
         }
@@ -261,19 +268,48 @@ namespace FrontEndProcessorService.Simulator
 
         private void SetCurrentAndVoltage()
         {
-            if (substationOne.Where(x => x.MrId != "Breaker_Pump1").ToList().TrueForAll(x => x.State == DState.ON))
+            BasePointCacheItem tapChanger = model.Values.FirstOrDefault(x => x.MrId == "Analog_TapChanger1");
+
+            if(tapChanger != null)
             {
-                SendMessageWithCheck("PT1Current_W1", 5);
-                SendMessageWithCheck("PT1Current_W2", 5);
-                SendMessageWithCheck("PT1Voltage_W1", 220);
-                SendMessageWithCheck("PT1Voltage_W2", 220);
+                if (substationOne.Where(x => x.MrId != "Breaker_Pump1").ToList().TrueForAll(x => x.State == DState.ON))
+                {
+                    SendMessageWithCheck("PT1Current_W1", 5);
+                    SendMessageWithCheck("PT1Voltage_W1", 220);
+                    SendMessageWithCheck("PT1Current_W2", GetTransformedCurrent(tapChanger.RawValue));                    
+                    SendMessageWithCheck("PT1Voltage_W2", GetTransformedVoltage(tapChanger.RawValue));
+                }
+                else
+                {
+                    SendMessageWithCheck("PT1Current_W1", 0);
+                    SendMessageWithCheck("PT1Current_W2", 0);
+                    SendMessageWithCheck("PT1Voltage_W1", 0);
+                    SendMessageWithCheck("PT1Voltage_W2", 0);
+                }
+            }
+        }
+
+        private float GetTransformedVoltage(float tc_position)
+        {
+            if(tc_position >= 0)
+            {
+                return 220 + 220 * (tc_position / 100);
             }
             else
             {
-                SendMessageWithCheck("PT1Current_W1", 0);
-                SendMessageWithCheck("PT1Current_W2", 0);
-                SendMessageWithCheck("PT1Voltage_W1", 0);
-                SendMessageWithCheck("PT1Voltage_W2", 0);
+                return 220 - 220 * (tc_position / 100);
+            }
+        }
+
+        private float GetTransformedCurrent(float tc_position)
+        {
+            if (tc_position >= 0)
+            {
+                return 5 - 5 * (tc_position / 100);
+            }
+            else
+            {
+                return 5 + 5 * (tc_position / 100);
             }
         }
 
@@ -295,40 +331,50 @@ namespace FrontEndProcessorService.Simulator
 
         private void SetCurrentAndVoltageSubTwo()
         {
-            if (substationTwo.Where(x => x.MrId != "Breaker_Pump2" && x.MrId != "Breaker_Pump3").ToList().TrueForAll(x => x.State == DState.ON))
+            BasePointCacheItem tapChanger = model.Values.FirstOrDefault(x => x.MrId == "Analog_TapChanger2");
+
+            if (tapChanger != null)
             {
-                SendMessageWithCheck("PT2Current_W1", 5);
-                SendMessageWithCheck("PT2Current_W2", 5);
-                SendMessageWithCheck("PT2Voltage_W1", 220);
-                SendMessageWithCheck("PT2Voltage_W2", 220);
-            }
-            else
-            {
-                SendMessageWithCheck("PT2Current_W1", 0);
-                SendMessageWithCheck("PT2Current_W2", 0);
-                SendMessageWithCheck("PT2Voltage_W1", 0);
-                SendMessageWithCheck("PT2Voltage_W2", 0);
+                if (substationTwo.Where(x => x.MrId != "Breaker_Pump2" && x.MrId != "Breaker_Pump3").ToList().TrueForAll(x => x.State == DState.ON))
+                {
+                    SendMessageWithCheck("PT2Current_W1", 5);
+                    SendMessageWithCheck("PT2Voltage_W1", 220);
+                    SendMessageWithCheck("PT2Current_W2", GetTransformedCurrent(tapChanger.RawValue));                    
+                    SendMessageWithCheck("PT2Voltage_W2", GetTransformedVoltage(tapChanger.RawValue));
+                }
+                else
+                {
+                    SendMessageWithCheck("PT2Current_W1", 0);
+                    SendMessageWithCheck("PT2Current_W2", 0);
+                    SendMessageWithCheck("PT2Voltage_W1", 0);
+                    SendMessageWithCheck("PT2Voltage_W2", 0);
+                }
             }
         }
         
-        private void EmptyTank1(object parameter)
+        private void EmptyTank1()
         {
-            float fluidFlow = (float)parameter;
+            float fluidFlow = 0;
 
             if(tank1 != null)
             {
-                while (tank1.RawValue - fluidFlow >= 0)
+                while (true)
                 {
-                    SendMessage(tank1.Address, tank1.RawValue - fluidFlow);
+                    fluidFlow = pump1FluidFlow;
 
-                    Thread.Sleep(3000);
+                    if(tank1.RawValue - fluidFlow >= 0)
+                    {
+                        SendMessage(tank1.Address, tank1.RawValue - fluidFlow);
+
+                        Thread.Sleep(3000);
+                    }
                 }
             }
         }
 
-        private void EmptyTank2(object parameter)
+        private void EmptyTank2()
         {
-            float fluidFlow = (float)parameter;
+            float fluidFlow = 0;
 
             if (tank2 != null)
             {
@@ -338,6 +384,42 @@ namespace FrontEndProcessorService.Simulator
 
                     Thread.Sleep(3000);
                 }
+
+                while (true)
+                {
+                    if (Pump2Running)
+                        fluidFlow = pump2FluidFlow;
+                    if (Pump3Running)
+                        fluidFlow += pump3FluidFlow;
+
+                    if (tank2.RawValue - fluidFlow >= 0)
+                    {
+                        SendMessage(tank2.Address, tank2.RawValue - fluidFlow);
+
+                        Thread.Sleep(3000);
+                    }
+                }
+            }
+        }
+
+        private float CalculateFluidFlow(float fluidFlow, float pumpPower)
+        {
+            float powerRatio = 0;
+
+            if (pumpPower == 0)
+                return fluidFlow;
+
+            if(pumpPower >= 1100)
+            {
+                powerRatio = pumpPower / 1100;
+
+                return fluidFlow + powerRatio;
+            }
+            else
+            {
+                powerRatio = 1100 / pumpPower;
+
+                return fluidFlow - powerRatio;
             }
         }
 
