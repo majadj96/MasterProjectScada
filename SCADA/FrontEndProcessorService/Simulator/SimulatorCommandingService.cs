@@ -21,7 +21,6 @@ namespace FrontEndProcessorService.Simulator
         AnalogPointCacheItem tank2 = null;
         Thread Tank1SimulatorThread;
         Thread Tank2SimulatorThread;
-        Thread Tank2SimulatorThread2;
 
         private System.Timers.Timer timer;
         private bool pointUpdate = false;
@@ -42,7 +41,6 @@ namespace FrontEndProcessorService.Simulator
 
             Tank1SimulatorThread = new Thread(EmptyTank1);
             Tank2SimulatorThread = new Thread(EmptyTank2);
-            Tank2SimulatorThread2 = new Thread(EmptyTank2);
 
             StartTimer();
         }
@@ -276,8 +274,10 @@ namespace FrontEndProcessorService.Simulator
                 {
                     SendMessageWithCheck("PT1Current_W1", 5);
                     SendMessageWithCheck("PT1Voltage_W1", 220);
-                    SendMessageWithCheck("PT1Current_W2", GetTransformedCurrent(tapChanger.RawValue));                    
-                    SendMessageWithCheck("PT1Voltage_W2", GetTransformedVoltage(tapChanger.RawValue));
+                    float cur = GetTransformedCurrent(tapChanger.RawValue);
+                    SendMessageWithCheck("PT1Current_W2", cur);
+                    float vol = GetTransformedVoltage(tapChanger.RawValue);
+                    SendMessageWithCheck("PT1Voltage_W2", vol);
                 }
                 else
                 {
@@ -305,11 +305,13 @@ namespace FrontEndProcessorService.Simulator
         {
             if (tc_position >= 0)
             {
-                return 5 - 5 * (tc_position / 100);
+                return 5;
+                //return 5 - 5 * ((tc_position-(float)0.5) / 100);
             }
             else
             {
-                return 5 + 5 * (tc_position / 100);
+                return 5;
+                //return 5 + 5 * (tc_position - (float)0.5 / 100);
             }
         }
 

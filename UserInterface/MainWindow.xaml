@@ -303,7 +303,7 @@
             </Grid.ColumnDefinitions>
 
             <lvc:Gauge Name="Power1Gauge" Grid.Column="0" 
-            From="0" To="1000" Value="{Binding GaugePower1}" >
+            From="0" To="2000" Value="{Binding GaugePower1}" >
                 <lvc:Gauge.GaugeActiveFill>
                     <LinearGradientBrush>
                         <GradientStop Color="#FF48BDB3" Offset="0.0" />
@@ -314,7 +314,7 @@
             </lvc:Gauge>
 
             <lvc:Gauge Name="Power2Gauge" Grid.Column="2" Visibility="{Binding GaugePower2Visibility}"
-            From="0" To="1000" Value="{Binding GaugePower2}" >
+            From="0" To="2000" Value="{Binding GaugePower2}" >
                 <lvc:Gauge.GaugeActiveFill>
                     <LinearGradientBrush>
                         <GradientStop Color="#FF48BDB3" Offset="0.0" />
