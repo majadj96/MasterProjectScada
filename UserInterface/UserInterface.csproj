@@ -34,12 +34,42 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>analytics_graph_online_statistics_icon_127207.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommonServiceLocator, Version=2.0.5.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.5\lib\net46\CommonServiceLocator.dll</HintPath>
     </Reference>
     <Reference Include="ControlzEx, Version=4.0.0.0, Culture=neutral, PublicKeyToken=69f1c32f803d307e, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.4.3.0\lib\net45\ControlzEx.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.v18.2, Version=18.2.5.0, Culture=neutral, PublicKeyToken=1b6562238b11e6dd, processorArchitecture=MSIL">
+      <HintPath>..\packages\YshXaf.DevExpress.Data_yesfree.18.2.5\lib\net40\DevExpress.Data.v18.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Data.20.1.4\lib\net452\DevExpress.Data.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Images.v18.2, Version=18.2.5.0, Culture=neutral, PublicKeyToken=1b6562238b11e6dd, processorArchitecture=MSIL">
+      <HintPath>..\packages\YshXaf.DevExpress.Images_yesfree.18.2.5\lib\net40\DevExpress.Images.v18.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Mvvm.v18.2, Version=18.2.5.0, Culture=neutral, PublicKeyToken=1b6562238b11e6dd, processorArchitecture=MSIL">
+      <HintPath>..\packages\YshXaf.DevExpress.Mvvm_yesfree.18.2.5\lib\net40\DevExpress.Mvvm.v18.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Pdf.v18.2.Core, Version=18.2.5.0, Culture=neutral, PublicKeyToken=1b6562238b11e6dd, processorArchitecture=MSIL">
+      <HintPath>..\packages\YshXaf.DevExpress.Pdf.Core_yesfree.18.2.5\lib\net40\DevExpress.Pdf.v18.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Printing.v18.2.Core, Version=18.2.5.0, Culture=neutral, PublicKeyToken=1b6562238b11e6dd, processorArchitecture=MSIL">
+      <HintPath>..\packages\YshXaf.DevExpress.Printing.Core_yesfree.18.2.5\lib\net40\DevExpress.Printing.v18.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Core.v18.2, Version=18.2.5.0, Culture=neutral, PublicKeyToken=1b6562238b11e6dd, processorArchitecture=MSIL">
+      <HintPath>..\packages\YshXaf.DevExpress.Xpf.Core_yesfree.18.2.5\lib\net40\DevExpress.Xpf.Core.v18.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Grid.v18.2, Version=18.2.5.0, Culture=neutral, PublicKeyToken=1b6562238b11e6dd, processorArchitecture=MSIL">
+      <HintPath>..\packages\YshXaf.DevExpress.Xpf.Grid_yesfree.18.2.5\lib\net40\DevExpress.Xpf.Grid.v18.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Grid.v18.2.Core, Version=18.2.5.0, Culture=neutral, PublicKeyToken=1b6562238b11e6dd, processorArchitecture=MSIL">
+      <HintPath>..\packages\YshXaf.DevExpress.Xpf.Grid.Core_yesfree.18.2.5\lib\net40\DevExpress.Xpf.Grid.v18.2.Core.dll</HintPath>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.4.1.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
@@ -85,12 +115,19 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WpfAnimatedGif, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7cd3b544a090dc, processorArchitecture=MSIL">
+      <HintPath>..\packages\WpfAnimatedGif.2.0.0\lib\net40\WpfAnimatedGif.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\DialogMessageToColorConverter.cs" />
+    <Compile Include="Converters\InvertBooleanConverter.cs" />
+    <Compile Include="Converters\PixelsConverter.cs" />
+    <Compile Include="Dialog\DialogViewModel..cs" />
     <Compile Include="Handlers\AlarmHandler.cs" />
     <Compile Include="AnalyticsWindow.xaml.cs">
       <DependentUpon>AnalyticsWindow.xaml</DependentUpon>
@@ -108,6 +145,7 @@
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\ConverterState.cs" />
     <Compile Include="Handlers\CustomEventHandler.cs" />
+    <Compile Include="Helper\RetryHelper.cs" />
     <Compile Include="Model\AsynchronousMachine.cs" />
     <Compile Include="Model\Breaker.cs" />
     <Compile Include="Model\Disconector.cs" />
@@ -154,6 +192,9 @@
     </Compile>
     <Compile Include="View\CommandPowerTransformerView.xaml.cs">
       <DependentUpon>CommandPowerTransformerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\DialogUserControl.xaml.cs">
+      <DependentUpon>DialogUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\EventTableView.xaml.cs">
       <DependentUpon>EventTableView.xaml</DependentUpon>
@@ -212,6 +253,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Dialog\DialogUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\EventTableView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -244,7 +289,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -346,6 +393,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\cross.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\alarm-bell.png" />
+    <Resource Include="analytics_graph_online_statistics_icon_127207.ico" />
+    <Content Include="Assets\completeGif.mp4" />
+    <Resource Include="Assets\scadaCon.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

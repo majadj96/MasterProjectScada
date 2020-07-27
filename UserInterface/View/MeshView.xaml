@@ -2,13 +2,13 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:UserInterface.View"
-             xmlns:viewModel="clr-namespace:UserInterface.ViewModel"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converter="clr-namespace:UserInterface.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="450" Width="750">
+             d:DesignHeight="600" d:DesignWidth="260">
 
     <UserControl.Resources>
+		<converter:PixelsConverter x:Key="PixelsConverter" />
         <Style x:Key="MyButtonStyle" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True"/>
             <Setter Property="Margin" Value="5"/>
@@ -34,141 +34,141 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid Margin="0,0,0,-202" Background="White">
-        <Canvas Margin="288,20,0,0" Background="White">
+    <Grid Background="White">
+        <Canvas Background="White">
 
             <Line
             X1="0" Y1="0"
             X2="190" Y2="0"
             Stroke="{Binding LineStart}"
-            StrokeThickness="4" Grid.Row="1" Canvas.Left="15" Canvas.Top="1"/>
+            StrokeThickness="4" Canvas.Left="15" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=1}"/>
             <Line
             X1="0" Y1="0"
-            X2="0" Y2="20"
+            X2="0" Y2="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=20}"
             Stroke="{Binding LineFirst}"
-            StrokeThickness="4" Grid.Row="1" Canvas.Left="110" Canvas.Top="4" />
+            StrokeThickness="4" Canvas.Left="110" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=4}" />
 
             <Line
             X1="0" Y1="0"
-            X2="0" Y2="20"
+            X2="0" Y2="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=20}"
             Stroke="{Binding LineSecond}"
-            StrokeThickness="4" Grid.Row="1" Canvas.Left="110" Canvas.Top="99" />
+            StrokeThickness="4" Canvas.Left="110" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=99}" />
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="4"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="119"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=119}"/>
             <Line
             X1="0" Y1="0"
-            X2="0" Y2="25"
+            X2="0" Y2="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=25}"
             Name="line_2"
             Stroke="{Binding LineThird}"
-            StrokeThickness="4" Grid.Row="1" Height="25" Canvas.Left="110" Canvas.Top="191" />
+            StrokeThickness="4" Canvas.Left="110" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=191}" />
             <Line
             X1="0" Y1="0"
-            X2="0" Y2="23"
+            X2="0" Y2="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=23}"
                 Stroke="{Binding LineFourth}"
             Name="line_3"
-            StrokeThickness="4" Grid.Row="1" Canvas.Left="110" Canvas.Top="387" Height="23" />
+            StrokeThickness="4" Canvas.Left="110" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=387}" />
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="4"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="216"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=216}"/>
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="4"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="22"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=22}"/>
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="4"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="381"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=381}"/>
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="4"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="410"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=410}"/>
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="4"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="93"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=93}"/>
             <Line
                 Stroke="{Binding LineUpDis1}"
                 Name="Up_Disconector"
                 X1="0" Y1="0"
-                X2="0" Y2="17"
-                StrokeThickness="4" Canvas.Left="110" Canvas.Top="28" Height="17" />
+                X2="0" Y2="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=17}"
+                StrokeThickness="4" Canvas.Left="110" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=28}" />
             <Line
                 x:Name="Down_Disconector_Copy"
                 X1="0" Y1="0"
-                X2="0" Y2="17"
+                X2="0" Y2="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=17}"
                 Stroke="{Binding LineDownDis1}"
-                StrokeThickness="4" Canvas.Left="110" Canvas.Top="76" Height="17" />
+                StrokeThickness="4" Canvas.Left="110" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=76}" />
             <Line
                 x:Name="Up_Breaker"
                 X1="0" Y1="0"
-                X2="0" Y2="17"
+                X2="0" Y2="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=17}"
                 Stroke="{Binding LineUpBreaker}"
-                StrokeThickness="4" Canvas.Left="110" Canvas.Top="125" Height="17" />
+                StrokeThickness="4" Canvas.Left="110" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=125}" />
             <Line
                 x:Name="Down_Breaker"
                 X1="0" Y1="0"
-                X2="0" Y2="17"
+                X2="0" Y2="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=17}"
                 Stroke="{Binding LineDownBreaker}"
-                StrokeThickness="4" Canvas.Left="110" Canvas.Top="169" Height="17" />
+                StrokeThickness="4" Canvas.Left="110" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=169}" />
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="4"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="186"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=186}"/>
             <Line
                 x:Name="Up_Disconector_2"
                 X1="0" Y1="0"
-                X2="0" Y2="17"
+                X2="0" Y2="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=17}"
                 Stroke="{Binding LineUpDis2}"
-                StrokeThickness="4" Canvas.Left="110" Canvas.Top="222" Height="17" />
+                StrokeThickness="4" Canvas.Left="110" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=222}" />
             <Line
                 x:Name="Down_Disconector_2"
                 X1="0" Y1="0"
-                X2="0" Y2="17"
+                X2="0" Y2="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=17}"
                 Stroke="{Binding LineDownDis2}"
-                StrokeThickness="4" Canvas.Left="110" Canvas.Top="275" Height="17" />
+                StrokeThickness="4" Canvas.Left="110" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=275}" />
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="4"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="292"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=292}"/>
             <Line
                 x:Name="Up_PT"
                 X1="0" Y1="0"
-                X2="0" Y2="17"
+                X2="0" Y2="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=17}"
                 Stroke="{Binding LineUpPT}"
-                StrokeThickness="4" Canvas.Left="110" Canvas.Top="298" Height="17" />
+                StrokeThickness="4" Canvas.Left="110" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=298}" />
             <Line
                 x:Name="Down_PT"
                 X1="0" Y1="0"
-                X2="0" Y2="17"
+                X2="0" Y2="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=17}"
                 Stroke="{Binding LineDownPT}"
-                StrokeThickness="4" Canvas.Left="110" Canvas.Top="364" Height="17" />
+                StrokeThickness="4" Canvas.Left="110" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=364}" />
 
             <Line
                 x:Name="Up_AM"
                 X1="0" Y1="0"
-                X2="0" Y2="25"
+                X2="0" Y2="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=25}"
                 Stroke="{Binding LineUpBreaker2}"
-                StrokeThickness="4" Canvas.Left="110" Canvas.Top="417" Height="25" Fill="Red" />
-            <Button Name="Disc_1" Content="" Canvas.Left="91" Margin="0" Canvas.Top="44" Width="37" Height="37" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
+                StrokeThickness="4" Canvas.Left="110" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=417}" Fill="Red" />
+			<Button Name="Disc_1" Content="" Canvas.Left="91" Margin="0" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=44}" Width="37" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=37}" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
                 <Button.Background>
                     <ImageBrush ImageSource="{Binding Disconector1Image}"/>
                 </Button.Background>
@@ -176,7 +176,7 @@
                     <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Disconnector1"/>
                 </Button.InputBindings>
             </Button>
-            <Button Name="Disc_2" Content="" Canvas.Left="91" Margin="0" Canvas.Top="239" Width="37" Height="37" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
+			<Button Name="Disc_2" Content="" Canvas.Left="91" Margin="0" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=239}" Width="37" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=37}" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
                 <Button.Background>
                     <ImageBrush ImageSource="{Binding Disconector2Image}"/>
                 </Button.Background>
@@ -185,7 +185,7 @@
                     <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Disconnector2"/>
                 </Button.InputBindings>
             </Button>
-            <Button x:Name="Breaker" Content="" Canvas.Left="97" Margin="0" Canvas.Top="142" Width="27" Height="27" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
+			<Button x:Name="Breaker" Content="" Canvas.Left="97" Margin="0" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=142}" Width="27" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=27}" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen">
                 <Button.Background>
                     <ImageBrush ImageSource="{Binding BreakerImage}"/>
                 </Button.Background>
@@ -194,7 +194,7 @@
                     <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Breaker1"/>
                 </Button.InputBindings>
             </Button>
-            <Button x:Name="PT" Canvas.Left="78" Margin="0" Canvas.Top="310" Width="65" Height="60" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen" FontFamily="Segoe UI Semibold" Foreground="#00000000">
+			<Button x:Name="PT" Canvas.Left="78" Margin="0" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=310}" Width="65" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=60}" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen" FontFamily="Segoe UI Semibold" Foreground="#00000000">
                 <Button.Background>
                     <ImageBrush ImageSource="{Binding PTImage}"/>
                 </Button.Background>
@@ -203,13 +203,13 @@
                     <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="PowerTransformer"/>
                 </Button.InputBindings>
             </Button>
-            <Button x:Name="AM_1" Content="" Canvas.Left="97" Margin="0" Canvas.Top="502" Width="60" Height="78" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}">
+			<Button x:Name="AM_1" Content="" Canvas.Left="97" Margin="0" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=502}" Width="60" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=78}" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}">
                 <Button.Background>
                     <ImageBrush ImageSource="{Binding PumpImage, Mode=TwoWay}"/>
                 </Button.Background>
             </Button>
 
-            <Button x:Name="BR_AM_1" Canvas.Left="100" Margin="0" Canvas.Top="441" Width="21" Height="19" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen" FontFamily="Segoe UI Semibold" Foreground="#00000000">
+			<Button x:Name="BR_AM_1" Canvas.Left="100" Margin="0" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=441}" Width="21" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=19}" BorderBrush="{x:Null}" Style="{StaticResource MyButtonStyle}" Cursor="Pen" FontFamily="Segoe UI Semibold" Foreground="#00000000">
                 <Button.Background>
                     <ImageBrush ImageSource="{Binding BreakerPumpOneImage}"/>
                 </Button.Background>
@@ -220,18 +220,18 @@
             <Line
                 x:Name="Down_AM_BR"
                 X1="0" Y1="0"
-                X2="0" Y2="19"
+                X2="0" Y2="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=19}"
                 Stroke="{Binding LineDownBreaker2}"
-                StrokeThickness="4" Canvas.Left="110" Canvas.Top="460" Height="19" Fill="Red" />
+                StrokeThickness="4" Canvas.Left="110" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=460}" Fill="Red" />
             <Line
                 x:Name="Down_CN_AM_BR"
                 X1="0" Y1="0"
-                X2="0" Y2="22"
+                X2="0" Y2="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=22}"
                 Stroke="{Binding LineUpPumpOne}"
-                StrokeThickness="4" Canvas.Left="110" Canvas.Top="480" Height="22" Fill="Red" />
-            <Canvas Visibility="{Binding Two_AM_Visible}" Height="150" Canvas.Top="442" Width="253" Background="White">
+                StrokeThickness="4" Canvas.Left="110" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=480}" Fill="Red" />
+			<Canvas Visibility="{Binding Two_AM_Visible}" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=150}" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=442}" Width="253" Background="White">
 
-                <Button x:Name="AM_2_Multi" Content="" Canvas.Left="171" Margin="0" Width="60" Height="78" BorderBrush="{x:Null}" Canvas.Top="62" Style="{StaticResource MyButtonStyle}">
+				<Button x:Name="AM_2_Multi" Content="" Canvas.Left="171" Margin="0" Width="60" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=78}" BorderBrush="{x:Null}" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=62}" Style="{StaticResource MyButtonStyle}">
                     <Button.Background>
                         <ImageBrush ImageSource="{Binding Pump2Image, Mode=TwoWay}"/>
                     </Button.Background>
@@ -241,7 +241,7 @@
                     </Button.InputBindings>
                 </Button>
 
-                <Button x:Name="AM_1_Multi" Content="" Canvas.Left="40" Margin="0" Width="60" Height="78" BorderBrush="{x:Null}" Canvas.Top="61" Style="{StaticResource MyButtonStyle}">
+				<Button x:Name="AM_1_Multi" Content="" Canvas.Left="40" Margin="0" Width="60" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=78}" BorderBrush="{x:Null}" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=62}" Style="{StaticResource MyButtonStyle}">
                     <Button.Background>
                         <ImageBrush ImageSource="{Binding Pump1Image, Mode=TwoWay}"/>
                     </Button.Background>
@@ -251,7 +251,7 @@
                     </Button.InputBindings>
                 </Button>
 
-                <Button x:Name="Breaker_Pump_M1" Content="" Canvas.Left="42" Margin="0" Width="21" Height="19" BorderBrush="{x:Null}" Canvas.Top="15" Style="{StaticResource MyButtonStyle}" Cursor="Pen" FontFamily="Segoe UI Semibold" Foreground="#00000000">
+				<Button x:Name="Breaker_Pump_M1" Content="" Canvas.Left="42" Margin="0" Width="21" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=19}" BorderBrush="{x:Null}" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=15}" Style="{StaticResource MyButtonStyle}" Cursor="Pen" FontFamily="Segoe UI Semibold" Foreground="#00000000">
                     <Button.Background>
                         <ImageBrush ImageSource="{Binding Breaker_PM1Image}"/>
                     </Button.Background>
@@ -259,7 +259,7 @@
                         <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Breaker4"/>
                     </Button.InputBindings>
                 </Button>
-                <Button x:Name="Breaker_Pump_M2" Content="" Canvas.Left="173" Margin="0" Width="21" Height="19" BorderBrush="{x:Null}" Canvas.Top="15" Style="{StaticResource MyButtonStyle}" Cursor="Pen" FontFamily="Segoe UI Semibold" Foreground="#00000000">
+				<Button x:Name="Breaker_Pump_M2" Content="" Canvas.Left="173" Margin="0" Width="21" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=19}" BorderBrush="{x:Null}" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=15}" Style="{StaticResource MyButtonStyle}" Cursor="Pen" FontFamily="Segoe UI Semibold" Foreground="#00000000">
                     <Button.Background>
                         <ImageBrush ImageSource="{Binding Breaker_PM2Image}"/>
                     </Button.Background>
@@ -267,77 +267,80 @@
                         <MouseBinding Gesture="RightClick" Command="{Binding Commanding}" CommandParameter="Breaker5"/>
                     </Button.InputBindings>
                 </Button>
-                <Rectangle Height="12" Canvas.Left="51" Stroke="{Binding LineUpFirstPump}" StrokeThickness="4" Canvas.Top="4" Width="3"/>
-                <Rectangle Height="12" Canvas.Left="183" Stroke="{Binding LineUpSecondPump}" StrokeThickness="4" Canvas.Top="4" Width="3"/>
-                <Rectangle Height="13" Canvas.Left="51" Stroke="{Binding LineUpBreakerFirstPump}" StrokeThickness="4" Canvas.Top="34" Width="3"/>
-                <Rectangle Height="12" Canvas.Left="51" Stroke="{Binding LineUpBreakerFirstPumpCN}" StrokeThickness="4" Canvas.Top="49" Width="3"/>
-                <Rectangle Height="3" Canvas.Left="51" Stroke="{Binding LineUpMultiPump}" StrokeThickness="4" Width="134" Canvas.Top="-1"/>
-                <Rectangle Height="14" Canvas.Left="183" Stroke="{Binding LineUpBreakerSecondPump}" StrokeThickness="4" Canvas.Top="34" Width="3"/>
-                <Rectangle Height="9" Canvas.Left="183" Stroke="{Binding LineUpBreakerSecondPumpCN}" StrokeThickness="4" Canvas.Top="53" Width="3"/>
+				<Rectangle Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=12}" Canvas.Left="51" Stroke="{Binding LineUpFirstPump}" StrokeThickness="4" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=4}" Width="3"/>
+				<Rectangle Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=12}" Canvas.Left="183" Stroke="{Binding LineUpSecondPump}" StrokeThickness="4" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=4}" Width="3"/>
+				<Rectangle Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=13}" Canvas.Left="51" Stroke="{Binding LineUpBreakerFirstPump}" StrokeThickness="4" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=34}" Width="3"/>
+				<Rectangle Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=12}" Canvas.Left="51" Stroke="{Binding LineUpBreakerFirstPumpCN}" StrokeThickness="4" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=49}" Width="3"/>
+				<Rectangle Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=3}" Canvas.Left="51" Stroke="{Binding LineUpMultiPump}" StrokeThickness="4" Width="134" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=-1}"/>
+				<Rectangle Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=14}" Canvas.Left="183" Stroke="{Binding LineUpBreakerSecondPump}" StrokeThickness="4" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=34}" Width="3"/>
+				<Rectangle Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=9}" Canvas.Left="183" Stroke="{Binding LineUpBreakerSecondPumpCN}" StrokeThickness="4" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=53}" Width="3"/>
 
                 <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="4"
-                Stroke="Black" Canvas.Left="49" Canvas.Top="-2"/>
+                Stroke="Black" Canvas.Left="49" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=-2}"/>
                 <Ellipse
                     Fill="Black"
                     Height="6"
                     Width="6"
                     StrokeThickness="4"
-                    Stroke="Black" Canvas.Left="181" Canvas.Top="-2"/>
+                    Stroke="Black" Canvas.Left="181" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=-2}"/>
                 <Ellipse
                     Fill="Black"
                     Height="6"
                     Width="6"
                     StrokeThickness="4"
-                    Stroke="Black" Canvas.Left="49" Canvas.Top="46"/>
+                    Stroke="Black" Canvas.Left="49" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=46}"/>
                 <Ellipse
                     Fill="Black"
                     Height="6"
                     Width="6"
                     StrokeThickness="4"
-                    Stroke="Black" Canvas.Left="181" Canvas.Top="46"/>
+                    Stroke="Black" Canvas.Left="181" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=46}"/>
             </Canvas>
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="4"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="-1"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=-1}"/>
             <Ellipse
                 Fill="Black"
                 Height="6"
                 Width="6"
                 StrokeThickness="4"
                 Visibility="{Binding SinglePumpCN}"
-                Stroke="Black" Canvas.Left="107" Canvas.Top="473"/>
-            <Border BorderThickness="1" BorderBrush="Black" Height="25" Canvas.Left="172" Canvas.Top="230" Width="65">
-                <TextBlock Name="Struja1" Visibility="{Binding Sub1Visibility}" Text="{Binding StrujaW1}" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" Background="LightGray" Height="25" Canvas.Left="172" Canvas.Top="230" Width="65"/>
+                Stroke="Black" Canvas.Left="107" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=473}"/>
+			<Border BorderThickness="1" BorderBrush="Black" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=25}" Canvas.Left="172" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=230}" Width="65">
+				<TextBlock Name="Struja1" Visibility="{Binding Sub1Visibility}" Text="{Binding StrujaW1}" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" Background="White" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=25}" Canvas.Left="172" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=230}" Width="65"/>
             </Border>
-            <Border BorderThickness="1" BorderBrush="Black" Height="25" Canvas.Left="172" Canvas.Top="370" Width="65">
-                <TextBlock Name="Struja2" Visibility="{Binding Sub1Visibility}" Text="{Binding StrujaW2}" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center"  HorizontalAlignment="Center" Background="LightGray" Height="25" Canvas.Left="172" Canvas.Top="370" Width="65"/>
+			<Border BorderThickness="1" BorderBrush="Black" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=25}" Canvas.Left="172" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=370}" Width="65">
+				<TextBlock Name="Struja2" Visibility="{Binding Sub1Visibility}" Text="{Binding StrujaW2}" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center"  HorizontalAlignment="Center" Background="White" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=25}" Canvas.Left="172" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=370}" Width="65"/>
             </Border>
-            <Border BorderThickness="1" BorderBrush="Black" Height="25" Canvas.Left="172" Canvas.Top="255" Width="65">
-                <TextBlock x:Name="Napon1" Visibility="{Binding Sub1Visibility}" Text="{Binding NaponW1}" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" Background="LightGray" Height="25" Canvas.Left="172" Canvas.Top="255" Width="65"/>
+			<Border BorderThickness="1" BorderBrush="Black" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=25}" Canvas.Left="172" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=255}" Width="65">
+				<TextBlock x:Name="Napon1" Visibility="{Binding Sub1Visibility}" Text="{Binding NaponW1}" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" Background="White" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=25}" Canvas.Left="172" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=255}" Width="65"  FontFamily="Calibri" FontSize="14"/>
             </Border>
-            <Border BorderThickness="1" BorderBrush="Black" Height="25" Canvas.Left="172" Canvas.Top="395" Width="65">
-                <TextBlock x:Name="Napon2" Visibility="{Binding Sub1Visibility}" Text="{Binding NaponW2}" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center"  HorizontalAlignment="Center" Background="LightGray" Height="25" Canvas.Left="172" Canvas.Top="395" Width="65"/>
+			<Border BorderThickness="1" BorderBrush="Black" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=25}" Canvas.Left="172" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=395}" Width="65">
+				<TextBlock x:Name="Napon2" Visibility="{Binding Sub1Visibility}" Text="{Binding NaponW2}" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center"  HorizontalAlignment="Center" Background="White" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=25}" Canvas.Left="172" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=395}" Width="65"  FontFamily="Calibri" FontSize="14"/>
             </Border>
-            <Border BorderThickness="1" BorderBrush="Black" Height="25" Canvas.Left="172" Canvas.Top="230" Width="65">
-                <TextBlock Padding="4" Name="Struja21" Visibility="{Binding Sub2Visibility}" Text="{Binding Struja2W1}" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" Background="White" Height="25" Canvas.Left="172" Canvas.Top="230" Width="65" FontFamily="Calibri" FontSize="14"/>
+			<Border BorderThickness="1" BorderBrush="Black" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=25}" Canvas.Left="172" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=230}" Width="65">
+				<TextBlock Name="Struja21" Visibility="{Binding Sub2Visibility}" Text="{Binding Struja2W1}" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" Background="White" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=25}" Canvas.Left="172" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=230}" Width="65" FontFamily="Calibri" FontSize="14"/>
             </Border>
-            <Border BorderThickness="1" BorderBrush="Black" Height="25" Canvas.Left="172" Canvas.Top="370" Width="65">
-                <TextBlock Padding="4" Name="Struja22" Visibility="{Binding Sub2Visibility}" Text="{Binding Struja2W2}" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center"  HorizontalAlignment="Center" Background="White" Height="25" Canvas.Left="172" Canvas.Top="370" Width="65" FontFamily="Calibri" FontSize="14"/>
+			<Border BorderThickness="1" BorderBrush="Black" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=25}" Canvas.Left="172" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=370}" Width="65">
+				<TextBlock Name="Struja22" Visibility="{Binding Sub2Visibility}" Text="{Binding Struja2W2}" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center"  HorizontalAlignment="Center" Background="White" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=25}" Canvas.Left="172" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=370}" Width="65" FontFamily="Calibri" FontSize="14"/>
             </Border>
-            <Border BorderThickness="1" BorderBrush="Black" Height="25" Canvas.Left="172" Canvas.Top="255" Width="65">
-                <TextBlock Padding="4" x:Name="Napon21" Visibility="{Binding Sub2Visibility}" Text="{Binding Napon2W1}" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" Background="White" Height="25" Canvas.Left="172" Canvas.Top="255" Width="65" FontFamily="Calibri" FontSize="14"/>
+			<Border BorderThickness="1" BorderBrush="Black" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=25}" Canvas.Left="172" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=255}" Width="65">
+				<TextBlock x:Name="Napon21" Visibility="{Binding Sub2Visibility}" Text="{Binding Napon2W1}" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" Background="White" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=25}" Canvas.Left="172" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=255}" Width="65" FontFamily="Calibri" FontSize="14"/>
             </Border>
-            <Border BorderThickness="1" BorderBrush="Black" Height="25" Canvas.Left="172" Canvas.Top="395" Width="65">
-                <TextBlock Padding="4" x:Name="Napon22" Visibility="{Binding Sub2Visibility}" Text="{Binding Napon2W2}" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center"  HorizontalAlignment="Center" Background="White" Height="25" Canvas.Left="172" Canvas.Top="395" Width="65" FontFamily="Calibri" FontSize="14"/>
+			<Border BorderThickness="1" BorderBrush="Black" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=25}" Canvas.Left="172" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=395}" Width="65">
+				<TextBlock x:Name="Napon22" Visibility="{Binding Sub2Visibility}" Text="{Binding Napon2W2}" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center"  HorizontalAlignment="Center" Background="White" Height="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=25}" Canvas.Left="172" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=395}" Width="65" FontFamily="Calibri" FontSize="14"/>
             </Border>
-
-        </Canvas>
+			
+			<Label Canvas.Left="100" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=592}" Visibility="{Binding Sub1Visibility}" Content="Pump 1" FontSize="16" FontFamily="Calibri"/>
+			<Label Canvas.Left="45" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=592}" Visibility="{Binding Sub2Visibility}" Content="Pump 1" FontSize="16" FontFamily="Calibri"/>
+			<Label Canvas.Left="175" Canvas.Top="{Binding Path=.,Converter={StaticResource PixelsConverter}, ConverterParameter=592}" Visibility="{Binding Sub2Visibility}" Content="Pump 2" FontSize="16" FontFamily="Calibri"/>
+		</Canvas>
     </Grid>
 </UserControl>

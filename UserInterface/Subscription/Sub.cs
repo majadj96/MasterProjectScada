@@ -1,13 +1,8 @@
-﻿using Common.AlarmEvent;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using PubSubCommon;
-using ScadaCommon;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
+using UserInterface.Helper;
 
 namespace UserInterface.Subscription
 {
@@ -34,16 +29,15 @@ namespace UserInterface.Subscription
         }
 
         public void OnSubscribe(string topic)
-        {
-            try
-            {
-                _proxy.Subscribe(topic);
-            }
-            catch
-            {
-
-            }
-        }
+            => RetryHelper.Retry(
+                    action: () =>
+                    {
+                        _proxy.Subscribe(topic);
+                    },
+                    retryCount: 30,
+                    delay: TimeSpan.FromSeconds(1))
+                .GetAwaiter()
+                .GetResult();
 
         void OnUnSubscribe(object sender, EventArgs e, string topic)
         {

@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows.Threading;
@@ -18,6 +19,7 @@ namespace UserInterface.ViewModel
         private string breakerId { get; set; }
         
         private Substation substationCurrent;
+        public Dictionary<long, Measurement> Measurements; 
         #endregion
 
         #region Line_colors
@@ -46,12 +48,12 @@ namespace UserInterface.ViewModel
         public string lineUpBreakerSecondPumpCN { get; set; }
 		private string strujaW1 = "0 A";
 		private string strujaW2 = "0 A";
-		private string naponW1 = "0 A";
-		private string naponW2 = "0 A";
+		private string naponW1 = "0 V";
+		private string naponW2 = "0 V";
 		private string struja2W1 = "0 A";
 		private string struja2W2 = "0 A";
-		private string napon2W1 = "0 A";
-		private string napon2W2 = "0 A";
+		private string napon2W1 = "0 V";
+		private string napon2W2 = "0 V";
 		private string sub1Visibility = "Visible";
 		private string sub2Visibility = "Hidden";
 		#endregion
@@ -245,11 +247,11 @@ namespace UserInterface.ViewModel
 				sub2Visibility = value;
 				if(sub2Visibility == "Hidden")
 				{
-					sub1Visibility = "Visible";
+					Sub1Visibility = "Visible";
 				}
 				else
 				{
-					sub1Visibility = "Hidden";
+					Sub1Visibility = "Hidden";
 				}
 				OnPropertyChanged(nameof(Sub2Visibility));
 			}
@@ -284,7 +286,7 @@ namespace UserInterface.ViewModel
             set { substationCurrent = value; OnPropertyChanged("SubstationCurrent"); }
         }
 
-        public string singlePumpCN { get; set; }
+        public string singlePumpCN { get; set; } = "Visible";
         public string SinglePumpCN
         {
             get
@@ -882,7 +884,7 @@ namespace UserInterface.ViewModel
             {
                 CommandingWindow commandingWindow = new CommandingWindow();
 
-                CommandingWindowViewModel commandingWindowViewModel = new CommandingWindowViewModel(SubstationCurrent);
+                CommandingWindowViewModel commandingWindowViewModel = new CommandingWindowViewModel(SubstationCurrent, Measurements);
 
                 commandingWindow.DataContext = commandingWindowViewModel;
 

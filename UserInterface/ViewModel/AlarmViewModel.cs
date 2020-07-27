@@ -42,7 +42,7 @@ namespace UserInterface.ViewModel
 
             AcknowledgeAlarmCommand = new MyICommand<int>(AcknowledgeAlarm);
 
-            FillList();
+            //FillList();
         }
 
         private void FillList ()
@@ -99,7 +99,7 @@ namespace UserInterface.ViewModel
         private void AlarmHandler_UpdateAlarmsCollection(object sender, EventArgs e)
         {
             AlarmItems = new ObservableCollection<Alarm>(this.alarmHandler.Alarms);
-            FillList();
+            //FillList();
         }
 
         public void AcknowledgeAlarm(int id)

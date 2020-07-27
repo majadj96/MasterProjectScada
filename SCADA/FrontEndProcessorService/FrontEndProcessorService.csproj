@@ -41,6 +41,9 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>servicesconfig_servicios_6119.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -67,6 +70,7 @@
     <Compile Include="FieldCommunicationService.cs" />
     <Compile Include="NDSConfigurationService.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Simulator\SimulatorCommandingService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -103,6 +107,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\Common.csproj">
+      <Project>{6C234280-508A-47A4-B9CA-2677082EF85F}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\EntityFrameworkMeasurementInfrastructure\EntityFrameworkMeasurementInfrastructure.csproj">
       <Project>{B4FB1C6B-6F44-4F1E-B6C2-07E025A2ACBA}</Project>
       <Name>EntityFrameworkMeasurementInfrastructure</Name>
@@ -110,6 +118,10 @@
     <ProjectReference Include="..\..\RepositoryCore\RepositoryCore.csproj">
       <Project>{46F879CD-DF1D-402A-9373-62153FDE9ED4}</Project>
       <Name>RepositoryCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DNP3\DNP3.csproj">
+      <Project>{8CC2C599-ABC9-426E-8D54-4F9F25162417}</Project>
+      <Name>DNP3</Name>
     </ProjectReference>
     <ProjectReference Include="..\ProcessingModule\ProcessingModule.csproj">
       <Project>{a61facb3-147e-4fd9-88c1-a3f226157c23}</Project>
@@ -120,7 +132,9 @@
       <Name>ScadaCommon</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="servicesconfig_servicios_6119.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
