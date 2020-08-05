@@ -103,6 +103,13 @@ namespace ProcessingModule
         /// <inheritdoc />
         public void ExecuteWriteCommand(PointType pointType, ushort transactionId, byte remoteUnitAddress, ushort pointAddress, int value, string commandOwner)
         {
+            List<BasePointCacheItem> points = storage.GetPoints(new List<PointIdentifier>(1) { new PointIdentifier(pointType, pointAddress) });
+
+            if(points[0].Flag == PointFlag.OperaterCommanded && commandOwner != "UI")
+            {
+                return;
+            }
+
             if (pointType == PointType.ANALOG_OUTPUT)
             {
                 ExecuteAnalogCommand(transactionId, remoteUnitAddress, pointAddress, value, commandOwner);
