@@ -1,0 +1,776 @@
+﻿<delta id="0">
+  <operations>
+    <operation type="insert">
+      <ResourceDescriptions count="67">
+        <ResourceDescription>
+          <id gid="0x0000000bffffffff" type="SUBSTATION" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Substation_1" />
+            <Property id="IDOBJ_NAME" value="Substation_1" />
+            <Property id="IDOBJ_DESC" value="Substation" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x0000000bfffffffe" type="SUBSTATION" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Substation_2" />
+            <Property id="IDOBJ_NAME" value="Substation_2" />
+            <Property id="IDOBJ_DESC" value="Substation" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000008ffffffff" type="FEEDEROBJECT" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Feeder_1" />
+            <Property id="IDOBJ_NAME" value="Feeder_1" />
+            <Property id="IDOBJ_DESC" value="FeederObject" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000003ffffffff" type="ACLINESEGMENT" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="ACLS_1" />
+            <Property id="IDOBJ_NAME" value="ACLS_1" />
+            <Property id="IDOBJ_DESC" value="ACLineSegment" />
+            <Property id="EQUIPMENT_EQUIPCONTAINER" value="0x0000000bffffffff" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000006ffffffff" type="DISCONNECTOR" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Disc_1" />
+            <Property id="IDOBJ_NAME" value="Disc_1" />
+            <Property id="IDOBJ_DESC" value="Disconnector" />
+            <Property id="EQUIPMENT_EQUIPCONTAINER" value="0x0000000bffffffff" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000006fffffffe" type="DISCONNECTOR" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Disc_2" />
+            <Property id="IDOBJ_NAME" value="Disc_2" />
+            <Property id="IDOBJ_DESC" value="Disconnector" />
+            <Property id="EQUIPMENT_EQUIPCONTAINER" value="0x0000000bffffffff" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000006fffffffd" type="DISCONNECTOR" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Disc_3" />
+            <Property id="IDOBJ_NAME" value="Disc_3" />
+            <Property id="IDOBJ_DESC" value="Disconnector" />
+            <Property id="EQUIPMENT_EQUIPCONTAINER" value="0x0000000bfffffffe" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000006fffffffc" type="DISCONNECTOR" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Disc_4" />
+            <Property id="IDOBJ_NAME" value="Disc_4" />
+            <Property id="IDOBJ_DESC" value="Disconnector" />
+            <Property id="EQUIPMENT_EQUIPCONTAINER" value="0x0000000bfffffffe" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000004ffffffff" type="BREAKER" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Breaker_1" />
+            <Property id="IDOBJ_NAME" value="Breaker_1" />
+            <Property id="IDOBJ_DESC" value="Breaker" />
+            <Property id="EQUIPMENT_EQUIPCONTAINER" value="0x0000000bffffffff" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000004fffffffe" type="BREAKER" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Breaker_2" />
+            <Property id="IDOBJ_NAME" value="Breaker_2" />
+            <Property id="IDOBJ_DESC" value="Breaker" />
+            <Property id="EQUIPMENT_EQUIPCONTAINER" value="0x0000000bfffffffe" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000004fffffffd" type="BREAKER" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Breaker_AsyncMachine1" />
+            <Property id="IDOBJ_NAME" value="Breaker_AsyncMachine1" />
+            <Property id="IDOBJ_DESC" value="Breaker" />
+            <Property id="EQUIPMENT_EQUIPCONTAINER" value="0x0000000bffffffff" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000004fffffffc" type="BREAKER" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Breaker_AsyncMachine2" />
+            <Property id="IDOBJ_NAME" value="Breaker_AsyncMachine2" />
+            <Property id="IDOBJ_DESC" value="Breaker" />
+            <Property id="EQUIPMENT_EQUIPCONTAINER" value="0x0000000bfffffffe" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000004fffffffb" type="BREAKER" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Breaker_AsyncMachine3" />
+            <Property id="IDOBJ_NAME" value="Breaker_AsyncMachine3" />
+            <Property id="IDOBJ_DESC" value="Breaker" />
+            <Property id="EQUIPMENT_EQUIPCONTAINER" value="0x0000000bfffffffe" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000001ffffffff" type="ASYNCHRONOUSMACHINE" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="AsyncM_1" />
+            <Property id="IDOBJ_NAME" value="AsyncM_1" />
+            <Property id="IDOBJ_DESC" value="AsynchronousMachine" />
+            <Property id="EQUIPMENT_EQUIPCONTAINER" value="0x0000000bffffffff" />
+            <Property id="ASYNCMACHINE_COSPHI" value="0.707" />
+            <Property id="ASYNCMACHINE_RATEDP" value="300" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000001fffffffe" type="ASYNCHRONOUSMACHINE" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="AsyncM_2" />
+            <Property id="IDOBJ_NAME" value="AsyncM_2" />
+            <Property id="IDOBJ_DESC" value="AsynchronousMachine" />
+            <Property id="EQUIPMENT_EQUIPCONTAINER" value="0x0000000bfffffffe" />
+            <Property id="ASYNCMACHINE_COSPHI" value="0.707" />
+            <Property id="ASYNCMACHINE_RATEDP" value="300" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000001fffffffd" type="ASYNCHRONOUSMACHINE" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="AsyncM_3" />
+            <Property id="IDOBJ_NAME" value="AsyncM_3" />
+            <Property id="IDOBJ_DESC" value="AsynchronousMachine" />
+            <Property id="EQUIPMENT_EQUIPCONTAINER" value="0x0000000bfffffffe" />
+            <Property id="ASYNCMACHINE_COSPHI" value="0.707" />
+            <Property id="ASYNCMACHINE_RATEDP" value="300" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000005ffffffff" type="CONNECTIVITYNODE" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="CN_1" />
+            <Property id="IDOBJ_NAME" value="CN_1" />
+            <Property id="IDOBJ_DESC" value="ConnectivityNode" />
+            <Property id="CONNECTIVITYNODE_CNODECONT" value="0x0000000bffffffff" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000005fffffffe" type="CONNECTIVITYNODE" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="CN_2" />
+            <Property id="IDOBJ_NAME" value="CN_2" />
+            <Property id="IDOBJ_DESC" value="ConnectivityNode" />
+            <Property id="CONNECTIVITYNODE_CNODECONT" value="0x0000000bffffffff" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000005fffffffd" type="CONNECTIVITYNODE" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="CN_3" />
+            <Property id="IDOBJ_NAME" value="CN_3" />
+            <Property id="IDOBJ_DESC" value="ConnectivityNode" />
+            <Property id="CONNECTIVITYNODE_CNODECONT" value="0x0000000bffffffff" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000005fffffffc" type="CONNECTIVITYNODE" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="CN_4" />
+            <Property id="IDOBJ_NAME" value="CN_4" />
+            <Property id="IDOBJ_DESC" value="ConnectivityNode" />
+            <Property id="CONNECTIVITYNODE_CNODECONT" value="0x0000000bffffffff" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000005fffffffb" type="CONNECTIVITYNODE" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="CN_5" />
+            <Property id="IDOBJ_NAME" value="CN_5" />
+            <Property id="IDOBJ_DESC" value="ConnectivityNode" />
+            <Property id="CONNECTIVITYNODE_CNODECONT" value="0x0000000bffffffff" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000009ffffffff" type="POWERTRANSFORMER" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="PTR_1" />
+            <Property id="IDOBJ_NAME" value="PTR_1" />
+            <Property id="IDOBJ_DESC" value="PowerTransformer" />
+            <Property id="EQUIPMENT_EQUIPCONTAINER" value="0x0000000bffffffff" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000009fffffffe" type="POWERTRANSFORMER" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="PTR_2" />
+            <Property id="IDOBJ_NAME" value="PTR_2" />
+            <Property id="IDOBJ_DESC" value="PowerTransformer" />
+            <Property id="EQUIPMENT_EQUIPCONTAINER" value="0x0000000bfffffffe" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x0000000dffffffff" type="TRANSFORMERWINDING" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="TRWinding_1" />
+            <Property id="IDOBJ_NAME" value="TRWinding_1" />
+            <Property id="IDOBJ_DESC" value="TransformerWinding" />
+            <Property id="EQUIPMENT_EQUIPCONTAINER" value="0x0000000bffffffff" />
+            <Property id="TRANSFORMERWINDING_POWERTR" value="0x00000009ffffffff" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x0000000dfffffffe" type="TRANSFORMERWINDING" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="TRWinding_2" />
+            <Property id="IDOBJ_NAME" value="TRWinding_2" />
+            <Property id="IDOBJ_DESC" value="TransformerWinding" />
+            <Property id="EQUIPMENT_EQUIPCONTAINER" value="0x0000000bffffffff" />
+            <Property id="TRANSFORMERWINDING_POWERTR" value="0x00000009ffffffff" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x0000000dfffffffd" type="TRANSFORMERWINDING" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="TRWinding_3" />
+            <Property id="IDOBJ_NAME" value="TRWinding_3" />
+            <Property id="IDOBJ_DESC" value="TransformerWinding" />
+            <Property id="EQUIPMENT_EQUIPCONTAINER" value="0x0000000bfffffffe" />
+            <Property id="TRANSFORMERWINDING_POWERTR" value="0x00000009fffffffe" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x0000000dfffffffc" type="TRANSFORMERWINDING" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="TRWinding_4" />
+            <Property id="IDOBJ_NAME" value="TRWinding_4" />
+            <Property id="IDOBJ_DESC" value="TransformerWinding" />
+            <Property id="EQUIPMENT_EQUIPCONTAINER" value="0x0000000bfffffffe" />
+            <Property id="TRANSFORMERWINDING_POWERTR" value="0x00000009fffffffe" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x0000000affffffff" type="RATIOTAPCHANGER" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="RatioTC_1" />
+            <Property id="IDOBJ_NAME" value="RatioTC_1" />
+            <Property id="IDOBJ_DESC" value="RatioTapChanger" />
+            <Property id="TAPCHANGER_HIGHSTEP" value="7" />
+            <Property id="TAPCHANGER_LOWSTEP" value="-7" />
+            <Property id="TAPCHANGER_NORMALSTEP" value="0" />
+            <Property id="RATIOTAPCHANGER_TRWINDING" value="0x0000000dfffffffe" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x0000000afffffffe" type="RATIOTAPCHANGER" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="RatioTC_2" />
+            <Property id="IDOBJ_NAME" value="RatioTC_2" />
+            <Property id="IDOBJ_DESC" value="RatioTapChanger" />
+            <Property id="TAPCHANGER_HIGHSTEP" value="7" />
+            <Property id="TAPCHANGER_LOWSTEP" value="-7" />
+            <Property id="TAPCHANGER_NORMALSTEP" value="0" />
+            <Property id="RATIOTAPCHANGER_TRWINDING" value="0x0000000dfffffffc" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x0000000cffffffff" type="TERMINAL" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Terminal_1" />
+            <Property id="IDOBJ_NAME" value="Terminal_1" />
+            <Property id="IDOBJ_DESC" value="Terminal" />
+            <Property id="TERMINAL_CONNNODE" value="0x00000005ffffffff" />
+            <Property id="TERMINAL_CONDEQUIPMENT" value="0x00000006ffffffff" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x0000000cfffffffe" type="TERMINAL" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Terminal_2" />
+            <Property id="IDOBJ_NAME" value="Terminal_2" />
+            <Property id="IDOBJ_DESC" value="Terminal" />
+            <Property id="TERMINAL_CONNNODE" value="0x00000005ffffffff" />
+            <Property id="TERMINAL_CONDEQUIPMENT" value="0x00000004ffffffff" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x0000000cfffffffd" type="TERMINAL" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Terminal_3" />
+            <Property id="IDOBJ_NAME" value="Terminal_3" />
+            <Property id="IDOBJ_DESC" value="Terminal" />
+            <Property id="TERMINAL_CONNNODE" value="0x00000005fffffffe" />
+            <Property id="TERMINAL_CONDEQUIPMENT" value="0x00000004ffffffff" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x0000000cfffffffc" type="TERMINAL" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Terminal_4" />
+            <Property id="IDOBJ_NAME" value="Terminal_4" />
+            <Property id="IDOBJ_DESC" value="Terminal" />
+            <Property id="TERMINAL_CONNNODE" value="0x00000005fffffffe" />
+            <Property id="TERMINAL_CONDEQUIPMENT" value="0x00000006fffffffe" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x0000000cfffffffb" type="TERMINAL" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Terminal_5" />
+            <Property id="IDOBJ_NAME" value="Terminal_5" />
+            <Property id="IDOBJ_DESC" value="Terminal" />
+            <Property id="TERMINAL_CONNNODE" value="0x00000005fffffffd" />
+            <Property id="TERMINAL_CONDEQUIPMENT" value="0x00000006fffffffe" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x0000000cfffffffa" type="TERMINAL" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Terminal_6" />
+            <Property id="IDOBJ_NAME" value="Terminal_6" />
+            <Property id="IDOBJ_DESC" value="Terminal" />
+            <Property id="TERMINAL_CONNNODE" value="0x00000005fffffffd" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x0000000cfffffff9" type="TERMINAL" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Terminal_7" />
+            <Property id="IDOBJ_NAME" value="Terminal_7" />
+            <Property id="IDOBJ_DESC" value="Terminal" />
+            <Property id="TERMINAL_CONNNODE" value="0x00000005fffffffc" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x0000000cfffffff8" type="TERMINAL" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Terminal_8" />
+            <Property id="IDOBJ_NAME" value="Terminal_8" />
+            <Property id="IDOBJ_DESC" value="Terminal" />
+            <Property id="TERMINAL_CONNNODE" value="0x00000005fffffffb" />
+            <Property id="TERMINAL_CONDEQUIPMENT" value="0x00000003ffffffff" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x0000000cfffffff7" type="TERMINAL" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Terminal_9" />
+            <Property id="IDOBJ_NAME" value="Terminal_9" />
+            <Property id="IDOBJ_DESC" value="Terminal" />
+            <Property id="TERMINAL_CONNNODE" value="0x00000005fffffffb" />
+            <Property id="TERMINAL_CONDEQUIPMENT" value="0x00000001ffffffff" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002ffffffff" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="PT1Current" />
+            <Property id="IDOBJ_NAME" value="PT1Current" />
+            <Property id="IDOBJ_DESC" value="Power transformer current" />
+            <Property id="MEASUREMENT_PSR" value="0x00000009ffffffff" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="Current" />
+            <Property id="ANALOG_MAXVALUE" value="100" />
+            <Property id="ANALOG_MINVALUE" value="0" />
+            <Property id="ANALOG_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002fffffffe" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="PT1Voltage" />
+            <Property id="IDOBJ_NAME" value="PT1Voltage" />
+            <Property id="IDOBJ_DESC" value="Power transformer voltage" />
+            <Property id="MEASUREMENT_PSR" value="0x00000009ffffffff" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="Voltage" />
+            <Property id="ANALOG_MAXVALUE" value="10000" />
+            <Property id="ANALOG_MINVALUE" value="0" />
+            <Property id="ANALOG_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002fffffffd" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="PT2Current" />
+            <Property id="IDOBJ_NAME" value="PT2Current" />
+            <Property id="IDOBJ_DESC" value="Power transformer current" />
+            <Property id="MEASUREMENT_PSR" value="0x00000009fffffffe" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="Current" />
+            <Property id="ANALOG_MAXVALUE" value="100" />
+            <Property id="ANALOG_MINVALUE" value="0" />
+            <Property id="ANALOG_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002fffffffc" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="PT2Voltage" />
+            <Property id="IDOBJ_NAME" value="PT2Voltage" />
+            <Property id="IDOBJ_DESC" value="Power transformer voltage" />
+            <Property id="MEASUREMENT_PSR" value="0x00000009fffffffe" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="Voltage" />
+            <Property id="ANALOG_MAXVALUE" value="10000" />
+            <Property id="ANALOG_MINVALUE" value="0" />
+            <Property id="ANALOG_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002fffffffb" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Pump1Current" />
+            <Property id="IDOBJ_NAME" value="Pump1Current" />
+            <Property id="IDOBJ_DESC" value="Pump current" />
+            <Property id="MEASUREMENT_PSR" value="0x00000001ffffffff" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="Current" />
+            <Property id="ANALOG_MAXVALUE" value="100" />
+            <Property id="ANALOG_MINVALUE" value="0" />
+            <Property id="ANALOG_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002fffffffa" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Pump1Power" />
+            <Property id="IDOBJ_NAME" value="Pump1Power" />
+            <Property id="IDOBJ_DESC" value="Pump active power" />
+            <Property id="MEASUREMENT_PSR" value="0x00000001ffffffff" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="ActivePower" />
+            <Property id="ANALOG_MAXVALUE" value="100" />
+            <Property id="ANALOG_MINVALUE" value="0" />
+            <Property id="ANALOG_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002fffffff9" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Pump1Pressure" />
+            <Property id="IDOBJ_NAME" value="Pump1Pressure" />
+            <Property id="IDOBJ_DESC" value="Pump pressure" />
+            <Property id="MEASUREMENT_PSR" value="0x00000001ffffffff" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="Unitless" />
+            <Property id="ANALOG_MAXVALUE" value="10000" />
+            <Property id="ANALOG_MINVALUE" value="0" />
+            <Property id="ANALOG_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002fffffff8" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Pump1Voltage" />
+            <Property id="IDOBJ_NAME" value="Pump1Voltage" />
+            <Property id="IDOBJ_DESC" value="Pump voltage" />
+            <Property id="MEASUREMENT_PSR" value="0x00000001ffffffff" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="Voltage" />
+            <Property id="ANALOG_MAXVALUE" value="10000" />
+            <Property id="ANALOG_MINVALUE" value="0" />
+            <Property id="ANALOG_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002fffffff7" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Pump2Current" />
+            <Property id="IDOBJ_NAME" value="Pump2Current" />
+            <Property id="IDOBJ_DESC" value="Pump current" />
+            <Property id="MEASUREMENT_PSR" value="0x00000001fffffffe" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="Current" />
+            <Property id="ANALOG_MAXVALUE" value="100" />
+            <Property id="ANALOG_MINVALUE" value="0" />
+            <Property id="ANALOG_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002fffffff6" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Pump2Power" />
+            <Property id="IDOBJ_NAME" value="Pump2Power" />
+            <Property id="IDOBJ_DESC" value="Pump active power" />
+            <Property id="MEASUREMENT_PSR" value="0x00000001fffffffe" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="ActivePower" />
+            <Property id="ANALOG_MAXVALUE" value="100" />
+            <Property id="ANALOG_MINVALUE" value="0" />
+            <Property id="ANALOG_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002fffffff5" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Pump2Pressure" />
+            <Property id="IDOBJ_NAME" value="Pump2Pressure" />
+            <Property id="IDOBJ_DESC" value="Pump pressure" />
+            <Property id="MEASUREMENT_PSR" value="0x00000001fffffffe" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="Unitless" />
+            <Property id="ANALOG_MAXVALUE" value="10000" />
+            <Property id="ANALOG_MINVALUE" value="0" />
+            <Property id="ANALOG_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002fffffff4" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Pump2Voltage" />
+            <Property id="IDOBJ_NAME" value="Pump2Voltage" />
+            <Property id="IDOBJ_DESC" value="Pump voltage" />
+            <Property id="MEASUREMENT_PSR" value="0x00000001fffffffe" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="Voltage" />
+            <Property id="ANALOG_MAXVALUE" value="10000" />
+            <Property id="ANALOG_MINVALUE" value="0" />
+            <Property id="ANALOG_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002fffffff3" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Pump3Current" />
+            <Property id="IDOBJ_NAME" value="Pump3Current" />
+            <Property id="IDOBJ_DESC" value="Pump current" />
+            <Property id="MEASUREMENT_PSR" value="0x00000001fffffffd" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="Current" />
+            <Property id="ANALOG_MAXVALUE" value="100" />
+            <Property id="ANALOG_MINVALUE" value="0" />
+            <Property id="ANALOG_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002fffffff2" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Pump3Power" />
+            <Property id="IDOBJ_NAME" value="Pump3Power" />
+            <Property id="IDOBJ_DESC" value="Pump active power" />
+            <Property id="MEASUREMENT_PSR" value="0x00000001fffffffd" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="ActivePower" />
+            <Property id="ANALOG_MAXVALUE" value="100" />
+            <Property id="ANALOG_MINVALUE" value="0" />
+            <Property id="ANALOG_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002fffffff1" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Pump3Pressure" />
+            <Property id="IDOBJ_NAME" value="Pump3Pressure" />
+            <Property id="IDOBJ_DESC" value="Pump pressure" />
+            <Property id="MEASUREMENT_PSR" value="0x00000001fffffffd" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="Unitless" />
+            <Property id="ANALOG_MAXVALUE" value="10000" />
+            <Property id="ANALOG_MINVALUE" value="0" />
+            <Property id="ANALOG_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002fffffff0" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Pump3Voltage" />
+            <Property id="IDOBJ_NAME" value="Pump3Voltage" />
+            <Property id="IDOBJ_DESC" value="Pump voltage" />
+            <Property id="MEASUREMENT_PSR" value="0x00000001fffffffd" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="Voltage" />
+            <Property id="ANALOG_MAXVALUE" value="10000" />
+            <Property id="ANALOG_MINVALUE" value="0" />
+            <Property id="ANALOG_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002ffffffef" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Analog_TapChanger1" />
+            <Property id="IDOBJ_NAME" value="Analog_TapChanger1" />
+            <Property id="IDOBJ_DESC" value="TapChanger PTR_1 measurement" />
+            <Property id="MEASUREMENT_PSR" value="0x0000000affffffff" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="Unitless" />
+            <Property id="ANALOG_MAXVALUE" value="7" />
+            <Property id="ANALOG_MINVALUE" value="-7" />
+            <Property id="ANALOG_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002ffffffee" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Analog_TapChanger2" />
+            <Property id="IDOBJ_NAME" value="Analog_TapChanger2" />
+            <Property id="IDOBJ_DESC" value="TapChanger PTR_2 measurement" />
+            <Property id="MEASUREMENT_PSR" value="0x0000000afffffffe" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="Unitless" />
+            <Property id="ANALOG_MAXVALUE" value="7" />
+            <Property id="ANALOG_MINVALUE" value="-7" />
+            <Property id="ANALOG_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002ffffffed" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="FluidLevel_Tank1" />
+            <Property id="IDOBJ_NAME" value="FluidLevel_Tank1" />
+            <Property id="IDOBJ_DESC" value="Level of fluid in first tank" />
+            <Property id="MEASUREMENT_PSR" value="0x0000000bffffffff" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="Unitless" />
+            <Property id="ANALOG_MAXVALUE" value="100" />
+            <Property id="ANALOG_MINVALUE" value="0" />
+            <Property id="ANALOG_NORMALVALUE" value="10" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000002ffffffec" type="ANALOG" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="FluidLevel_Tank2" />
+            <Property id="IDOBJ_NAME" value="FluidLevel_Tank2" />
+            <Property id="IDOBJ_DESC" value="Level of fluid in second tank" />
+            <Property id="MEASUREMENT_PSR" value="0x0000000bfffffffe" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="Unitless" />
+            <Property id="ANALOG_MAXVALUE" value="100" />
+            <Property id="ANALOG_MINVALUE" value="0" />
+            <Property id="ANALOG_NORMALVALUE" value="10" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000007ffffffff" type="DISCRETE" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Breaker_1SwitchStatus" />
+            <Property id="IDOBJ_NAME" value="Breaker_1SwitchStatus" />
+            <Property id="IDOBJ_DESC" value="Discrete measurement" />
+            <Property id="MEASUREMENT_PSR" value="0x00000004ffffffff" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="SwitchStatus" />
+            <Property id="DISCRETE_MAXVALUE" value="1" />
+            <Property id="DISCRETE_MINVALUE" value="0" />
+            <Property id="DISCRETE_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000007fffffffe" type="DISCRETE" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Breaker_2SwitchStatus" />
+            <Property id="IDOBJ_NAME" value="Breaker_2SwitchStatus" />
+            <Property id="IDOBJ_DESC" value="Breaker switch status" />
+            <Property id="MEASUREMENT_PSR" value="0x00000004fffffffe" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="SwitchStatus" />
+            <Property id="DISCRETE_MAXVALUE" value="1" />
+            <Property id="DISCRETE_MINVALUE" value="0" />
+            <Property id="DISCRETE_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000007fffffffd" type="DISCRETE" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Breaker_Pump1" />
+            <Property id="IDOBJ_NAME" value="Breaker_Pump1" />
+            <Property id="IDOBJ_DESC" value="Discrete measurement" />
+            <Property id="MEASUREMENT_PSR" value="0x00000004fffffffd" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="SwitchStatus" />
+            <Property id="DISCRETE_MAXVALUE" value="1" />
+            <Property id="DISCRETE_MINVALUE" value="0" />
+            <Property id="DISCRETE_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000007fffffffc" type="DISCRETE" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Breaker_Pump2" />
+            <Property id="IDOBJ_NAME" value="Breaker_Pump2" />
+            <Property id="IDOBJ_DESC" value="Breaker switch status" />
+            <Property id="MEASUREMENT_PSR" value="0x00000004fffffffc" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="SwitchStatus" />
+            <Property id="DISCRETE_MAXVALUE" value="1" />
+            <Property id="DISCRETE_MINVALUE" value="0" />
+            <Property id="DISCRETE_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000007fffffffb" type="DISCRETE" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Breaker_Pump3" />
+            <Property id="IDOBJ_NAME" value="Breaker_Pump3" />
+            <Property id="IDOBJ_DESC" value="Breaker switch status" />
+            <Property id="MEASUREMENT_PSR" value="0x00000004fffffffb" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="SwitchStatus" />
+            <Property id="DISCRETE_MAXVALUE" value="1" />
+            <Property id="DISCRETE_MINVALUE" value="0" />
+            <Property id="DISCRETE_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000007fffffffa" type="DISCRETE" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Discrete_Disc1" />
+            <Property id="IDOBJ_NAME" value="Discrete_Disc1" />
+            <Property id="IDOBJ_DESC" value="Discrete measurement" />
+            <Property id="MEASUREMENT_PSR" value="0x00000006ffffffff" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="SwitchStatus" />
+            <Property id="DISCRETE_MAXVALUE" value="1" />
+            <Property id="DISCRETE_MINVALUE" value="0" />
+            <Property id="DISCRETE_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000007fffffff9" type="DISCRETE" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Discrete_Disc2" />
+            <Property id="IDOBJ_NAME" value="Discrete_Disc2" />
+            <Property id="IDOBJ_DESC" value="Discrete measurement" />
+            <Property id="MEASUREMENT_PSR" value="0x00000006fffffffe" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="SwitchStatus" />
+            <Property id="DISCRETE_MAXVALUE" value="1" />
+            <Property id="DISCRETE_MINVALUE" value="0" />
+            <Property id="DISCRETE_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000007fffffff8" type="DISCRETE" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Discrete_Disc3" />
+            <Property id="IDOBJ_NAME" value="Discrete_Disc3" />
+            <Property id="IDOBJ_DESC" value="Discrete measurement" />
+            <Property id="MEASUREMENT_PSR" value="0x00000006fffffffd" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="SwitchStatus" />
+            <Property id="DISCRETE_MAXVALUE" value="1" />
+            <Property id="DISCRETE_MINVALUE" value="0" />
+            <Property id="DISCRETE_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+        <ResourceDescription>
+          <id gid="0x00000007fffffff7" type="DISCRETE" />
+          <Properties>
+            <Property id="IDOBJ_MRID" value="Discrete_Disc4" />
+            <Property id="IDOBJ_NAME" value="Discrete_Disc4" />
+            <Property id="IDOBJ_DESC" value="Discrete measurement" />
+            <Property id="MEASUREMENT_PSR" value="0x00000006fffffffc" />
+            <Property id="MEASUREMENT_DIRECTION" value="ReadWrite" />
+            <Property id="MEASUREMENT_MEASTYPE" value="SwitchStatus" />
+            <Property id="DISCRETE_MAXVALUE" value="1" />
+            <Property id="DISCRETE_MINVALUE" value="0" />
+            <Property id="DISCRETE_NORMALVALUE" value="0" />
+          </Properties>
+        </ResourceDescription>
+      </ResourceDescriptions>
+    </operation>
+  </operations>
+</delta>
