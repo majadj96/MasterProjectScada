@@ -25,11 +25,11 @@ namespace FrontEndProcessorService.Simulator
         private System.Timers.Timer timer;
         private bool pointUpdate = false;
         const float nominalPump1Flow = 4;
-        const float nominalPump2Flow = 4;
-        const float nominalPump3Flow = 5;
+        const float nominalPump2Flow = 3;
+        const float nominalPump3Flow = 2;
         private float pump1FluidFlow = 4;
-        private float pump2FluidFlow = 4;
-        private float pump3FluidFlow = 5;
+        private float pump2FluidFlow = 3;
+        private float pump3FluidFlow = 2;
         private bool Pump1Running = false;
         private bool Pump2Running = false;
         private bool Pump3Running = false;
@@ -368,7 +368,7 @@ namespace FrontEndProcessorService.Simulator
                     {
                         SendMessage(tank1.Address, tank1.RawValue - fluidFlow);
 
-                        Thread.Sleep(3000);
+                        Thread.Sleep(5000);
                     }
                 }
             }
@@ -380,12 +380,12 @@ namespace FrontEndProcessorService.Simulator
 
             if (tank2 != null)
             {
-                while (tank2.RawValue - fluidFlow >= 0)
-                {
-                    SendMessage(tank2.Address, tank2.RawValue - fluidFlow);
+                //while (tank2.RawValue - fluidFlow >= 0)
+                //{
+                //    SendMessage(tank2.Address, tank2.RawValue - fluidFlow);
 
-                    Thread.Sleep(3000);
-                }
+                //    Thread.Sleep(3000);
+                //}
 
                 while (true)
                 {
@@ -398,7 +398,7 @@ namespace FrontEndProcessorService.Simulator
                     {
                         SendMessage(tank2.Address, tank2.RawValue - fluidFlow);
 
-                        Thread.Sleep(3000);
+                        Thread.Sleep(5000);
                     }
                 }
             }

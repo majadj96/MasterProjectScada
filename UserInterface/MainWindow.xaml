@@ -431,7 +431,7 @@
         </Grid>
 
 
-        <Grid
+        <!--<Grid
             Margin="100"
             Grid.RowSpan="10"
             Grid.ColumnSpan="10"
@@ -442,6 +442,6 @@
             <Image gif:ImageBehavior.AnimatedSource="Assets/scadaCon.gif"/>
             <Label Content="SCADA IS CONNECTED" HorizontalAlignment="Center" Margin="10"  VerticalAlignment="Top" Foreground="White" FontFamily="Calibri" Background="Black"/>
 
-        </Grid>
+        </Grid>-->
     </Grid>
 </mah:MetroWindow>
