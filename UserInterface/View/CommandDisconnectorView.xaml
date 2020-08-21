@@ -4,8 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:UserInterface.View"
-             mc:Ignorable="d" 
-             d:DesignHeight="370" d:DesignWidth="370" Background="White">
+             mc:Ignorable="d" d:DesignWidth="370" Background="White" Height="473">
     <UserControl.Resources>
         <Style x:Key="MyButtonStyle" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -187,6 +186,48 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="AutoModeButtonStyle" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" 
+                        BorderThickness="1"
+                        BorderBrush="Black" 
+                        Background="{Binding AutoModeBackground}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="DarkGray" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ManualModeButtonStyle" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" 
+                        BorderThickness="1"
+                        BorderBrush="Black" 
+                        Background="{Binding ManualModeBackground}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="DarkGray" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     <Grid>
@@ -223,8 +264,17 @@
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="301,233,0,0" VerticalAlignment="Top" Width="57">
             <Image Source="{Binding OperatorCommandedSource}" HorizontalAlignment="Left" Height="50" Margin="2,1.5,0,0" VerticalAlignment="Top" Width="48"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="11,288,0,0" VerticalAlignment="Top" Width="347">
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="11,343,0,0" VerticalAlignment="Top" Width="347">
             <Button Style="{StaticResource MyButtonStyle}" Height="35" Width="100" Content="Command" Margin="123.4,8.4,119.8,7.8" Background="#FF64CBE2" Foreground="#FF252525" Command="{Binding Command}" FontFamily="Calibri" FontSize="16"/>
         </Border>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="11,288,0,0" VerticalAlignment="Top" Width="173">
+            <Label Content="Operation mode:" VerticalContentAlignment="Center" FontFamily="Calibri" FontSize="20" Foreground="Black" Margin="9,0,0,0"/>
+        </Border>
+        <Button Style="{StaticResource AutoModeButtonStyle}" Background="{Binding AutoModeBackground}" Command="{Binding AutoModeCommand}" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="184,288,0,0" VerticalAlignment="Top" Width="88">
+            <TextBlock Background="Transparent" Text="Auto" FontWeight="Normal" FontFamily="Calibri" FontSize="20"/>
+        </Button>
+        <Button Style="{StaticResource ManualModeButtonStyle}" Background="{Binding ManualModeBackground}" Command="{Binding ManualModeCommand}" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="55" Margin="272,288,0,0" VerticalAlignment="Top" Width="86">
+            <TextBlock Background="Transparent" Text="Manual" FontWeight="Normal" FontFamily="Calibri" FontSize="20"/>
+        </Button>
     </Grid>
 </UserControl>

@@ -43,37 +43,37 @@ namespace UserInterface
 
             if (string.Compare(window, "Disconnector1") == 0)
             {
-                commandDisconnectorViewModel = new CommandDisconnectorViewModel(SubstationCurrent.Disconectors[0], "1");
+                commandDisconnectorViewModel = new CommandDisconnectorViewModel(SubstationCurrent.Disconectors[0], "1", this.measurements);
                 CurrentCommandViewModel = commandDisconnectorViewModel;
             }
             else if (string.Compare(window, "Disconnector2") == 0)
             {
                 if (SubstationCurrent.Disconectors.Count > 1)
                 {
-                    commandDisconnectorViewModel = new CommandDisconnectorViewModel(SubstationCurrent.Disconectors[1], "2");
+                    commandDisconnectorViewModel = new CommandDisconnectorViewModel(SubstationCurrent.Disconectors[1], "2", this.measurements);
                     CurrentCommandViewModel = commandDisconnectorViewModel;
                 }
             }
             else if (string.Compare(window, "Breaker1") == 0)
             {
-                commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breakers[0], "1");
+                commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breakers[0], "1", this.measurements);
                 CurrentCommandViewModel = commandBreakerViewModel;
             }
             else if (string.Compare(window, "Breaker2") == 0)
             {
-                commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breakers[1], "2");
+                commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breakers[1], "2", this.measurements);
                 CurrentCommandViewModel = commandBreakerViewModel;
             }
             else if (string.Compare(window, "Breaker3") == 0)
             {
-                commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breakers[0], "3");
+                commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breakers[0], "3", this.measurements);
                 CurrentCommandViewModel = commandBreakerViewModel;
             }
             else if (string.Compare(window, "Breaker4") == 0)
             {
                 if (SubstationCurrent.Breakers.Count > 2)
                 {
-                    commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breakers[1], "4");
+                    commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breakers[1], "4", this.measurements);
                     CurrentCommandViewModel = commandBreakerViewModel;
                 }
             }
@@ -81,7 +81,7 @@ namespace UserInterface
             {
                 if (SubstationCurrent.Breakers.Count > 2)
                 {
-                    commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breakers[2], "5");
+                    commandBreakerViewModel = new CommandBreakerViewModel(SubstationCurrent.Breakers[2], "5", this.measurements);
                     CurrentCommandViewModel = commandBreakerViewModel;
                 }
             }

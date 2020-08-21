@@ -1,4 +1,6 @@
-﻿using ScadaCommon.ComandingModel;
+﻿using Common;
+using ScadaCommon;
+using ScadaCommon.ComandingModel;
 using ScadaCommon.ServiceContract;
 using System;
 using System.Collections.Generic;
@@ -33,6 +35,11 @@ namespace NetworkDynamicService.ProxyPool
         public void ReadDigitalOutput(FEPCommandObject cmdObject)
         {
             Channel.ReadDigitalOutput(cmdObject);
+        }
+
+        public void SetPointOperationMode(PointType pointType, ushort address, OperationMode operationMode)
+        {
+            Channel.SetPointOperationMode(pointType, address, operationMode);
         }
 
         public void WriteAnalogOutput(FEPCommandObject cmdObject)

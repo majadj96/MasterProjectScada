@@ -22,6 +22,15 @@ namespace Common
         CmdFail = 0x08
     }
 
+    /// <summary>
+    /// Point operation mode.
+    /// </summary>
+    public enum OperationMode : short
+    {
+        AUTO = 0,
+        MANUAL = 1
+    }
+
     public enum AlarmCategory : short
     {
         ChangeOfState = 0x0,

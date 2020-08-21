@@ -1,4 +1,5 @@
-﻿using ScadaCommon;
+﻿using Common;
+using ScadaCommon;
 using ScadaCommon.ComandingModel;
 using ScadaCommon.Interfaces;
 using ScadaCommon.ServiceContract;
@@ -59,6 +60,11 @@ namespace FrontEndProcessorService
         public void ReadAnalogOutput(FEPCommandObject cmdObject)
         {
             ProcessingManager.ExecuteReadCommand(PointType.ANALOG_OUTPUT, cmdObject.TransactionId, Configuration.UnitAddress, cmdObject.Address, 0, cmdObject.CommandOwner);
+        }
+
+        public void SetPointOperationMode(PointType pointType, ushort address, OperationMode operationMode)
+        {
+            ProcessingManager.SetPointOperationMode(pointType, address, operationMode);
         }
     }
 }

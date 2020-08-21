@@ -105,7 +105,7 @@ namespace ProcessingModule
         {
             List<BasePointCacheItem> points = storage.GetPoints(new List<PointIdentifier>(1) { new PointIdentifier(pointType, pointAddress) });
 
-            if(points[0].Flag == PointFlag.OperaterCommanded && commandOwner != "UI")
+            if(points[0].OperationMode == OperationMode.MANUAL && commandOwner != "UI")
             {
                 return;
             }
@@ -353,6 +353,13 @@ namespace ProcessingModule
                 IDNP3Functions fn = DNP3FunctionFactory.CreateDNP3Message(p);
                 this.functionExecutor.SendMessage(fn);
             }
+        }
+
+        public void SetPointOperationMode(PointType pointType, ushort address, OperationMode operationMode)
+        {
+            List<BasePointCacheItem> points = storage.GetPoints(new List<PointIdentifier>(1) { new PointIdentifier(pointType, address) });
+
+            points[0].OperationMode = operationMode;
         }
     }
 }

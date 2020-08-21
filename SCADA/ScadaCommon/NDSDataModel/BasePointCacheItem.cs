@@ -29,6 +29,7 @@ namespace ScadaCommon.NDSDataModel
         protected bool inAlarm = false;
         private float rawValue;
         private PointFlag flag = 0x0;
+        private OperationMode operationMode = 0x0;
 
         public BasePointCacheItem()
         {
@@ -211,6 +212,8 @@ namespace ScadaCommon.NDSDataModel
                 name = value;
             }
         }
+
+        public OperationMode OperationMode { get => operationMode; set => operationMode = value; }
         #endregion Properties
     }
 }

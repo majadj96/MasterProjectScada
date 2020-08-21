@@ -25,6 +25,7 @@ namespace UserInterface.Model
         public MeasurementType Type { get; set; }
         public string AlarmVisibility { get; set; } = "Hidden";
         public DateTime Time { get; set; }
+        public OperationMode OperationMode { get; set; } = 0x0;
         public string State
         {
             get

@@ -8,20 +8,28 @@ using UserInterface.Converters;
 using UserInterface.Model;
 using UserInterface.ProxyPool;
 using System.Windows;
+using System.Windows.Media;
+using System.Collections.Generic;
+using Common;
 
 namespace UserInterface.ViewModel
 {
     public class CommandDisconnectorViewModel : BindableBase
     {
         public MyICommand Command { get; private set; }
+        public MyICommand AutoModeCommand { get; private set; }
+        public MyICommand ManualModeCommand { get; private set; }
 
         #region Variables
         private Disconector disconector;
+        private Measurement measurement;
         private string type;
         private bool newState;
         private string inAlarmSource;
         private string autoCommandedSource;
         private string operatorCommandedSource;
+        private Brush autoModeBackground;
+        private Brush manualModeBackground;
         #endregion
 
         #region Props
@@ -50,9 +58,18 @@ namespace UserInterface.ViewModel
             get => operatorCommandedSource;
             set { operatorCommandedSource = value; OnPropertyChanged("OperatorCommandedSource"); }
         }
+
+        public Brush AutoModeBackground {
+            get => autoModeBackground;
+            set { autoModeBackground = value; OnPropertyChanged("AutoModeBackground"); }
+        }
+        public Brush ManualModeBackground {
+            get => manualModeBackground;
+            set { manualModeBackground = value; OnPropertyChanged("ManualModeBackground"); }
+        }
         #endregion
 
-        public CommandDisconnectorViewModel(Disconector disconector, string type)
+        public CommandDisconnectorViewModel(Disconector disconector, string type, Dictionary<long, Measurement> measurements)
         {
             DisconectorCurrent = disconector;
             NewState = !ConverterState.ConvertToBool(DisconectorCurrent.State);
@@ -61,7 +78,54 @@ namespace UserInterface.ViewModel
 
             SetPictures();
 
+            if(measurements.TryGetValue(DisconectorCurrent.DiscreteGID, out Measurement meas))
+            {
+                this.measurement = meas;
+                SetOpModeBindings(meas.OperationMode);
+            }
+
             Command = new MyICommand(CommandDisconnector);
+            AutoModeCommand = new MyICommand(CommandAutoMode);
+            ManualModeCommand = new MyICommand(CommandManualMode);
+        }
+
+        private void CommandManualMode()
+        {
+            if (ProxyServices.CommandingServiceProxy.SetPointOperationMode(this.measurement.Gid, OperationMode.MANUAL))
+            {
+                this.measurement.OperationMode = OperationMode.MANUAL;
+            }
+
+            SetOpModeBindings(OperationMode.MANUAL);
+        }
+
+        private void CommandAutoMode()
+        {
+            if (ProxyServices.CommandingServiceProxy.SetPointOperationMode(this.measurement.Gid, OperationMode.AUTO))
+            {
+                this.measurement.OperationMode = OperationMode.AUTO;
+            }
+
+            SetOpModeBindings(OperationMode.AUTO);
+        }
+
+        private void SetOpModeBindings(OperationMode opMode)
+        {
+            switch (opMode)
+            {
+                case OperationMode.AUTO:
+                    AutoModeBackground = Brushes.OrangeRed;
+                    ManualModeBackground = SystemColors.ControlBrush;
+                    break;
+                case OperationMode.MANUAL:
+                    ManualModeBackground = Brushes.OrangeRed;
+                    AutoModeBackground = SystemColors.ControlBrush;
+                    break;
+                default:
+                    AutoModeBackground = SystemColors.ControlBrush;
+                    ManualModeBackground = SystemColors.ControlBrush;
+                    break;
+            }
         }
 
         private void SetPictures()
@@ -84,6 +148,16 @@ namespace UserInterface.ViewModel
 
         public void CommandDisconnector()
         {
+            if(this.measurement.OperationMode != OperationMode.MANUAL)
+            {
+                string messageText = "Operation mode will be set to Manual. Are you sure you want to execute command?";
+                MessageBoxResult result = MessageBox.Show(messageText,"Alert", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if(result == MessageBoxResult.Yes)
+                {
+                    CommandManualMode();
+                }
+            }
+
             DisconectorCurrent.NewState = ConverterState.ConvertToDiscreteState(NewState);
 
             CommandObject commandObject = new CommandObject() { CommandingTime = DateTime.Now, CommandOwner = "UI", EguValue = (float)DisconectorCurrent.NewState, SignalGid = DisconectorCurrent.DiscreteGID };

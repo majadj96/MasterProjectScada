@@ -1,4 +1,5 @@
-﻿using ScadaCommon;
+﻿using Common;
+using ScadaCommon;
 using ScadaCommon.ComandingModel;
 using ScadaCommon.ServiceContract;
 using System.ServiceModel;
@@ -30,6 +31,11 @@ namespace UserInterface.ProxyPool
         public CommandResult ReadDigitalOutput(CommandObject command)
         {
             return Channel.ReadDigitalOutput(command);
+        }
+
+        public bool SetPointOperationMode(long signalGid, OperationMode operationMode)
+        {
+            return Channel.SetPointOperationMode(signalGid, operationMode);
         }
 
         public CommandResult WriteAnalogOutput(CommandObject command)

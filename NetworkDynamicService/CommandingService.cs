@@ -1,4 +1,5 @@
-﻿using NetworkDynamicService.Cache;
+﻿using Common;
+using NetworkDynamicService.Cache;
 using ScadaCommon;
 using ScadaCommon.BackEnd_FrontEnd;
 using ScadaCommon.ComandingModel;
@@ -129,6 +130,27 @@ namespace NetworkDynamicService
             }
 
             return transactionId;
+        }
+
+        public bool SetPointOperationMode(long signalGid, OperationMode operationMode)
+        {
+            if(this.nDSRealTimePointCache.TryGetBasePointItem(signalGid, out BasePointCacheItem basePointCacheItem))
+            {
+                try
+                {
+                    this.fepCmdProxy.SetPointOperationMode(basePointCacheItem.Type, basePointCacheItem.Address, operationMode);
+                    basePointCacheItem.OperationMode = operationMode;
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

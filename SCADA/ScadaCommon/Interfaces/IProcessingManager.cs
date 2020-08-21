@@ -1,4 +1,6 @@
-﻿namespace ScadaCommon.Interfaces
+﻿using Common;
+
+namespace ScadaCommon.Interfaces
 {
     /// <summary>
     /// Interface containing logic for processing points and executing commands.
@@ -39,5 +41,7 @@
         /// Send byte array message
         /// </summary>
         void SendRawBytesMessage(DNP3FunctionCode functionCode, byte[] message);
+
+        void SetPointOperationMode(PointType pointType, ushort address, OperationMode operationMode);
     }
 }
