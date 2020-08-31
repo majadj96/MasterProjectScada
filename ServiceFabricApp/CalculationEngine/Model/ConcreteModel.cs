@@ -6,12 +6,19 @@ using System.Threading.Tasks;
 
 namespace CalculationEngine.Model
 {
-    public static class ConcreteModel
+    public class ConcreteModel
     {
-        public static Dictionary<long, IdObject> CurrentModel = new Dictionary<long, IdObject>();
-        public static Dictionary<long, IdObject> CurrentModel_Copy = new Dictionary<long, IdObject>();
-        public static Dictionary<long, IdObject> BackupModel = new Dictionary<long, IdObject>();
+        public Dictionary<long, IdObject> CurrentModel { get; set; }
+        public Dictionary<long, IdObject> CurrentModel_Copy { get; set; }
+        public Dictionary<long, IdObject> BackupModel { get; set; }
+        public List<Tank> Tanks { get; set; }
 
-        public static List<Tank> Tanks = new List<Tank>();
+        public ConcreteModel()
+        {
+            CurrentModel = new Dictionary<long, IdObject>();
+            CurrentModel_Copy = new Dictionary<long, IdObject>();
+            BackupModel = new Dictionary<long, IdObject>();
+            Tanks = new List<Tank>();
+        }
     }
 }

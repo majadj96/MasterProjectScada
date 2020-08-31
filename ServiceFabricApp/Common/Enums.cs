@@ -13,6 +13,24 @@ namespace Common
         UI = 0x02
     }
 
+    [Flags]
+    public enum PointFlag : short
+    {
+        Alarm = 0x01,
+        OperaterCommanded = 0x02,
+        AutoCommanded = 0x04,
+        CmdFail = 0x08
+    }
+
+    /// <summary>
+    /// Point operation mode.
+    /// </summary>
+    public enum OperationMode : short
+    {
+        AUTO = 0,
+        MANUAL = 1
+    }
+
     public enum AlarmCategory : short
     {
         ChangeOfState = 0x0,

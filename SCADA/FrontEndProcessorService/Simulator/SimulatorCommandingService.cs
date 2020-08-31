@@ -55,7 +55,7 @@ namespace FrontEndProcessorService.Simulator
 
         private void SimulateValues_OnTimer(object sender, ElapsedEventArgs e)
         {
-            if (!pointUpdate || model.Count <= 0)
+            if (!pointUpdate || model.Count < 27)
                 return;
 
             pointUpdate = false;
@@ -70,6 +70,8 @@ namespace FrontEndProcessorService.Simulator
             BasePointCacheItem pump1voltage = null;
             BasePointCacheItem pump2current = null;
             BasePointCacheItem pump2voltage = null;
+            BasePointCacheItem tapChanger1 = null;
+            BasePointCacheItem tapChanger2 = null;
 
             foreach (BasePointCacheItem item in model.Values)
             {
@@ -93,6 +95,10 @@ namespace FrontEndProcessorService.Simulator
                     pump2current = item;
                 else if (item.MrId.Equals("PT2Voltage_W2"))
                     pump2voltage = item;
+                else if (item.MrId.Equals("Analog_TapChanger1"))
+                    tapChanger1 = item;
+                else if (item.MrId.Equals("Analog_TapChanger2"))
+                    tapChanger2 = item;
             }
 
             if (substationOne.Count == 4 && substationOne.TrueForAll(x => x.State == DState.ON))
@@ -156,9 +162,7 @@ namespace FrontEndProcessorService.Simulator
                 }
             }
 
-            pump1FluidFlow = CalculateFluidFlow(nominalPump1Flow, pump1power.RawValue);
-            pump2FluidFlow = CalculateFluidFlow(nominalPump2Flow, pump2power.RawValue);
-            pump3FluidFlow = CalculateFluidFlow(nominalPump3Flow, pump3power.RawValue);
+            CalculateFluidFlow(tapChanger1.RawValue, tapChanger2.RawValue);
 
             UpdateFluidLevel();
         }
@@ -272,8 +276,8 @@ namespace FrontEndProcessorService.Simulator
             {
                 if (substationOne.Where(x => x.MrId != "Breaker_Pump1").ToList().TrueForAll(x => x.State == DState.ON))
                 {
-                    SendMessageWithCheck("PT1Current_W1", 5);
-                    SendMessageWithCheck("PT1Voltage_W1", 220);
+                    SendMessageWithCheck("PT1Current_W1", 4);
+                    SendMessageWithCheck("PT1Voltage_W1", 440);
                     float cur = GetTransformedCurrent(tapChanger.RawValue);
                     SendMessageWithCheck("PT1Current_W2", cur);
                     float vol = GetTransformedVoltage(tapChanger.RawValue);
@@ -291,14 +295,7 @@ namespace FrontEndProcessorService.Simulator
 
         private float GetTransformedVoltage(float tc_position)
         {
-            if(tc_position >= 0)
-            {
-                return 220 + 220 * (tc_position / 100);
-            }
-            else
-            {
-                return 220 - 220 * (tc_position / 100);
-            }
+            return 220 + 220 * ((tc_position - 7) / 100);
         }
 
         private float GetTransformedCurrent(float tc_position)
@@ -339,8 +336,8 @@ namespace FrontEndProcessorService.Simulator
             {
                 if (substationTwo.Where(x => x.MrId != "Breaker_Pump2" && x.MrId != "Breaker_Pump3").ToList().TrueForAll(x => x.State == DState.ON))
                 {
-                    SendMessageWithCheck("PT2Current_W1", 5);
-                    SendMessageWithCheck("PT2Voltage_W1", 220);
+                    SendMessageWithCheck("PT2Current_W1", 4);
+                    SendMessageWithCheck("PT2Voltage_W1", 440);
                     SendMessageWithCheck("PT2Current_W2", GetTransformedCurrent(tapChanger.RawValue));                    
                     SendMessageWithCheck("PT2Voltage_W2", GetTransformedVoltage(tapChanger.RawValue));
                 }
@@ -392,37 +389,39 @@ namespace FrontEndProcessorService.Simulator
                     if (Pump2Running)
                         fluidFlow = pump2FluidFlow;
                     if (Pump3Running)
-                        fluidFlow += pump3FluidFlow;
+                        fluidFlow = pump3FluidFlow;
+                    if (Pump2Running && Pump3Running)
+                        fluidFlow = pump2FluidFlow + pump3FluidFlow;
 
                     if (tank2.RawValue - fluidFlow >= 0)
                     {
                         SendMessage(tank2.Address, tank2.RawValue - fluidFlow);
 
-                        Thread.Sleep(5000);
+                        Thread.Sleep(6000);
                     }
                 }
             }
         }
 
-        private float CalculateFluidFlow(float fluidFlow, float pumpPower)
+        private void CalculateFluidFlow(float tc1Position, float tc2Position)
         {
-            float powerRatio = 0;
+            float scaledPosition1 = tc1Position - 7;
+            float scaledPosition2 = tc2Position - 7;
 
-            if (pumpPower == 0)
-                return fluidFlow;
-
-            if(pumpPower >= 1100)
-            {
-                powerRatio = pumpPower / 1100;
-
-                return fluidFlow + powerRatio;
-            }
+            if (nominalPump1Flow + scaledPosition1 > 0)
+                pump1FluidFlow = nominalPump1Flow + scaledPosition1;
             else
-            {
-                powerRatio = 1100 / pumpPower;
+                pump1FluidFlow = 1;
 
-                return fluidFlow - powerRatio;
-            }
+            if (nominalPump2Flow + scaledPosition2 > 0)
+                pump2FluidFlow = nominalPump2Flow + scaledPosition2;
+            else
+                pump2FluidFlow = 1;
+
+            if (nominalPump3Flow + scaledPosition2 > 0)
+                pump3FluidFlow = nominalPump3Flow + scaledPosition2;
+            else
+                pump3FluidFlow = 1;
         }
 
         private void SendMessage(ushort address, float value)

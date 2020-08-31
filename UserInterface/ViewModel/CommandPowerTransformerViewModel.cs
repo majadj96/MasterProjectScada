@@ -47,8 +47,11 @@ namespace UserInterface.ViewModel
             {
                 case "TapChangerUp":
                     {
-                        CommandObject commandObject = new CommandObject() { CommandingTime = DateTime.Now, CommandOwner = "UI", EguValue = (float)tapChangerPosition.Value + 1, SignalGid = tapChangerPosition.Gid };
-                        var v = ProxyServices.CommandingServiceProxy.WriteAnalogOutput(commandObject);
+                        if (tapChangerPosition.Value + 1 <= tapChangerPosition.Max)
+                        {
+                            CommandObject commandObject = new CommandObject() { CommandingTime = DateTime.Now, CommandOwner = "UI", EguValue = (float)tapChangerPosition.Value + 1, SignalGid = tapChangerPosition.Gid };
+                            var v = ProxyServices.CommandingServiceProxy.WriteAnalogOutput(commandObject);
+                        }
                         //TranformerCurrent.TapChangerValue++;
                         //if (TranformerCurrent.TapChangerValue <= TranformerCurrent.MaxValueTapChanger)
                         //{
@@ -66,8 +69,11 @@ namespace UserInterface.ViewModel
                     break;
                 case "TapChangerDown":
                     {
-                        CommandObject commandObject = new CommandObject() { CommandingTime = DateTime.Now, CommandOwner = "UI", EguValue = (float)tapChangerPosition.Value - 1, SignalGid = tapChangerPosition.Gid };
-                        var v = ProxyServices.CommandingServiceProxy.WriteAnalogOutput(commandObject);
+                        if (tapChangerPosition.Value - 1 >= tapChangerPosition.Min)
+                        {
+                            CommandObject commandObject = new CommandObject() { CommandingTime = DateTime.Now, CommandOwner = "UI", EguValue = (float)tapChangerPosition.Value - 1, SignalGid = tapChangerPosition.Gid };
+                            var v = ProxyServices.CommandingServiceProxy.WriteAnalogOutput(commandObject);
+                        }
                         //TranformerCurrent.TapChangerValue--;
                         //if (TranformerCurrent.TapChangerValue >= TranformerCurrent.MinValueTapChanger)
                         //{

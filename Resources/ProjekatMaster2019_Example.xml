@@ -316,8 +316,8 @@
 	</cim:Analog>
 <!-- PowerTransformer 1 measurements -->
 	<cim:Analog rdf:ID="Analog_PT1Voltage_W1">
-		<cim:Analog.maxValue>242</cim:Analog.maxValue>
-		<cim:Analog.minValue>198</cim:Analog.minValue>
+		<cim:Analog.maxValue>450</cim:Analog.maxValue>
+		<cim:Analog.minValue>400</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Voltage</cim:Measurement.measurementType>
@@ -327,8 +327,8 @@
 		<ftn:IdentifiedObject.name>PT1Voltage_W1</ftn:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_PT1Current_W1">
-		<cim:Analog.maxValue>100</cim:Analog.maxValue>
-		<cim:Analog.minValue>20</cim:Analog.minValue>
+		<cim:Analog.maxValue>5</cim:Analog.maxValue>
+		<cim:Analog.minValue>3</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Current</cim:Measurement.measurementType>
@@ -338,8 +338,8 @@
 		<ftn:IdentifiedObject.name>PT1Current_W1</ftn:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_PT1Voltage_W2">
-		<cim:Analog.maxValue>242</cim:Analog.maxValue>
-		<cim:Analog.minValue>198</cim:Analog.minValue>
+		<cim:Analog.maxValue>240</cim:Analog.maxValue>
+		<cim:Analog.minValue>200</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Voltage</cim:Measurement.measurementType>
@@ -349,8 +349,8 @@
 		<ftn:IdentifiedObject.name>PT1Voltage_W2</ftn:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_PT1Current_W2">
-		<cim:Analog.maxValue>100</cim:Analog.maxValue>
-		<cim:Analog.minValue>20</cim:Analog.minValue>
+		<cim:Analog.maxValue>6</cim:Analog.maxValue>
+		<cim:Analog.minValue>4</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Current</cim:Measurement.measurementType>
@@ -361,8 +361,8 @@
 	</cim:Analog>
 <!-- PowerTransformer 2 measurements -->
 	<cim:Analog rdf:ID="Analog_PT2Voltage_W1">
-		<cim:Analog.maxValue>242</cim:Analog.maxValue>
-		<cim:Analog.minValue>198</cim:Analog.minValue>
+		<cim:Analog.maxValue>450</cim:Analog.maxValue>
+		<cim:Analog.minValue>400</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Voltage</cim:Measurement.measurementType>
@@ -372,8 +372,8 @@
 		<ftn:IdentifiedObject.name>PT2Voltage_W1</ftn:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_PT2Current_W1">
-		<cim:Analog.maxValue>100</cim:Analog.maxValue>
-		<cim:Analog.minValue>20</cim:Analog.minValue>
+		<cim:Analog.maxValue>5</cim:Analog.maxValue>
+		<cim:Analog.minValue>3</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Current</cim:Measurement.measurementType>
@@ -383,8 +383,8 @@
 		<ftn:IdentifiedObject.name>PT2Current_W1</ftn:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_PT2Voltage_W2">
-		<cim:Analog.maxValue>242</cim:Analog.maxValue>
-		<cim:Analog.minValue>198</cim:Analog.minValue>
+		<cim:Analog.maxValue>240</cim:Analog.maxValue>
+		<cim:Analog.minValue>200</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Voltage</cim:Measurement.measurementType>
@@ -394,8 +394,8 @@
 		<ftn:IdentifiedObject.name>PT2Voltage_W2</ftn:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_PT2Current_W2">
-		<cim:Analog.maxValue>100</cim:Analog.maxValue>
-		<cim:Analog.minValue>20</cim:Analog.minValue>
+		<cim:Analog.maxValue>6</cim:Analog.maxValue>
+		<cim:Analog.minValue>4</cim:Analog.minValue>
 		<cim:Analog.normalValue>0</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Current</cim:Measurement.measurementType>
@@ -406,9 +406,9 @@
 	</cim:Analog>
 <!-- TapChanger measurements -->
 	<cim:Analog rdf:ID="Analog_TapChanger1">
-		<cim:Analog.maxValue>7</cim:Analog.maxValue>
-		<cim:Analog.minValue>-7</cim:Analog.minValue>
-		<cim:Analog.normalValue>0</cim:Analog.normalValue>
+		<cim:Analog.maxValue>14</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.normalValue>7</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Unitless</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#RatioTC_1"/>
@@ -417,9 +417,9 @@
 		<ftn:IdentifiedObject.name>Analog_TapChanger1</ftn:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_TapChanger2">
-		<cim:Analog.maxValue>7</cim:Analog.maxValue>
-		<cim:Analog.minValue>-7</cim:Analog.minValue>
-		<cim:Analog.normalValue>0</cim:Analog.normalValue>
+		<cim:Analog.maxValue>14</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
+		<cim:Analog.normalValue>7</cim:Analog.normalValue>
 		<cim:Measurement.direction>ReadWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>Unitless</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#RatioTC_2"/>

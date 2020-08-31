@@ -13,9 +13,9 @@ namespace CalculationEngine.Model
         private int maxValue;
         private int minValue;
         private int normalValue;
-		private long equipmentGid;
+        private long equipmentGid;
 
-		public Discrete(long gid) : base(gid)
+        public Discrete(long gid) : base(gid)
         {
             GID = gid;
         }
@@ -24,6 +24,6 @@ namespace CalculationEngine.Model
         public int MaxValue { get => maxValue; set => maxValue = value; }
         public int MinValue { get => minValue; set => minValue = value; }
         public int NormalValue { get => normalValue; set => normalValue = value; }
-		public long EquipmentGid { get => equipmentGid; set => equipmentGid = value; }
-	}
+        public long EquipmentGid { get => equipmentGid; set => equipmentGid = value; }
+    }
 }

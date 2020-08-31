@@ -24,6 +24,8 @@ namespace ScadaCommon
 		WRITE_SINGLE_REGISTER = 0x06,
 	}
 
+
+
     /// <summary>
     /// Possible modbus point types.
     /// </summary>
@@ -48,7 +50,8 @@ namespace ScadaCommon
     public enum CommandResult : short
     {
         Success = 0,
-        Failure = 1
+        Failure = 1,
+        CmdInProgress = 3
     }
 
     public enum TypeField : short

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -27,5 +28,7 @@ namespace ScadaCommon.BackEnd_FrontEnd
         public DateTime Timestamp { get; set; }
         [DataMember]
         public bool InAlarm { get; set; }
+        [DataMember]
+        public PointFlag Flag { get; set; } = 0x0;
     }
 }

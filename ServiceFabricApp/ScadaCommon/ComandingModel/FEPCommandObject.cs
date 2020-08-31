@@ -10,7 +10,32 @@ namespace ScadaCommon.ComandingModel
     {
         private ushort adress;
         private int rawValue;
+        private ushort transactionId;
+        private string commandOwner;
 
+        public string CommandOwner
+        {
+            get
+            {
+                return commandOwner;
+            }
+            set
+            {
+                commandOwner = value;
+            }
+        }
+
+        public ushort TransactionId
+        {
+            get
+            {
+                return transactionId;
+            }
+            set
+            {
+                transactionId = value;
+            }
+        }
         public ushort Address
         {
             get

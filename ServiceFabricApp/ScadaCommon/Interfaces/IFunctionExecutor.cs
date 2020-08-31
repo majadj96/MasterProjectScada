@@ -1,4 +1,5 @@
-﻿using ScadaCommon.Interfaces;
+﻿using ScadaCommon.FEPDataModel;
+using ScadaCommon.Interfaces;
 using System;
 using System.Collections.Generic;
 
@@ -10,7 +11,7 @@ namespace ScadaCommon.Interfaces
     /// <param name="type">The type of the point.</param>
     /// <param name="pointAddres">The address of the point.</param>
     /// <param name="newValue">The new value received for the point.</param>
-    public delegate void UpdatePointDelegate(Dictionary<Tuple<PointType, ushort>, ushort> pointsToupdate);
+    public delegate void UpdatePointDelegate(PointChanges changes);
 
     /// <summary>
     /// Interface containing logic for sending modbus requests and receiving point values. 
@@ -29,6 +30,8 @@ namespace ScadaCommon.Interfaces
 		event UpdatePointDelegate UpdatePointEvent;
 
         void SendMessage(IDNP3Functions message);
+
+        void SendDirectMessage(IDNP3Functions message);
 
         void StartExecution();
     }

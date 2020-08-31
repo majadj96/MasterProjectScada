@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="ComandingModel\FEPCommandObject.cs" />
     <Compile Include="ComandingModel\CommandObject.cs" />
+    <Compile Include="FEPDataModel\PointChanges.cs" />
     <Compile Include="Interfaces\IConfigItem.cs" />
     <Compile Include="ProcesingModel\AnalogPoint.cs" />
     <Compile Include="ProcesingModel\DigitalPoint.cs" />
@@ -78,10 +79,11 @@
     <Compile Include="ServiceContract\IStateUpdateService.cs" />
     <Compile Include="ServiceProxies\NetworkDynamicServiceProxy.cs" />
     <Compile Include="ServiceProxies\NetworkDynamicStateServiceProxy.cs" />
+    <Compile Include="Utility\UniqueIdGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{6c234280-508a-47a4-b9ca-2677082ef85f}</Project>
+    <ProjectReference Include="..\..\Common\Common.csproj">
+      <Project>{6C234280-508A-47A4-B9CA-2677082EF85F}</Project>
       <Name>Common</Name>
     </ProjectReference>
   </ItemGroup>
