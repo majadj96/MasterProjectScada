@@ -15,6 +15,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScadaCommon", "ScadaCommon\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionManagerContracts", "TransactionManagerContracts\TransactionManagerContracts.csproj", "{0A8F68EC-31CB-4FD1-B54A-DCF2FC97BBEC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDataProccessorService", "DynamicDataProccessorService\DynamicDataProccessorService.csproj", "{3EAD47A2-0701-4528-9309-6B7FDED33371}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateUpdaterService", "StateUpdaterService\StateUpdaterService.csproj", "{6E6DFC8B-3FE8-42E9-AC75-66214B4CA027}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScadaModelManagementService", "ScadaModelManagementService\ScadaModelManagementService.csproj", "{9FAC1690-1537-4085-AA0B-3190DFAAF249}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandingManagementService", "CommandingManagementService\CommandingManagementService.csproj", "{1F88B967-8190-4C06-94B0-1481010CC97C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +99,38 @@ Global
 		{0A8F68EC-31CB-4FD1-B54A-DCF2FC97BBEC}.Release|x64.Build.0 = Release|Any CPU
 		{0A8F68EC-31CB-4FD1-B54A-DCF2FC97BBEC}.Release|x86.ActiveCfg = Release|Any CPU
 		{0A8F68EC-31CB-4FD1-B54A-DCF2FC97BBEC}.Release|x86.Build.0 = Release|Any CPU
+		{3EAD47A2-0701-4528-9309-6B7FDED33371}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{3EAD47A2-0701-4528-9309-6B7FDED33371}.Debug|x64.ActiveCfg = Debug|x64
+		{3EAD47A2-0701-4528-9309-6B7FDED33371}.Debug|x64.Build.0 = Debug|x64
+		{3EAD47A2-0701-4528-9309-6B7FDED33371}.Debug|x86.ActiveCfg = Debug|x64
+		{3EAD47A2-0701-4528-9309-6B7FDED33371}.Release|Any CPU.ActiveCfg = Release|x64
+		{3EAD47A2-0701-4528-9309-6B7FDED33371}.Release|x64.ActiveCfg = Release|x64
+		{3EAD47A2-0701-4528-9309-6B7FDED33371}.Release|x64.Build.0 = Release|x64
+		{3EAD47A2-0701-4528-9309-6B7FDED33371}.Release|x86.ActiveCfg = Release|x64
+		{6E6DFC8B-3FE8-42E9-AC75-66214B4CA027}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{6E6DFC8B-3FE8-42E9-AC75-66214B4CA027}.Debug|x64.ActiveCfg = Debug|x64
+		{6E6DFC8B-3FE8-42E9-AC75-66214B4CA027}.Debug|x64.Build.0 = Debug|x64
+		{6E6DFC8B-3FE8-42E9-AC75-66214B4CA027}.Debug|x86.ActiveCfg = Debug|x64
+		{6E6DFC8B-3FE8-42E9-AC75-66214B4CA027}.Release|Any CPU.ActiveCfg = Release|x64
+		{6E6DFC8B-3FE8-42E9-AC75-66214B4CA027}.Release|x64.ActiveCfg = Release|x64
+		{6E6DFC8B-3FE8-42E9-AC75-66214B4CA027}.Release|x64.Build.0 = Release|x64
+		{6E6DFC8B-3FE8-42E9-AC75-66214B4CA027}.Release|x86.ActiveCfg = Release|x64
+		{9FAC1690-1537-4085-AA0B-3190DFAAF249}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{9FAC1690-1537-4085-AA0B-3190DFAAF249}.Debug|x64.ActiveCfg = Debug|x64
+		{9FAC1690-1537-4085-AA0B-3190DFAAF249}.Debug|x64.Build.0 = Debug|x64
+		{9FAC1690-1537-4085-AA0B-3190DFAAF249}.Debug|x86.ActiveCfg = Debug|x64
+		{9FAC1690-1537-4085-AA0B-3190DFAAF249}.Release|Any CPU.ActiveCfg = Release|x64
+		{9FAC1690-1537-4085-AA0B-3190DFAAF249}.Release|x64.ActiveCfg = Release|x64
+		{9FAC1690-1537-4085-AA0B-3190DFAAF249}.Release|x64.Build.0 = Release|x64
+		{9FAC1690-1537-4085-AA0B-3190DFAAF249}.Release|x86.ActiveCfg = Release|x64
+		{1F88B967-8190-4C06-94B0-1481010CC97C}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{1F88B967-8190-4C06-94B0-1481010CC97C}.Debug|x64.ActiveCfg = Debug|x64
+		{1F88B967-8190-4C06-94B0-1481010CC97C}.Debug|x64.Build.0 = Debug|x64
+		{1F88B967-8190-4C06-94B0-1481010CC97C}.Debug|x86.ActiveCfg = Debug|x64
+		{1F88B967-8190-4C06-94B0-1481010CC97C}.Release|Any CPU.ActiveCfg = Release|x64
+		{1F88B967-8190-4C06-94B0-1481010CC97C}.Release|x64.ActiveCfg = Release|x64
+		{1F88B967-8190-4C06-94B0-1481010CC97C}.Release|x64.Build.0 = Release|x64
+		{1F88B967-8190-4C06-94B0-1481010CC97C}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

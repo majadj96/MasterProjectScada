@@ -29,10 +29,14 @@
     <None Include="Scripts\Deploy-FabricApplication.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <ProjectReference Include="..\CalculationEngine\CalculationEngine.csproj" />
+    <ProjectReference Include="..\CommandingManagementService\CommandingManagementService.csproj" />
+    <ProjectReference Include="..\DynamicDataProccessorService\DynamicDataProccessorService.csproj" />
+    <ProjectReference Include="..\ScadaModelManagementService\ScadaModelManagementService.csproj" />
+    <ProjectReference Include="..\StateUpdaterService\StateUpdaterService.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CalculationEngine\CalculationEngine.csproj" />
+    <Content Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
   <PropertyGroup>

@@ -1,6 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="ServiceFabricAppType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
+    <Parameter Name="CommandingManagementService_InstanceCount" DefaultValue="-1" />
+    <Parameter Name="ScadaModelManagementService_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="ScadaModelManagementService_PartitionCount" DefaultValue="1" />
+    <Parameter Name="ScadaModelManagementService_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="StateUpdaterService_InstanceCount" DefaultValue="-1" />
+    <Parameter Name="DynamicDataProccessorService_InstanceCount" DefaultValue="-1" />
     <Parameter Name="CalculationEngine_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="CalculationEngine_PartitionCount" DefaultValue="1" />
     <Parameter Name="CalculationEngine_TargetReplicaSetSize" DefaultValue="3" />
@@ -8,6 +14,22 @@
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
        ServiceManifest.xml file. -->
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="CommandingManagementServicePkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="ScadaModelManagementServicePkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="StateUpdaterServicePkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="DynamicDataProccessorServicePkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
   <ServiceManifestImport>
     <ServiceManifestRef ServiceManifestName="CalculationEnginePkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides />
@@ -18,6 +40,26 @@
          ServiceFabric PowerShell module.
          
          The attribute ServiceTypeName below must match the name defined in the imported ServiceManifest.xml file. -->
+    <Service Name="CommandingManagementService" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="CommandingManagementServiceType" InstanceCount="[CommandingManagementService_InstanceCount]">
+        <SingletonPartition />
+      </StatelessService>
+    </Service>
+    <Service Name="ScadaModelManagementService" ServicePackageActivationMode="ExclusiveProcess">
+      <StatefulService ServiceTypeName="ScadaModelManagementServiceType" TargetReplicaSetSize="[ScadaModelManagementService_TargetReplicaSetSize]" MinReplicaSetSize="[ScadaModelManagementService_MinReplicaSetSize]">
+        <UniformInt64Partition PartitionCount="[ScadaModelManagementService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+      </StatefulService>
+    </Service>
+    <Service Name="StateUpdaterService" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="StateUpdaterServiceType" InstanceCount="[StateUpdaterService_InstanceCount]">
+        <SingletonPartition />
+      </StatelessService>
+    </Service>
+    <Service Name="DynamicDataProccessorService" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="DynamicDataProccessorServiceType" InstanceCount="[DynamicDataProccessorService_InstanceCount]">
+        <SingletonPartition />
+      </StatelessService>
+    </Service>
     <Service Name="CalculationEngine" ServicePackageActivationMode="ExclusiveProcess">
       <StatefulService ServiceTypeName="CalculationEngineType" TargetReplicaSetSize="[CalculationEngine_TargetReplicaSetSize]" MinReplicaSetSize="[CalculationEngine_MinReplicaSetSize]">
         <UniformInt64Partition PartitionCount="[CalculationEngine_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
