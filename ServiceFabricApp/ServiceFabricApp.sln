@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataModel", "DataModel\Data
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkModelService", "NetworkModelService\NetworkModelService.csproj", "{9E1F98EF-25D5-465E-9ADF-EA027C7FF34D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotifyNMSService", "NotifyNMSService\NotifyNMSService.csproj", "{D6545646-77AA-4813-9B72-B28911B9E715}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,6 +117,14 @@ Global
 		{9E1F98EF-25D5-465E-9ADF-EA027C7FF34D}.Release|x64.ActiveCfg = Release|x64
 		{9E1F98EF-25D5-465E-9ADF-EA027C7FF34D}.Release|x64.Build.0 = Release|x64
 		{9E1F98EF-25D5-465E-9ADF-EA027C7FF34D}.Release|x86.ActiveCfg = Release|x64
+		{D6545646-77AA-4813-9B72-B28911B9E715}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{D6545646-77AA-4813-9B72-B28911B9E715}.Debug|x64.ActiveCfg = Debug|x64
+		{D6545646-77AA-4813-9B72-B28911B9E715}.Debug|x64.Build.0 = Debug|x64
+		{D6545646-77AA-4813-9B72-B28911B9E715}.Debug|x86.ActiveCfg = Debug|x64
+		{D6545646-77AA-4813-9B72-B28911B9E715}.Release|Any CPU.ActiveCfg = Release|x64
+		{D6545646-77AA-4813-9B72-B28911B9E715}.Release|x64.ActiveCfg = Release|x64
+		{D6545646-77AA-4813-9B72-B28911B9E715}.Release|x64.Build.0 = Release|x64
+		{D6545646-77AA-4813-9B72-B28911B9E715}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -34,6 +34,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CalculationEngine\CalculationEngine.csproj" />
     <ProjectReference Include="..\NetworkModelService\NetworkModelService.csproj" />
+    <ProjectReference Include="..\NotifyNMSService\NotifyNMSService.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
   <PropertyGroup>

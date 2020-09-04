@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,6 +50,7 @@
     <Compile Include="Core\PowerSystemResource.cs" />
     <Compile Include="Core\Substation.cs" />
     <Compile Include="Core\Terminal.cs" />
+    <Compile Include="IGetResourceDescriptions.cs" />
     <Compile Include="Meas\Analog.cs" />
     <Compile Include="Meas\Discrete.cs" />
     <Compile Include="Meas\Measurement.cs" />

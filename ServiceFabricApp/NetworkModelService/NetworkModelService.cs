@@ -1,35 +1,84 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Fabric;
+using System.Fabric.Description;
+using System.Globalization;
 using System.Linq;
+using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.GDA;
+using DataModel;
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
+using Microsoft.ServiceFabric.Services.Communication.Wcf.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
+using TransactionManagerContracts;
 
 namespace NetworkModelService
 {
 	/// <summary>
 	/// An instance of this class is created for each service replica by the Service Fabric runtime.
 	/// </summary>
-	internal sealed class NetworkModelService : StatefulService
+	internal sealed class NetworkModelService : StatefulService, IModelUpdateContract
 	{
+        private NetworkModel nm = null;
 		public NetworkModelService(StatefulServiceContext context)
 			: base(context)
-		{ }
-
-		/// <summary>
-		/// Optional override to create listeners (e.g., HTTP, Service Remoting, WCF, etc.) for this service replica to handle client or user requests.
-		/// </summary>
-		/// <remarks>
-		/// For more information on service communication, see https://aka.ms/servicefabricservicecommunication
-		/// </remarks>
-		/// <returns>A collection of listeners.</returns>
-		protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners()
 		{
-			return new ServiceReplicaListener[0];
-		}
+            nm = new NetworkModel();
+        }
+
+        public UpdateResult UpdateModel(Delta delta)
+        {
+            return nm.UpdateModel(delta);
+        }
+
+        /// <summary>
+        /// Optional override to create listeners (e.g., HTTP, Service Remoting, WCF, etc.) for this service replica to handle client or user requests.
+        /// </summary>
+        /// <remarks>
+        /// For more information on service communication, see https://aka.ms/servicefabricservicecommunication
+        /// </remarks>
+        /// <returns>A collection of listeners.</returns>
+        protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners()
+		{
+            return new[] { new ServiceReplicaListener((context) =>
+                {
+                    string host = host = context.NodeContext.IPAddressOrFQDN;
+
+                    EndpointResourceDescription endpointConfig = context.CodePackageActivationContext.GetEndpoint("ModelUpdateEndpoint");
+                    int port = endpointConfig.Port;
+                    string scheme = endpointConfig.Protocol.ToString();
+                    string uri = string.Format(CultureInfo.InvariantCulture, "{0}://{1}:{2}/ModelUpdateNMS", "net.tcp", host, port);
+
+                    var listener = new WcfCommunicationListener<IModelUpdateContract>(
+                        wcfServiceObject: this,
+                        serviceContext: context,
+                        listenerBinding: new NetTcpBinding(SecurityMode.None),
+                        address: new EndpointAddress(uri)
+                    );
+                    return listener;
+                }, name: "ModelUpdateNMS"),
+                new ServiceReplicaListener((context) =>
+                {
+                    string host = host = context.NodeContext.IPAddressOrFQDN;
+
+                    EndpointResourceDescription endpointConfig = context.CodePackageActivationContext.GetEndpoint("GetResourceDescsEndpoint");
+                    int port = endpointConfig.Port;
+                    string scheme = endpointConfig.Protocol.ToString();
+                    string uri = string.Format(CultureInfo.InvariantCulture, "{0}://{1}:{2}/GetResourceDescs", "net.tcp", host, port);
+
+                    var listener = new WcfCommunicationListener<IGetResourceDescriptions>(
+                        wcfServiceObject: this.nm,
+                        serviceContext: context,
+                        listenerBinding: new NetTcpBinding(SecurityMode.None),
+                        address: new EndpointAddress(uri)
+                    );
+                    return listener;
+                }, name : "GetResourceDescs")
+            };
+        }
 
 		/// <summary>
 		/// This is the main entry point for your service replica.

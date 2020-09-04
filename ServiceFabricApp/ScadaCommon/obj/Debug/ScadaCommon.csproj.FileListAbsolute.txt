@@ -24,3 +24,4 @@ C:\Users\Bosa\Desktop\service-fabric-branch\MasterProjectScada\ServiceFabricApp\
 C:\Users\Bosa\Desktop\service-fabric-branch\MasterProjectScada\ServiceFabricApp\ScadaCommon\obj\Debug\ScadaCommon.csproj.CopyComplete
 C:\Users\Bosa\Desktop\service-fabric-branch\MasterProjectScada\ServiceFabricApp\ScadaCommon\obj\Debug\ScadaCommon.dll
 C:\Users\Bosa\Desktop\service-fabric-branch\MasterProjectScada\ServiceFabricApp\ScadaCommon\obj\Debug\ScadaCommon.pdb
+C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\ScadaCommon\obj\Debug\ScadaCommon.csprojAssemblyReference.cache
