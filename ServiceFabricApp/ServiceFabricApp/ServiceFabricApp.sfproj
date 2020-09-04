@@ -33,6 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CalculationEngine\CalculationEngine.csproj" />
+    <ProjectReference Include="..\NetworkModelService\NetworkModelService.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
   <PropertyGroup>
