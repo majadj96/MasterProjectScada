@@ -73,13 +73,13 @@ namespace NetworkModelService
 
         #region Find
 
-        public bool EntityExists(long globalId)
+        public async Task<bool> EntityExists(long globalId)
         {
             DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(globalId);
 
-            if (ContainerExists(type))
+            if (await ContainerExists(type))
             {
-                Container container = GetContainer(type);
+                Container container = await GetContainer(type);
 
                 if (container.EntityExists(globalId))
                 {
@@ -90,13 +90,13 @@ namespace NetworkModelService
             return false;
         }
 
-        public bool EntityExistsCopy(long globalId)
+        public async Task<bool> EntityExistsCopy(long globalId)
         {
             DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(globalId);
 
-            if (ContainerExistsCopy(type))
+            if (await ContainerExistsCopy(type))
             {
-                Container container = GetContainerCopy(type);
+                Container container = await GetContainerCopy(type);
 
                 if (container.EntityExists(globalId))
                 {
@@ -107,9 +107,9 @@ namespace NetworkModelService
             return false;
         }
 
-        private bool ContainerExistsCopy(DMSType type)
+        private async Task<bool> ContainerExistsCopy(DMSType type)
         {
-            if(GetContainerFromModel(type, "networkDataModelCopy").Result != null)
+            if(await GetContainerFromModel(type, "networkDataModelCopy") != null)
             {
                 return true;
             }
@@ -126,12 +126,12 @@ namespace NetworkModelService
             return false;
         }
 
-        public IdentifiedObject GetEntity(long globalId)
+        public async Task<IdentifiedObject> GetEntity(long globalId)
         {
-            if (EntityExists(globalId))
+            if (await EntityExists(globalId))
             {
                 DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(globalId);
-                IdentifiedObject io = GetContainer(type).GetEntity(globalId);
+                IdentifiedObject io = (await GetContainer(type)).GetEntity(globalId);
 
                 return io;
             }
@@ -142,12 +142,12 @@ namespace NetworkModelService
             }
         }
 
-        public IdentifiedObject GetEntityCopy(long globalId)
+        public async Task<IdentifiedObject> GetEntityCopy(long globalId)
         {
-            if (EntityExistsCopy(globalId))
+            if (await EntityExistsCopy(globalId))
             {
                 DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(globalId);
-                IdentifiedObject io = GetContainerCopy(type).GetEntity(globalId);
+                IdentifiedObject io = (await GetContainerCopy(type)).GetEntity(globalId);
 
                 return io;
             }
@@ -164,21 +164,21 @@ namespace NetworkModelService
         /// </summary>
         /// <param name="type">Type of container.</param>
         /// <returns>True if container exists, otherwise FALSE.</returns>
-        private bool ContainerExists(DMSType type)
+        private async Task<bool> ContainerExists(DMSType type)
         {
-            if(GetContainerFromModel(type, "networkDataModel") != null)
+            if((await GetContainerFromModel(type, "networkDataModel")) != null)
             {
                 return true;
             }
 
             return false;
 
-            if (networkDataModel.ContainsKey(type))
-            {
-                return true;
-            }
+            //if (networkDataModel.ContainsKey(type))
+            //{
+            //    return true;
+            //}
 
-            return false;
+            //return false;
         }
 
         /// <summary>
@@ -186,9 +186,9 @@ namespace NetworkModelService
         /// </summary>
         /// <param name="type">Type of container.</param>
         /// <returns>Container for specified local id</returns>
-        private Container GetContainer(DMSType type)
+        private async Task<Container> GetContainer(DMSType type)
         {
-            Container cont = GetContainerFromModel(type, "networkDataModel").Result;
+            Container cont = await GetContainerFromModel(type, "networkDataModel");
 
             if(cont != null)
             {
@@ -200,20 +200,20 @@ namespace NetworkModelService
                 throw new Exception(message);
             }
 
-            if (ContainerExists(type))
-            {
-                return networkDataModel[type];
-            }
-            else
-            {
-                string message = string.Format("Container does not exist for type {0}.", type);
-                throw new Exception(message);
-            }
+            //if (ContainerExists(type))
+            //{
+            //    return networkDataModel[type];
+            //}
+            //else
+            //{
+            //    string message = string.Format("Container does not exist for type {0}.", type);
+            //    throw new Exception(message);
+            //}
         }
 
-        private Container GetContainerCopy(DMSType type)
+        private async Task<Container> GetContainerCopy(DMSType type)
         {
-            Container cont = GetContainerFromModel(type, "networkDataModelCopy").Result;
+            Container cont = await GetContainerFromModel(type, "networkDataModelCopy");
 
             if(cont != null)
             {
@@ -225,16 +225,15 @@ namespace NetworkModelService
                 throw new Exception(message);
             }
 
-            if (ContainerExistsCopy(type))
-            {
-                return networkDataModelCopy[type];
-            }
-            else
-            {
-                string message = string.Format("Container does not exist for type {0}.", type);
-                throw new Exception(message);
-            }
-
+            //if (ContainerExistsCopy(type))
+            //{
+            //    return networkDataModelCopy[type];
+            //}
+            //else
+            //{
+            //    string message = string.Format("Container does not exist for type {0}.", type);
+            //    throw new Exception(message);
+            //}
         }
 
         #endregion Find
@@ -242,13 +241,16 @@ namespace NetworkModelService
         public List<ResourceDescription> GetResourceDescriptions()
         {
             List<ResourceDescription> retVal = new List<ResourceDescription>();
-            List<long> gids = RetrieveAllGIDs().Result;
+            List<long> gids = new List<long>();
+
+            Task.Run(async () => gids = await RetrieveAllGIDs()).Wait();
 
             try
             {
                 foreach (long gid in gids)
                 {
-                    IdentifiedObject io = GetEntity(gid);
+                    IdentifiedObject io = null;
+                    Task.Run(async () => io = await GetEntity(gid)).Wait();
 
                     ResourceDescription rd = new ResourceDescription(gid);
 
@@ -273,7 +275,7 @@ namespace NetworkModelService
             return retVal;
         }
 
-        public UpdateResult ApplyDelta(Delta delta)
+        public async Task<UpdateResult> ApplyDelta(Delta delta)
         {
             bool applyingStarted = false;
             UpdateResult updateResult = new UpdateResult();
@@ -282,7 +284,7 @@ namespace NetworkModelService
             {
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Applying  delta to network model.");
 
-                Dictionary<short, int> typesCounters = GetCounters();
+                Dictionary<short, int> typesCounters = await GetCounters();
                 Dictionary<long, long> globalIdPairs = new Dictionary<long, long>();
                 delta.FixNegativeToPositiveIds(ref typesCounters, ref globalIdPairs);
                 updateResult.GlobalIdPairs = globalIdPairs;
@@ -292,7 +294,7 @@ namespace NetworkModelService
 
                 foreach (ResourceDescription rd in delta.InsertOperations)
                 {
-                    InsertEntity(rd);
+                    await InsertEntity(rd);
                 }
 
                 foreach (ResourceDescription rd in delta.UpdateOperations)
@@ -336,7 +338,7 @@ namespace NetworkModelService
         /// Inserts entity into the network model.
         /// </summary>
         /// <param name="rd">Description of the resource that should be inserted</param>        
-		private void InsertEntity(ResourceDescription rd)
+		private async Task InsertEntity(ResourceDescription rd)
         {
             if (rd == null)
             {
@@ -349,7 +351,7 @@ namespace NetworkModelService
             CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Inserting entity with GID ({0:x16}).", globalId);
 
             // check if mapping for specified global id already exists			
-            if (this.EntityExistsCopy(globalId))
+            if (await this.EntityExistsCopy(globalId))
             {
                 string message = String.Format("Failed to insert entity because entity with specified GID ({0:x16}) already exists in network model.", globalId);
                 CommonTrace.WriteTrace(CommonTrace.TraceError, message);
@@ -364,9 +366,9 @@ namespace NetworkModelService
                 Container container = null;
 
                 // get container or create container 
-                if (ContainerExistsCopy(type))
+                if (await ContainerExistsCopy(type))
                 {
-                    container = GetContainerCopy(type);
+                    container = await GetContainerCopy(type);
                 }
                 else
                 {
@@ -397,14 +399,14 @@ namespace NetworkModelService
                             if (targetGlobalId != 0)
                             {
 
-                                if (!EntityExistsCopy(targetGlobalId))
+                                if (!(await EntityExistsCopy(targetGlobalId)))
                                 {
                                     string message = string.Format("Failed to get target entity with GID: 0x{0:X16}. {0}", targetGlobalId);
                                     throw new Exception(message);
                                 }
 
                                 // get referenced entity for update
-                                IdentifiedObject targetEntity = GetEntityCopy(targetGlobalId);
+                                IdentifiedObject targetEntity = await GetEntityCopy(targetGlobalId);
                                 
                                 targetEntity.AddReference(property.Id, io.GID);                                
                             }
@@ -432,7 +434,7 @@ namespace NetworkModelService
         /// Updates entity in block model.
         /// </summary>
         /// <param name="rd">Description of the resource that should be updated</param>		
-        private void UpdateEntity(ResourceDescription rd)
+        private async void UpdateEntity(ResourceDescription rd)
         {
             if (rd == null || rd.Properties == null && rd.Properties.Count == 0)
             {
@@ -446,14 +448,14 @@ namespace NetworkModelService
 
                 CommonTrace.WriteTrace(CommonTrace.TraceVerbose, "Updating entity with GID ({0:x16}).", globalId);
 
-                if (!this.EntityExistsCopy(globalId))
+                if (!await this.EntityExistsCopy(globalId))
                 {
                     string message = String.Format("Failed to update entity because entity with specified GID ({0:x16}) does not exist in network model.", globalId);
                     CommonTrace.WriteTrace(CommonTrace.TraceError, message);
                     throw new Exception(message);
                 }
 
-                IdentifiedObject io = GetEntityCopy(globalId);
+                IdentifiedObject io = await GetEntityCopy(globalId);
 
                 // updating properties of entity
                 foreach (Property property in rd.Properties)
@@ -464,7 +466,7 @@ namespace NetworkModelService
 
                         if (oldTargetGlobalId != 0)
                         {
-                            IdentifiedObject oldTargetEntity = GetEntityCopy(oldTargetGlobalId);
+                            IdentifiedObject oldTargetEntity = await GetEntityCopy(oldTargetGlobalId);
                             oldTargetEntity.RemoveReference(property.Id, globalId);
                         }
 
@@ -473,13 +475,13 @@ namespace NetworkModelService
 
                         if (targetGlobalId != 0)
                         {
-                            if (!EntityExistsCopy(targetGlobalId))
+                            if (!await EntityExistsCopy(targetGlobalId))
                             {
                                 string message = string.Format("Failed to get target entity with GID: 0x{0:X16}.", targetGlobalId);
                                 throw new Exception(message);
                             }
 
-                            IdentifiedObject targetEntity = GetEntityCopy(targetGlobalId);
+                            IdentifiedObject targetEntity = await GetEntityCopy(targetGlobalId);
                             targetEntity.AddReference(property.Id, globalId);
                         }
 
@@ -507,7 +509,7 @@ namespace NetworkModelService
         /// Deletes resource from the netowrk model.
         /// </summary>
         /// <param name="rd">Description of the resource that should be deleted</param>		
-        private void DeleteEntity(ResourceDescription rd)
+        private async void DeleteEntity(ResourceDescription rd)
         {
             if (rd == null)
             {
@@ -522,7 +524,7 @@ namespace NetworkModelService
                 CommonTrace.WriteTrace(CommonTrace.TraceVerbose, "Deleting entity with GID ({0:x16}).", globalId);
 
                 // check if entity exists
-                if (!this.EntityExistsCopy(globalId))
+                if (!await this.EntityExistsCopy(globalId))
                 {
                     string message = String.Format("Failed to delete entity because entity with specified GID ({0:x16}) does not exist in network model.", globalId);
                     CommonTrace.WriteTrace(CommonTrace.TraceError, message);
@@ -530,7 +532,7 @@ namespace NetworkModelService
                 }
 
                 // get entity to be deleted
-                IdentifiedObject io = GetEntityCopy(globalId);
+                IdentifiedObject io = await GetEntityCopy(globalId);
 
                 // check if entity could be deleted (if it is not referenced by any other entity)
                 if (io.IsReferenced)
@@ -575,7 +577,7 @@ namespace NetworkModelService
                             if (targetGlobalId != 0)
                             {
                                 // get target entity
-                                IdentifiedObject targetEntity = GetEntityCopy(targetGlobalId);
+                                IdentifiedObject targetEntity = await GetEntityCopy(targetGlobalId);
 
                                 // remove reference to another entity
                                 targetEntity.RemoveReference(propertyId, globalId);
@@ -586,7 +588,7 @@ namespace NetworkModelService
 
               // remove entity form netowrk model
               DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(globalId);
-                Container container = GetContainerCopy(type);
+                Container container = await GetContainerCopy(type);
                 container.RemoveEntity(globalId);
 
                 CommonTrace.WriteTrace(CommonTrace.TraceVerbose, "Deleting entity with GID ({0:x16}) successfully finished.", globalId);
@@ -605,60 +607,60 @@ namespace NetworkModelService
         /// <param name="source">source id</param>		
         /// <param name="association">desinition of association</param>
         /// <returns>related gids</returns>
-        private List<long> ApplyAssocioationOnSource(long source, Association association)
-        {
-            List<long> relatedGids = new List<long>();
+        //private List<long> ApplyAssocioationOnSource(long source, Association association)
+        //{
+        //    List<long> relatedGids = new List<long>();
 
-            if (association == null)
-            {
-                association = new Association();
-            }
+        //    if (association == null)
+        //    {
+        //        association = new Association();
+        //    }
 
-            IdentifiedObject io = GetEntity(source);
+        //    IdentifiedObject io = GetEntity(source);
 
-            if (!io.HasProperty(association.PropertyId))
-            {
-                throw new Exception(string.Format("Entity with GID = 0x{0:x16} does not contain prperty with Id = {1}.", source, association.PropertyId));
-            }
+        //    if (!io.HasProperty(association.PropertyId))
+        //    {
+        //        throw new Exception(string.Format("Entity with GID = 0x{0:x16} does not contain prperty with Id = {1}.", source, association.PropertyId));
+        //    }
 
-            Property propertyRef = null;
+        //    Property propertyRef = null;
 
-            if (Property.GetPropertyType(association.PropertyId) == PropertyType.Reference)
-            {
-                propertyRef = io.GetProperty(association.PropertyId);
-                long relatedGidFromProperty = propertyRef.AsReference();
+        //    if (Property.GetPropertyType(association.PropertyId) == PropertyType.Reference)
+        //    {
+        //        propertyRef = io.GetProperty(association.PropertyId);
+        //        long relatedGidFromProperty = propertyRef.AsReference();
 
-                if (relatedGidFromProperty != 0)
-                {
-                    if (association.Type == 0 || (short)ModelCodeHelper.GetTypeFromModelCode(association.Type) == ModelCodeHelper.ExtractTypeFromGlobalId(relatedGidFromProperty))
-                    {
-                        relatedGids.Add(relatedGidFromProperty);
-                    }
-                }
-            }
-            else if (Property.GetPropertyType(association.PropertyId) == PropertyType.ReferenceVector)
-            {
-                propertyRef = io.GetProperty(association.PropertyId);
-                List<long> relatedGidsFromProperty = propertyRef.AsReferences();
+        //        if (relatedGidFromProperty != 0)
+        //        {
+        //            if (association.Type == 0 || (short)ModelCodeHelper.GetTypeFromModelCode(association.Type) == ModelCodeHelper.ExtractTypeFromGlobalId(relatedGidFromProperty))
+        //            {
+        //                relatedGids.Add(relatedGidFromProperty);
+        //            }
+        //        }
+        //    }
+        //    else if (Property.GetPropertyType(association.PropertyId) == PropertyType.ReferenceVector)
+        //    {
+        //        propertyRef = io.GetProperty(association.PropertyId);
+        //        List<long> relatedGidsFromProperty = propertyRef.AsReferences();
 
-                if (relatedGidsFromProperty != null)
-                {
-                    foreach (long relatedGidFromProperty in relatedGidsFromProperty)
-                    {
-                        if (association.Type == 0 || (short)ModelCodeHelper.GetTypeFromModelCode(association.Type) == ModelCodeHelper.ExtractTypeFromGlobalId(relatedGidFromProperty))
-                        {
-                            relatedGids.Add(relatedGidFromProperty);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                throw new Exception(string.Format("Association propertyId = {0} is not reference or reference vector type.", association.PropertyId));
-            }
+        //        if (relatedGidsFromProperty != null)
+        //        {
+        //            foreach (long relatedGidFromProperty in relatedGidsFromProperty)
+        //            {
+        //                if (association.Type == 0 || (short)ModelCodeHelper.GetTypeFromModelCode(association.Type) == ModelCodeHelper.ExtractTypeFromGlobalId(relatedGidFromProperty))
+        //                {
+        //                    relatedGids.Add(relatedGidFromProperty);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        throw new Exception(string.Format("Association propertyId = {0} is not reference or reference vector type.", association.PropertyId));
+        //    }
 
-            return relatedGids;
-        }
+        //    return relatedGids;
+        //}
 
         private void Initialize()
         {
@@ -770,7 +772,7 @@ namespace NetworkModelService
             return result;
         }
 
-        private Dictionary<short, int> GetCounters()
+        private async Task<Dictionary<short, int>> GetCounters()
         {
             Dictionary<short, int> typesCounters = new Dictionary<short, int>();
 
@@ -778,9 +780,9 @@ namespace NetworkModelService
             {
                 typesCounters[(short)type] = 0;
 
-                if (ModelContainsKey(type, "networkDataModelCopy").Result)
+                if (await ModelContainsKey(type, "networkDataModelCopy"))
                 {
-                    typesCounters[(short)type] = GetContainerCopy(type).Count;
+                    typesCounters[(short)type] = (await GetContainerCopy(type)).Count;
                 }
 
                 //if (networkDataModelCopy.ContainsKey(type))
@@ -873,9 +875,9 @@ namespace NetworkModelService
             //networkModel = networkModelCopy;
             //ClearDict("networkDataModelCopy");
 
-            CopyDataModel("networkDataModel", "networkDataModelOld");
-            CopyDataModel("networkDataModelCopy", "networkDataModel");
-            ClearDict("networkDataModelCopy");
+            Task.Run(async () => await CopyDataModel("networkDataModel", "networkDataModelOld")).Wait();
+            Task.Run(async () => await CopyDataModel("networkDataModelCopy", "networkDataModel")).Wait();
+            Task.Run(async () => await ClearDict("networkDataModelCopy")).Wait();
 
             networkDataModelOld = new Dictionary<DMSType, Container>(networkDataModel);
             networkDataModel = new Dictionary<DMSType, Container>(networkDataModelCopy);
@@ -886,7 +888,7 @@ namespace NetworkModelService
             return true;
         }
 
-        private async void ClearDict(string dictName)
+        private async Task ClearDict(string dictName)
         {
             IReliableDictionary<short, Container> networkModel = await GetDataModel(dictName);
 
@@ -904,9 +906,9 @@ namespace NetworkModelService
 
             //networkModel = networkModelOld;
 
-            CopyDataModel("networkDataModelOld", "networkDataModel");
+            Task.Run(async () => await CopyDataModel("networkDataModelOld", "networkDataModel")).Wait();
+            Task.Run(async () => await ClearDict("networkDataModelCopy")).Wait();
             //networkModelCopy.ClearAsync();
-            ClearDict("networkDataModelCopy");
 
             networkDataModel = new Dictionary<DMSType, Container>(networkDataModelOld);
             networkDataModelCopy.Clear();
@@ -928,14 +930,14 @@ namespace NetworkModelService
         {
             Console.WriteLine("Update model invoked");
             ServiceEventSource.Current.Message("Update model invoked.");
-
-            UpdateResult result = ApplyDelta(delta);
+            UpdateResult result = null;
+            Task.Run(async () => result = await ApplyDelta(delta)).Wait();
 
             //IReliableDictionary<short, Container> networkModel = GetDataModel("networkDataModel").Result;
             //IReliableDictionary<short, Container> networkModelOld = GetDataModel("networkDataModelOld").Result;
 
             //networkModelOld = networkModel;
-            CopyDataModel("networkDataModel", "networkDataModelOld");
+            Task.Run(async () => await CopyDataModel("networkDataModel", "networkDataModelOld")).Wait();
 
             networkDataModelOld = new Dictionary<DMSType, Container>(networkDataModel);
 
@@ -977,7 +979,7 @@ namespace NetworkModelService
             return result;
         }
 
-        private async void CopyDataModel(string sourceDictName, string destDictName)
+        private async Task CopyDataModel(string sourceDictName, string destDictName)
         {
             var sourceDataModel = await GetDataModel(sourceDictName);
             var destinationDataModel = await GetDataModel(destDictName);
