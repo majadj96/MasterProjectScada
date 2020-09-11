@@ -7,6 +7,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
+using Common;
 using Common.GDA;
 using DataModel;
 using Microsoft.ServiceFabric.Data.Collections;
@@ -26,7 +27,7 @@ namespace NetworkModelService
 		public NetworkModelService(StatefulServiceContext context)
 			: base(context)
 		{
-            nm = new NetworkModel();
+            nm = new NetworkModel(this.StateManager);
         }
 
         public UpdateResult UpdateModel(Delta delta)
@@ -89,26 +90,32 @@ namespace NetworkModelService
 		{
 			// TODO: Replace the following sample code with your own logic 
 			//       or remove this RunAsync override if it's not needed in your service.
-
-			var myDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, long>>("myDictionary");
+            
+			var m = await this.StateManager.GetOrAddAsync<IReliableDictionary<short, Container>>("networkDataModel");
+			var m2 = await this.StateManager.GetOrAddAsync<IReliableDictionary<short, Container>>("networkDataModelCopy");
+			var m3 = await this.StateManager.GetOrAddAsync<IReliableDictionary<short, Container>>("networkDataModelOld");
 
 			while (true)
 			{
 				cancellationToken.ThrowIfCancellationRequested();
 
-				using (var tx = this.StateManager.CreateTransaction())
-				{
-					var result = await myDictionary.TryGetValueAsync(tx, "Counter");
+                if(nm.commitFinished)
+                {
+                    m = await this.StateManager.GetOrAddAsync<IReliableDictionary<short, Container>>("networkDataModel");
+                    m2 = await this.StateManager.GetOrAddAsync<IReliableDictionary<short, Container>>("networkDataModelCopy");
+                    m3 = await this.StateManager.GetOrAddAsync<IReliableDictionary<short, Container>>("networkDataModelOld");
 
-					ServiceEventSource.Current.ServiceMessage(this.Context, "Current Counter Value: {0}",
-						result.HasValue ? result.Value.ToString() : "Value does not exist.");
+                    using (var tx = this.StateManager.CreateTransaction())
+                    {
+                        var enumerable = await m.CreateEnumerableAsync(tx);
+                        var asyncEnumerator = enumerable.GetAsyncEnumerator();
 
-					await myDictionary.AddOrUpdateAsync(tx, "Counter", 0, (key, value) => ++value);
-
-					// If an exception is thrown before calling CommitAsync, the transaction aborts, all changes are 
-					// discarded, and nothing is saved to the secondary replicas.
-					await tx.CommitAsync();
-				}
+                        while (await asyncEnumerator.MoveNextAsync(CancellationToken.None))
+                        {
+                            KeyValuePair<short, Container> item = asyncEnumerator.Current;
+                        }
+                    }
+                }
 
 				await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
 			}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
@@ -9,6 +10,7 @@ using DataModel.Core;
 
 namespace DataModel.Wires
 {
+    [DataContract]
     public class ACLineSegment : Conductor
     {
         public ACLineSegment(long gID) : base(gID)

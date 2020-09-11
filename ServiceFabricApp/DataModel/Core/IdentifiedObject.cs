@@ -3,6 +3,7 @@ using Common.GDA;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,6 +15,7 @@ namespace DataModel.Core
         Target = 2,
         Both = 3,
     }
+    [DataContract]
     public class IdentifiedObject
     {
         /// <summary>
@@ -31,9 +33,13 @@ namespace DataModel.Core
             GID = gID;
         }
 
+        [DataMember]
         public string MRID { get => mRID; set => mRID = value; }
+        [DataMember]
         public string Name { get => name; set => name = value; }
+        [DataMember]
         public string Description { get => description; set => description = value; }
+        [DataMember]
         public long GID { get => gID; set => gID = value; }
 
         public static bool operator ==(IdentifiedObject x, IdentifiedObject y)

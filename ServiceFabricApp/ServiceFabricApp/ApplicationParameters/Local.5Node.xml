@@ -3,8 +3,8 @@
   <Parameters>
     <Parameter Name="NotifyNMSService_InstanceCount" Value="1" />
     <Parameter Name="NetworkModelService_PartitionCount" Value="1" />
-    <Parameter Name="NetworkModelService_MinReplicaSetSize" Value="3" />
-    <Parameter Name="NetworkModelService_TargetReplicaSetSize" Value="3" />
+    <Parameter Name="NetworkModelService_MinReplicaSetSize" Value="1" />
+    <Parameter Name="NetworkModelService_TargetReplicaSetSize" Value="1" />
     <Parameter Name="CalculationEngine_PartitionCount" Value="1" />
     <Parameter Name="CalculationEngine_MinReplicaSetSize" Value="1" />
     <Parameter Name="CalculationEngine_TargetReplicaSetSize" Value="1" />

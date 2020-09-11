@@ -2,12 +2,15 @@
 using Common.GDA;
 using DataModel;
 using DataModel.Core;
+using Microsoft.ServiceFabric.Data;
+using Microsoft.ServiceFabric.Data.Collections;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using TransactionManagerContracts;
@@ -16,6 +19,8 @@ namespace NetworkModelService
 {
     public class NetworkModel : ITransactionSteps, IModelUpdateContract, IGetResourceDescriptions
     {
+        private IReliableStateManager StateManager;
+
         /// <summary>
         /// Dictionary which contains all data: Key - DMSType, Value - Container
         /// </summary>
@@ -35,16 +40,35 @@ namespace NetworkModelService
         /// ModelResourceDesc class contains metadata of the model
         /// </summary>
         private ModelResourcesDesc resourcesDescs;
+        public bool commitFinished = false;
 
         /// <summary>
         /// Initializes a new instance of the Model class.
         /// </summary>
-        public NetworkModel()
+        public NetworkModel(IReliableStateManager stateManager)
         {
+            this.StateManager = stateManager;
+
             networkDataModel = new Dictionary<DMSType, Container>();
             networkDataModelCopy = new Dictionary<DMSType, Container>();
             resourcesDescs = new ModelResourcesDesc();
-            Initialize();
+            //Initialize();
+        }
+
+        private async Task<Container> GetContainerFromModel(DMSType type, string dictName)
+        {
+            var networkModelCopy = await this.StateManager.GetOrAddAsync<IReliableDictionary<short, Container>>(dictName);
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                var result = await networkModelCopy.TryGetValueAsync(tx, (short)type);
+
+                // If an exception is thrown before calling CommitAsync, the transaction aborts, all changes are 
+                // discarded, and nothing is saved to the secondary replicas.
+                await tx.CommitAsync();
+
+                return result.Value;
+            }
         }
 
         #region Find
@@ -85,6 +109,15 @@ namespace NetworkModelService
 
         private bool ContainerExistsCopy(DMSType type)
         {
+            if(GetContainerFromModel(type, "networkDataModelCopy").Result != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
             if (networkDataModelCopy.ContainsKey(type))
             {
                 return true;
@@ -133,6 +166,13 @@ namespace NetworkModelService
         /// <returns>True if container exists, otherwise FALSE.</returns>
         private bool ContainerExists(DMSType type)
         {
+            if(GetContainerFromModel(type, "networkDataModel") != null)
+            {
+                return true;
+            }
+
+            return false;
+
             if (networkDataModel.ContainsKey(type))
             {
                 return true;
@@ -148,6 +188,18 @@ namespace NetworkModelService
         /// <returns>Container for specified local id</returns>
         private Container GetContainer(DMSType type)
         {
+            Container cont = GetContainerFromModel(type, "networkDataModel").Result;
+
+            if(cont != null)
+            {
+                return cont;
+            }
+            else
+            {
+                string message = string.Format("Container does not exist for type {0}.", type);
+                throw new Exception(message);
+            }
+
             if (ContainerExists(type))
             {
                 return networkDataModel[type];
@@ -157,11 +209,22 @@ namespace NetworkModelService
                 string message = string.Format("Container does not exist for type {0}.", type);
                 throw new Exception(message);
             }
-
         }
 
         private Container GetContainerCopy(DMSType type)
         {
+            Container cont = GetContainerFromModel(type, "networkDataModelCopy").Result;
+
+            if(cont != null)
+            {
+                return cont;
+            }
+            else
+            {
+                string message = string.Format("Container does not exist for type {0}.", type);
+                throw new Exception(message);
+            }
+
             if (ContainerExistsCopy(type))
             {
                 return networkDataModelCopy[type];
@@ -179,7 +242,7 @@ namespace NetworkModelService
         public List<ResourceDescription> GetResourceDescriptions()
         {
             List<ResourceDescription> retVal = new List<ResourceDescription>();
-            List<long> gids = RetrieveAllGIDs();
+            List<long> gids = RetrieveAllGIDs().Result;
 
             try
             {
@@ -309,6 +372,7 @@ namespace NetworkModelService
                 {
                     container = new Container();
                     networkDataModelCopy.Add(type, container);
+                    AddContainerToModel(type, container, "networkDataModelCopy");
                 }
 
                 // create entity and add it to container
@@ -714,23 +778,67 @@ namespace NetworkModelService
             {
                 typesCounters[(short)type] = 0;
 
-                if (networkDataModelCopy.ContainsKey(type))
+                if (ModelContainsKey(type, "networkDataModelCopy").Result)
                 {
                     typesCounters[(short)type] = GetContainerCopy(type).Count;
                 }
+
+                //if (networkDataModelCopy.ContainsKey(type))
+                //{
+                //    typesCounters[(short)type] = GetContainerCopy(type).Count;
+                //}
             }
 
             return typesCounters;
         }
 
-        public List<long> RetrieveAllGIDs()
+        private async void AddContainerToModel(DMSType type, Container cont, string dictName)
+        {
+            var networkModel = await this.StateManager.GetOrAddAsync<IReliableDictionary<short, Container>>(dictName);
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                await networkModel.AddAsync(tx, (short)type, cont);
+
+                // If an exception is thrown before calling CommitAsync, the transaction aborts, all changes are 
+                // discarded, and nothing is saved to the secondary replicas.
+                await tx.CommitAsync();
+            }
+        }
+
+        private async Task<bool> ModelContainsKey(DMSType type, string dictName)
+        {
+            var networkModel = await this.StateManager.GetOrAddAsync<IReliableDictionary<short, Container>>(dictName);
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                return await networkModel.ContainsKeyAsync(tx, (short)type);
+            }
+        }
+
+        public async Task<List<long>> RetrieveAllGIDs()
         {
             List<long> retVal = new List<long>();
 
-            foreach (var item in networkDataModel)
+            var networkModel = await this.StateManager.GetOrAddAsync<IReliableDictionary<short, Container>>("networkDataModel");
+
+            using (var tx = this.StateManager.CreateTransaction())
             {
-                retVal.AddRange(item.Value.Entities.Keys);
+                var enumerable = await networkModel.CreateEnumerableAsync(tx);
+                var asyncEnumerator = enumerable.GetAsyncEnumerator();
+
+                while (await asyncEnumerator.MoveNextAsync(CancellationToken.None))
+                {
+                    retVal.AddRange(asyncEnumerator.Current.Value.Entities.Keys);
+                }
             }
+
+            //List<long> retVal = new List<long>();
+
+            //foreach (var item in networkDataModel)
+            //{
+            //    retVal.AddRange(item.Value.Entities.Keys);
+            //}
 
             return retVal;
         }
@@ -747,6 +855,7 @@ namespace NetworkModelService
         public bool Prepare()
         {
             Console.WriteLine("NMS Prepare.");
+            ServiceEventSource.Current.Message("NMS Prepare.");
 
             return true;
         }
@@ -754,58 +863,111 @@ namespace NetworkModelService
         public bool Commit()
         {
             Console.WriteLine("NMS Commit.");
+            ServiceEventSource.Current.Message("NMS Commit.");
+
+            //IReliableDictionary<short, Container> networkModel = GetDataModel("networkDataModel").Result;
+            //IReliableDictionary<short, Container> networkModelCopy = GetDataModel("networkDataModelCopy").Result;
+            //IReliableDictionary<short, Container> networkModelOld = GetDataModel("networkDataModelOld").Result;
+
+            //networkModelOld = networkModel;
+            //networkModel = networkModelCopy;
+            //ClearDict("networkDataModelCopy");
+
+            CopyDataModel("networkDataModel", "networkDataModelOld");
+            CopyDataModel("networkDataModelCopy", "networkDataModel");
+            ClearDict("networkDataModelCopy");
 
             networkDataModelOld = new Dictionary<DMSType, Container>(networkDataModel);
             networkDataModel = new Dictionary<DMSType, Container>(networkDataModelCopy);
             networkDataModelCopy.Clear();
 
+            this.commitFinished = true;
+
             return true;
+        }
+
+        private async void ClearDict(string dictName)
+        {
+            IReliableDictionary<short, Container> networkModel = await GetDataModel(dictName);
+
+            await networkModel.ClearAsync();
         }
 
         public void Rollback()
         {
             Console.WriteLine("NMS Rollback.");
+            ServiceEventSource.Current.Message("NMS Rollback.");
+
+            //IReliableDictionary<short, Container> networkModel = GetDataModel("networkDataModel").Result;
+            //IReliableDictionary<short, Container> networkModelCopy = GetDataModel("networkDataModelCopy").Result;
+            //IReliableDictionary<short, Container> networkModelOld = GetDataModel("networkDataModelOld").Result;
+
+            //networkModel = networkModelOld;
+
+            CopyDataModel("networkDataModelOld", "networkDataModel");
+            //networkModelCopy.ClearAsync();
+            ClearDict("networkDataModelCopy");
 
             networkDataModel = new Dictionary<DMSType, Container>(networkDataModelOld);
             networkDataModelCopy.Clear();
         }
 
+        private async Task<IReliableDictionary<short, Container>> GetDataModel(string dictName)
+        {
+            var ret = await this.StateManager.TryGetAsync<IReliableDictionary<short, Container>>(dictName);
+
+            if(ret.HasValue)
+            {
+                return ret.Value;
+            }
+
+            throw new Exception($"Dictionary <{dictName}> not found");
+        }
+
         public UpdateResult UpdateModel(Delta delta)
         {
             Console.WriteLine("Update model invoked");
+            ServiceEventSource.Current.Message("Update model invoked.");
 
             UpdateResult result = ApplyDelta(delta);
+
+            //IReliableDictionary<short, Container> networkModel = GetDataModel("networkDataModel").Result;
+            //IReliableDictionary<short, Container> networkModelOld = GetDataModel("networkDataModelOld").Result;
+
+            //networkModelOld = networkModel;
+            CopyDataModel("networkDataModel", "networkDataModelOld");
+
             networkDataModelOld = new Dictionary<DMSType, Container>(networkDataModel);
 
             try
             {
                 TMProxy _proxyTM = new TMProxy(this);
                 _proxyTM.Enlist();
+                _proxyTM.EndEnlist(true);
+                //try
+                //{
+                //    ModelUpdateProxy _proxyCE = new ModelUpdateProxy("CE");
+                //    if (_proxyCE.UpdateModel(delta).Result == ResultType.Failed)
+                //    {
+                //        _proxyTM.EndEnlist(false);
+                //        return new UpdateResult() { Result = ResultType.Failed, Message = "CE failed to update model." };
+                //    }
 
-                try
-                {
-                    ModelUpdateProxy _proxyCE = new ModelUpdateProxy("CE");
-                    if (_proxyCE.UpdateModel(delta).Result == ResultType.Failed)
-                    {
-                        _proxyTM.EndEnlist(false);
-                        return new UpdateResult() { Result = ResultType.Failed, Message = "CE failed to update model." };
-                    }
+                //    //SCADA NDS
+                //    ModelUpdateProxy _proxyNDS = new ModelUpdateProxy("NDS");
+                //    if (_proxyNDS.UpdateModel(delta).Result == ResultType.Failed)
+                //    {
+                //        _proxyTM.EndEnlist(false);
+                //        return new UpdateResult() { Result = ResultType.Failed, Message = "NDS failed to update model." };
+                //    }
 
-                    //SCADA NDS
-                    ModelUpdateProxy _proxyNDS = new ModelUpdateProxy("NDS");
-                    if (_proxyNDS.UpdateModel(delta).Result == ResultType.Failed)
-                    {
-                        _proxyTM.EndEnlist(false);
-                        return new UpdateResult() { Result = ResultType.Failed, Message = "NDS failed to update model." };
-                    }
-
-                    _proxyTM.EndEnlist(true);
-                }
-                catch (Exception e)
-                {
-                    _proxyTM.EndEnlist(false);
-                    return new UpdateResult() { Message = e.Message, Result = ResultType.Failed };
-                }
+                //    _proxyTM.EndEnlist(true);
+                //}
+                //catch (Exception e)
+                //{
+                //    _proxyTM.EndEnlist(false);
+                //    return new UpdateResult() { Message = e.Message, Result = ResultType.Failed };
+                //}
             }
             catch (Exception ex)
             {
@@ -813,6 +975,28 @@ namespace NetworkModelService
             }            
 
             return result;
+        }
+
+        private async void CopyDataModel(string sourceDictName, string destDictName)
+        {
+            var sourceDataModel = await GetDataModel(sourceDictName);
+            var destinationDataModel = await GetDataModel(destDictName);
+
+            await destinationDataModel.ClearAsync();
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                var enumerable = await sourceDataModel.CreateEnumerableAsync(tx);
+                var asyncEnumerator = enumerable.GetAsyncEnumerator();
+
+                while (await asyncEnumerator.MoveNextAsync(CancellationToken.None))
+                {
+                    KeyValuePair<short, Container> item = asyncEnumerator.Current;
+                    await destinationDataModel.AddAsync(tx, item.Key, item.Value);
+                }
+
+                await tx.CommitAsync();
+            }
         }
     }
 }

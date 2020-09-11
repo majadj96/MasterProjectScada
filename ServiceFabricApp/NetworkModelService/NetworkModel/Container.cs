@@ -6,11 +6,14 @@ using DataModel.Wires;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace NetworkModelService
 {
+    [DataContract]
+    [KnownType("GetKnownType")]
     public class Container
     {
         /// <summary>
@@ -25,9 +28,29 @@ namespace NetworkModelService
         {
         }
 
+        private static Type[] GetKnownType()
+        {
+            Type[] t = new Type[13];
+            t[0] = typeof(AsynchronousMachine);
+            t[1] = typeof(Substation);
+            t[2] = typeof(Terminal);
+            t[3] = typeof(Analog);
+            t[4] = typeof(Discrete);
+            t[5] = typeof(ConnectivityNode);
+            t[6] = typeof(ACLineSegment);
+            t[7] = typeof(Breaker);
+            t[8] = typeof(Disconnector);
+            t[9] = typeof(PowerTransformer);
+            t[10] = typeof(RatioTapChanger);
+            t[11] = typeof(TransformerWinding);
+            t[12] = typeof(FeederObject);
+            return t;
+        }
+
         /// <summary>
         /// Gets or sets dictionary of entities (identified objects) inside container.
         /// </summary>	
+        [DataMember]
         public Dictionary<long, IdentifiedObject> Entities
         {
             get { return entities; }
@@ -36,7 +59,7 @@ namespace NetworkModelService
 
         /// <summary>
         /// Gets a number of entitis in container
-        /// </summary>		
+        /// </summary>	
         public int Count
         {
             get { return entities.Count; }

@@ -4,11 +4,13 @@ using DataModel.Wires;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DataModel.Core
 {
+    [DataContract]
     public class AsynchronousMachine : RegulatingCondEq
     {
         public AsynchronousMachine(long gID) : base(gID)
@@ -18,7 +20,9 @@ namespace DataModel.Core
         private float cosPhi;
         private float ratedP;
 
+        [DataMember]
         public float CosPhi { get => cosPhi; set => cosPhi = value; }
+        [DataMember]
         public float RatedP { get => ratedP; set => ratedP = value; }
 
         public override bool Equals(object obj)

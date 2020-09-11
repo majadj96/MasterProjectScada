@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
@@ -9,6 +10,7 @@ using DataModel.Core;
 
 namespace DataModel.Wires
 {
+    [DataContract]
     public class RatioTapChanger : TapChanger
     {
         private long transformerWinding = 0;
@@ -17,6 +19,7 @@ namespace DataModel.Wires
         {
         }
 
+        [DataMember]
         public long TransformerWinding { get => transformerWinding; set => transformerWinding = value; }
                 
         public override bool Equals(object obj)

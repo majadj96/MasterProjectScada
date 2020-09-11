@@ -4,11 +4,13 @@ using DataModel.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DataModel.Wires
 {
+    [DataContract]
     public class TapChanger:PowerSystemResource
     {
         private int highStep;
@@ -19,8 +21,11 @@ namespace DataModel.Wires
         {
         }
 
+        [DataMember]
         public int HighStep { get => highStep; set => highStep = value; }
+        [DataMember]
         public int LowStep { get => lowStep; set => lowStep = value; }
+        [DataMember]
         public int NormalStep { get => normalStep; set => normalStep = value; }
         
         public override bool Equals(object obj)

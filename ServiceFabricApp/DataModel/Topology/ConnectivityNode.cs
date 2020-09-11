@@ -4,11 +4,13 @@ using DataModel.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DataModel.Topology
 {
+    [DataContract]
     public class ConnectivityNode : IdentifiedObject
     {
         public ConnectivityNode(long gID) : base(gID)
@@ -18,7 +20,9 @@ namespace DataModel.Topology
         private long connectivityNodeContainer = 0;
         private List<long> terminals = new List<long>();
 
+        [DataMember]
         public long ConnectivityNodeContainer { get => connectivityNodeContainer; set => connectivityNodeContainer = value; }
+        [DataMember]
         public List<long> Terminals { get => terminals; set => terminals = value; }
 
         public override bool Equals(object obj)

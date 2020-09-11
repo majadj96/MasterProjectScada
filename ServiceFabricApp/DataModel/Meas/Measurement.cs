@@ -4,11 +4,13 @@ using DataModel.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DataModel.Meas
 {
+    [DataContract]
     public class Measurement : IdentifiedObject
     {
         public Measurement(long gID) : base(gID)
@@ -20,9 +22,13 @@ namespace DataModel.Meas
         private SignalDirection direction;
         private MeasurementType measurementType;
 
+        [DataMember]
         public List<long> Terminals { get => terminals; set => terminals = value; }
+        [DataMember]
         public long PSR { get => pSR; set => pSR = value; }
+        [DataMember]
         public SignalDirection Direction { get => direction; set => direction = value; }
+        [DataMember]
         public MeasurementType MeasurementType { get => measurementType; set => measurementType = value; }
 
         public override bool Equals(object x)

@@ -3,11 +3,13 @@ using Common.GDA;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DataModel.Meas
 {
+    [DataContract]
     public class Analog : Measurement
     {
         public Analog(long gID) : base(gID)
@@ -18,8 +20,11 @@ namespace DataModel.Meas
         private float minValue;
         private float normalValue;
 
+        [DataMember]
         public float MaxValue { get => maxValue; set => maxValue = value; }
+        [DataMember]
         public float MinValue { get => minValue; set => minValue = value; }
+        [DataMember]
         public float NormalValue { get => normalValue; set => normalValue = value; }
 
         public override bool Equals(object obj)

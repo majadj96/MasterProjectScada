@@ -4,11 +4,13 @@ using DataModel.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DataModel.Wires
 {
+    [DataContract]
     public class TransformerWinding : ConductingEquipment
     {
         private long powerTransformer = 0;
@@ -18,7 +20,9 @@ namespace DataModel.Wires
         {
         }
 
+        [DataMember]
         public long PowerTransformer { get => powerTransformer; set => powerTransformer = value; }
+        [DataMember]
         public long RatioTapChanger { get => ratioTapChanger; set => ratioTapChanger = value; }
 
         public override bool Equals(object obj)

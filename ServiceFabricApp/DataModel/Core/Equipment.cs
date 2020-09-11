@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
@@ -8,6 +9,7 @@ using Common.GDA;
 
 namespace DataModel.Core
 {
+    [DataContract]
     public class Equipment : PowerSystemResource
     {
         public Equipment(long gID) : base(gID)
@@ -16,6 +18,7 @@ namespace DataModel.Core
 
         private long equipmentContainer = 0;
 
+        [DataMember]
         public long EquipmentContainer { get => equipmentContainer; set => equipmentContainer = value; }
 
         public override bool Equals(object x)

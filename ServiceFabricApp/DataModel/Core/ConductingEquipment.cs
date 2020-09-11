@@ -3,11 +3,13 @@ using Common.GDA;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DataModel.Core
 {
+    [DataContract]
     public class ConductingEquipment : Equipment
     {
         public ConductingEquipment(long gID) : base(gID)
@@ -16,6 +18,7 @@ namespace DataModel.Core
 
         private List<long> terminals = new List<long>();
 
+        [DataMember]
         public List<long> Terminals { get => terminals; set => terminals = value; }
 
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
@@ -8,6 +9,7 @@ using Common.GDA;
 
 namespace DataModel.Core
 {
+    [DataContract]
     public class Terminal : IdentifiedObject
     {
         public Terminal(long gID) : base(gID)
@@ -18,8 +20,11 @@ namespace DataModel.Core
         private long conductingEquipment = 0;
         private List<long> measurements = new List<long>();
 
+        [DataMember]
         public long ConnectivityNode { get => connectivityNode; set => connectivityNode = value; }
+        [DataMember]
         public long ConductingEquipment { get => conductingEquipment; set => conductingEquipment = value; }
+        [DataMember]
         public List<long> Measurements { get => measurements; set => measurements = value; }
 
 
