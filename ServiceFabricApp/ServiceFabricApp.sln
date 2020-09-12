@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScadaCommon", "ScadaCommon\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionManagerContracts", "TransactionManagerContracts\TransactionManagerContracts.csproj", "{0A8F68EC-31CB-4FD1-B54A-DCF2FC97BBEC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionManager", "TransactionManager\TransactionManager.csproj", "{EF0DD50A-57AF-4CBE-B960-E7A7406D3A12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,14 @@ Global
 		{0A8F68EC-31CB-4FD1-B54A-DCF2FC97BBEC}.Release|x64.Build.0 = Release|Any CPU
 		{0A8F68EC-31CB-4FD1-B54A-DCF2FC97BBEC}.Release|x86.ActiveCfg = Release|Any CPU
 		{0A8F68EC-31CB-4FD1-B54A-DCF2FC97BBEC}.Release|x86.Build.0 = Release|Any CPU
+		{EF0DD50A-57AF-4CBE-B960-E7A7406D3A12}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{EF0DD50A-57AF-4CBE-B960-E7A7406D3A12}.Debug|x64.ActiveCfg = Debug|x64
+		{EF0DD50A-57AF-4CBE-B960-E7A7406D3A12}.Debug|x64.Build.0 = Debug|x64
+		{EF0DD50A-57AF-4CBE-B960-E7A7406D3A12}.Debug|x86.ActiveCfg = Debug|x64
+		{EF0DD50A-57AF-4CBE-B960-E7A7406D3A12}.Release|Any CPU.ActiveCfg = Release|x64
+		{EF0DD50A-57AF-4CBE-B960-E7A7406D3A12}.Release|x64.ActiveCfg = Release|x64
+		{EF0DD50A-57AF-4CBE-B960-E7A7406D3A12}.Release|x64.Build.0 = Release|x64
+		{EF0DD50A-57AF-4CBE-B960-E7A7406D3A12}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

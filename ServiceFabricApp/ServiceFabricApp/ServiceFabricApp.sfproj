@@ -33,6 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CalculationEngine\CalculationEngine.csproj" />
+    <ProjectReference Include="..\TransactionManager\TransactionManager.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
   <PropertyGroup>
