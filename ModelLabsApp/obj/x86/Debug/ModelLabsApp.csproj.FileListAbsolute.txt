@@ -1,0 +1,11 @@
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\bin\ModelLabsApp.exe.config
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\bin\ModelLabsApp.exe
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\bin\ModelLabsApp.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\ModelLabsApp\obj\x86\Debug\ModelLabsApp.csprojAssemblyReference.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\ModelLabsApp\obj\x86\Debug\ModelLabsApp.ModelLabsAppForm.resources
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\ModelLabsApp\obj\x86\Debug\ModelLabsApp.Properties.Resources.resources
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\ModelLabsApp\obj\x86\Debug\ModelLabsApp.csproj.GenerateResource.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\ModelLabsApp\obj\x86\Debug\ModelLabsApp.csproj.CoreCompileInputs.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\ModelLabsApp\obj\x86\Debug\ModelLabsApp.csproj.CopyComplete
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\ModelLabsApp\obj\x86\Debug\ModelLabsApp.exe
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\ModelLabsApp\obj\x86\Debug\ModelLabsApp.pdb

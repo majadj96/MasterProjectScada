@@ -1,0 +1,6 @@
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\bin\CIMParser.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\bin\CIMParser.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\CIMParser\obj\x86\Debug\CIMParser.csprojAssemblyReference.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\CIMParser\obj\x86\Debug\CIMParser.csproj.CoreCompileInputs.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\CIMParser\obj\x86\Debug\CIMParser.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\CIMParser\obj\x86\Debug\CIMParser.pdb

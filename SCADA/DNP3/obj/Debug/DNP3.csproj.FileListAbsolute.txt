@@ -1,0 +1,11 @@
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\DNP3\bin\Debug\DNP3.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\DNP3\bin\Debug\DNP3.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\DNP3\bin\Debug\ScadaCommon.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\DNP3\bin\Debug\Common.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\DNP3\bin\Debug\ScadaCommon.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\DNP3\bin\Debug\Common.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\DNP3\obj\Debug\DNP3.csprojAssemblyReference.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\DNP3\obj\Debug\DNP3.csproj.CoreCompileInputs.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\DNP3\obj\Debug\DNP3.csproj.CopyComplete
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\DNP3\obj\Debug\DNP3.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\DNP3\obj\Debug\DNP3.pdb

@@ -1,0 +1,9 @@
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\DataModel\bin\Debug\DataModel.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\DataModel\bin\Debug\DataModel.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\DataModel\bin\Debug\Common.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\DataModel\bin\Debug\Common.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\DataModel\obj\Debug\DataModel.csprojAssemblyReference.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\DataModel\obj\Debug\DataModel.csproj.CoreCompileInputs.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\DataModel\obj\Debug\DataModel.csproj.CopyComplete
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\DataModel\obj\Debug\DataModel.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\DataModel\obj\Debug\DataModel.pdb

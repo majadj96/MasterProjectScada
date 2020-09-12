@@ -1,0 +1,9 @@
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\TransactionManagerContracts\bin\Debug\TransactionManagerContracts.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\TransactionManagerContracts\bin\Debug\TransactionManagerContracts.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\TransactionManagerContracts\bin\Debug\Common.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\TransactionManagerContracts\bin\Debug\Common.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\TransactionManagerContracts\obj\Debug\TransactionManagerContracts.csprojAssemblyReference.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\TransactionManagerContracts\obj\Debug\TransactionManagerContracts.csproj.CoreCompileInputs.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\TransactionManagerContracts\obj\Debug\TransactionManagerContracts.csproj.CopyComplete
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\TransactionManagerContracts\obj\Debug\TransactionManagerContracts.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\TransactionManagerContracts\obj\Debug\TransactionManagerContracts.pdb

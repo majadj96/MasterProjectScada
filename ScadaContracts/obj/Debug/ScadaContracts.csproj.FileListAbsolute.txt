@@ -1,0 +1,5 @@
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\ScadaContracts\bin\Debug\ScadaContracts.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\ScadaContracts\bin\Debug\ScadaContracts.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\ScadaContracts\obj\Debug\ScadaContracts.csproj.CoreCompileInputs.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\ScadaContracts\obj\Debug\ScadaContracts.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\ScadaContracts\obj\Debug\ScadaContracts.pdb

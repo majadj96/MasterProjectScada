@@ -1,0 +1,14 @@
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NMS\bin\Debug\NMS.exe.config
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NMS\bin\Debug\NMS.exe
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NMS\bin\Debug\NMS.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NMS\bin\Debug\PubSubCommon.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NMS\bin\Debug\Common.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NMS\bin\Debug\ScadaCommon.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NMS\bin\Debug\PubSubCommon.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NMS\bin\Debug\Common.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NMS\bin\Debug\ScadaCommon.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NMS\obj\Debug\NMS.csprojAssemblyReference.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NMS\obj\Debug\NMS.csproj.CoreCompileInputs.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NMS\obj\Debug\NMS.csproj.CopyComplete
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NMS\obj\Debug\NMS.exe
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NMS\obj\Debug\NMS.pdb

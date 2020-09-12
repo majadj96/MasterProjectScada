@@ -1,0 +1,13 @@
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\ProcessingModule\bin\Debug\ProcessingModule.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\ProcessingModule\bin\Debug\ProcessingModule.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\ProcessingModule\bin\Debug\DNP3.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\ProcessingModule\bin\Debug\ScadaCommon.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\ProcessingModule\bin\Debug\Common.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\ProcessingModule\bin\Debug\DNP3.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\ProcessingModule\bin\Debug\ScadaCommon.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\ProcessingModule\bin\Debug\Common.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\ProcessingModule\obj\Debug\ProcessingModule.csprojAssemblyReference.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\ProcessingModule\obj\Debug\ProcessingModule.csproj.CoreCompileInputs.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\ProcessingModule\obj\Debug\ProcessingModule.csproj.CopyComplete
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\ProcessingModule\obj\Debug\ProcessingModule.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\SCADA\ProcessingModule\obj\Debug\ProcessingModule.pdb

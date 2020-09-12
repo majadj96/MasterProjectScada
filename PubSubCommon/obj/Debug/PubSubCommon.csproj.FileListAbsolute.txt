@@ -1,0 +1,11 @@
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\PubSubCommon\bin\Debug\PubSubCommon.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\PubSubCommon\bin\Debug\PubSubCommon.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\PubSubCommon\bin\Debug\Common.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\PubSubCommon\bin\Debug\ScadaCommon.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\PubSubCommon\bin\Debug\Common.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\PubSubCommon\bin\Debug\ScadaCommon.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\PubSubCommon\obj\Debug\PubSubCommon.csprojAssemblyReference.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\PubSubCommon\obj\Debug\PubSubCommon.csproj.CoreCompileInputs.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\PubSubCommon\obj\Debug\PubSubCommon.csproj.CopyComplete
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\PubSubCommon\obj\Debug\PubSubCommon.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\PubSubCommon\obj\Debug\PubSubCommon.pdb

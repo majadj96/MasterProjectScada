@@ -1,0 +1,9 @@
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NetworkModelGDAContract\bin\Debug\ProcessingModule.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NetworkModelGDAContract\bin\Debug\ProcessingModule.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NetworkModelGDAContract\bin\Debug\Common.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NetworkModelGDAContract\bin\Debug\Common.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NetworkModelGDAContract\obj\Debug\NetworkModelGDAContract.csprojAssemblyReference.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NetworkModelGDAContract\obj\Debug\NetworkModelGDAContract.csproj.CoreCompileInputs.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NetworkModelGDAContract\obj\Debug\NetworkModelGDAContract.csproj.CopyComplete
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NetworkModelGDAContract\obj\Debug\ProcessingModule.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\NetworkModelGDAContract\obj\Debug\ProcessingModule.pdb

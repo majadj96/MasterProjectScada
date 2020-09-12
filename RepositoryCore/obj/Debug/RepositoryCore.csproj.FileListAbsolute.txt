@@ -1,0 +1,11 @@
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\RepositoryCore\bin\Debug\RepositoryCore.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\RepositoryCore\bin\Debug\RepositoryCore.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\RepositoryCore\bin\Debug\Common.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\RepositoryCore\bin\Debug\ScadaCommon.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\RepositoryCore\bin\Debug\Common.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\RepositoryCore\bin\Debug\ScadaCommon.pdb
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\RepositoryCore\obj\Debug\RepositoryCore.csprojAssemblyReference.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\RepositoryCore\obj\Debug\RepositoryCore.csproj.CoreCompileInputs.cache
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\RepositoryCore\obj\Debug\RepositoryCore.csproj.CopyComplete
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\RepositoryCore\obj\Debug\RepositoryCore.dll
+C:\Users\dmilosevic\Source\Repos\MasterProjectScada\RepositoryCore\obj\Debug\RepositoryCore.pdb
