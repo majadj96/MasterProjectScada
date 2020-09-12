@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Fabric;
+using System.Fabric.Description;
+using System.Globalization;
 using System.Linq;
+using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
+using Microsoft.ServiceFabric.Services.Communication.Wcf.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
+using TransactionManagerContracts;
 
 namespace TransactionManager
 {
@@ -15,9 +20,12 @@ namespace TransactionManager
     /// </summary>
     internal sealed class TransactionManager : StatefulService
     {
+        private EnlistManager em = null;
         public TransactionManager(StatefulServiceContext context)
             : base(context)
-        { }
+        {
+            em = new EnlistManager();
+        }
 
         /// <summary>
         /// Optional override to create listeners (e.g., HTTP, Service Remoting, WCF, etc.) for this service replica to handle client or user requests.
@@ -28,7 +36,24 @@ namespace TransactionManager
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners()
         {
-            return new ServiceReplicaListener[0];
+            return new[] { new ServiceReplicaListener((context) =>
+                {
+                    string host = host = context.NodeContext.IPAddressOrFQDN;
+
+                    EndpointResourceDescription endpointConfig = context.CodePackageActivationContext.GetEndpoint("EnlistEndpoint");
+                    int port = endpointConfig.Port;
+                    string scheme = endpointConfig.Protocol.ToString();
+                    string uri = string.Format(CultureInfo.InvariantCulture, "{0}://{1}:{2}/TM", "net.tcp", host, port);
+
+                    var listener = new WcfCommunicationListener<IEnlistManager>(
+                        wcfServiceObject: this.em,
+                        serviceContext: context,
+                        listenerBinding: new NetTcpBinding(SecurityMode.None),
+                        address: new EndpointAddress(uri)
+                    );
+                    return listener;
+                }, name: "TM")
+            };
         }
 
         /// <summary>
