@@ -18,6 +18,7 @@ using UserInterface.Command;
 using LiveCharts.Definitions.Series;
 using System.Threading.Tasks;
 using Common;
+using UserInterface.Classes;
 
 namespace UserInterface
 {
@@ -25,28 +26,40 @@ namespace UserInterface
     {
         
         private bool isDiscreteSelected;
+        private bool _isBussy;
         private static volatile bool _isFirstDbCall = true;
+        private string selectedType;
+        private int _dummyStatus;
 
         private List<SignalListItemViewModel> signalList;
+        public List<Substation> SubstationList { get; set; }
+        public List<string> MeasureType { get; set; }
 
         public Dictionary<long, Substation> substations;
         private Dictionary<long, Measurement> measurements = new Dictionary<long, Measurement>();
-
         public Dictionary<long, StepLineSeries> signalsOn;
         public SeriesCollection SeriesCollection { get; set; }
-
         private ObservableCollection<RadioButton> radioButtons = new ObservableCollection<RadioButton>();
+        public Func<double, string> Formatter { get; set; }
 
-        public List<Substation> SubstationList { get; set; }
-        public List<string> MeasureType { get; set; }
-		private DateTime initialDateTime;
+        private DateTime initialDateTime;
 		public DateTime InitialDateTime { get { return initialDateTime; } set { initialDateTime = value; OnPropertyChanged(nameof(InitialDateTime)); } }
 		private DateTime maxDateTime;
 		public DateTime MaxDateTime { get { return maxDateTime; } set { maxDateTime = value; OnPropertyChanged(nameof(MaxDateTime)); } }
-		public Func<double, string> Formatter { get; set; }
+        private DateTime? startDate = null;
+        private DateTime? endDate = null;
+        private Substation selectedSubstation;
 
-        private bool _isBussy;
-
+        private Messenger messenger = new Messenger();
+        private IMeasurementRepository measurementProxy;
+        public int DummyStatus
+        {
+            get => _dummyStatus;
+            set
+            {
+                SetProperty(ref _dummyStatus, value);
+            }
+        }
         public bool IsBussy
         {
             get => _isBussy;
@@ -55,8 +68,26 @@ namespace UserInterface
                 SetProperty(ref _isBussy, value);
             }
         }
-
-		public Substation SelectedSubstation
+        public bool IsDiscreteSelected
+        {
+            get => isDiscreteSelected;
+            set
+            {
+                SetProperty(ref isDiscreteSelected, value);
+            }
+        }
+        public string SelectedType
+        {
+            get { return selectedType; }
+            set
+            {
+                selectedType = value;
+                PopulateSignals(selectedSubstation.Gid, selectedType);
+                signalsOn.Clear();
+                SeriesCollection.Clear();
+            }
+        }
+        public Substation SelectedSubstation
         {
             get { return selectedSubstation; }
             set
@@ -70,52 +101,25 @@ namespace UserInterface
                     PopulateSignals(selectedSubstation.Gid, selectedType);
             }
         }
-
-        public string SelectedType
-        {
-            get { return selectedType; }
-            set
-            {
-                selectedType = value;
-                PopulateSignals(selectedSubstation.Gid, selectedType);
-                signalsOn.Clear();
-                SeriesCollection.Clear();
-            }
-        }
-
-
-
         public List<SignalListItemViewModel> SignalList
         {
             get => signalList;
             set => SetProperty(ref signalList, value);
         }
-
-        private DateTime? startDate = null;
         public DateTime? StartDate
         {
             get { return startDate; }
             set { startDate = value; OnPropertyChanged("StartDate"); InitialDateTime = startDate.Value; }
         }
-
-        private DateTime? endDate = null;
         public DateTime? EndDate
         {
             get { return endDate; }
             set { endDate = value; OnPropertyChanged("EndDate"); MaxDateTime = endDate.Value; }
         }
-
-
-        private Messenger messenger = new Messenger();
-        private Substation selectedSubstation;
-        private string selectedType;
-
-        private IMeasurementRepository measurementProxy;
-
+        
         public AnalyticsWindowViewModel(Dictionary<long, Substation> substations, IMeasurementRepository measurementProxy, Dictionary<long, Measurement> measurements)
         {
             this.measurements = measurements;
-
             foreach (var item in Application.Current.Windows)
 			{
 				if(item.GetType() == typeof(AnalyticsWindow))
@@ -123,15 +127,10 @@ namespace UserInterface
 					((Window)item).Closing += new CancelEventHandler(AnalyticsWindow_Closing);
 				}
 			}
-
 			signalsOn = new Dictionary<long, StepLineSeries>();
-
 			this.substations = substations;
-			
 			SetChartModelValues();
-
             this.measurementProxy = measurementProxy;
-            
         }
 
         //private void OnZoom(string destination)
@@ -156,17 +155,14 @@ namespace UserInterface
 							   .Y(dayModel => dayModel.Value);
 
 			this.SeriesCollection = new SeriesCollection(dayConfig);
-
 			this.InitialDateTime = DateTime.Now;
 			this.MaxDateTime = DateTime.Now.AddDays(30);
-
 			this.Formatter = value => new DateTime((long)value).ToString("yyyy-MM-dd HH:mm:ss");
 		}
 
         public void Setup()
         {
             SubstationList = substations.Values.ToList();
-
             MeasureType = new List<string> { "Digital", "Analog" };
         }
 
@@ -177,7 +173,6 @@ namespace UserInterface
 
         private async Task HandleSignalChecked(SignalListItemViewModel signal)
         {
-
             if (signal.IsChecked)
             {
                 RepositoryCore.Measurement[] measurements = default;
@@ -212,7 +207,6 @@ namespace UserInterface
                 SeriesCollection.Remove(signalsOn[signal.Gid]);
                 signalsOn.Remove(signal.Gid);
             }
-
             _isFirstDbCall = false;
         }
 
@@ -225,9 +219,7 @@ namespace UserInterface
                 line.PointGeometry = DefaultGeometries.Square;
 
             ChartValues<ChartModel> chartValues = new ChartValues<ChartModel>();
-
             measurements = measurements.OrderBy(m => m.ChangedTime.Value).ToArray();
-
 			DateTime now = DateTime.Now;
 
 			foreach (var measure in measurements)
@@ -239,7 +231,6 @@ namespace UserInterface
             if (chartValues.Count != 0)
             {
                 this.InitialDateTime = chartValues.FirstOrDefault()?.DateTime ?? chartValues.LastOrDefault()?.DateTime.AddSeconds(-10) ?? DateTime.Now;
-
                 this.MaxDateTime = chartValues.LastOrDefault()?.DateTime.AddSeconds(10) ?? chartValues.FirstOrDefault()?.DateTime.AddMinutes(10) ?? DateTime.Now;
             }
             line.Values = chartValues;
@@ -252,25 +243,6 @@ namespace UserInterface
             Substation selectedSub = substations.Where(x => x.Value.Gid == substationGid).FirstOrDefault().Value;
 
             if (type.Equals("Digital")) {
-                //foreach (var dis in selectedSub.Disconectors)
-                //{
-                //    tempList.Add(new SignalListItemViewModel()
-                //    {
-                //        Name = dis.Name,
-                //        Gid = dis.DiscreteGID,
-                //        Type = "State"
-                //    });
-                //}
-
-                //foreach (var breaker in selectedSub.Breakers)
-                //{
-                //    tempList.Add(new SignalListItemViewModel()
-                //    {
-                //        Name = breaker.Name,
-                //        Gid = breaker.DiscreteGID,
-                //        Type = "State"
-                //    });
-                //}
                 foreach (Measurement meas in measurements.Values)
                 {
                     if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(meas.Gid) == DMSType.ANALOG)
@@ -313,74 +285,9 @@ namespace UserInterface
                             Type = meas.Type.ToString()
                         });
                     }
-                }
-
-                //tempList
-                //    .AddRange(selectedSub.AsynchronousMachines
-                //        .Select(x => new SignalListItemViewModel
-                //            {
-                //                Name = x.Name,
-                //                Gid = x.SignalGid,
-                //                Type = "Power"
-                //            }));
-
-                //tempList.Add(new SignalListItemViewModel()
-                //{
-                //    Name = "Tap Changer",
-                //    Gid = long.Parse(selectedSub.TapChanger.GID),
-                //    Type = "Position"
-                //});
-
-                //for (int i = 0; i < selectedSub.Transformator.TransformerWindings.Capacity * 2; i++)
-                //{
-                //    switch (i)
-                //    {
-                //        case 0:
-                //            tempList.Add(new SignalListItemViewModel()
-                //            {
-                //                Name = "Transformer Winding - Primary",
-                //                Gid = long.Parse(selectedSub.Transformator.TransformerWindings[i % 2].GID),
-                //                Type = "Voltage"
-                //            });
-                //            break;
-                //        case 2:
-                //            tempList.Add(new SignalListItemViewModel()
-                //            {
-                //                Name = "Transformer Winding - Primary",
-                //                Gid = long.Parse(selectedSub.Transformator.TransformerWindings[i % 2].GID),
-                //                Type = "Current"
-                //            });
-                //            break;
-                //        case 1:
-                //            tempList.Add(new SignalListItemViewModel()
-                //            {
-                //                Name = "Transformer Winding - Secondary",
-                //                Gid = long.Parse(selectedSub.Transformator.TransformerWindings[i % 2].GID),
-                //                Type = "Voltage"
-                //            });
-                //            break;
-                //        case 3:
-                //            tempList.Add(new SignalListItemViewModel()
-                //            {
-                //                Name = "Transformer Winding - Secondary",
-                //                Gid = long.Parse(selectedSub.Transformator.TransformerWindings[i % 2].GID),
-                //                Type = "Current"
-                //            });
-                //            break;
-                //    }
-                //}                   
+                }                
             }
 			SignalList = tempList;
-        }
-
-        public bool IsDiscreteSelected
-        {
-            get => isDiscreteSelected;
-            set
-            {
-                SetProperty(ref isDiscreteSelected, value);
-                //PopulateSignals(selectedSubstation.Gid);
-            }
         }
 
 		void AnalyticsWindow_Closing(object sender, CancelEventArgs e)
@@ -388,16 +295,6 @@ namespace UserInterface
 			signalsOn = new Dictionary<long, StepLineSeries>();
 			Messenger.Default.Unregister<SignalListItemViewModel>(this);
 		}
-
-        private int _dummyStatus;
-        public int DummyStatus
-        {
-            get => _dummyStatus;
-            set
-            {
-                SetProperty(ref _dummyStatus, value);
-            }
-        }
 
         private async Task ExecuteSafely(Action action, bool isLongOperation)
         {
@@ -438,17 +335,5 @@ namespace UserInterface
             }
         }
     }
-
-	public class ChartModel
-	{
-		public DateTime DateTime { get; set; }
-		public double Value { get; set; }
-
-		public ChartModel(DateTime dateTime, double value)
-		{
-			this.DateTime = dateTime;
-			this.Value = value;
-		}
-	}
 }
 
