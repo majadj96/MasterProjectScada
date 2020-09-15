@@ -24,7 +24,7 @@ namespace TransactionManager
         public TransactionManager(StatefulServiceContext context)
             : base(context)
         {
-            em = new EnlistManager();
+            em = new EnlistManager(StateManager);
         }
 
         /// <summary>
@@ -65,6 +65,8 @@ namespace TransactionManager
         {
             // TODO: Replace the following sample code with your own logic 
             //       or remove this RunAsync override if it's not needed in your service.
+
+            //var myQueue = await StateManager.GetOrAddAsync<IReliableConcurrentQueue<ITransactionSteps>>("CurrentlyEnlistedServices");
 
             var myDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, long>>("myDictionary");
 
