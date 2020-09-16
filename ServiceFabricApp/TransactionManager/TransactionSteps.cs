@@ -26,7 +26,9 @@ namespace TransactionManager
             }
             else //uspesan commit -> uskladjen je model na svim servisima -> kazi NMS-u da prosledi model na UI
             {
+                TMData.CreateNMSProxy();
                 TMData.NotifyNMSProxy.UpdateUIModel();
+                ServiceEventSource.Current.Message("TM - Transaction successfully completed.");
             }
 
             

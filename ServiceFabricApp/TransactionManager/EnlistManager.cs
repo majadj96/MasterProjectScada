@@ -16,69 +16,87 @@ namespace TransactionManager
     class EnlistManager : IEnlistManager
     {
         private IReliableStateManager StateManager;
-
-        //razmotri da vratis ovo u TMData pa nek bude pristupanje kao ranije (pristupa se odavde i iz TransationSteps)
-        //private IReliableConcurrentQueue<ITransactionSteps> CurrentlyEnlistedServices;
-        //private List<ITransactionSteps> CompleteEnlistedServices;
         
         public EnlistManager(IReliableStateManager stateManager)
         {
             StateManager = stateManager;
-            //CompleteEnlistedServices = new List<ITransactionSteps>(5);
-
-            //mislim da je dovoljno samo u konstruktoru preuzeti Queue
-            //besides, queue already gets created in Service RunAsync method, so this shouldn't take long to fetch it
-            TMData.CurrentlyEnlistedServices = Task.Run(async() => await StateManager.GetOrAddAsync<IReliableConcurrentQueue<ITransactionSteps>>("CurrentlyEnlistedServices")).Result;
         }
 
-        public void EndEnlist(bool isSuccessful)
+        public async void EndEnlist(bool isSuccessful)
         {
-            using (var tx = StateManager.CreateTransaction())
+            try
             {
-                ConditionalValue<ITransactionSteps> ret;
-                do
+                var CurrentlyEnlistedServices = await StateManager.GetOrAddAsync<IReliableConcurrentQueue<ITransactionSteps>>("CurrentlyEnlistedServices");
+
+                using (var tx = StateManager.CreateTransaction())
                 {
-                    ret = Task.Run(async () => await TMData.CurrentlyEnlistedServices.TryDequeueAsync(tx)).Result;
-
-                    if (isSuccessful && ret.HasValue)
+                    ConditionalValue<ITransactionSteps> ret;
+                    do
                     {
-                        TMData.CompleteEnlistedServices.Add(ret.Value);
-                    }
+                        ret = await CurrentlyEnlistedServices.TryDequeueAsync(tx);
 
-                } while (TMData.CurrentlyEnlistedServices.Count > 0 && ret.HasValue);
+                        if (isSuccessful && ret.HasValue)
+                        {
+                            TMData.CompleteEnlistedServices.Add(ret.Value);
+                        }
 
-                tx.CommitAsync();
+                    } while (CurrentlyEnlistedServices.Count > 0 && ret.HasValue);
+
+                    await tx.CommitAsync();
+                }
+
+                if (!isSuccessful)
+                {
+                    return;
+                }
+
+                TransactionSteps.BeginTransaction();
             }
-
-            if (!isSuccessful)
+            catch (Exception ex)
             {
-                return;
+                ServiceEventSource.Current.Message($"Exception raised in EndEnlist method: {ex.Message}");
             }
-                
-            TransactionSteps.BeginTransaction();
+            
         }
 
-        public void Enlist()
+        public async void Enlist()
         {
-            OperationContext context = OperationContext.Current;
-            context.Channel.Closing += Channel_Closing;
-
-            var callbackObj = context.GetCallbackChannel<ITransactionSteps>();
-
-            using (var tx = StateManager.CreateTransaction())
+            try
             {
-                TMData.CurrentlyEnlistedServices.EnqueueAsync(tx, callbackObj);
-                
-                tx.CommitAsync();
-            }  
+                OperationContext context = OperationContext.Current;
+                context.Channel.Closing += Channel_Closing;
+
+                var callbackObj = context.GetCallbackChannel<ITransactionSteps>();
+                var CurrentlyEnlistedServices = await StateManager.GetOrAddAsync<IReliableConcurrentQueue<ITransactionSteps>>("CurrentlyEnlistedServices");
+
+                using (var tx = StateManager.CreateTransaction())
+                {
+                    await CurrentlyEnlistedServices.EnqueueAsync(tx, callbackObj);
+
+                    await tx.CommitAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                ServiceEventSource.Current.Message($"Exception raised in Enlist method: {ex.Message}");
+            }
+            
         }
 
         private void Channel_Closing(object sender, EventArgs e)
         {
-            var service = sender as ITransactionSteps;
+            try
+            {
+                var service = sender as ITransactionSteps;
 
-            if (service != null)
-                TMData.CompleteEnlistedServices.Remove(service);
+                if (service != null)
+                    TMData.CompleteEnlistedServices.Remove(service);
+            }
+            catch (Exception ex)
+            {
+                ServiceEventSource.Current.Message($"Exception raised in Channel_Closing method: {ex.Message}");
+            }
+            
         }
     }
 }
