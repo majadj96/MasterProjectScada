@@ -18,41 +18,43 @@ namespace TransactionManager
         private IReliableStateManager StateManager;
 
         //razmotri da vratis ovo u TMData pa nek bude pristupanje kao ranije (pristupa se odavde i iz TransationSteps)
-        private IReliableConcurrentQueue<ITransactionSteps> CurrentlyEnlistedServices;
-        private List<ITransactionSteps> CompleteEnlistedServices;
+        //private IReliableConcurrentQueue<ITransactionSteps> CurrentlyEnlistedServices;
+        //private List<ITransactionSteps> CompleteEnlistedServices;
         
         public EnlistManager(IReliableStateManager stateManager)
         {
             StateManager = stateManager;
-            CompleteEnlistedServices = new List<ITransactionSteps>(5);
+            //CompleteEnlistedServices = new List<ITransactionSteps>(5);
 
             //mislim da je dovoljno samo u konstruktoru preuzeti Queue
             //besides, queue already gets created in Service RunAsync method, so this shouldn't take long to fetch it
-            CurrentlyEnlistedServices = Task.Run(async() => await StateManager.GetOrAddAsync<IReliableConcurrentQueue<ITransactionSteps>>("CurrentlyEnlistedServices")).Result;
+            TMData.CurrentlyEnlistedServices = Task.Run(async() => await StateManager.GetOrAddAsync<IReliableConcurrentQueue<ITransactionSteps>>("CurrentlyEnlistedServices")).Result;
         }
 
         public void EndEnlist(bool isSuccessful)
         {
-            if (!isSuccessful)
-            {
-                //Empty CurrentlyEnlistedServices here
-                return;
-            }
-
             using (var tx = StateManager.CreateTransaction())
             {
                 ConditionalValue<ITransactionSteps> ret;
                 do
                 {
-                    ret = Task.Run(async () => await CurrentlyEnlistedServices.TryDequeueAsync(tx)).Result;
-                    if (ret.HasValue)
+                    ret = Task.Run(async () => await TMData.CurrentlyEnlistedServices.TryDequeueAsync(tx)).Result;
+
+                    if (isSuccessful && ret.HasValue)
                     {
-                        CompleteEnlistedServices.Add(ret.Value);
+                        TMData.CompleteEnlistedServices.Add(ret.Value);
                     }
 
-                } while (CurrentlyEnlistedServices.Count > 0 && ret.HasValue);
+                } while (TMData.CurrentlyEnlistedServices.Count > 0 && ret.HasValue);
+
+                tx.CommitAsync();
             }
 
+            if (!isSuccessful)
+            {
+                return;
+            }
+                
             TransactionSteps.BeginTransaction();
         }
 
@@ -62,11 +64,10 @@ namespace TransactionManager
             context.Channel.Closing += Channel_Closing;
 
             var callbackObj = context.GetCallbackChannel<ITransactionSteps>();
-            //TMData.CurrentlyEnlistedServices.Add(service);
 
             using (var tx = StateManager.CreateTransaction())
             {
-                CurrentlyEnlistedServices.EnqueueAsync(tx, callbackObj);
+                TMData.CurrentlyEnlistedServices.EnqueueAsync(tx, callbackObj);
                 
                 tx.CommitAsync();
             }  
@@ -77,9 +78,7 @@ namespace TransactionManager
             var service = sender as ITransactionSteps;
 
             if (service != null)
-
-                //TMData.CompleteEnlistedServices.Remove(service);
-                CompleteEnlistedServices.Remove(service);
+                TMData.CompleteEnlistedServices.Remove(service);
         }
     }
 }

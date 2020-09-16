@@ -14,7 +14,7 @@ namespace TransactionManager
             bool isPrepared = Prepare();
             if (!isPrepared)
             {
-                Rollback(); //da li i ovde ide rollback ili samo kad commit failuje? 
+                Rollback();
                 return;
             }
 
