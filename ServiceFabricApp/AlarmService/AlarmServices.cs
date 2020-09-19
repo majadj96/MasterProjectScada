@@ -1,5 +1,4 @@
 ﻿using Common.AlarmEvent;
-using AlarmEventServiceInfrastructure;
 using ScadaCommon.ServiceContract;
 using System.Collections.Generic;
 using System.ServiceModel;

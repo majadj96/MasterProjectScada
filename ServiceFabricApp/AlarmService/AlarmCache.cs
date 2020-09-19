@@ -11,10 +11,12 @@ namespace AlarmService
     {
         private Dictionary<string, Alarm> alarmCache = new Dictionary<string, Alarm>();
         private IPub alarmPublisher;
+
         public AlarmCache(IPub alarmPublisher)
         {
             this.alarmPublisher = alarmPublisher;
         }
+
         public List<Alarm> GetAllAlarms()
         {
             List<Alarm> retList = new List<Alarm>();

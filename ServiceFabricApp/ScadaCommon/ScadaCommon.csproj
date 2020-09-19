@@ -71,7 +71,9 @@
     <Compile Include="PointIdentifierHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceContract\IAlarmEventService.cs" />
+    <Compile Include="ServiceContract\IAlarmService.cs" />
     <Compile Include="ServiceContract\IBackendProcessor.cs" />
+    <Compile Include="ServiceContract\IEventService.cs" />
     <Compile Include="ServiceContract\IProcessingServiceContract.cs" />
     <Compile Include="ServiceContract\ICommandingServiceContract.cs" />
     <Compile Include="ServiceContract\IFEPCommandingServiceContract.cs" />
@@ -82,7 +84,7 @@
     <Compile Include="Utility\UniqueIdGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\Common.csproj">
+    <ProjectReference Include="..\Common\Common.csproj">
       <Project>{6C234280-508A-47A4-B9CA-2677082EF85F}</Project>
       <Name>Common</Name>
     </ProjectReference>
