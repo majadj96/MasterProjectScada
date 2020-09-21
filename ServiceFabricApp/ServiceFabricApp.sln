@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkModelService", "Netw
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotifyNMSService", "NotifyNMSService\NotifyNMSService.csproj", "{D6545646-77AA-4813-9B72-B28911B9E715}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionManager", "TransactionManager\TransactionManager.csproj", "{5BF81E1C-C66B-4F82-ACAA-0D901732F4BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -125,6 +127,14 @@ Global
 		{D6545646-77AA-4813-9B72-B28911B9E715}.Release|x64.ActiveCfg = Release|x64
 		{D6545646-77AA-4813-9B72-B28911B9E715}.Release|x64.Build.0 = Release|x64
 		{D6545646-77AA-4813-9B72-B28911B9E715}.Release|x86.ActiveCfg = Release|x64
+		{5BF81E1C-C66B-4F82-ACAA-0D901732F4BA}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{5BF81E1C-C66B-4F82-ACAA-0D901732F4BA}.Debug|x64.ActiveCfg = Debug|x64
+		{5BF81E1C-C66B-4F82-ACAA-0D901732F4BA}.Debug|x64.Build.0 = Debug|x64
+		{5BF81E1C-C66B-4F82-ACAA-0D901732F4BA}.Debug|x86.ActiveCfg = Debug|x64
+		{5BF81E1C-C66B-4F82-ACAA-0D901732F4BA}.Release|Any CPU.ActiveCfg = Release|x64
+		{5BF81E1C-C66B-4F82-ACAA-0D901732F4BA}.Release|x64.ActiveCfg = Release|x64
+		{5BF81E1C-C66B-4F82-ACAA-0D901732F4BA}.Release|x64.Build.0 = Release|x64
+		{5BF81E1C-C66B-4F82-ACAA-0D901732F4BA}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
