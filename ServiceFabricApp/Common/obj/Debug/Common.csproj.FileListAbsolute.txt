@@ -3,12 +3,6 @@ C:\Users\Obren\Documents\GitHub\MasterProjectScada\Common\bin\Debug\Common.pdb
 C:\Users\Obren\Documents\GitHub\MasterProjectScada\Common\obj\Debug\Common.csproj.CoreCompileInputs.cache
 C:\Users\Obren\Documents\GitHub\MasterProjectScada\Common\obj\Debug\Common.dll
 C:\Users\Obren\Documents\GitHub\MasterProjectScada\Common\obj\Debug\Common.pdb
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\Common\bin\Debug\Common.dll
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\Common\bin\Debug\Common.pdb
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\Common\obj\Debug\Common.csproj.CoreCompileInputs.cache
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\Common\obj\Debug\Common.dll
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\Common\obj\Debug\Common.pdb
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\Common\obj\Debug\Common.csprojAssemblyReference.cache
 C:\Users\Bosa\Desktop\service-fabric-branch\MasterProjectScada\ServiceFabricApp\Common\bin\Debug\Common.dll
 C:\Users\Bosa\Desktop\service-fabric-branch\MasterProjectScada\ServiceFabricApp\Common\bin\Debug\Common.pdb
 C:\Users\Bosa\Desktop\service-fabric-branch\MasterProjectScada\ServiceFabricApp\Common\obj\Debug\Common.csprojAssemblyReference.cache

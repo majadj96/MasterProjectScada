@@ -22,65 +22,69 @@ namespace TransactionManager
             StateManager = stateManager;
         }
 
-        public async void EndEnlist(bool isSuccessful)
+        public void EndEnlist(bool isSuccessful)
         {
-            try
+            Task.Run(async () =>
             {
-                var CurrentlyEnlistedServices = await StateManager.GetOrAddAsync<IReliableConcurrentQueue<ITransactionSteps>>("CurrentlyEnlistedServices");
-
-                using (var tx = StateManager.CreateTransaction())
+                try
                 {
-                    ConditionalValue<ITransactionSteps> ret;
+                    var CurrentlyEnlistedServices = await StateManager.GetOrAddAsync<IReliableConcurrentQueue<ITransactionSteps>>("CurrentlyEnlistedServices");
+
                     do
                     {
-                        ret = await CurrentlyEnlistedServices.TryDequeueAsync(tx);
-
-                        if (isSuccessful && ret.HasValue)
+                        using (var tx = StateManager.CreateTransaction())
                         {
-                            TMData.CompleteEnlistedServices.Add(ret.Value);
+                            var ret = await CurrentlyEnlistedServices.TryDequeueAsync(tx, System.Threading.CancellationToken.None, TimeSpan.FromSeconds(4));
+                            await tx.CommitAsync();
+
+                            if (ret.HasValue)
+                            {
+                                TMData.CompleteEnlistedServices.Add(ret.Value);
+                            }
+                            //ConditionalValue<ITransactionSteps> ret;
+
                         }
+                    } while (CurrentlyEnlistedServices.Count > 0);
 
-                    } while (CurrentlyEnlistedServices.Count > 0 && ret.HasValue);
+                    if (!isSuccessful)
+                    {
+                        return;
+                    }
 
-                    await tx.CommitAsync();
+                    TransactionSteps.BeginTransaction();
                 }
-
-                if (!isSuccessful)
+                catch (Exception ex)
                 {
-                    return;
+                    ServiceEventSource.Current.Message($"Exception raised in EndEnlist method: {ex.Message}");
                 }
-
-                TransactionSteps.BeginTransaction();
-            }
-            catch (Exception ex)
-            {
-                ServiceEventSource.Current.Message($"Exception raised in EndEnlist method: {ex.Message}");
-            }
-            
+            }).Wait();
         }
 
-        public async void Enlist()
+        public void Enlist()
         {
-            try
+            OperationContext context = OperationContext.Current;
+            context.Channel.Closing += Channel_Closing;
+
+            var callbackObj = context.GetCallbackChannel<ITransactionSteps>();
+
+            Task.Run(async () =>
             {
-                OperationContext context = OperationContext.Current;
-                context.Channel.Closing += Channel_Closing;
-
-                var callbackObj = context.GetCallbackChannel<ITransactionSteps>();
-                var CurrentlyEnlistedServices = await StateManager.GetOrAddAsync<IReliableConcurrentQueue<ITransactionSteps>>("CurrentlyEnlistedServices");
-
-                using (var tx = StateManager.CreateTransaction())
+                try
                 {
-                    await CurrentlyEnlistedServices.EnqueueAsync(tx, callbackObj);
+                    var CurrentlyEnlistedServices = await StateManager.GetOrAddAsync<IReliableConcurrentQueue<ITransactionSteps>>("CurrentlyEnlistedServices");
 
-                    await tx.CommitAsync();
+                    using (var tx = StateManager.CreateTransaction())
+                    {
+                        await CurrentlyEnlistedServices.EnqueueAsync(tx, callbackObj);
+
+                        await tx.CommitAsync();
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                ServiceEventSource.Current.Message($"Exception raised in Enlist method: {ex.Message}");
-            }
-            
+                catch (Exception ex)
+                {
+                    ServiceEventSource.Current.Message($"Exception raised in Enlist method: {ex.Message}");
+                }
+            }).Wait();
         }
 
         private void Channel_Closing(object sender, EventArgs e)

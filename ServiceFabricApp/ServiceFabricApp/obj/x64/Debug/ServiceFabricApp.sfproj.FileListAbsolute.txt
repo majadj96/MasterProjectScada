@@ -1,3 +1,2 @@
 C:\Users\Obren\source\repos\ServiceFabricApp\ServiceFabricApp\obj\x64\Debug\ServiceFabricApp.sfproj.CoreCompileInputs.cache
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\ServiceFabricApp\obj\x64\Debug\ServiceFabricApp.sfproj.CoreCompileInputs.cache
 C:\Users\Bosa\Desktop\service-fabric-branch\MasterProjectScada\ServiceFabricApp\ServiceFabricApp\obj\x64\Debug\ServiceFabricApp.sfproj.CoreCompileInputs.cache

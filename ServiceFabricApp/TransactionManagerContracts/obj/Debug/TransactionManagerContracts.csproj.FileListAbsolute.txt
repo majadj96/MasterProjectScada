@@ -7,15 +7,6 @@ C:\Users\Obren\Documents\GitHub\MasterProjectScada\TransactionManagerContracts\o
 C:\Users\Obren\Documents\GitHub\MasterProjectScada\TransactionManagerContracts\obj\Debug\TransactionManagerContracts.csproj.CopyComplete
 C:\Users\Obren\Documents\GitHub\MasterProjectScada\TransactionManagerContracts\obj\Debug\TransactionManagerContracts.dll
 C:\Users\Obren\Documents\GitHub\MasterProjectScada\TransactionManagerContracts\obj\Debug\TransactionManagerContracts.pdb
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\TransactionManagerContracts\bin\Debug\TransactionManagerContracts.dll
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\TransactionManagerContracts\bin\Debug\TransactionManagerContracts.pdb
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\TransactionManagerContracts\bin\Debug\Common.dll
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\TransactionManagerContracts\bin\Debug\Common.pdb
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\TransactionManagerContracts\obj\Debug\TransactionManagerContracts.csprojAssemblyReference.cache
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\TransactionManagerContracts\obj\Debug\TransactionManagerContracts.csproj.CoreCompileInputs.cache
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\TransactionManagerContracts\obj\Debug\TransactionManagerContracts.csproj.CopyComplete
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\TransactionManagerContracts\obj\Debug\TransactionManagerContracts.dll
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\TransactionManagerContracts\obj\Debug\TransactionManagerContracts.pdb
 C:\Users\Bosa\Desktop\service-fabric-branch\MasterProjectScada\ServiceFabricApp\TransactionManagerContracts\bin\Debug\TransactionManagerContracts.dll
 C:\Users\Bosa\Desktop\service-fabric-branch\MasterProjectScada\ServiceFabricApp\TransactionManagerContracts\bin\Debug\TransactionManagerContracts.pdb
 C:\Users\Bosa\Desktop\service-fabric-branch\MasterProjectScada\ServiceFabricApp\TransactionManagerContracts\bin\Debug\Common.dll

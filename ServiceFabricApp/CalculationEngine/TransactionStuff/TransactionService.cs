@@ -19,12 +19,14 @@ namespace CalculationEngine
         public bool Prepare()
         {
             Console.WriteLine("CE Prepare");
+            ServiceEventSource.Current.Message("CE Prepare");
             return true;
         }
 
         public bool Commit()
         {
             Console.WriteLine("CE Commit");
+            ServiceEventSource.Current.Message("CE Commit");
 
             Model.BackupModel = new Dictionary<long, IdObject>(Model.CurrentModel);
             Model.CurrentModel = new Dictionary<long, IdObject>(Model.CurrentModel_Copy);
@@ -41,6 +43,7 @@ namespace CalculationEngine
         public void Rollback()
         {
             Console.WriteLine("CE Rollback");
+            ServiceEventSource.Current.Message("CE Rollback");
 
             Model.CurrentModel = new Dictionary<long, IdObject>(Model.BackupModel);
             Model.CurrentModel_Copy.Clear();

@@ -945,31 +945,31 @@ namespace NetworkModelService
             {
                 TMProxy _proxyTM = new TMProxy(this);
                 _proxyTM.Enlist();
-                _proxyTM.EndEnlist(true);
-                //try
-                //{
-                //    ModelUpdateProxy _proxyCE = new ModelUpdateProxy("CE");
-                //    if (_proxyCE.UpdateModel(delta).Result == ResultType.Failed)
-                //    {
-                //        _proxyTM.EndEnlist(false);
-                //        return new UpdateResult() { Result = ResultType.Failed, Message = "CE failed to update model." };
-                //    }
 
-                //    //SCADA NDS
-                //    ModelUpdateProxy _proxyNDS = new ModelUpdateProxy("NDS");
-                //    if (_proxyNDS.UpdateModel(delta).Result == ResultType.Failed)
-                //    {
-                //        _proxyTM.EndEnlist(false);
-                //        return new UpdateResult() { Result = ResultType.Failed, Message = "NDS failed to update model." };
-                //    }
+                try
+                {
+                    ModelUpdateProxy _proxyCE = new ModelUpdateProxy("CE");
+                    if (_proxyCE.UpdateModel(delta).Result == ResultType.Failed)
+                    {
+                        _proxyTM.EndEnlist(false);
+                        return new UpdateResult() { Result = ResultType.Failed, Message = "CE failed to update model." };
+                    }
 
-                //    _proxyTM.EndEnlist(true);
-                //}
-                //catch (Exception e)
-                //{
-                //    _proxyTM.EndEnlist(false);
-                //    return new UpdateResult() { Message = e.Message, Result = ResultType.Failed };
-                //}
+                    //SCADA NDS
+                    ModelUpdateProxy _proxyNDS = new ModelUpdateProxy("NDS");
+                    if (_proxyNDS.UpdateModel(delta).Result == ResultType.Failed)
+                    {
+                        _proxyTM.EndEnlist(false);
+                        return new UpdateResult() { Result = ResultType.Failed, Message = "NDS failed to update model." };
+                    }
+
+                    _proxyTM.EndEnlist(true);
+                }
+                catch (Exception e)
+                {
+                    _proxyTM.EndEnlist(false);
+                    return new UpdateResult() { Message = e.Message, Result = ResultType.Failed };
+                }
             }
             catch (Exception ex)
             {
