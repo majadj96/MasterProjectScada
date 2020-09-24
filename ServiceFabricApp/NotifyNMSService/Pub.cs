@@ -10,55 +10,32 @@ namespace NotifyNMSService
 {
     public class Pub
     {
-        IPub _proxy;
-        int _eventCounter;
+        //IPub _proxy;
 
-        public Pub()
-        {
-            try
-            {
-                CreateProxy();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            
-            _eventCounter = 0;
-        }
-        private void CreateProxy()
+        private IPub CreateProxy()
         {
             string endpointAddressString = "net.tcp://localhost:7001/Pub";
             EndpointAddress endpointAddress = new EndpointAddress(endpointAddressString);
             NetTcpBinding netTcpBinding = new NetTcpBinding();
-            _proxy = ChannelFactory<IPub>.CreateChannel(netTcpBinding, endpointAddress);
+            return ChannelFactory<IPub>.CreateChannel(netTcpBinding, endpointAddress);
         }
 
         public void SendEvent(NMSModel model, EventArgs e)
         {
-            try
-            {
-                model.EventData = "a";
-                model.TopicName = "nms";
-                _proxy.Publish(model, "nms");
-                _eventCounter += 1;
-            }
-            catch(Exception ee) {
-                Console.WriteLine(ee.Message);
-            }
-        }
+            IPub proxy = CreateProxy();
 
-        private NMSModel PrepareEvent()
-        {
-            NMSModel e = new NMSModel();
-            e.TopicName = "nms";
-            e.EventData = "p1";
-            return e;
-        }
+            proxy.Publish(model, "nms");
 
-        void OnResetCounter(object sender, EventArgs e)
-        {
-            _eventCounter = 0;
+            //try
+            //{
+            //    model.EventData = "a";
+            //    model.TopicName = "nms";
+            //    _proxy.Publish(model, "nms");
+            //    _eventCounter += 1;
+            //}
+            //catch(Exception ee) {
+            //    Console.WriteLine(ee.Message);
+            //}
         }
     }
 }
