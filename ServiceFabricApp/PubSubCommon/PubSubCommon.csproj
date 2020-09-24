@@ -48,6 +48,7 @@
     <Compile Include="NMSModel.cs" />
     <Compile Include="ObjectTypeHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PublisherProxy.cs" />
     <Compile Include="ScadaUIExchangeModel.cs" />
   </ItemGroup>
   <ItemGroup>

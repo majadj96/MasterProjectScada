@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Fabric;
+using System.Fabric.Description;
+using System.Globalization;
 using System.Linq;
+using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
+using Microsoft.ServiceFabric.Services.Communication.Wcf.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
+using NetworkDynamicService.PointUpdater;
+using PubSubCommon;
+using ScadaCommon.ServiceContract;
 
 namespace StateUpdaterService
 {
@@ -14,9 +21,15 @@ namespace StateUpdaterService
     /// </summary>
     internal sealed class StateUpdaterService : StatelessService
     {
+        private IPub publisherProxy;
+        private IStateUpdateService stateUpdateService;
+
         public StateUpdaterService(StatelessServiceContext context)
             : base(context)
-        { }
+        {
+            publisherProxy = new PublisherProxy("PublisherEndPoint");
+            stateUpdateService = new StateUpdateService(publisherProxy);
+        }
 
         /// <summary>
         /// Optional override to create listeners (e.g., TCP, HTTP) for this service replica to handle client or user requests.
@@ -24,7 +37,24 @@ namespace StateUpdaterService
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
-            return new ServiceInstanceListener[0];
+            return new[] { new ServiceInstanceListener((context) =>
+                {
+                    string host = host = context.NodeContext.IPAddressOrFQDN;
+
+                    EndpointResourceDescription endpointConfig = context.CodePackageActivationContext.GetEndpoint("StateUpdateService");
+                    int port = endpointConfig.Port;
+                    string scheme = endpointConfig.Protocol.ToString();
+                    string uri = string.Format(CultureInfo.InvariantCulture, "{0}://{1}:{2}/IStateUpdateService", "net.tcp", host, port);
+
+                    var listener = new WcfCommunicationListener<IStateUpdateService>(
+                        wcfServiceObject: this.stateUpdateService,
+                        serviceContext: context,
+                        listenerBinding: new NetTcpBinding(),
+                        address: new EndpointAddress(uri)
+                    );
+                    return listener;
+                })
+            };
         }
 
         /// <summary>

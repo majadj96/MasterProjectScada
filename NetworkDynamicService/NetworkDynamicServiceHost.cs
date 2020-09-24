@@ -51,7 +51,7 @@ namespace NetworkDynamicService
             transactionService =  new TransactionService(nDSRealTimePointCache, OpenProxies);
             measurementRepository = new MeasurementProviderService(measurementsRepository);
             modelUpdateContract = new ModelUpdateContract(nDSRealTimePointCache, ndSConfigurationProxy, transactionService);
-            stateUpdateService = new StateUpdateService(publisherProxy);
+            //stateUpdateService = new StateUpdateService(publisherProxy);
             commandingService = new CommandingService(fepCmdProxy, backEndPocessingModule, nDSRealTimePointCache);
             processingService = new ProcessingService(backEndPocessingModule);
             InitializeHosts();
@@ -91,7 +91,7 @@ namespace NetworkDynamicService
         private void InitializeHosts()
         {
             hosts = new List<ServiceHost>();
-            hosts.Add(new ServiceHost(stateUpdateService));
+            //hosts.Add(new ServiceHost(stateUpdateService));
             hosts.Add(new ServiceHost(commandingService));
             hosts.Add(new ServiceHost(modelUpdateContract));
             hosts.Add(new ServiceHost(processingService));
