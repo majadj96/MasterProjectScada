@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ServiceModel;
 
 namespace AlarmService
@@ -28,12 +27,12 @@ namespace AlarmService
         {
             if (host == null)
             {
-                throw new Exception("AlarmEventServices can not be opend because it is not initialized.");
+                throw new Exception("AlarmService can not be opend because it is not initialized.");
             }
 
             host.Open();
 
-            string message = "The AlarmEventServices is started.";
+            string message = "The AlarmService is started.";
             Console.WriteLine("\n{0}", message);
         }
 
@@ -41,12 +40,12 @@ namespace AlarmService
         {
             if (host == null)
             {
-                throw new Exception("AlarmEventServices can not be closed because it is not initialized.");
+                throw new Exception("AlarmService can not be closed because it is not initialized.");
             }
 
             host.Close();
 
-            string message = "The AlarmEventServices is closed.";
+            string message = "The AlarmService is closed.";
             Console.WriteLine("\n\n{0}", message);
         }
 

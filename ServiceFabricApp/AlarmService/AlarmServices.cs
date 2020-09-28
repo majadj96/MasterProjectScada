@@ -10,7 +10,6 @@ namespace AlarmService
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class AlarmServices : IAlarmService
     {
-        private AlarmEventRepository alarmEventDB = new AlarmEventRepository();
         private IPub publisherProxy;
         private AlarmCache alarmCache;
 
