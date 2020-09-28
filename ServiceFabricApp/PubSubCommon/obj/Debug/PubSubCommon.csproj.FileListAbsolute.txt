@@ -20,3 +20,14 @@ C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\PubSubCommon
 C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\PubSubCommon\bin\Debug\Common.pdb
 C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\PubSubCommon\bin\Debug\ScadaCommon.pdb
 C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\PubSubCommon\obj\Debug\PubSubCommon.csproj.CopyComplete
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\PubSubCommon\bin\Debug\PubSubCommon.dll
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\PubSubCommon\bin\Debug\PubSubCommon.pdb
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\PubSubCommon\bin\Debug\Common.dll
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\PubSubCommon\bin\Debug\ScadaCommon.dll
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\PubSubCommon\bin\Debug\Common.pdb
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\PubSubCommon\bin\Debug\ScadaCommon.pdb
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\PubSubCommon\obj\Debug\PubSubCommon.csprojAssemblyReference.cache
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\PubSubCommon\obj\Debug\PubSubCommon.csproj.CoreCompileInputs.cache
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\PubSubCommon\obj\Debug\PubSubCommon.csproj.CopyComplete
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\PubSubCommon\obj\Debug\PubSubCommon.dll
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\PubSubCommon\obj\Debug\PubSubCommon.pdb

@@ -19,8 +19,7 @@ namespace AlarmService
         public AlarmService(StatefulServiceContext context)
             : base(context)
         {
-            AlarmServiceHost alarmServiceHost = new AlarmServiceHost();
-            alarmServiceHost.Start();
+            AlarmServices alarmService = new AlarmServices();
         }
 
         private int LoadConfiguration()

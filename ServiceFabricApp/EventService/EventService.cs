@@ -19,8 +19,7 @@ namespace EventService
         public EventService(StatefulServiceContext context)
             : base(context)
         {
-            EventServiceHost eventServiceHost = new EventServiceHost();
-            eventServiceHost.Start();
+            EventServices eventServices = new EventServices();
         }
 
         private int LoadConfiguration()

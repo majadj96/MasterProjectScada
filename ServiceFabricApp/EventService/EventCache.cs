@@ -1,4 +1,5 @@
 ﻿using Common.AlarmEvent;
+using EventService.Channels;
 using PubSubCommon;
 using System.Collections.Generic;
 
@@ -7,13 +8,11 @@ namespace EventService
     public class EventCache
     {
         private List<Event> eventCache = new List<Event>(100);
-        private IPub eventPublisher;
-        private AlarmEventRepository eventDB;
+        private EventPublish eventPublish;
 
-        public EventCache(IPub eventPublisher, AlarmEventRepository eventDB)
+        public EventCache(EventPublish eventPublish)
         {
-            this.eventPublisher = eventPublisher;
-            this.eventDB = eventDB;
+            this.eventPublish = eventPublish;
         }
 
         public List<Event> GetAllEvents()
@@ -24,7 +23,7 @@ namespace EventService
         public void AddEvent(Event newEvent)
         {
             eventCache.Add(newEvent);
-            eventPublisher.Publish(newEvent, "event");
+            eventPublish.SendEvent(newEvent, new System.EventArgs());
         }
     }
 }

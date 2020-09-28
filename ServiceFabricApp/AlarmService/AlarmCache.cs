@@ -1,6 +1,6 @@
-﻿using Common;
+﻿using AlarmService.Channels;
+using Common;
 using Common.AlarmEvent;
-using PubSubCommon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +10,9 @@ namespace AlarmService
     public class AlarmCache
     {
         private Dictionary<string, Alarm> alarmCache = new Dictionary<string, Alarm>();
-        private IPub alarmPublisher;
+        private AlarmPublish alarmPublisher;
 
-        public AlarmCache(IPub alarmPublisher)
+        public AlarmCache(AlarmPublish alarmPublisher)
         {
             this.alarmPublisher = alarmPublisher;
         }
@@ -34,12 +34,12 @@ namespace AlarmService
             if (!alarmCache.ContainsKey(alarmKey))
             {
                 alarmCache.Add(alarmKey, alarm);
-                alarmPublisher.Publish(new AlarmDescription(alarm, AlarmOperation.INSERT), "alarm");
+                alarmPublisher.SendEvent(new AlarmDescription(alarm, AlarmOperation.INSERT), new EventArgs());
             }
             else
             {
                 alarmCache[alarmKey] = alarm;
-                alarmPublisher.Publish(new AlarmDescription(alarm, AlarmOperation.UPDATE), "alarm");
+                alarmPublisher.SendEvent(new AlarmDescription(alarm, AlarmOperation.UPDATE), new EventArgs());
             }
         }
 
@@ -81,7 +81,7 @@ namespace AlarmService
             if (alarmCache.ContainsKey(alarmKey))
             {
                 alarmCache[alarmKey] = alarm;
-                alarmPublisher.Publish(new AlarmDescription(alarm, AlarmOperation.UPDATE), "alarm");
+                alarmPublisher.SendEvent(new AlarmDescription(alarm, AlarmOperation.UPDATE), new EventArgs());
             }
         }
 
@@ -93,7 +93,7 @@ namespace AlarmService
             if (alarmCache.ContainsKey(alarmKey))
             {
                 alarmCache.Remove(alarmKey);
-                alarmPublisher.Publish(new AlarmDescription(alarm, AlarmOperation.DELETE), "alarm");
+                alarmPublisher.SendEvent(new AlarmDescription(alarm, AlarmOperation.DELETE), new EventArgs());
             }
         }
 

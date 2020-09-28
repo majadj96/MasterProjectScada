@@ -1,6 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="ServiceFabricAppType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric" ManifestId="46b92981-8833-4130-9a35-afa7f86f65fd">
   <Parameters>
+    <Parameter Name="EventService_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="EventService_PartitionCount" DefaultValue="1" />
+    <Parameter Name="EventService_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="AlarmService_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="AlarmService_PartitionCount" DefaultValue="1" />
+    <Parameter Name="AlarmService_TargetReplicaSetSize" DefaultValue="3" />
     <Parameter Name="CalculationEngine_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="CalculationEngine_PartitionCount" DefaultValue="1" />
     <Parameter Name="CalculationEngine_TargetReplicaSetSize" DefaultValue="3" />
@@ -8,6 +14,14 @@
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
        ServiceManifest.xml file. -->
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="EventServicePkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="AlarmServicePkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
   <ServiceManifestImport>
     <ServiceManifestRef ServiceManifestName="CalculationEnginePkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides />
@@ -18,6 +32,16 @@
          ServiceFabric PowerShell module.
          
          The attribute ServiceTypeName below must match the name defined in the imported ServiceManifest.xml file. -->
+    <Service Name="EventService" ServicePackageActivationMode="ExclusiveProcess">
+      <StatefulService ServiceTypeName="EventServiceType" TargetReplicaSetSize="[EventService_TargetReplicaSetSize]" MinReplicaSetSize="[EventService_MinReplicaSetSize]">
+        <UniformInt64Partition PartitionCount="[EventService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+      </StatefulService>
+    </Service>
+    <Service Name="AlarmService" ServicePackageActivationMode="ExclusiveProcess">
+      <StatefulService ServiceTypeName="AlarmServiceType" TargetReplicaSetSize="[AlarmService_TargetReplicaSetSize]" MinReplicaSetSize="[AlarmService_MinReplicaSetSize]">
+        <UniformInt64Partition PartitionCount="[AlarmService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+      </StatefulService>
+    </Service>
     <Service Name="CalculationEngine" ServicePackageActivationMode="ExclusiveProcess">
       <StatefulService ServiceTypeName="CalculationEngineType" TargetReplicaSetSize="[CalculationEngine_TargetReplicaSetSize]" MinReplicaSetSize="[CalculationEngine_MinReplicaSetSize]">
         <UniformInt64Partition PartitionCount="[CalculationEngine_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />

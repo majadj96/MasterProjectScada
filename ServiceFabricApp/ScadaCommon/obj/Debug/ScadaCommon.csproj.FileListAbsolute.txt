@@ -15,3 +15,12 @@ C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\ScadaCommon\
 C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\ScadaCommon\obj\Debug\ScadaCommon.csproj.CopyComplete
 C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\ScadaCommon\obj\Debug\ScadaCommon.dll
 C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\ScadaCommon\obj\Debug\ScadaCommon.pdb
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\ScadaCommon\bin\Debug\ScadaCommon.dll
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\ScadaCommon\bin\Debug\ScadaCommon.pdb
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\ScadaCommon\bin\Debug\Common.dll
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\ScadaCommon\bin\Debug\Common.pdb
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\ScadaCommon\obj\Debug\ScadaCommon.csprojAssemblyReference.cache
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\ScadaCommon\obj\Debug\ScadaCommon.csproj.CoreCompileInputs.cache
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\ScadaCommon\obj\Debug\ScadaCommon.csproj.CopyComplete
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\ScadaCommon\obj\Debug\ScadaCommon.dll
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\ScadaCommon\obj\Debug\ScadaCommon.pdb

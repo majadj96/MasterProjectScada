@@ -2,22 +2,20 @@
 using ScadaCommon.ServiceContract;
 using System.Collections.Generic;
 using System.ServiceModel;
-using System;
-using PubSubCommon;
+using EventService.Channels;
 
 namespace EventService
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class EventServices : IEventService
     {
-        //private AlarmEventRepository alarmEventDB = new AlarmEventRepository();
-        private IPub publisherProxy;
+        private EventPublish eventPublish;
         private EventCache eventCache;
 
         public EventServices()
         {
-            //publisherProxy = CreatePublisherProxy();
-            eventCache = new EventCache(publisherProxy, alarmEventDB);
+            this.eventPublish = new EventPublish();
+            eventCache = new EventCache(eventPublish);
         }
 
         public void AddEvent(Event newEvent)

@@ -32,7 +32,9 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AlarmService\AlarmService.csproj" />
     <ProjectReference Include="..\CalculationEngine\CalculationEngine.csproj" />
+    <ProjectReference Include="..\EventService\EventService.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
   <PropertyGroup>

@@ -4,19 +4,22 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using System;
 using PubSubCommon;
+using AlarmService.Channels;
 
 namespace AlarmService
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class AlarmServices : IAlarmService
     {
-        private IPub publisherProxy;
+        private AlarmPublish alarmPublish;
         private AlarmCache alarmCache;
+        private EventProxy eventProxy;
 
         public AlarmServices()
         {
-            publisherProxy = CreatePublisherProxy();
-            alarmCache = new AlarmCache(publisherProxy);
+            this.alarmPublish = new AlarmPublish();
+            eventProxy = new EventProxy("EventServiceEndpoint");
+            alarmCache = new AlarmCache(alarmPublish);
         }
 
         public bool AcknowledgeAlarm(Alarm alarm)
@@ -49,20 +52,12 @@ namespace AlarmService
             alarmCache.AddAlarm(alarm);
             AlarmToEventConverter(alarm, out alarmEventToReport);
 
-            //eventCache.AddEvent(alarmEventToReport);
+            eventProxy.AddEvent(alarmEventToReport);
         }
 
         public List<Alarm> GetAllAlarms()
         {
             return alarmCache.GetAllAlarms();
-        }
-
-        private IPub CreatePublisherProxy()
-        {
-            string endpointAddressString = "net.tcp://localhost:7001/Pub";
-            EndpointAddress endpointAddress = new EndpointAddress(endpointAddressString);
-            NetTcpBinding netTcpBinding = new NetTcpBinding();
-            return ChannelFactory<IPub>.CreateChannel(netTcpBinding, endpointAddress);
         }
 
         private void AlarmToEventConverter(Alarm alarm, out Event alarmEvent)
@@ -97,7 +92,8 @@ namespace AlarmService
                     break;
             }
             alarmEventToReport.Message = String.Format("Acknowledge '{0}' alarm", alarmEventMessage);
-            //eventCache.AddEvent(alarmEventToReport);
+
+            eventProxy.AddEvent(alarmEventToReport);
         }
     }
 }

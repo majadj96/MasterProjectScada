@@ -8,3 +8,8 @@ C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\Common\bin\D
 C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\Common\obj\Debug\Common.csproj.CoreCompileInputs.cache
 C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\Common\obj\Debug\Common.dll
 C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\Common\obj\Debug\Common.pdb
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\Common\bin\Debug\Common.dll
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\Common\bin\Debug\Common.pdb
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\Common\obj\Debug\Common.csproj.CoreCompileInputs.cache
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\Common\obj\Debug\Common.dll
+D:\PSI\MasterProjekatCLOUD\MasterProjectScada\ServiceFabricApp\Common\obj\Debug\Common.pdb

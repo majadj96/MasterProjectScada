@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace AlarmService
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        /// <summary>
+        /// This is the entry point of the service host process.
+        /// </summary>
+        private static void Main()
         {
             try
             {
