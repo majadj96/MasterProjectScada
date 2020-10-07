@@ -22,7 +22,7 @@ namespace UserInterface
             {
                 Alarms = ProxyServices.AlarmEventServiceProxy.GetAllAlarms();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 Console.WriteLine("Error while requesting Alarms");
             }

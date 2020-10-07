@@ -17,6 +17,7 @@ using System.Windows;
 using UserInterface.Command;
 using LiveCharts.Definitions.Series;
 using System.Threading.Tasks;
+using Common;
 
 namespace UserInterface
 {
@@ -29,6 +30,7 @@ namespace UserInterface
         private List<SignalListItemViewModel> signalList;
 
         public Dictionary<long, Substation> substations;
+        private Dictionary<long, Measurement> measurements = new Dictionary<long, Measurement>();
 
         public Dictionary<long, StepLineSeries> signalsOn;
         public SeriesCollection SeriesCollection { get; set; }
@@ -110,8 +112,10 @@ namespace UserInterface
 
         private IMeasurementRepository measurementProxy;
 
-        public AnalyticsWindowViewModel(Dictionary<long, Substation> substations, IMeasurementRepository measurementProxy)
+        public AnalyticsWindowViewModel(Dictionary<long, Substation> substations, IMeasurementRepository measurementProxy, Dictionary<long, Measurement> measurements)
         {
+            this.measurements = measurements;
+
             foreach (var item in Application.Current.Windows)
 			{
 				if(item.GetType() == typeof(AnalyticsWindow))
@@ -248,81 +252,123 @@ namespace UserInterface
             Substation selectedSub = substations.Where(x => x.Value.Gid == substationGid).FirstOrDefault().Value;
 
             if (type.Equals("Digital")) {
-                foreach (var dis in selectedSub.Disconectors)
-                {
-                    tempList.Add(new SignalListItemViewModel()
-                    {
-                        Name = dis.Name,
-                        Gid = dis.DiscreteGID,
-                        Type = "State"
-                    });
-                }
+                //foreach (var dis in selectedSub.Disconectors)
+                //{
+                //    tempList.Add(new SignalListItemViewModel()
+                //    {
+                //        Name = dis.Name,
+                //        Gid = dis.DiscreteGID,
+                //        Type = "State"
+                //    });
+                //}
 
-                foreach (var breaker in selectedSub.Breakers)
+                //foreach (var breaker in selectedSub.Breakers)
+                //{
+                //    tempList.Add(new SignalListItemViewModel()
+                //    {
+                //        Name = breaker.Name,
+                //        Gid = breaker.DiscreteGID,
+                //        Type = "State"
+                //    });
+                //}
+                foreach (Measurement meas in measurements.Values)
                 {
-                    tempList.Add(new SignalListItemViewModel()
+                    if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(meas.Gid) == DMSType.ANALOG)
+                        continue;
+
+                    if(selectedSub.Transformator.GID == meas.PowerSystemResource.ToString()
+                        || selectedSub.TapChanger.GID == meas.PowerSystemResource.ToString()
+                        || selectedSub.Disconectors.Any(x => x.GID == meas.PowerSystemResource.ToString())
+                        || selectedSub.Breakers.Any(x => x.GID == meas.PowerSystemResource.ToString())
+                        || selectedSub.AsynchronousMachines.Any(x => x.GID == meas.PowerSystemResource.ToString())
+                        || selectedSub.Transformator.TransformerWindings.Any(x => x.GID == meas.PowerSystemResource.ToString()))
                     {
-                        Name = breaker.Name,
-                        Gid = breaker.DiscreteGID,
-                        Type = "State"
-                    });
+                        tempList.Add(new SignalListItemViewModel()
+                        {
+                            Name = meas.Name,
+                            Gid = meas.Gid,
+                            Type = meas.Type.ToString()
+                        });
+                    }
                 }
             } else
             {
-                tempList
-                    .AddRange(selectedSub.AsynchronousMachines
-                        .Select(x => new SignalListItemViewModel
-                            {
-                                Name = x.Name,
-                                Gid = x.SignalGid,
-                                Type = "Power"
-                            }));
-
-                tempList.Add(new SignalListItemViewModel()
+                foreach (Measurement meas in measurements.Values)
                 {
-                    Name = "Tap Changer",
-                    Gid = long.Parse(selectedSub.TapChanger.GID),
-                    Type = "Position"
-                });
+                    if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(meas.Gid) == DMSType.DISCRETE)
+                        continue;
 
-                for (int i = 0; i < selectedSub.Transformator.TransformerWindings.Capacity * 2; i++)
-                {
-                    switch (i)
+                    if (selectedSub.Transformator.GID == meas.PowerSystemResource.ToString()
+                        || selectedSub.TapChanger.GID == meas.PowerSystemResource.ToString()
+                        || selectedSub.Disconectors.Any(x => x.GID == meas.PowerSystemResource.ToString())
+                        || selectedSub.Breakers.Any(x => x.GID == meas.PowerSystemResource.ToString())
+                        || selectedSub.AsynchronousMachines.Any(x => x.GID == meas.PowerSystemResource.ToString())
+                        || selectedSub.Transformator.TransformerWindings.Any(x => x.GID == meas.PowerSystemResource.ToString())
+                        || meas.PowerSystemResource.ToString() == selectedSub.Gid)
                     {
-                        case 0:
-                            tempList.Add(new SignalListItemViewModel()
-                            {
-                                Name = "Transformer Winding - Primary",
-                                Gid = long.Parse(selectedSub.Transformator.TransformerWindings[i % 2].GID),
-                                Type = "Voltage"
-                            });
-                            break;
-                        case 2:
-                            tempList.Add(new SignalListItemViewModel()
-                            {
-                                Name = "Transformer Winding - Primary",
-                                Gid = long.Parse(selectedSub.Transformator.TransformerWindings[i % 2].GID),
-                                Type = "Current"
-                            });
-                            break;
-                        case 1:
-                            tempList.Add(new SignalListItemViewModel()
-                            {
-                                Name = "Transformer Winding - Secondary",
-                                Gid = long.Parse(selectedSub.Transformator.TransformerWindings[i % 2].GID),
-                                Type = "Voltage"
-                            });
-                            break;
-                        case 3:
-                            tempList.Add(new SignalListItemViewModel()
-                            {
-                                Name = "Transformer Winding - Secondary",
-                                Gid = long.Parse(selectedSub.Transformator.TransformerWindings[i % 2].GID),
-                                Type = "Current"
-                            });
-                            break;
+                        tempList.Add(new SignalListItemViewModel()
+                        {
+                            Name = meas.Name,
+                            Gid = meas.Gid,
+                            Type = meas.Type.ToString()
+                        });
                     }
-                }                   
+                }
+
+                //tempList
+                //    .AddRange(selectedSub.AsynchronousMachines
+                //        .Select(x => new SignalListItemViewModel
+                //            {
+                //                Name = x.Name,
+                //                Gid = x.SignalGid,
+                //                Type = "Power"
+                //            }));
+
+                //tempList.Add(new SignalListItemViewModel()
+                //{
+                //    Name = "Tap Changer",
+                //    Gid = long.Parse(selectedSub.TapChanger.GID),
+                //    Type = "Position"
+                //});
+
+                //for (int i = 0; i < selectedSub.Transformator.TransformerWindings.Capacity * 2; i++)
+                //{
+                //    switch (i)
+                //    {
+                //        case 0:
+                //            tempList.Add(new SignalListItemViewModel()
+                //            {
+                //                Name = "Transformer Winding - Primary",
+                //                Gid = long.Parse(selectedSub.Transformator.TransformerWindings[i % 2].GID),
+                //                Type = "Voltage"
+                //            });
+                //            break;
+                //        case 2:
+                //            tempList.Add(new SignalListItemViewModel()
+                //            {
+                //                Name = "Transformer Winding - Primary",
+                //                Gid = long.Parse(selectedSub.Transformator.TransformerWindings[i % 2].GID),
+                //                Type = "Current"
+                //            });
+                //            break;
+                //        case 1:
+                //            tempList.Add(new SignalListItemViewModel()
+                //            {
+                //                Name = "Transformer Winding - Secondary",
+                //                Gid = long.Parse(selectedSub.Transformator.TransformerWindings[i % 2].GID),
+                //                Type = "Voltage"
+                //            });
+                //            break;
+                //        case 3:
+                //            tempList.Add(new SignalListItemViewModel()
+                //            {
+                //                Name = "Transformer Winding - Secondary",
+                //                Gid = long.Parse(selectedSub.Transformator.TransformerWindings[i % 2].GID),
+                //                Type = "Current"
+                //            });
+                //            break;
+                //    }
+                //}                   
             }
 			SignalList = tempList;
         }

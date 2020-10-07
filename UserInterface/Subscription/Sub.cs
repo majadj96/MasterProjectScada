@@ -1,11 +1,14 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using PubSubCommon;
 using System;
+using System.Runtime.Serialization;
 using System.ServiceModel;
 using UserInterface.Helper;
 
 namespace UserInterface.Subscription
 {
+    [Serializable]
+    [DataContract]
     public class Sub : IPub
     {
         ISub _proxy;
@@ -21,7 +24,7 @@ namespace UserInterface.Subscription
 
         public void MakeProxy(string EndpoindAddress, object callbackinstance)
         {
-            NetTcpBinding netTcpbinding = new NetTcpBinding(SecurityMode.None);
+            NetTcpBinding netTcpbinding = new NetTcpBinding();
             EndpointAddress endpointAddress = new EndpointAddress(EndpoindAddress);
             InstanceContext context = new InstanceContext(callbackinstance);
             DuplexChannelFactory<ISub> channelFactory = new DuplexChannelFactory<ISub>(context, netTcpbinding, endpointAddress);
@@ -29,15 +32,19 @@ namespace UserInterface.Subscription
         }
 
         public void OnSubscribe(string topic)
-            => RetryHelper.Retry(
-                    action: () =>
-                    {
-                        _proxy.Subscribe(topic);
-                    },
-                    retryCount: 30,
-                    delay: TimeSpan.FromSeconds(1))
-                .GetAwaiter()
-                .GetResult();
+        {
+            _proxy.Subscribe(topic);
+
+            //=> RetryHelper.Retry(
+            //        action: () =>
+            //        {
+            //            _proxy.Subscribe(topic);
+            //        },
+            //        retryCount: 30,
+            //        delay: TimeSpan.FromSeconds(1))
+            //    .GetAwaiter()
+            //    .GetResult();
+        }
 
         void OnUnSubscribe(object sender, EventArgs e, string topic)
         {

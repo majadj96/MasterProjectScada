@@ -450,7 +450,7 @@ namespace UserInterface
         {
             AnalyticsWindow analyticsWindow = new AnalyticsWindow();
 
-            AnalyticsWindowViewModel analyticsWindowViewModel = new AnalyticsWindowViewModel(substations, measurementRepository);
+            AnalyticsWindowViewModel analyticsWindowViewModel = new AnalyticsWindowViewModel(substations, measurementRepository, this.measurements);
 
             analyticsWindow.DataContext = analyticsWindowViewModel;
 
