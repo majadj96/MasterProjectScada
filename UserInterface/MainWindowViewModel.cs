@@ -28,27 +28,24 @@ namespace UserInterface
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        #region Commands
         public MyICommand<string> ButtonTablesCommand { get; private set; }
         public MyICommand<string> SearchSubsCommand { get; private set; }
         public MyICommand<string> DissmisSubsCommand { get; private set; }
         public MyICommand<string> AnalyticsOpenCommand { get; private set; }
         public MyICommand<string> LoadSubstationCommand { get; private set; }
+        #endregion
 
+        #region Variables
         private MeshViewModel meshViewModel = new MeshViewModel();
-
         private ObservableCollection<RadioButton> radioButtons = new ObservableCollection<RadioButton>();
         private ObservableCollection<Substation> substationsList = new ObservableCollection<Substation>();
         private ObservableCollection<string> searchType = new ObservableCollection<string> { "Name", "GID" };
         List<Substation> searchedSubs = new List<Substation>();
         private AlarmHandler alarmHandler;
         private CustomEventHandler customEventHandler;
-
         private DispatcherTimer AlarmButtonTimer = new DispatcherTimer();
         private MeasurementProxy measurementRepository;
-
-        //private Thread threadAlarms;
-
-        #region Variables
         private BindableBase currentMeshViewModel;
         private BindableBase currentTableViewModel;
 
@@ -344,15 +341,13 @@ namespace UserInterface
         public Dictionary<long, Measurement> Measurements { get => measurements; set => measurements = value; }
         #endregion
 
-        DispatcherTimer timer = new DispatcherTimer();
         Random rand = new Random();
+        Sub subscriptionManager = null;
 
         public MainWindowViewModel()
         {
             meshViewModel.Measurements = Measurements;
             CurrentMeshViewModel = meshViewModel;
-            //Dialog = new DialogViewModel();
-
             ButtonTablesCommand = new MyICommand<string>(OnNavigation);
             LoadSubstationCommand = new MyICommand<string>(changeGrid);
             SearchSubsCommand = new MyICommand<string>(searchSubstation);
@@ -360,56 +355,21 @@ namespace UserInterface
             AnalyticsOpenCommand = new MyICommand<string>(openAnalytics);
 
             IsConnectedScada = false;
-           
-
-            //int i = 0;
-
-            //AnalyticsOpenCommand = new MyICommand<string>(x =>
-            //{
-            //    if(i%2 == 0)
-            //    {
-            //        DialogMessageType type = i == 0 ? DialogMessageType.Error : DialogMessageType.Info;
-            //        MessengerInstance.Send(new DialogMessage("This is message", type));
-            //    }
-
-            //    i++;
-            //});
 
             alarmHandler = new AlarmHandler(Measurements);
             customEventHandler = new CustomEventHandler();
-
-            //RetryHelper.Retry(
-            //        action: () => 
-            //        {
-
-            //            measurementRepository = new MeasurementProxy("MeasurementEndPoint");
-            //            measurementRepository.Open();
-            //        },
-            //        retryCount: 30,
-            //        delay: TimeSpan.FromSeconds(1),
-            //        afterFailure: () =>
-            //        {
-            //            measurementRepository = null;
-            //        })
-            //    .GetAwaiter()
-            //    .GetResult();
-
             measurementRepository = new MeasurementProxy("MeasurementEndPoint");
 
-            Sub subNMS = new Sub();
-            subNMS.OnSubscribe("nms");
-            subNMS.OnSubscribe("scada");
-            subNMS.OnSubscribe("alarm");
-            subNMS.OnSubscribe("connectionState");
-            subNMS.OnSubscribe("event");
+            subscriptionManager = new Sub();
+            subscribeTo("nms");
+            subscribeTo("scada");
+            subscribeTo("alarm");
+            subscribeTo("connectionState");
+            subscribeTo("event");
             setUpInitState();
 
             substations = new Dictionary<long, Substation>();
-
-            timer.Tick += new EventHandler(Test);
-            timer.Interval = new TimeSpan(0, 0, 1);
-            timer.Start();
-
+           
             AlarmButtonTimer.Tick += ButtonBlinks;
             AlarmButtonTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
             AlarmButtonTimer.Start();
@@ -421,6 +381,11 @@ namespace UserInterface
                 else
                     PopulateModel(message.Target, message.Notification);
             });
+        }
+
+        private void subscribeTo(string topic)
+        {
+            subscriptionManager.OnSubscribe(topic);
         }
 
         private void changeGrid(string a)
@@ -462,7 +427,7 @@ namespace UserInterface
             SearchTerm = "";
         }
 
-
+        #region AlarmsCheck
         /*private void CheckForAlarms(object stateInfo)
         {
             while (true)
@@ -480,16 +445,8 @@ namespace UserInterface
                 }
             }
         }*/
-
-        private void Test(object sender, EventArgs e)
-        {
-            //GaugeValue = rand.Next(0, 100).ToString();
-
-            //AnguarValue = rand.Next(-7, 7).ToString();
-
-           // GaugeClasic = rand.Next(300, 1000).ToString();
-        }
-
+        #endregion
+            
         private void ButtonBlinks(object sender, EventArgs e)
         {
             if (FlagToStartBlinking)
@@ -571,8 +528,8 @@ namespace UserInterface
 
         public void setUpInitState()
         {
-            connectedStatusBar = "DISCONNECTED"; //SCADA konekcija
-            timeStampStatusBar = DateTime.Now.ToLongDateString();  //SCADA konekcija
+            connectedStatusBar = "DISCONNECTED"; 
+            timeStampStatusBar = DateTime.Now.ToLongDateString();
         }
 
         public void SetCurrentSubstation()
@@ -721,9 +678,6 @@ namespace UserInterface
 
                         Messenger.Default.Send<Measurement>(meas);
                     }
-
-                    //measure.Gid to da se poklapa sa nekim od gidova od asinhrone ili od brejkera ili od diskonektora ili od ono za fluide itd..trebaju nam merenja
-                    //Prodje se kroz sve podstanice i onda kroz svaki od elemenata i onda radi radnju
 
                     foreach(Substation sub in Substations.Values)
                     {
@@ -981,7 +935,11 @@ namespace UserInterface
             int i = 0;
             foreach (KeyValuePair<long, Substation> sub in substations)
             {
-                RadioButton rb = new RadioButton() { Content = (i + 1) + ". " + sub.Value.Name + "(" + sub.Key + ")", IsChecked = i == 0 };
+                RadioButton rb = new RadioButton() {
+                    Content = (i + 1) + ". " + sub.Value.Name + "(" + sub.Key + ")",
+                    IsChecked = i == 0
+                };
+
                 rb.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFE8D856"));
                 rb.Checked += (sender, args) =>
                 {
@@ -992,13 +950,10 @@ namespace UserInterface
                             radioBut.IsChecked = false;
                         }
                     }
-
                     String[] gidList = (sender as RadioButton).Content.ToString().Split('(');
                     String[] gidL = gidList[1].Split(')');
                     String gid = gidL[0];
                     setSelectedSubstation(gid);
-
-
                     RadioButtons = test;
                 };
                 rb.Tag = i;
@@ -1024,7 +979,6 @@ namespace UserInterface
                     substations.Add((long)gid.GetValue(), substation);
             }
             SubstationsList = new ObservableCollection<Substation>(substations.Values);
-            // setRadioButtons();
             foreach (ResourceDescription resource in resources.Where(x => (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.DISCONNECTOR) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.BREAKER) ||
                                                                         (ModelCodeHelper.ExtractTypeFromGlobalId(x.Id) == (short)DMSType.RATIOTAPCHANGER) ||
@@ -1187,7 +1141,6 @@ namespace UserInterface
                                     {
                                         if (s.Transformator != null)
                                         {
-                                            //Ovo je TW koji je vezan za PT
                                             TransformerWinding TW = s.Transformator.TransformerWindings.FirstOrDefault(x => x.GID == gid.ToString());
                                             if (TW != null)
                                             {
@@ -1287,7 +1240,6 @@ namespace UserInterface
                             model.Value = property.GetValue().ToString();
                             break;
                         case Common.ModelCode.TRANSFORMERWINDING_POWERTR:
-                            //TW sadrzi ID od svog PT, treba povezati njih
                             break;
                         default:
                             break;

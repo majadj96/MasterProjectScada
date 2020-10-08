@@ -125,6 +125,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\ChartModel.cs" />
     <Compile Include="Converters\DialogMessageToColorConverter.cs" />
     <Compile Include="Converters\InvertBooleanConverter.cs" />
     <Compile Include="Converters\PixelsConverter.cs" />
