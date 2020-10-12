@@ -31,6 +31,7 @@ namespace PubSubService
 
 
             Console.WriteLine("Endpoint address '{0}:{1}' subscribed to '{2}'", address, port, topicName);
+            ServiceEventSource.Current.Message("Endpoint address '{0}:{1}' subscribed to '{2}'", address, port, topicName);
 
             //Notify NMS to send current model to UI
             if (topicName == "nms")

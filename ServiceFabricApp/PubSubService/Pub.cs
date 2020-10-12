@@ -32,6 +32,7 @@ namespace PubSubService
 				catch (Exception ex)
 				{
 					Console.WriteLine("Could not invoke TryToPublish method. {0}", ex.Message);
+                    ServiceEventSource.Current.Message("Could not invoke TryToPublish method. {0}", ex.Message);
 				}
 			}
 		}

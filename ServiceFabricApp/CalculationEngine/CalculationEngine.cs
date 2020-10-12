@@ -30,13 +30,14 @@ namespace CalculationEngine
 
             int config = LoadConfiguration();
             ProcessingData processingData = new ProcessingData(model, config);
+            PublishMeasurements pub = new PublishMeasurements(processingData);
 
-            TransactionService transactionService = new TransactionService(processingData, model);
+            TransactionService transactionService = new TransactionService(processingData, model, pub);
             this.modelUpdateService = new ModelUpdateContract(model, transactionService);
 
-            PublishMeasurements pub = new PublishMeasurements(processingData);
-            SubscribeProxy sub = new SubscribeProxy(pub);
-            sub.Subscribe("scada");
+            
+            //SubscribeProxy sub = new SubscribeProxy(pub);
+            //sub.Subscribe("scada");
 
             CalcEngine engine = new CalcEngine(processingData);
         }

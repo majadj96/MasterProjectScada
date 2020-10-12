@@ -20,6 +20,8 @@ namespace NetworkModelService
     public class NetworkModel : ITransactionSteps, IModelUpdateContract, IGetResourceDescriptions
     {
         private IReliableStateManager StateManager;
+        private DeltaBlobRepository DeltaBlobRepository;
+        private Delta LastDelta;
 
         /// <summary>
         /// Dictionary which contains all data: Key - DMSType, Value - Container
@@ -321,6 +323,7 @@ namespace NetworkModelService
                 if (applyingStarted)
                 {
                     //SaveDelta(delta);
+                    LastDelta = delta;
                 }
 
                 if (updateResult.Result == ResultType.Succeeded)
@@ -664,110 +667,76 @@ namespace NetworkModelService
 
         private void Initialize()
         {
-            List<Delta> result = ReadAllDeltas();
+            DeltaBlobRepository = new DeltaBlobRepository();
 
-            foreach (Delta delta in result)
-            {
-                try
-                {
-                    foreach (ResourceDescription rd in delta.InsertOperations)
-                    {
-                        InsertEntity(rd);
-                    }
+            //List<Delta> result = ReadAllDeltas();
 
-                    foreach (ResourceDescription rd in delta.UpdateOperations)
-                    {
-                        UpdateEntity(rd);
-                    }
+            //foreach (Delta delta in result)
+            //{
+            //    try
+            //    {
+            //        foreach (ResourceDescription rd in delta.InsertOperations)
+            //        {
+            //            InsertEntity(rd);
+            //        }
 
-                    foreach (ResourceDescription rd in delta.DeleteOperations)
-                    {
-                        DeleteEntity(rd);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    CommonTrace.WriteTrace(CommonTrace.TraceError, "Error while applying delta (id = {0}) during service initialization. {1}", delta.Id, ex.Message);
-                }
-            }
+            //        foreach (ResourceDescription rd in delta.UpdateOperations)
+            //        {
+            //            UpdateEntity(rd);
+            //        }
+
+            //        foreach (ResourceDescription rd in delta.DeleteOperations)
+            //        {
+            //            DeleteEntity(rd);
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        CommonTrace.WriteTrace(CommonTrace.TraceError, "Error while applying delta (id = {0}) during service initialization. {1}", delta.Id, ex.Message);
+            //    }
+            //}
         }
 
         private void SaveDelta(Delta delta)
         {
-            bool fileExisted = false;
-
-            if (File.Exists(Config.Instance.ConnectionString))
-            {
-                fileExisted = true;
-            }
-
-            FileStream fs = new FileStream(Config.Instance.ConnectionString, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            fs.Seek(0, SeekOrigin.Begin);
-
-            BinaryReader br = null;
-            int deltaCount = 0;
-
-            if (fileExisted)
-            {
-                br = new BinaryReader(fs);
-                deltaCount = br.ReadInt32();
-            }
-
-            BinaryWriter bw = new BinaryWriter(fs);
-            fs.Seek(0, SeekOrigin.Begin);
-
-            delta.Id = ++deltaCount;
             byte[] deltaSerialized = delta.Serialize();
             int deltaLength = deltaSerialized.Length;
 
-            bw.Write(deltaCount);
-            fs.Seek(0, SeekOrigin.End);
-            bw.Write(deltaLength);
-            bw.Write(deltaSerialized);
-
-            if (br != null)
-            {
-                br.Close();
-            }
-
-            bw.Close();
-            fs.Close();
+            DeltaBlobRepository.AddDeltaBlob("Blob1", deltaSerialized); //DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")
         }
 
         private List<Delta> ReadAllDeltas()
         {
             List<Delta> result = new List<Delta>();
 
-            if (!File.Exists(Config.Instance.ConnectionString))
+            foreach (byte[] item in DeltaBlobRepository.ReadAllDeltaBlobs())
             {
-                return result;
-            }
+                MemoryStream stream = new MemoryStream(item);
+                stream.Seek(0, SeekOrigin.Begin);
 
-            FileStream fs = new FileStream(Config.Instance.ConnectionString, FileMode.OpenOrCreate, FileAccess.Read);
-            fs.Seek(0, SeekOrigin.Begin);
-
-            if (fs.Position < fs.Length) // if it is not empty stream
-            {
-                BinaryReader br = new BinaryReader(fs);
-
-                int deltaCount = br.ReadInt32();
-                int deltaLength = 0;
-                byte[] deltaSerialized = null;
-                Delta delta = null;
-
-                for (int i = 0; i < deltaCount; i++)
+                if(stream.Position < stream.Length)
                 {
-                    deltaLength = br.ReadInt32();
-                    deltaSerialized = new byte[deltaLength];
-                    br.Read(deltaSerialized, 0, deltaLength);
-                    delta = Delta.Deserialize(deltaSerialized);
-                    result.Add(delta);
+                    BinaryReader br = new BinaryReader(stream);
+
+                    int deltaCount = br.ReadInt32();
+                    int deltaLength = 0;
+                    byte[] deltaSerialized = null;
+                    Delta delta = null;
+
+                    for (int i = 0; i < deltaCount; i++)
+                    {
+                        deltaLength = br.ReadInt32();
+                        deltaSerialized = new byte[deltaLength];
+                        br.Read(deltaSerialized, 0, deltaLength);
+                        delta = Delta.Deserialize(deltaSerialized);
+                        result.Add(delta);
+                    }
+
+                    br.Close();
                 }
 
-                br.Close();
+                stream.Close();
             }
-
-            fs.Close();
 
             return result;
         }
@@ -884,6 +853,8 @@ namespace NetworkModelService
             networkDataModelCopy.Clear();
 
             this.commitFinished = true;
+
+            //SaveDelta(LastDelta);
 
             return true;
         }

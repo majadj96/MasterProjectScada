@@ -20,14 +20,3 @@ C:\Users\Bosa\Desktop\service-fabric-branch\MasterProjectScada\ServiceFabricApp\
 C:\Users\Bosa\Desktop\service-fabric-branch\MasterProjectScada\ServiceFabricApp\PubSubCommon\obj\Debug\PubSubCommon.csproj.CopyComplete
 C:\Users\Bosa\Desktop\service-fabric-branch\MasterProjectScada\ServiceFabricApp\PubSubCommon\obj\Debug\PubSubCommon.dll
 C:\Users\Bosa\Desktop\service-fabric-branch\MasterProjectScada\ServiceFabricApp\PubSubCommon\obj\Debug\PubSubCommon.pdb
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\PubSubCommon\bin\Debug\PubSubCommon.dll
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\PubSubCommon\bin\Debug\PubSubCommon.pdb
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\PubSubCommon\bin\Debug\Common.dll
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\PubSubCommon\bin\Debug\ScadaCommon.dll
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\PubSubCommon\bin\Debug\Common.pdb
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\PubSubCommon\bin\Debug\ScadaCommon.pdb
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\PubSubCommon\obj\Debug\PubSubCommon.csprojAssemblyReference.cache
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\PubSubCommon\obj\Debug\PubSubCommon.csproj.CoreCompileInputs.cache
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\PubSubCommon\obj\Debug\PubSubCommon.csproj.CopyComplete
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\PubSubCommon\obj\Debug\PubSubCommon.dll
-C:\Users\Obren\Documents\GitHub\MasterProjectScada\ServiceFabricApp\PubSubCommon\obj\Debug\PubSubCommon.pdb

@@ -1,4 +1,5 @@
 ﻿using CalculationEngine.Model;
+using PubSubCommon;
 using System;
 using System.Collections.Generic;
 using TransactionManagerContracts;
@@ -9,11 +10,13 @@ namespace CalculationEngine
     {
         private ProcessingData _processingData;
         private ConcreteModel Model;
+        private IPub publisher;
 
-        public TransactionService(ProcessingData processingData, ConcreteModel model)
+        public TransactionService(ProcessingData processingData, ConcreteModel model, IPub pub)
         {
             _processingData = processingData;
             Model = model;
+            this.publisher = pub;
         }
 
         public bool Prepare()
@@ -32,6 +35,8 @@ namespace CalculationEngine
             Model.CurrentModel = new Dictionary<long, IdObject>(Model.CurrentModel_Copy);
             Model.CurrentModel_Copy.Clear();
 
+            SubscribeProxy sub = new SubscribeProxy(publisher);
+            sub.Subscribe("scada");
             //_processingData.UpdateAsyncMachines();
             _processingData.IsModelChanged = true;
 

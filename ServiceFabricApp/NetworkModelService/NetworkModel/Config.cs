@@ -19,7 +19,7 @@ namespace NetworkModelService
 
         private Config()
         {
-            //connectionString = ConfigurationManager.ConnectionStrings["networkModelconnectionString"].ConnectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["networkModelconnectionString"].ConnectionString;
         }
 
         #region Static members
