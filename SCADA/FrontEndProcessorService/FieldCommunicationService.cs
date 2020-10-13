@@ -118,7 +118,7 @@ namespace FrontEndProcessorService
         public void StartService(Dictionary<Tuple<ushort, PointType>, BasePointCacheItem> points)
         {
             this.points = points;
-            ndsProxy.Open();
+            //ndsProxy.Open();
             ndsStateProxy.Open();
 
             commandExecutor.StartExecution();

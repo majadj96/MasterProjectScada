@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Communication.Wcf.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
-using NetworkDynamicService.PointUpdater;
+using CommandingManagementService.PointUpdater;
 using PubSubCommon;
 using ScadaCommon.ServiceContract;
 

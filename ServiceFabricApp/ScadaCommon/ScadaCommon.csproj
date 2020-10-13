@@ -48,6 +48,7 @@
     <Compile Include="ComandingModel\CommandObject.cs" />
     <Compile Include="FEPDataModel\PointChanges.cs" />
     <Compile Include="Interfaces\IConfigItem.cs" />
+    <Compile Include="Interfaces\IRealTimeCacheService.cs" />
     <Compile Include="ProcesingModel\AnalogPoint.cs" />
     <Compile Include="ProcesingModel\DigitalPoint.cs" />
     <Compile Include="ProcesingModel\IInputObject.cs" />
@@ -77,14 +78,22 @@
     <Compile Include="ServiceContract\IFEPCommandingServiceContract.cs" />
     <Compile Include="ServiceContract\IPointUpdateService.cs" />
     <Compile Include="ServiceContract\IStateUpdateService.cs" />
+    <Compile Include="ServiceProxies\FepCommandingServiceProxy.cs" />
+    <Compile Include="ServiceProxies\FepConfigProxy.cs" />
+    <Compile Include="ServiceProxies\MeasurementRepositoryProxy.cs" />
     <Compile Include="ServiceProxies\NetworkDynamicServiceProxy.cs" />
     <Compile Include="ServiceProxies\NetworkDynamicStateServiceProxy.cs" />
+    <Compile Include="ServiceProxies\RealTimeCacheServiceProxy.cs" />
     <Compile Include="Utility\UniqueIdGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\RepositoryCore\RepositoryCore.csproj">
+      <Project>{46F879CD-DF1D-402A-9373-62153FDE9ED4}</Project>
+      <Name>RepositoryCore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{6c234280-508a-47a4-b9ca-2677082ef85f}</Project>
       <Name>Common</Name>

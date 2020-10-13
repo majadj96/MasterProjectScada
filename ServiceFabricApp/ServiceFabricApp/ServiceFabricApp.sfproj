@@ -32,7 +32,9 @@
     <ProjectReference Include="..\CalculationEngine\CalculationEngine.csproj" />
     <ProjectReference Include="..\CommandingManagementService\CommandingManagementService.csproj" />
     <ProjectReference Include="..\DynamicDataProccessorService\DynamicDataProccessorService.csproj" />
-    <ProjectReference Include="..\ScadaModelManagementService\ScadaModelManagementService.csproj" />
+    <ProjectReference Include="..\MeasurementRepositoryService\MeasurementRepositoryService.csproj" />
+    <ProjectReference Include="..\RealTimeCacheService\RealTimeCacheService.csproj" />
+    <ProjectReference Include="..\SCADAModelUpdateService\SCADAModelUpdateService.csproj" />
     <ProjectReference Include="..\StateUpdaterService\StateUpdaterService.csproj" />
   </ItemGroup>
   <ItemGroup>

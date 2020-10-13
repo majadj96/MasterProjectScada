@@ -4,7 +4,7 @@ using PubSubCommon;
 using ScadaCommon;
 using ScadaCommon.ServiceContract;
 
-namespace NetworkDynamicService.PointUpdater
+namespace CommandingManagementService.PointUpdater
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class StateUpdateService : IStateUpdateService

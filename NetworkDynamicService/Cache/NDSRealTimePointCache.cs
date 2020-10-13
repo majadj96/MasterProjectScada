@@ -52,7 +52,7 @@ namespace NetworkDynamicService.Cache
             int minDiscrete = 0;
             int maxDiscrete = 0;
             int normalDiscrete = 0;
-            float minAnalog = 0;
+            float minAnalog = 0; 
             float maxAnalog = 0;
             float normalAnalog = 0;
 

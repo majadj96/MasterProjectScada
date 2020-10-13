@@ -10,14 +10,15 @@ using ScadaCommon.BackEnd_FrontEnd;
 using Common.AlarmEvent;
 using ScadaCommon.Interfaces;
 using Common;
+using ScadaCommon.ServiceContract;
 
 namespace BackEndProcessorService
 {
     public class AlarmingModule : IProcessingData
     {
-        private AlarmEventServiceProxy alarmEventServiceProxy;
+        private IAlarmEventService alarmEventServiceProxy;
 
-        public AlarmingModule(AlarmEventServiceProxy alarmEventServiceProxy)
+        public AlarmingModule(IAlarmEventService alarmEventServiceProxy)
         {
             this.alarmEventServiceProxy = alarmEventServiceProxy;
         }

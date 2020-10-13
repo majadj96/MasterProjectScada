@@ -40,20 +40,20 @@ namespace NetworkDynamicService
         {
             pointUpdateProxy = new PointUpdateProxy("UpdatePointEndPoint");
             alarmEventServiceProxy = new AlarmEventServiceProxy("AlarmEventServiceEndPoint");
-            ndSConfigurationProxy = new NDSConfigurationProxy("IFEPConfigService");
-            fepCmdProxy = new FepCommandingServiceProxy("FEPCommandingServiceContract");
-            publisherProxy = new PublisherProxy("PublisherEndPoint");
+            //ndSConfigurationProxy = new NDSConfigurationProxy("IFEPConfigService");
+            //fepCmdProxy = new FepCommandingServiceProxy("FEPCommandingServiceContract");
+            //publisherProxy = new PublisherProxy("PublisherEndPoint");
            
 
-            nDSRealTimePointCache = new NDSRealTimePointCache();
-            backEndPocessingModule = new BackEndPocessingModule(pointUpdateProxy, this.alarmEventServiceProxy, this.publisherProxy, this.measurementsRepository);
+            //nDSRealTimePointCache = new NDSRealTimePointCache();
+            //backEndPocessingModule = new BackEndPocessingModule(pointUpdateProxy, this.alarmEventServiceProxy, this.publisherProxy, this.measurementsRepository);
 
-            transactionService =  new TransactionService(nDSRealTimePointCache, OpenProxies);
-            measurementRepository = new MeasurementProviderService(measurementsRepository);
-            modelUpdateContract = new ModelUpdateContract(nDSRealTimePointCache, ndSConfigurationProxy, transactionService);
+            //transactionService =  new TransactionService(nDSRealTimePointCache, OpenProxies);
+            //measurementRepository = new MeasurementProviderService(measurementsRepository);
+            //modelUpdateContract = new ModelUpdateContract(nDSRealTimePointCache, ndSConfigurationProxy, transactionService);
             //stateUpdateService = new StateUpdateService(publisherProxy);
-            commandingService = new CommandingService(fepCmdProxy, backEndPocessingModule, nDSRealTimePointCache);
-            processingService = new ProcessingService(backEndPocessingModule);
+            //commandingService = new CommandingService(fepCmdProxy, backEndPocessingModule, nDSRealTimePointCache);
+            //processingService = new ProcessingService(backEndPocessingModule);
             InitializeHosts();
         }
 
@@ -92,7 +92,7 @@ namespace NetworkDynamicService
         {
             hosts = new List<ServiceHost>();
             //hosts.Add(new ServiceHost(stateUpdateService));
-            hosts.Add(new ServiceHost(commandingService));
+            //hosts.Add(new ServiceHost(commandingService));
             hosts.Add(new ServiceHost(modelUpdateContract));
             hosts.Add(new ServiceHost(processingService));
             hosts.Add(new ServiceHost(measurementRepository));

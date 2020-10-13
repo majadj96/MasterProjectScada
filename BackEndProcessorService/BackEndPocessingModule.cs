@@ -16,11 +16,11 @@ namespace BackEndProcessorService
     {
         private IPointUpdateService pointUpdateProxy;
         private IPub publisherProxy;
-        private AlarmEventServiceProxy alarmEventServiceProxy;
+        private IAlarmEventService alarmEventServiceProxy;
         private IMeasurementRepository measurementRepository;
         public List<IProcessingData> ProcessingPipeline { get; set; }
         public List<IProcessingData> CommandingPipeline { get; set; }
-        public BackEndPocessingModule(IPointUpdateService pointUpdateProxy, AlarmEventServiceProxy alarmEventServiceProxy, IPub publisherProxy, IMeasurementRepository measurementRepository)
+        public BackEndPocessingModule(IPointUpdateService pointUpdateProxy, IAlarmEventService alarmEventServiceProxy, IPub publisherProxy, IMeasurementRepository measurementRepository)
         {
             this.alarmEventServiceProxy = alarmEventServiceProxy;
             this.pointUpdateProxy = pointUpdateProxy;
@@ -82,7 +82,7 @@ namespace BackEndProcessorService
         private void InitializeProcessingModules()
         {
             this.ProcessingPipeline.Add(new EGUConverterModule());
-            this.ProcessingPipeline.Add(new AlarmingModule(this.alarmEventServiceProxy));
+            this.ProcessingPipeline.Add(new AlarmingModule(alarmEventServiceProxy));
 
             this.CommandingPipeline.Add(new RawConverterModule());
         }
