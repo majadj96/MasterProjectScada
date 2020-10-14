@@ -1,4 +1,6 @@
-﻿namespace ScadaCommon.Interfaces
+﻿using Common;
+
+namespace ScadaCommon.Interfaces
 {
     /// <summary>
     /// Interface containing logic for processing points and executing commands.
@@ -21,7 +23,8 @@
         /// <param name="remoteUnitAddress">The remote unit address.</param>
         /// <param name="pointAddress">The point address.</param>
         /// <param name="value">The value.</param>
-        void ExecuteWriteCommand(PointType pointType, ushort transactionId, byte remoteUnitAddress, ushort pointAddress, int value);
+        /// <param name="commandOwner">The commandOwner.</param>
+        void ExecuteWriteCommand(PointType pointType, ushort transactionId, byte remoteUnitAddress, ushort pointAddress, int value, string commandOwner);
 
         /// <summary>
         /// Executes a read command.
@@ -31,11 +34,14 @@
         /// <param name="remoteUnitAddress">The remote unit address.</param>
         /// <param name="startAddress">The start address.</param>
         /// <param name="numberOfPoints">The number of points that should be read.</param>
-        void ExecuteReadCommand(PointType pointType, ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints);
+        /// <param name="commandOwner">The commandOwner.</param>
+        void ExecuteReadCommand(PointType pointType, ushort transactionId, byte remoteUnitAddress, ushort startAddress, ushort numberOfPoints, string commandOwner);
 
         /// <summary>
         /// Send byte array message
         /// </summary>
         void SendRawBytesMessage(DNP3FunctionCode functionCode, byte[] message);
+
+        void SetPointOperationMode(PointType pointType, ushort address, OperationMode operationMode);
     }
 }

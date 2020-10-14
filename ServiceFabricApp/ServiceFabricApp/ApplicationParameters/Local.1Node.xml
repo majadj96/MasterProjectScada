@@ -1,6 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Application xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="fabric:/ServiceFabricApp" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
+    <Parameter Name="EventService_PartitionCount" Value="1" />
+    <Parameter Name="EventService_MinReplicaSetSize" Value="1" />
+    <Parameter Name="EventService_TargetReplicaSetSize" Value="1" />
+    <Parameter Name="AlarmService_PartitionCount" Value="1" />
+    <Parameter Name="AlarmService_MinReplicaSetSize" Value="1" />
+    <Parameter Name="AlarmService_TargetReplicaSetSize" Value="1" />
+    <Parameter Name="CommandingManagementService_InstanceCount" Value="1" />
+    <Parameter Name="DynamicDataProccessorService_InstanceCount" Value="1" />
+    <Parameter Name="MeasurementRepositoryService_InstanceCount" Value="1" />
+    <Parameter Name="RealTimeCacheService_PartitionCount" Value="1" />
+    <Parameter Name="RealTimeCacheService_MinReplicaSetSize" Value="1" />
+    <Parameter Name="RealTimeCacheService_TargetReplicaSetSize" Value="1" />
+    <Parameter Name="StateUpdaterService_InstanceCount" Value="1" />
+    <Parameter Name="SCADAModelUpdateService_InstanceCount" Value="1" />
+    <Parameter Name="PubSubService_PartitionCount" Value="1" />
+    <Parameter Name="PubSubService_MinReplicaSetSize" Value="1" />
+    <Parameter Name="PubSubService_TargetReplicaSetSize" Value="1" />
+    <Parameter Name="TransactionManager_PartitionCount" Value="1" />
+    <Parameter Name="TransactionManager_MinReplicaSetSize" Value="1" />
+    <Parameter Name="TransactionManager_TargetReplicaSetSize" Value="1" />
+    <Parameter Name="NotifyNMSService_InstanceCount" Value="1" />
+    <Parameter Name="NetworkModelService_PartitionCount" Value="1" />
+    <Parameter Name="NetworkModelService_MinReplicaSetSize" Value="1" />
+    <Parameter Name="NetworkModelService_TargetReplicaSetSize" Value="1" />
     <Parameter Name="CalculationEngine_PartitionCount" Value="1" />
     <Parameter Name="CalculationEngine_MinReplicaSetSize" Value="1" />
     <Parameter Name="CalculationEngine_TargetReplicaSetSize" Value="1" />

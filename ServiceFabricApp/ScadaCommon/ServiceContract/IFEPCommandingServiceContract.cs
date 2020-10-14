@@ -1,4 +1,5 @@
-﻿using ScadaCommon.ComandingModel;
+﻿using Common;
+using ScadaCommon.ComandingModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,5 +24,7 @@ namespace ScadaCommon.ServiceContract
         void ReadDigitalOutput(FEPCommandObject cmdObject);
         [OperationContract]
         void ReadAnalogOutput(FEPCommandObject cmdObject);
+        [OperationContract]
+        void SetPointOperationMode(PointType pointType, ushort address, OperationMode operationMode);
     }
 }

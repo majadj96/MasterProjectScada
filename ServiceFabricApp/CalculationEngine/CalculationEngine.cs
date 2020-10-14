@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Fabric;
 using System.Fabric.Description;
 using System.Globalization;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
+using CalculationEngine.Model;
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Communication.Wcf.Runtime;
@@ -20,9 +22,31 @@ namespace CalculationEngine
     /// </summary>
     internal sealed class CalculationEngine : StatefulService
     {
+        private ModelUpdateContract modelUpdateService;
         public CalculationEngine(StatefulServiceContext context)
             : base(context)
-        { }
+        {
+            ConcreteModel model = new ConcreteModel();
+
+            int config = LoadConfiguration();
+            ProcessingData processingData = new ProcessingData(model, config);
+            PublishMeasurements pub = new PublishMeasurements(processingData);
+
+            TransactionService transactionService = new TransactionService(processingData, model, pub);
+            this.modelUpdateService = new ModelUpdateContract(model, transactionService);
+
+            
+            //SubscribeProxy sub = new SubscribeProxy(pub);
+            //sub.Subscribe("scada");
+
+            CalcEngine engine = new CalcEngine(processingData);
+        }
+
+        private int LoadConfiguration()
+        {
+            string configString = ConfigurationManager.AppSettings.Get("MaxDifference");
+            return int.Parse(configString);
+        }
 
         /// <summary>
         /// Optional override to create listeners (e.g., HTTP, Service Remoting, WCF, etc.) for this service replica to handle client or user requests.
@@ -43,9 +67,9 @@ namespace CalculationEngine
                     string uri = string.Format(CultureInfo.InvariantCulture, "{0}://{1}:{2}/CE", "net.tcp", host, port);
 
                     var listener = new WcfCommunicationListener<IModelUpdateContract>(
-                        wcfServiceObject: new ModelUpdateContract(),
+                        wcfServiceObject: this.modelUpdateService,
                         serviceContext: context,
-                        listenerBinding: new NetTcpBinding(),
+                        listenerBinding: new NetTcpBinding(SecurityMode.None),
                         address: new EndpointAddress(uri)
                     );
                     return listener;
@@ -62,9 +86,6 @@ namespace CalculationEngine
         {
             // TODO: Replace the following sample code with your own logic 
             //       or remove this RunAsync override if it's not needed in your service.
-
-            CalcEngine engine = new CalcEngine();
-
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();

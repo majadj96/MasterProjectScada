@@ -32,7 +32,19 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AlarmService\AlarmService.csproj" />
     <ProjectReference Include="..\CalculationEngine\CalculationEngine.csproj" />
+    <ProjectReference Include="..\CommandingManagementService\CommandingManagementService.csproj" />
+    <ProjectReference Include="..\DynamicDataProccessorService\DynamicDataProccessorService.csproj" />
+    <ProjectReference Include="..\EventService\EventService.csproj" />
+    <ProjectReference Include="..\MeasurementRepositoryService\MeasurementRepositoryService.csproj" />
+    <ProjectReference Include="..\NetworkModelService\NetworkModelService.csproj" />
+    <ProjectReference Include="..\NotifyNMSService\NotifyNMSService.csproj" />
+    <ProjectReference Include="..\PubSubService\PubSubService.csproj" />
+    <ProjectReference Include="..\RealTimeCacheService\RealTimeCacheService.csproj" />
+    <ProjectReference Include="..\SCADAModelUpdateService\SCADAModelUpdateService.csproj" />
+    <ProjectReference Include="..\StateUpdaterService\StateUpdaterService.csproj" />
+    <ProjectReference Include="..\TransactionManager\TransactionManager.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
   <PropertyGroup>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization;
+using Common;
 
 namespace PubSubCommon
 {
@@ -14,6 +15,7 @@ namespace PubSubCommon
         private long gid;
         private double value;
         private DateTime time;
+        private PointFlag flag;
 
         public ScadaUIExchangeModel()
         {
@@ -56,6 +58,19 @@ namespace PubSubCommon
             set
             {
                 this.time = value;
+            }
+        }
+
+        [DataMember]
+        public PointFlag Flag
+        {
+            get
+            {
+                return flag;
+            }
+            set
+            {
+                this.flag = value;
             }
         }
     }

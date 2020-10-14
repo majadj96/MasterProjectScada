@@ -1,4 +1,5 @@
-﻿using ScadaCommon.ComandingModel;
+﻿using Common;
+using ScadaCommon.ComandingModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,5 +24,7 @@ namespace ScadaCommon.ServiceContract
         CommandResult ReadDigitalOutput(CommandObject command);
         [OperationContract]
         CommandResult ReadAnalogOutput(CommandObject command);
+        [OperationContract]
+        bool SetPointOperationMode(long signalGid, OperationMode operationMode);
     }
 }

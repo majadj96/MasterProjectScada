@@ -48,12 +48,12 @@
     <Compile Include="NMSModel.cs" />
     <Compile Include="ObjectTypeHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScadaModel.cs" />
+    <Compile Include="PublisherProxy.cs" />
     <Compile Include="ScadaUIExchangeModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{6c234280-508a-47a4-b9ca-2677082ef85f}</Project>
+      <Project>{6C234280-508A-47A4-B9CA-2677082EF85F}</Project>
       <Name>Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\ScadaCommon\ScadaCommon.csproj">

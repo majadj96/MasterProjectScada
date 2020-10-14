@@ -46,7 +46,9 @@
   <ItemGroup>
     <Compile Include="ComandingModel\FEPCommandObject.cs" />
     <Compile Include="ComandingModel\CommandObject.cs" />
+    <Compile Include="FEPDataModel\PointChanges.cs" />
     <Compile Include="Interfaces\IConfigItem.cs" />
+    <Compile Include="Interfaces\IRealTimeCacheService.cs" />
     <Compile Include="ProcesingModel\AnalogPoint.cs" />
     <Compile Include="ProcesingModel\DigitalPoint.cs" />
     <Compile Include="ProcesingModel\IInputObject.cs" />
@@ -70,19 +72,30 @@
     <Compile Include="PointIdentifierHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceContract\IAlarmEventService.cs" />
+    <Compile Include="ServiceContract\IAlarmService.cs" />
     <Compile Include="ServiceContract\IBackendProcessor.cs" />
+    <Compile Include="ServiceContract\IEventService.cs" />
     <Compile Include="ServiceContract\IProcessingServiceContract.cs" />
     <Compile Include="ServiceContract\ICommandingServiceContract.cs" />
     <Compile Include="ServiceContract\IFEPCommandingServiceContract.cs" />
     <Compile Include="ServiceContract\IPointUpdateService.cs" />
     <Compile Include="ServiceContract\IStateUpdateService.cs" />
+    <Compile Include="ServiceProxies\FEPCommandingServiceProxy.cs" />
+    <Compile Include="ServiceProxies\FepConfigProxy.cs" />
+    <Compile Include="ServiceProxies\MeasurementRepositoryProxy.cs" />
     <Compile Include="ServiceProxies\NetworkDynamicServiceProxy.cs" />
     <Compile Include="ServiceProxies\NetworkDynamicStateServiceProxy.cs" />
+    <Compile Include="ServiceProxies\RealTimeCacheServiceProxy.cs" />
+    <Compile Include="Utility\UniqueIdGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{6c234280-508a-47a4-b9ca-2677082ef85f}</Project>
+      <Project>{6C234280-508A-47A4-B9CA-2677082EF85F}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RepositoryCore\RepositoryCore.csproj">
+      <Project>{9990CCCD-3909-47FE-912E-EF40B57CB512}</Project>
+      <Name>RepositoryCore</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
