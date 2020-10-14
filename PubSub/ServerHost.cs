@@ -25,7 +25,7 @@ namespace PubSub
         public void HostSubscriptionService()
         {
             _subscribeServiceHost = new ServiceHost(typeof(Sub));
-            NetTcpBinding tcpBinding = new NetTcpBinding(SecurityMode.None);
+            NetTcpBinding tcpBinding = new NetTcpBinding();
 
             _subscribeServiceHost.AddServiceEndpoint(typeof(ISub), tcpBinding,
                                 "net.tcp://localhost:7002/Sub");

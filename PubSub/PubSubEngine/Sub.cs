@@ -33,9 +33,12 @@ namespace PubSub.PubSubEngine
 			//Notify NMS to send current model to UI
 			if(topicName == "nms")
 			{
-				INotifyNMS proxy = CreateNMSProxy();
-				proxy.UpdateUIModel();
-			}
+                Task.Run(() =>
+                {
+                    INotifyNMS proxy = CreateNMSProxy();
+                    proxy.UpdateUIModel();
+                });
+            }
 		}
 
 		private INotifyNMS CreateNMSProxy()

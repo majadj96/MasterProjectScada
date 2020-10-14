@@ -15,7 +15,7 @@ namespace CalculationEngine
 
 		public SubscribeProxy(IPub callback)
 		{
-			NetTcpBinding netTcpbinding = new NetTcpBinding(SecurityMode.None);
+			NetTcpBinding netTcpbinding = new NetTcpBinding();
 			EndpointAddress endpointAddress = new EndpointAddress(_endpoint);
 			InstanceContext context = new InstanceContext(callback);
 			DuplexChannelFactory<ISub> channelFactory = new DuplexChannelFactory<ISub>(context, netTcpbinding, endpointAddress);
