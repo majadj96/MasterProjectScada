@@ -1,6 +1,8 @@
 ﻿using Common;
 using Common.GDA;
 using DataModel.Core;
+using NetworkModelService.DeltaDB;
+using NetworkModelService.DeltaDB.Interfaces;
 using NetworkModelService.GDA;
 using System;
 using System.Collections.Generic;
@@ -36,6 +38,8 @@ namespace NetworkModelService
         /// </summary>
         private ModelResourcesDesc resourcesDescs;
 
+        private IDeltaRepository deltaRepository;
+
         /// <summary>
         /// Initializes a new instance of the Model class.
         /// </summary>
@@ -44,7 +48,7 @@ namespace NetworkModelService
             networkDataModel = new Dictionary<DMSType, Container>();
             networkDataModelCopy = new Dictionary<DMSType, Container>();
             resourcesDescs = new ModelResourcesDesc();
-            Initialize();
+            deltaRepository = new DeltaRepository();
         }
 
         #region Find
@@ -377,7 +381,7 @@ namespace NetworkModelService
             {
                 if (applyingStarted)
                 {
-                    //SaveDelta(delta);
+                    SaveDelta(delta);
                 }
 
                 if (updateResult.Result == ResultType.Succeeded)
@@ -741,112 +745,85 @@ namespace NetworkModelService
             }
         }
 
-        private void Initialize()
+        public void InitializeFromDB()
         {
+            if (networkDataModelCopy.Values.Count > 0 || networkDataModel.Values.Count > 0) //model already loaded (with ModelLabsApp)
+                return;
+
+            if (deltaRepository.GetNumberOfDeltas() <= 0) //no model in database
+                return;
+
             List<Delta> result = ReadAllDeltas();
+            Delta deltaToApply = null;
 
-            foreach (Delta delta in result)
+            if (result.Count <= 0)
+                return;
+
+            deltaToApply = result[0];
+
+            try
             {
-                try
+                foreach (ResourceDescription rd in deltaToApply.InsertOperations)
                 {
-                    foreach (ResourceDescription rd in delta.InsertOperations)
-                    {
-                        InsertEntity(rd);
-                    }
-
-                    foreach (ResourceDescription rd in delta.UpdateOperations)
-                    {
-                        UpdateEntity(rd);
-                    }
-
-                    foreach (ResourceDescription rd in delta.DeleteOperations)
-                    {
-                        DeleteEntity(rd);
-                    }
+                    InsertEntity(rd);
                 }
-                catch (Exception ex)
+
+                foreach (ResourceDescription rd in deltaToApply.UpdateOperations)
                 {
-                    CommonTrace.WriteTrace(CommonTrace.TraceError, "Error while applying delta (id = {0}) during service initialization. {1}", delta.Id, ex.Message);
+                    UpdateEntity(rd);
                 }
+
+                foreach (ResourceDescription rd in deltaToApply.DeleteOperations)
+                {
+                    DeleteEntity(rd);
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonTrace.WriteTrace(CommonTrace.TraceError, "Error while applying delta (id = {0}) during service initialization. {1}", deltaToApply.Id, ex.Message);
+            }        
+
+            InitiateTransaction(deltaToApply);
+
+            networkDataModelOld = new Dictionary<DMSType, Container>(networkDataModel);
+            networkDataModel = new Dictionary<DMSType, Container>(networkDataModelCopy);
+            networkDataModelCopy.Clear();
+
+            Pub pub = new Pub();
+            try
+            {
+                pub.SendEvent(new PubSubCommon.NMSModel() { ResourceDescs = GetResourceDescriptions() }, null);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error invoking publish method. Message:{ex.Message}");
             }
         }
 
         private void SaveDelta(Delta delta)
         {
-            bool fileExisted = false;
+            DeltaDBModel newDelta = new DeltaDBModel();
+            newDelta.Data = delta.Serialize();
 
-            if (File.Exists(Config.Instance.ConnectionString))
-            {
-                fileExisted = true;
-            }
-
-            FileStream fs = new FileStream(Config.Instance.ConnectionString, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            fs.Seek(0, SeekOrigin.Begin);
-
-            BinaryReader br = null;
-            int deltaCount = 0;
-
-            if (fileExisted)
-            {
-                br = new BinaryReader(fs);
-                deltaCount = br.ReadInt32();
-            }
-
-            BinaryWriter bw = new BinaryWriter(fs);
-            fs.Seek(0, SeekOrigin.Begin);
-
-            delta.Id = ++deltaCount;
-            byte[] deltaSerialized = delta.Serialize();
-            int deltaLength = deltaSerialized.Length;
-
-            bw.Write(deltaCount);
-            fs.Seek(0, SeekOrigin.End);
-            bw.Write(deltaLength);
-            bw.Write(deltaSerialized);
-
-            if (br != null)
-            {
-                br.Close();
-            }
-
-            bw.Close();
-            fs.Close();
+            deltaRepository.Add(newDelta);
         }
 
         private List<Delta> ReadAllDeltas()
         {
             List<Delta> result = new List<Delta>();
 
-            if (!File.Exists(Config.Instance.ConnectionString))
+            List<DeltaDBModel> deltasInDB = deltaRepository.GetAllDeltas();
+
+            //uzmi samo prvu Deltu (ako ih i bude vise, sve su iste kod nas)
+            if (deltasInDB.Count > 0)
             {
-                return result;
+                result.Add(Delta.Deserialize(deltasInDB[0].Data));
             }
 
-            FileStream fs = new FileStream(Config.Instance.ConnectionString, FileMode.OpenOrCreate, FileAccess.Read);
-            fs.Seek(0, SeekOrigin.Begin);
-
-            if (fs.Position < fs.Length) // if it is not empty stream
-            {
-                BinaryReader br = new BinaryReader(fs);
-
-                int deltaCount = br.ReadInt32();
-                int deltaLength = 0;
-                byte[] deltaSerialized = null;
-                Delta delta = null;
-
-                for (int i = 0; i < deltaCount; i++)
-                {
-                    deltaLength = br.ReadInt32();
-                    deltaSerialized = new byte[deltaLength];
-                    br.Read(deltaSerialized, 0, deltaLength);
-                    delta = Delta.Deserialize(deltaSerialized);
-                    result.Add(delta);
-                }
-
-                br.Close();
-            }
-
-            fs.Close();
+            //foreach (var delta in deltasInDB)
+            //{
+            //    result.Add(Delta.Deserialize(delta.Data));
+            //}
 
             return result;
         }
@@ -922,6 +899,13 @@ namespace NetworkModelService
             UpdateResult result = ApplyDelta(delta);
             networkDataModelOld = new Dictionary<DMSType, Container>(networkDataModel);
 
+            result = InitiateTransaction(delta);
+
+            return result;
+        }
+
+        public UpdateResult InitiateTransaction(Delta delta)
+        {
             try
             {
                 TMProxy _proxyTM = new TMProxy(this);
@@ -945,6 +929,7 @@ namespace NetworkModelService
                     }
 
                     _proxyTM.EndEnlist(true);
+                    return new UpdateResult() { Result = ResultType.Succeeded, Message = "Transaction succeeded." };
                 }
                 catch (Exception e)
                 {
@@ -955,9 +940,7 @@ namespace NetworkModelService
             catch (Exception ex)
             {
                 return new UpdateResult() { Message = "NMS enlist failed: " + ex.Message, Result = ResultType.Failed };
-            }            
-
-            return result;
+            }
         }
     }
 }

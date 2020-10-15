@@ -23,6 +23,12 @@ namespace NetworkModelService
                 {
                     nms.Start();
 
+                    message = "Press <Enter> to load model from Database (If not already loaded with ModelLabsApp)";
+                    CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
+                    Console.WriteLine(message);
+                    Console.ReadLine();
+                    nms.LoadAndPublishModelFromDB();
+
                     message = "Press <Enter> to stop the service.";
                     CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
                     Console.WriteLine(message);

@@ -101,5 +101,9 @@ namespace NetworkModelService
             CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
             Console.WriteLine("\n\n{0}", message);
         }
+        public void LoadAndPublishModelFromDB()
+        {
+            nm.InitializeFromDB();
+        }
     }
 }
