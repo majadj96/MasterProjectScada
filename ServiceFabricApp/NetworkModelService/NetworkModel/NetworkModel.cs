@@ -54,7 +54,7 @@ namespace NetworkModelService
             networkDataModel = new Dictionary<DMSType, Container>();
             networkDataModelCopy = new Dictionary<DMSType, Container>();
             resourcesDescs = new ModelResourcesDesc();
-            //Initialize();
+            Task.Run(async () => await Initialize()).Wait();
         }
 
         private async Task<Container> GetContainerFromModel(DMSType type, string dictName)
@@ -665,36 +665,38 @@ namespace NetworkModelService
         //    return relatedGids;
         //}
 
-        private void Initialize()
+        private async Task Initialize()
         {
             DeltaBlobRepository = new DeltaBlobRepository();
 
-            //List<Delta> result = ReadAllDeltas();
+            List<Delta> result = ReadAllDeltas();
 
-            //foreach (Delta delta in result)
-            //{
-            //    try
-            //    {
-            //        foreach (ResourceDescription rd in delta.InsertOperations)
-            //        {
-            //            InsertEntity(rd);
-            //        }
+            foreach (Delta delta in result)
+            {
+                try
+                {
+                    foreach (ResourceDescription rd in delta.InsertOperations)
+                    {
+                        await InsertEntity(rd);
+                    }
 
-            //        foreach (ResourceDescription rd in delta.UpdateOperations)
-            //        {
-            //            UpdateEntity(rd);
-            //        }
+                    foreach (ResourceDescription rd in delta.UpdateOperations)
+                    {
+                        UpdateEntity(rd);
+                    }
 
-            //        foreach (ResourceDescription rd in delta.DeleteOperations)
-            //        {
-            //            DeleteEntity(rd);
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        CommonTrace.WriteTrace(CommonTrace.TraceError, "Error while applying delta (id = {0}) during service initialization. {1}", delta.Id, ex.Message);
-            //    }
-            //}
+                    foreach (ResourceDescription rd in delta.DeleteOperations)
+                    {
+                        DeleteEntity(rd);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    CommonTrace.WriteTrace(CommonTrace.TraceError, "Error while applying delta (id = {0}) during service initialization. {1}", delta.Id, ex.Message);
+                }
+            }
+
+            this.commitFinished = true;
         }
 
         private void SaveDelta(Delta delta)
@@ -702,40 +704,18 @@ namespace NetworkModelService
             byte[] deltaSerialized = delta.Serialize();
             int deltaLength = deltaSerialized.Length;
 
-            DeltaBlobRepository.AddDeltaBlob("Blob1", deltaSerialized); //DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt")
+            DeltaBlobRepository.AddDeltaBlob(DateTime.Now.ToString("MM.dd.yyyy.hh:mm:ss.fff.tt"), deltaSerialized);
         }
 
         private List<Delta> ReadAllDeltas()
         {
             List<Delta> result = new List<Delta>();
+            Delta delta = null;
 
-            foreach (byte[] item in DeltaBlobRepository.ReadAllDeltaBlobs())
+            foreach (byte[] deltaRaw in DeltaBlobRepository.ReadAllDeltaBlobs())
             {
-                MemoryStream stream = new MemoryStream(item);
-                stream.Seek(0, SeekOrigin.Begin);
-
-                if(stream.Position < stream.Length)
-                {
-                    BinaryReader br = new BinaryReader(stream);
-
-                    int deltaCount = br.ReadInt32();
-                    int deltaLength = 0;
-                    byte[] deltaSerialized = null;
-                    Delta delta = null;
-
-                    for (int i = 0; i < deltaCount; i++)
-                    {
-                        deltaLength = br.ReadInt32();
-                        deltaSerialized = new byte[deltaLength];
-                        br.Read(deltaSerialized, 0, deltaLength);
-                        delta = Delta.Deserialize(deltaSerialized);
-                        result.Add(delta);
-                    }
-
-                    br.Close();
-                }
-
-                stream.Close();
+                delta = Delta.Deserialize(deltaRaw);
+                result.Add(delta);
             }
 
             return result;
@@ -854,7 +834,7 @@ namespace NetworkModelService
 
             this.commitFinished = true;
 
-            //SaveDelta(LastDelta);
+            SaveDelta(LastDelta);
 
             return true;
         }

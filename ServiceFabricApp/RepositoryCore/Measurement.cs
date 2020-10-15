@@ -12,15 +12,12 @@ namespace RepositoryCore
         public Measurement(DateTime rowKey)
         {
             PartitionKey = "Measurement";
-            RowKey = rowKey.ToString("MM/dd/yyyy hh:mm:ss.fff tt");
-            this.Timestamp = DateTime.Now;
+            string key = rowKey.ToString("MM.dd.yyyy.hh:mm:ss.fff.tt");
+            RowKey = key;
         }
 
         public Measurement()
         {
-            PartitionKey = "Measurement";
-            RowKey = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt");
-            this.Timestamp = DateTime.Now;
         }
 
         public int Id { get; set; }

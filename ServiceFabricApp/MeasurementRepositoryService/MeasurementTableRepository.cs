@@ -31,8 +31,8 @@ namespace MeasurementRepositoryService
         }
         public void AddMeasurement(Measurement newMeasurement)
         {
-            //TableOperation insertOperation = TableOperation.Insert(newMeasurement);
-            //_table.Execute(insertOperation);
+            TableOperation insertOperation = TableOperation.Insert(newMeasurement);
+            _table.Execute(insertOperation);
         }
 
         public void Add(Measurement measurement)

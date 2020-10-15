@@ -24,7 +24,7 @@ namespace NetworkModelService
                 var storageAccount = CloudStorageAccount.Parse(Config.Instance.ConnectionString);
                 
                 CloudBlobClient blobStorage = storageAccount.CreateCloudBlobClient();
-                BlobContainer = blobStorage.GetContainerReference("deltaContainer");
+                BlobContainer = blobStorage.GetContainerReference("delta-container");
                 BlobContainer.CreateIfNotExists();
                 // configure container for public access
                 var permissions = BlobContainer.GetPermissions();
@@ -54,7 +54,12 @@ namespace NetworkModelService
         {
             var blobs = BlobContainer.ListBlobs();
             CloudBlockBlob blob = blobs.OfType<CloudBlockBlob>().LastOrDefault();
-            byte[] returnValue = new byte[300];
+            if(blob != null)
+            {
+                blob.FetchAttributes();
+                long blobSize = blob.Properties.Length;
+            }
+            byte[] returnValue = new byte[] { };
             blob.DownloadToByteArray(returnValue, 0);
 
             return returnValue;
@@ -71,7 +76,10 @@ namespace NetworkModelService
                 List<CloudBlockBlob> listblob = blobs.OfType<CloudBlockBlob>().ToList();
                 foreach (CloudBlockBlob item in listblob)
                 {
-                    byte[] data = new byte[300];
+                    item.FetchAttributes();
+                    long blobSize = item.Properties.Length;
+
+                    byte[] data = new byte[blobSize];
                     item.DownloadToByteArray(data, 0);
 
                     returnValue.Add(data);
