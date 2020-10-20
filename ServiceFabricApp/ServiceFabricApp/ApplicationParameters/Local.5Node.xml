@@ -11,8 +11,8 @@
     <Parameter Name="DynamicDataProccessorService_InstanceCount" Value="1" />
     <Parameter Name="MeasurementRepositoryService_InstanceCount" Value="1" />
     <Parameter Name="RealTimeCacheService_PartitionCount" Value="1" />
-    <Parameter Name="RealTimeCacheService_MinReplicaSetSize" Value="1" />
-    <Parameter Name="RealTimeCacheService_TargetReplicaSetSize" Value="1" />
+    <Parameter Name="RealTimeCacheService_MinReplicaSetSize" Value="2" />
+    <Parameter Name="RealTimeCacheService_TargetReplicaSetSize" Value="2" />
     <Parameter Name="StateUpdaterService_InstanceCount" Value="1" />
     <Parameter Name="SCADAModelUpdateService_InstanceCount" Value="1" />
     <Parameter Name="PubSubService_PartitionCount" Value="1" />

@@ -1,5 +1,7 @@
 ﻿using Common;
 using Common.GDA;
+using Microsoft.ServiceFabric.Data;
+using Microsoft.ServiceFabric.Data.Collections;
 using ScadaCommon;
 using ScadaCommon.BackEnd_FrontEnd;
 using ScadaCommon.Interfaces;
@@ -8,21 +10,70 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RealTimeCacheService
 {
     public class SCADARealTimeCache : IRealTimeCacheService
     {
-        private Dictionary<long, BasePointCacheItem> ndsModel = new Dictionary<long, BasePointCacheItem>();
-        private Dictionary<long, BasePointCacheItem> ndsModelNew = new Dictionary<long, BasePointCacheItem>();
+        private IReliableDictionary<long, BasePointCacheItem> ndsModel;
+        private IReliableDictionary<long, BasePointCacheItem> ndsModelNew;
         private IFEPConfigService fepConfigServiceProxy;
+        IReliableStateManager stateManager;
         private bool modelUpdate = false;
         private Delta model;
 
-        public SCADARealTimeCache(IFEPConfigService fepConfigServiceProxy)
+        public SCADARealTimeCache(IFEPConfigService fepConfigServiceProxy, IReliableStateManager stateManager)
         {
             this.fepConfigServiceProxy = fepConfigServiceProxy;
+            this.stateManager = stateManager;
+
+            
+            //Task.Run(async () => await Initialize()).Wait();
+        }
+
+        private async Task Initialize()
+        {
+            ndsModel = await this.stateManager.GetOrAddAsync<IReliableDictionary<long, BasePointCacheItem>>("ndsModel");
+            ndsModelNew = await this.stateManager.GetOrAddAsync<IReliableDictionary<long, BasePointCacheItem>>("ndsModelNew");
+        }
+        private void Add(long key, BasePointCacheItem point)
+        {
+
+            Task.Run(async () =>
+            {
+                ndsModelNew = await this.stateManager.GetOrAddAsync<IReliableDictionary<long, BasePointCacheItem>>("ndsModelNew");
+
+                using (var tx = this.stateManager.CreateTransaction())
+                {
+                    var result = await ndsModelNew.TryAddAsync(tx, key, point);
+
+                    // If an exception is thrown before calling CommitAsync, the transaction aborts, all changes are 
+                    // discarded, and nothing is saved to the secondary replicas.
+                    await tx.CommitAsync();
+                }
+
+            }).Wait();
+        }
+
+        private BasePointCacheItem GetItem(long key)
+        {
+            BasePointCacheItem retVal = null;
+
+            Task.Run(async () =>
+            {
+                ndsModelNew = await this.stateManager.GetOrAddAsync<IReliableDictionary<long, BasePointCacheItem>>("ndsModelNew");
+
+                using (var tx = this.stateManager.CreateTransaction())
+                {
+                    var result = await ndsModelNew.TryGetValueAsync(tx, key);
+                    retVal = result.Value;
+                }
+
+            }).Wait();
+
+            return retVal;
         }
 
         public bool ModelUpdate
@@ -117,7 +168,7 @@ namespace RealTimeCacheService
                         NormalValue = normalDiscrete,
                         Address = (ushort)adress
                     };
-                    ndsModelNew.Add(item.Id, digital);
+                    Add(item.Id, digital);
                 }
                 else if ((DMSType)(ModelCodeHelper.ExtractTypeFromGlobalId(item.Id)) == DMSType.ANALOG)
                 {
@@ -177,22 +228,24 @@ namespace RealTimeCacheService
                         NormalValue = normalAnalog,
                         Address = (ushort)adress
                     };
-                    ndsModelNew.Add(item.Id, analog);
+                    Add(item.Id, analog);
                 }
             }
 
-            this.fepConfigServiceProxy.SendConfiguration(this.ndsModelNew.Values.ToList());
+            this.fepConfigServiceProxy.SendConfiguration(ModelNewToList());
         }
 
         //prilikom commit-a preuzmi novi model i postavi za vazeci
-        public void ApplyUpdate()
+        public async void ApplyUpdate()
         {
-            this.ndsModel = this.ndsModelNew;
+            //this.ndsModel = this.ndsModelNew;
+            await CopyDataModel();
         }
 
         public bool TryGetBasePointItem(long gid, out BasePointCacheItem basePointCacheItem)
         {
-            return ndsModel.TryGetValue(gid, out basePointCacheItem);
+            basePointCacheItem = GetItem(gid);
+            return true; //ndsModel.TryGetValue(gid, out basePointCacheItem);
         }
 
         public void StoreDelta(Delta delta)
@@ -201,6 +254,51 @@ namespace RealTimeCacheService
             this.model = delta;
             InitializePointCache(delta);
             this.modelUpdate = false;
+        }
+
+        private List<BasePointCacheItem> ModelNewToList()
+        {
+            List<BasePointCacheItem> retVal = new List<BasePointCacheItem>();
+
+            Task.Run(async () =>
+            {
+                ndsModelNew = await this.stateManager.GetOrAddAsync<IReliableDictionary<long, BasePointCacheItem>>("ndsModelNew");
+
+                using (var tx = this.stateManager.CreateTransaction())
+                {
+                    var enumerable = await ndsModelNew.CreateEnumerableAsync(tx);
+                    var asyncEnumerator = enumerable.GetAsyncEnumerator();
+
+                    while (await asyncEnumerator.MoveNextAsync(CancellationToken.None))
+                    {
+                        KeyValuePair<long, BasePointCacheItem> item = asyncEnumerator.Current;
+                        retVal.Add(item.Value);
+                    }
+
+                    await tx.CommitAsync();
+                }
+            }).Wait();
+
+            return retVal;
+        }
+
+        private async Task CopyDataModel()
+        {
+            await Initialize();
+
+            using (var tx = this.stateManager.CreateTransaction())
+            {
+                var enumerable = await ndsModelNew.CreateEnumerableAsync(tx);
+                var asyncEnumerator = enumerable.GetAsyncEnumerator();
+
+                while (await asyncEnumerator.MoveNextAsync(CancellationToken.None))
+                {
+                    KeyValuePair<long, BasePointCacheItem> item = asyncEnumerator.Current;
+                    await ndsModel.AddAsync(tx, item.Key, item.Value);
+                }
+
+                await tx.CommitAsync();
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ using Microsoft.ServiceFabric.Services.Communication.Wcf.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 using ScadaCommon.BackEnd_FrontEnd;
 using ScadaCommon.Interfaces;
+using ScadaCommon.NDSDataModel;
 using ScadaCommon.ServiceProxies;
 
 namespace RealTimeCacheService
@@ -29,7 +30,8 @@ namespace RealTimeCacheService
             : base(context)
         {
             fepConfigServiceProxy = new FepConfigProxy("FepConfigService");
-            realTimeCache = new SCADARealTimeCache(fepConfigServiceProxy);
+            realTimeCache = new SCADARealTimeCache(fepConfigServiceProxy, this.StateManager);
+
         }
 
         /// <summary>
@@ -68,6 +70,9 @@ namespace RealTimeCacheService
         /// <param name="cancellationToken">Canceled when Service Fabric needs to shut down this service replica.</param>
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
+            var ndsModel = await this.StateManager.GetOrAddAsync<IReliableDictionary<long, BasePointCacheItem>>("ndsModel");
+            var ndsModelNew = await this.StateManager.GetOrAddAsync<IReliableDictionary<long, BasePointCacheItem>>("ndsModelNew");
+
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();
