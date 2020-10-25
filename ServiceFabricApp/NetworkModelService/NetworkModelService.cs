@@ -90,7 +90,12 @@ namespace NetworkModelService
 		{
 			// TODO: Replace the following sample code with your own logic 
 			//       or remove this RunAsync override if it's not needed in your service.
-            
+
+			foreach (var item in this.GetAddresses())
+			{
+				ServiceEventSource.Current.Message("Service opened: " + item.Key + item.Value);
+			}
+
 			var m = await this.StateManager.GetOrAddAsync<IReliableDictionary<short, Container>>("networkDataModel");
 			var m2 = await this.StateManager.GetOrAddAsync<IReliableDictionary<short, Container>>("networkDataModelCopy");
 			var m3 = await this.StateManager.GetOrAddAsync<IReliableDictionary<short, Container>>("networkDataModelOld");

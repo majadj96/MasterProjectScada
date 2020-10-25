@@ -26,7 +26,9 @@ namespace AlarmService
         {
             Alarm cacheAlarm = alarmCache.FindAlarmInCache(alarm);
 
-            if (cacheAlarm.AbnormalIndicator != true)
+			ServiceEventSource.Current.Message("Alarm acknowledged");
+
+			if (cacheAlarm.AbnormalIndicator != true)
             {
                 alarmCache.RemoveAlarm(cacheAlarm);
 
@@ -53,7 +55,7 @@ namespace AlarmService
             AlarmToEventConverter(alarm, out alarmEventToReport);
 
             eventProxy.AddEvent(alarmEventToReport);
-        }
+		}
 
         public List<Alarm> GetAllAlarms()
         {

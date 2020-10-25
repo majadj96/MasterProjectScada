@@ -70,7 +70,12 @@ namespace RealTimeCacheService
         /// <param name="cancellationToken">Canceled when Service Fabric needs to shut down this service replica.</param>
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
-            var ndsModel = await this.StateManager.GetOrAddAsync<IReliableDictionary<long, BasePointCacheItem>>("ndsModel");
+			foreach (var item in this.GetAddresses())
+			{
+				ServiceEventSource.Current.Message("Service opened: " + item.Key + item.Value);
+			}
+
+			var ndsModel = await this.StateManager.GetOrAddAsync<IReliableDictionary<long, BasePointCacheItem>>("ndsModel");
             var ndsModelNew = await this.StateManager.GetOrAddAsync<IReliableDictionary<long, BasePointCacheItem>>("ndsModelNew");
 
             while (true)
