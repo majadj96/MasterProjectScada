@@ -22,9 +22,10 @@ namespace CalculationEngine
 
         public UpdateResult UpdateModel(Delta delta)
         {
-            Console.WriteLine("Update model invoked");
+            Console.WriteLine("CE - Update model invoked.");
+			ServiceEventSource.Current.Message("CE - Update model invoked.");
 
-            Model.CurrentModel_Copy = new Dictionary<long, IdObject>(Model.CurrentModel);
+			Model.CurrentModel_Copy = new Dictionary<long, IdObject>(Model.CurrentModel);
 
             foreach (ResourceDescription rd in delta.InsertOperations)
             {

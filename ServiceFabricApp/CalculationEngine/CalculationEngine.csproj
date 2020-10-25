@@ -94,6 +94,7 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Channels\EventProxy.cs" />
     <Compile Include="Model\TapChanger.cs" />
     <Compile Include="Model\Transformer.cs" />
     <Compile Include="Model\TransformerWinding.cs" />

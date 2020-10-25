@@ -24,6 +24,7 @@ namespace EventService
         {
             eventCache.Add(newEvent);
             eventPublish.SendEvent(newEvent, new System.EventArgs());
-        }
+			ServiceEventSource.Current.Message("New event added.");
+		}
     }
 }

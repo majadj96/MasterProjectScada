@@ -81,7 +81,12 @@ namespace CommandingManagementService
         /// <param name="cancellationToken">Canceled when Service Fabric needs to shut down this service instance.</param>
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
-            while (true)
+			foreach (var item in this.GetAddresses())
+			{
+				ServiceEventSource.Current.Message("Service opened: " + item.Key + item.Value);
+			}
+
+			while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 

@@ -10,7 +10,8 @@ namespace Common
     {
         SCADA = 0x0,
         CE = 0x01,
-        UI = 0x02
+        UI = 0x02,
+        NMS = 0x03
     }
 
     [Flags]

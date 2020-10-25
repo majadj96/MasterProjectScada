@@ -69,7 +69,8 @@ namespace PubSubService
             Filter.RemoveSubscriber(topicName, subscriber);
 
             Console.WriteLine($"Unsubscription for topic name: {topicName}");
-        }
+			ServiceEventSource.Current.Message($"Unsubscription for topic name: {topicName}");
+		}
 
         #endregion
     }

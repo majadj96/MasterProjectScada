@@ -27,7 +27,9 @@ namespace SCADAModelUpdateService
             try
             {
                 Console.WriteLine("Update model invoked");
-                transactionManagerProxy.Enlist();
+				ServiceEventSource.Current.Message("SCADA - Update model invoked");
+				
+				transactionManagerProxy.Enlist();
             }
             catch (Exception e)
             {

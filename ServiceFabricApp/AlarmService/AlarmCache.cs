@@ -35,12 +35,14 @@ namespace AlarmService
             {
                 alarmCache.Add(alarmKey, alarm);
                 alarmPublisher.SendEvent(new AlarmDescription(alarm, AlarmOperation.INSERT), new EventArgs());
-            }
+				ServiceEventSource.Current.Message("Alarm added.");
+			}
             else
             {
                 alarmCache[alarmKey] = alarm;
                 alarmPublisher.SendEvent(new AlarmDescription(alarm, AlarmOperation.UPDATE), new EventArgs());
-            }
+				ServiceEventSource.Current.Message("Alarm updated.");
+			}
         }
 
         public Alarm FindAlarmInCache(Alarm alarm)
@@ -82,7 +84,8 @@ namespace AlarmService
             {
                 alarmCache[alarmKey] = alarm;
                 alarmPublisher.SendEvent(new AlarmDescription(alarm, AlarmOperation.UPDATE), new EventArgs());
-            }
+				ServiceEventSource.Current.Message("Alarm updated.");
+			}
         }
 
         public void RemoveAlarm(Alarm alarm)
@@ -94,7 +97,8 @@ namespace AlarmService
             {
                 alarmCache.Remove(alarmKey);
                 alarmPublisher.SendEvent(new AlarmDescription(alarm, AlarmOperation.DELETE), new EventArgs());
-            }
+				ServiceEventSource.Current.Message("Alarm removed.");
+			}
         }
 
         private string GetAlarmKey(AlarmCategory category, long gid)
