@@ -66,12 +66,12 @@ namespace CalculationEngine
                     string scheme = endpointConfig.Protocol.ToString();
                     string uri = string.Format(CultureInfo.InvariantCulture, "{0}://{1}:{2}/CE", "net.tcp", host, port);
 
-                    var listener = new WcfCommunicationListener<IModelUpdateContract>(
-                        wcfServiceObject: this.modelUpdateService,
-                        serviceContext: context,
-                        listenerBinding: new NetTcpBinding(SecurityMode.None),
-                        address: new EndpointAddress(uri)
-                    );
+					var listener = new WcfCommunicationListener<IModelUpdateContract>(
+						wcfServiceObject: this.modelUpdateService,
+						serviceContext: context,
+						listenerBinding: new NetTcpBinding(SecurityMode.None),
+						address: new EndpointAddress(uri)
+					);
                     return listener;
                 })
             };
@@ -84,8 +84,13 @@ namespace CalculationEngine
         /// <param name="cancellationToken">Canceled when Service Fabric needs to shut down this service replica.</param>
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
-            // TODO: Replace the following sample code with your own logic 
-            //       or remove this RunAsync override if it's not needed in your service.
+			// TODO: Replace the following sample code with your own logic 
+			//       or remove this RunAsync override if it's not needed in your service.
+			foreach (var item in this.GetAddresses())
+			{
+				ServiceEventSource.Current.Message("Service opened: " + item.Key + item.Value);
+			}
+
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();

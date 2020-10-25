@@ -73,9 +73,9 @@ namespace NetworkModelService
             }
         }
 
-        #region Find
+		#region Find
 
-        public async Task<bool> EntityExists(long globalId)
+		public async Task<bool> EntityExists(long globalId)
         {
             DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(globalId);
 
@@ -285,8 +285,9 @@ namespace NetworkModelService
             try
             {
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Applying  delta to network model.");
+				ServiceEventSource.Current.Message("Applying delta to network model.");
 
-                Dictionary<short, int> typesCounters = await GetCounters();
+				Dictionary<short, int> typesCounters = await GetCounters();
                 Dictionary<long, long> globalIdPairs = new Dictionary<long, long>();
                 delta.FixNegativeToPositiveIds(ref typesCounters, ref globalIdPairs);
                 updateResult.GlobalIdPairs = globalIdPairs;
@@ -313,7 +314,8 @@ namespace NetworkModelService
             catch (Exception ex)
             {
                 string message = string.Format("Applying delta to network model failed. {0}.", ex.Message);
-                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+				ServiceEventSource.Current.Message("Applying delta to network model failed.");
+				CommonTrace.WriteTrace(CommonTrace.TraceError, message);
 
                 updateResult.Result = ResultType.Failed;
                 updateResult.Message = message;
@@ -329,7 +331,8 @@ namespace NetworkModelService
                 if (updateResult.Result == ResultType.Succeeded)
                 {
                     string mesage = "Applying delta to network model successfully finished.";
-                    CommonTrace.WriteTrace(CommonTrace.TraceInfo, mesage);
+					ServiceEventSource.Current.Message("Applying delta to network model successfully finished.");
+					CommonTrace.WriteTrace(CommonTrace.TraceInfo, mesage);
                     updateResult.Message = mesage;
                 }
             }
@@ -705,7 +708,8 @@ namespace NetworkModelService
             int deltaLength = deltaSerialized.Length;
 
             DeltaBlobRepository.AddDeltaBlob(DateTime.Now.ToString("MM.dd.yyyy.hh:mm:ss.fff.tt"), deltaSerialized);
-        }
+			ServiceEventSource.Current.Message("Delta added to blob.");
+		}
 
         private List<Delta> ReadAllDeltas()
         {
