@@ -1,7 +1,10 @@
-﻿using CalculationEngine.Model;
+﻿using CalculationEngine.Channels;
+using CalculationEngine.Model;
+using Common.AlarmEvent;
 using PubSubCommon;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TransactionManagerContracts;
 
 namespace CalculationEngine
@@ -41,6 +44,13 @@ namespace CalculationEngine
             _processingData.IsModelChanged = true;
 
             CalcEngine.aTimer.Start();
+
+            Task.Run(() =>
+            {
+                Event newEvent = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.CE, Message = "Integrity update complete" };
+                EventProxy proxy = new EventProxy("EventServiceEndpoint");
+                proxy.AddEvent(newEvent);
+            });
 
             return true;
         }

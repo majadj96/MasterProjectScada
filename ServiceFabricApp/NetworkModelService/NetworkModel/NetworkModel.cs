@@ -1,9 +1,11 @@
 ﻿using Common;
+using Common.AlarmEvent;
 using Common.GDA;
 using DataModel;
 using DataModel.Core;
 using Microsoft.ServiceFabric.Data;
 using Microsoft.ServiceFabric.Data.Collections;
+using NetworkModelService.Channels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -835,6 +837,13 @@ namespace NetworkModelService
             this.commitFinished = true;
 
             SaveDelta(LastDelta);
+
+            Task.Run(() =>
+            {
+                Event newEvent = new Event() { EventReported = DateTime.Now, EventReportedBy = Common.AlarmEventType.NMS, Message = "Integrity update complete" };
+                EventProxy proxy = new EventProxy("EventServiceEndpoint");
+                proxy.AddEvent(newEvent);
+            });
 
             return true;
         }
